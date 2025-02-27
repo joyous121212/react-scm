@@ -13,16 +13,6 @@ const routers: RouteObject[] = [
     {
         path: "/react",
         element: <DashBoard />,
-        children: [
-            {
-                path: "management",
-                children: [
-                    { path: "notice", element: <Notice /> },
-                    { path: "common-code", element: <CommonCode /> },
-                    { path: "common-code/:groupIdx", element: <DetailCode /> },
-                ],
-            },
-        ],
     },
 ];
 

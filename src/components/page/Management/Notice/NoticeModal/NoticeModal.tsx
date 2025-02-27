@@ -3,6 +3,7 @@ import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { NoticeModalStyled } from "./styled";
 
 export const NoticeModal = () => {
+    const test = () => {};
     return (
         <NoticeModalStyled>
             <div className='container'>
