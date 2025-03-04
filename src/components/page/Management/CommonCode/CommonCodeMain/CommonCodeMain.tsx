@@ -1,48 +1,95 @@
 import { useContext, useEffect, useState } from "react";
 import { CommonCodeMainStyled } from "./styled";
 import { CommonCodeContext } from "../../../../../api/Provider/CommonCodeProvider";
-import axios, { AxiosResponse } from "axios";
-import { CommonCode } from './../../../../../pages/management/CommonCode';
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
-
-interface ICommonCode {
-    "groupIdx": number;
-    "groupCode": string;
-    "groupName": string;
-    "useYn": string;
-    "createdDate": string;
-    "author": string;
-    "note": string;
-}
-
-interface ICommonCodeResponse {
-    commonCode: ICommonCode[];
-    commonCodeCnt: number;
-}
+import { useRecoilState } from "recoil";
+import { modalState } from "../../../../../stores/modalState";
+import { CommonCodeModal } from "../CommonCodeModal/CommonCodeModal";
+import { Portal } from "../../../../common/potal/Portal";
+import { useNavigate } from "react-router-dom";
+import { searchApi } from "../../../../../api/CommonCodeApi/searchApi";
+import { CommonCode } from "../../../../../api/api";
+import { ICommonCode, ICommonCodeResponse } from "../../../../../models/interface/ICommonCode";
+import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 
 export const CommonCodeMain = () => {
     const {searchKeyword} = useContext(CommonCodeContext);
     const [commonCodeList, setCommonCodeList] = useState<ICommonCode[]>();
+    const [modal, setModal] = useRecoilState(modalState);
+    const [groupId, setGroupId] = useState<number>(0);
+    const navigate = useNavigate();
+
+    const columns = [
+        {key: "groupIdx", title: "번호"},
+        {key: "groupCode", title: "그룹코드", clickable: true},
+        {key: "groupName", title: "그룹코드명"},
+        {key: "note", title: "그룹코드설명"},
+        {key: "createdDate", title: "등록일"},
+        {key: "useYn", title: "사용여부"},
+        {key: "actions", title: "비고"},
+
+    ] as Column<ICommonCode>[];
 
     useEffect(() => {
         searchCommonCode();
     }, [searchKeyword]);
 
-    const searchCommonCode = (currentPage?: number) => {
+    const searchCommonCode = async (currentPage?: number) => {
         currentPage = currentPage || 1;
-        axios.post("/management/commonCodeListBody.do", {
+
+        const result = await searchApi<ICommonCodeResponse>(CommonCode.searchList, {
             ...searchKeyword,
             currentPage, 
             pageSize: 5,
-            
-        }).then((res: AxiosResponse<ICommonCodeResponse>) => {
-            setCommonCodeList(res.data.commonCode);
         });
+
+        if(result) {
+            setCommonCodeList(result.commonCode); 
+        }
+
+        // axios.post("/management/commonCodeListBody.do", {
+        //     ...searchKeyword,
+        //     currentPage, 
+        //     pageSize: 5,
+            
+        // }).then((res: AxiosResponse<ICommonCodeResponse>) => {
+        //     setCommonCodeList(res.data.commonCode);
+        // });
+    }
+
+    const handlerModal = (id: number) => {
+        setModal(!modal);
+        setGroupId(id);
+    }
+
+    
+    const postSuccess = () => {
+        setModal(!modal);
+        searchCommonCode();
     }
 
     return (
         <CommonCodeMainStyled>
-            <table>
+            <StyledTable 
+                data={commonCodeList} 
+                columns={columns} 
+                renderAction={(row) => (
+                    <StyledButton size="small" onClick={() => (handlerModal(row.groupIdx))}>수정</StyledButton>
+                )}
+                onCellClick={(row, column) => {
+                    if(column === "groupCode") {
+                        navigate(`${row.groupIdx}`, {state: {groupCode: row.groupCode}})
+                    }
+                }} 
+            />
+            {
+                modal && (
+                    <Portal>
+                        <CommonCodeModal groupId={groupId} postSuccess={postSuccess} setGroupId={setGroupId}/>
+                    </Portal>
+                )
+            }
+            {/* <table>
                 <colgroup>
                     <col style={{ width: "5%" }} />
                     <col style={{ width: "20%" }} />
@@ -68,14 +115,27 @@ export const CommonCodeMain = () => {
                         return (
                             <tr key={commonCode.groupIdx}>
                                 <td>{commonCode.groupIdx}</td>
-                                <td>{commonCode.groupCode}</td>
+                                <td 
+                                    className='td-pointer' 
+                                    onClick={() => {
+                                        navigate(`${commonCode.groupIdx}`, {
+                                            state: {
+                                                groupCode: commonCode.groupCode,
+                                            }
+                                        })
+                                    }}
+                                >
+                                    {commonCode.groupCode}
+                                </td>
                                 <td>{commonCode.groupName}</td>
                                 <td>{commonCode.note}</td>
                                 <td>{commonCode.createdDate}</td>
                                 <td>{commonCode.useYn}</td>
                                 
                                 <td>
-                                    <StyledButton>수정</StyledButton>
+                                    <StyledButton onClick={() => {
+                                        handlerModal(commonCode.groupIdx);
+                                    }}>수정</StyledButton>
                                 </td>
                             </tr>
                         )
@@ -85,7 +145,8 @@ export const CommonCodeMain = () => {
                         </tr>
                     )}
                 </tbody>
-            </table>
+            </table> */}
+            
         </CommonCodeMainStyled>
     );
 };

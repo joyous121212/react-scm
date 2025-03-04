@@ -4,29 +4,13 @@ import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { NoticeModalStyled } from "./styled";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
-import { INotice } from "../NoticeMain/NoticeMain";
 import axios, { AxiosResponse } from "axios";
+import { INoticeDetail, INoticeDetailResponse, IPostResponse } from "../../../../../models/interface/INotice";
 
 interface INoticeModalProps {
     noticeId:number;
     setNoticeId: React.Dispatch<React.SetStateAction<number>>;
     postSuccess: () => void;
-}
-
-interface INoticeDetail extends INotice {
-    fileName: string | null;
-    fileExt: string | null;
-    fileSize: number;
-    physicalPath: string | null;
-    logicalPath: string | null;
-}
-
-interface INoticeDetailResponse {
-    detailValue: INoticeDetail;
-}
-
-interface IPostResponse {
-    result: "success" | "fail";
 }
 
 export const NoticeModal: FC<INoticeModalProps> = ({ noticeId, setNoticeId, postSuccess }) => {

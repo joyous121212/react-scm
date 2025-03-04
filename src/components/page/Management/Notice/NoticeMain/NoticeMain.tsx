@@ -7,19 +7,9 @@ import { NoticeModal } from "../NoticeModal/NoticeModal";
 import { Portal } from "../../../../common/potal/Portal";
 import { modalState } from "../../../../../stores/modalState";
 import { useRecoilState } from "recoil";
-
-export interface INotice {
-    noticeId: number,
-    title: string,
-    content: string,
-    author: string,
-    createdDate: string,
-}
-
-interface INoticeListBodyResponse {
-    noticeList: INotice[],
-    noticeCnt: number
-}
+import { searchApi } from "../../../../../api/NoticeApi/searchApi";
+import { NoticeCode } from "../../../../../api/api";
+import { INotice, INoticeListBodyResponse } from "../../../../../models/interface/INotice";
 
 export const NoticeMain = () => {
     const { search } = useLocation();
@@ -33,17 +23,25 @@ export const NoticeMain = () => {
         searchNoticeList();
     }, [search]);
 
-    const searchNoticeList = (currentPage?: number) => {
+    const searchNoticeList = async (currentPage?: number) => {
         currentPage = currentPage || 1;
         const searchParam = new URLSearchParams(search); // URLSearchParams - key, value 자동으로 나눠줌
         searchParam.append("currentPage", currentPage.toString());
         searchParam.append("pageSize", "5");
 
-        axios.post("/management/noticeListBody.do", searchParam).then((res: AxiosResponse<INoticeListBodyResponse>) => {
-            setNoticeList(res.data.noticeList);
-            setNoticeCount(res.data.noticeCnt);
+        const result = await searchApi<INoticeListBodyResponse>(NoticeCode.search, searchParam);
+
+        if (result) {
+            setNoticeList(result.noticeList);
+            setNoticeCount(result.noticeCnt);
             setCPage(currentPage);
-        });
+        }
+
+        // axios.post("/management/noticeListBody.do", searchParam).then((res: AxiosResponse<INoticeListBodyResponse>) => {
+        //     setNoticeList(res.data.noticeList);
+        //     setNoticeCount(res.data.noticeCnt);
+        //     setCPage(currentPage);
+        // });
     }
 
     const handlerModal = (id: number) => {

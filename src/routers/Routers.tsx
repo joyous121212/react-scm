@@ -22,6 +22,10 @@ const routers: RouteObject[] = [
                     {
                         path: "common-code",
                         element: <CommonCode />
+                    },
+                    {
+                        path: "common-code/:groupIdx",
+                        element: <DetailCode />,
                     }
                 ]
             }
