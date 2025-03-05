@@ -13,3 +13,7 @@ export const CommonCode = {
 export const Notice = {
     search: "/management/noticeListBody.do",
 };
+
+export const UserInfo = {
+    search: "/management/userInfoListBody.do",
+};
