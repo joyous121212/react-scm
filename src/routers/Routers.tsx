@@ -6,6 +6,7 @@ import { Notice } from "../../src/pages/management/Notice";
 import { DashBoard } from "../components/layout/DashBoard/DashBoard";
 import { NotFound } from "../components/common/NotFound/NotFound";
 import { DetailCode } from "../pages/management/DetailCode";
+import { Products } from "../pages/mall/Products";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -28,6 +29,21 @@ const routers: RouteObject[] = [
                     {
                         path: "common-code/:groupIdx",
                         element: <DetailCode />,
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        path: "/react",
+        element: <DashBoard />,
+        children: [
+            {
+                path: "mall",
+                children: [
+                    {
+                        path: "products",
+                        element: <Products />
                     },
                 ],
             },
