@@ -1,4 +1,5 @@
 import { Table, Td, Th, Thead, Tr } from "./styled";
+import noData from "../../../assets/noData.png";
 
 export interface Column<T> {
     key: keyof T | "actions";
@@ -64,7 +65,7 @@ export const StyledTable = <T extends { [key: string]: any }>({
                     ))
                 ) : (
                     <Tr>
-                        <Td colSpan={columns.length}>조회 내역이 없습니다.</Td>
+                        <Td colSpan={columns.length}><img src={noData} alt='noData' /></Td>
                     </Tr>
                 )}
             </tbody>
