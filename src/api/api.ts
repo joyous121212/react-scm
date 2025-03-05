@@ -24,3 +24,8 @@ export const Approval = {
 export const ShoppingReturnList = {
     searchList: "/trade/shoppingReturnListBody.do",
 };
+
+export const Products = {
+    searchList: "/mall/productsListBody.do",
+}
+

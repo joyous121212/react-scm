@@ -8,6 +8,7 @@ import { DetailCode } from "../pages/management/DetailCode";
 import { ApprovalOrder } from "../pages/approval/orders";
 import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
 import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
+import { Products } from "../pages/mall/Products";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -52,6 +53,21 @@ const routers: RouteObject[] = [
                     {
                         path: "common-code/:groupIdx",
                         element: <DetailCode />,
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        path: "/react",
+        element: <DashBoard />,
+        children: [
+            {
+                path: "mall",
+                children: [
+                    {
+                        path: "products",
+                        element: <Products />
                     },
                 ],
             },
