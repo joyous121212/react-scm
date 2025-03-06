@@ -1,8 +1,8 @@
 import axios, { AxiosResponse } from "axios";
 
-export const searchApi = async <T>(api: string, param: object): Promise<T | undefined> => {
+export const getApi = async <T>(api: string, params?: object): Promise<T | undefined> => {
     try {
-        const result: AxiosResponse<T> = await axios.post(api, param);
+        const result: AxiosResponse<T> = await axios.get(api, { params });
 
         if (result.status === 200) {
             return result.data;
@@ -10,6 +10,6 @@ export const searchApi = async <T>(api: string, param: object): Promise<T | unde
             throw new Error(`HTTP Error: ${result.status} - ${result.statusText}`);
         }
     } catch (error) {
-        console.error("api 호출 오류 발생", error);
+        console.error("API 호출 오류 발생", error);
     }
 };

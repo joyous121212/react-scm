@@ -16,4 +16,6 @@ export const Notice = {
 
 export const Products = {
     searchList: "/mall/productsListBody.do",
+    category: "/mall/products/category",
+    supplyList: "/mall/products/supplyList"
 }
