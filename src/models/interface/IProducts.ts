@@ -9,9 +9,22 @@ export interface IProducts {
     supplyName: string;
 }
 
+export interface IProductsDetail extends IProducts {
+    fileName: string | null;
+    filePath: string | null;
+    logicalPath: string | null;
+    fileSize: number;
+    fileType: string | null;
+}
+
 export interface IProductsListBodyResponse {
     products: IProducts[];
     productsCnt: number;
+}
+
+export interface IProductsBodyResponse {
+    detailValue: IProducts;
+    attachmentValue: IProductsDetail;
 }
 
 export interface ICategory {
@@ -20,4 +33,8 @@ export interface ICategory {
 
 export interface ISupplyList {
     name: string;
+}
+
+export interface IPostResponse {
+    result: "success" | "fail";
 }

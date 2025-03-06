@@ -16,9 +16,11 @@ export const Notice = {
 
 export const Products = {
     searchList: "/mall/productsListBody.do",
+    searchDetail: "/mall/productsDetailBody.do",
     category: "/mall/products/category",
     supplyList: "/mall/products/supplyList"
 }
+
 export const Approval = {
     searchOrder: "/approval/orderListBody.do",
     approvalOrder: "/approval/orderApproveUpdateBody.do",
