@@ -15,6 +15,18 @@ import axios from "axios";
 
 export const UserInfoModal = () => {
     // 상태 관리
+    
+// classType
+// : 
+// "기업고객"
+// detailCode
+// : 
+// "성실회원"
+// group_code
+// : 
+// "G00001A1"
+
+//user_type: "C"
     const [userData, setUserData] = useState({
         user_type: "",
         classType: "",
@@ -26,6 +38,7 @@ export const UserInfoModal = () => {
         password1: "",
         name: "",
         manager: "",
+        hp:"",
         userTel1: "",
         userTel2: "",
         userTel3: "",
@@ -36,12 +49,9 @@ export const UserInfoModal = () => {
         user_dt_address: "",
     });
 
-    const alertMessage = {
-        user_type: "",
-        classType: "",
-        statusYn: "",
-        group_code: "직원 유형을 입력해주세요",
-        detailCode: "직원 유형을 입력해주세요",
+    const alertMessage = {     
+        group_code: "직원 유형을 선택해주세요",
+        detailCode: "담당 업무를 선택해주세요",
         loginID: "아이디를 입력해주세요",
         password: "비번 을 입력해주세요",
         password1: "비번 을 입력해주세요",
@@ -66,7 +76,7 @@ export const UserInfoModal = () => {
 
     const [isValid, setIsValid] = useState(true); // 유효성 상태
     const [errorMessage, setErrorMessage] = useState(""); // 오류 메시지
-
+    const birthRef=useRef<HTMLInputElement>(null);
     //다음 우편번호찾기
     const [isDaumLoaded, setIsDaumLoaded] = useState(false);
 
@@ -80,8 +90,6 @@ export const UserInfoModal = () => {
     useEffect(() => {
         console.log(userData);
     }, [userData]);
-
-    useEffect(() => {}, [userData]);
 
     const handlerdetailCodeList = async () => {
         const param = {
@@ -167,6 +175,17 @@ export const UserInfoModal = () => {
             setUserData(box);
         }
     };
+
+    const handleChange2=(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)=>{
+
+        const { name, value } = e.target;
+        console.log(`네임: ${name}     밸류: ${value}`);
+        setUserData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    }
+
 
     const checkDuplicFnc = async () => {
         const idValiCheck = IdValidateInput(idRef.current.value);
@@ -277,6 +296,8 @@ export const UserInfoModal = () => {
         // 비밀번호 형식: 숫자, 영문자, 특수문자 조합으로 8~15자리
         const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,15}$/;
 
+        console.log(`1차비번 ${firstPwdRef.current.value} 2차비번 ${secondePwdRef.current.value}`)
+
         if (!passwordRegex.test(firstPwdRef.current.value)) {
             alert("비밀번호는 숫자, 영문자, 특수문자 조합으로 8~15자리여야 합니다.");
             return false;
@@ -299,22 +320,80 @@ export const UserInfoModal = () => {
     const tell2Ref = useRef<HTMLInputElement>(null);
     const tell3Ref = useRef<HTMLInputElement>(null);
 
-    const insertUserInfo = () => {
-        for (let key in userData) {
-            console.log(key + ": ");
-            if (
-                key != "manager" &&
-                key != "user_dt_address" &&
-                key != "classType" &&
-                key != "user_type" &&
-                key != "statusYn"
-            ) {
-                if (userData[key] === "") {
-                    alert(`${alertMessage[key]}`);
-                    return;
-                }
-            }
+    const handleChange3=(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)=>{
+
+        const { name, value } = e.target;
+        console.log(`네임: ${name}     밸류: ${value}`);
+       
+            setUserData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
+        
+    }
+
+    const validatePh = (name:string): boolean => {
+       // 각 필드의 값 가져오기
+    const tell1 = userData.userTel1;
+    const tell2 =  userData.userTel2;
+    const tell3 =  userData.userTel3;
+    var isValid=false;
+    if(name==="userTel1"){
+        isValid =tell1?.length === 3 && /^[0-9]{3}$/.test(tell1)
+    }
+    if(name==="userTel2"){
+         isValid =tell2?.length >= 3 && tell2?.length <= 4 && /^[0-9]{3,4}$/.test(tell2) 
+    }
+    if(name==="userTel3"){
+         isValid =tell3?.length >= 3 && tell3?.length <= 4 && /^[0-9]{3,4}$/.test(tell3); 
+    }  
+        if (isValid) {
+          return true;
+        } else {
+          alert('전화번호가 잘못된 형식입니다. 형식은 4자리-3자리-4자리입니다.');
+          return false;
         }
+      };
+
+
+
+      
+    const insertUserInfo = () => {
+       
+        // const box={...userData};
+        // var hp="";
+        for (let key in alertMessage) {
+            console.log(key + ": "+userData[key]);          
+            // if (
+            //     key != "manager" &&
+            //     key != "user_dt_address" &&
+            //     key != "classType" &&
+            //     key != "user_type" &&
+            //     key != "statusYn" &&
+            //     key !="password"&&
+            //     key !="password1"&&
+            //     key !="hp"
+                               
+            // ) {
+            //     if (userData[key] === "") {
+            //         alert(`${alertMessage[key]}`);
+            //         return;
+            //     }
+            // } 
+           
+           
+        }
+      
+       
+
+        // if( !validatePassword()){
+        //     return;
+        // }
+        // box.password=firstPwdRef.current.value;       
+        // setUserData(box);
+        console.log("---보내기 직전--")
+       // console.log(userData)
+
     };
 
     return (
@@ -427,9 +506,14 @@ export const UserInfoModal = () => {
                 <label>
                     <span>전화번호*</span>
                 </label>
-                <StyledInput maxLength={3} type='text' id='tel1' name='user_tel1' ref={tell1Ref} /> -
-                <StyledInput maxLength={4} type='text' id='tel2' name='user_tel2' ref={tell2Ref} /> -
-                <StyledInput maxLength={4} type='text' id='tel3' name='user_tel3' ref={tell3Ref} />
+                <StyledInput maxLength={3} type='text' id='tel1' name="userTel1"  onChange={handleChange3} /> -
+                <StyledInput maxLength={4} type='text' id='tel2' name="userTel2"  onChange={handleChange3} /> -
+                <StyledInput maxLength={4} type='text' id='tel3' name="userTel3"  onChange={handleChange3} />                
+                <label>
+                    <span>생년월일*</span>
+                </label>
+                <StyledInput name="birthday" type="date" onChange={handleChange2} />
+                
                 <label>
                     <StyledButton onClick={insertUserInfo}>등록</StyledButton>
                 </label>
