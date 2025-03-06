@@ -14,17 +14,6 @@ export const Notice = {
     search: "/management/noticeListBody.do",
 };
 
-export const Approval = {
-    searchOrder: "/approval/orderListBody.do",
-    approvalOrder: "/approval/orderApproveUpdateBody.do",
-    searchShoppingReturn: "/approval/shoppingReturnListBody.do",
-    approvalShoppingReturn: "/approval/shoppingReturnApproveUpdateBody.do",
-};
-
-export const ShoppingReturnList = {
-    searchList: "/trade/shoppingReturnListBody.do",
-};
-
 export const Products = {
     searchList: "/mall/productsListBody.do",
     searchDetail: "/mall/productsDetailBody.do",
@@ -32,4 +21,16 @@ export const Products = {
     supplyList: "/mall/products/supplyList"
 }
 
+export const Approval = {
+    searchOrder: "/approval/orderListBody.do",
+    approvalOrder: "/approval/orderApproveUpdateBody.do",
+    searchShoppingReturn: "/approval/shoppingReturnListBody.do",
+    approvalShoppingReturn: "/approval/shoppingReturnApproveUpdateBody.do"
+
+}
+
+
+export const ShoppingReturnList = {
+    searchList: "/trade/shoppingReturnListBody.do",
+};
 
