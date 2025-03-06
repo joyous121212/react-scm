@@ -21,3 +21,27 @@ export interface IUserInfoResponse {
     userInfo: IUserInfo[];
     userInfoCnt: number;
 }
+
+export interface IDetailCodeList {
+    author: any;
+    createdDate: any;
+    detailCode: string;
+    detailIdx: string;
+    detailName: string;
+    groupCode: string;
+    note: string;
+    updatedDate: any;
+    useYn: any;
+}
+
+export interface IDetailCodeListResponse {
+    detailCode: IDetailCodeList[];
+}
+
+export interface IDuplicUserId {
+    duplicCnt: number;
+}
+
+export interface IDuplicUserIdResponse {
+    duplicCnt: number;
+}
