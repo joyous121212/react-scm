@@ -10,6 +10,10 @@ import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable"
 import { Row } from "react-bootstrap";
 import { ProductsContext } from "../../../../../api/Provider/ProductsProvider";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
+import { Portal } from "../../../../common/potal/Portal";
+import { ProductsModal } from "../ProductsModal/ProductsModal";
+import { modalState } from "../../../../../stores/modalState";
+import { useRecoilState } from "recoil";
 
 export const ProductsMain = () => {
     const [productsList, setProductsList] = useState<IProducts[]>([]);
@@ -17,6 +21,8 @@ export const ProductsMain = () => {
     const [cPage, setCPage] = useState<number>(0);
     const navigate = useNavigate();
     const { searchKeyword } = useContext(ProductsContext);
+    const [modal, setModal] = useRecoilState<boolean>(modalState);
+    const [productId, setProductId] = useState<number>(0);
 
     const columns = [
         { key: "productId", title: "제품 ID"},
@@ -48,6 +54,16 @@ export const ProductsMain = () => {
        }
     }
 
+    const handlerModal = (id: number) => {
+        setModal(!modal);
+        setProductId(id);
+    }
+
+    const postSuccess = () => {
+        setModal(!modal);
+        searchProductsList(cPage);
+    };
+
     return (
         <ProductsMainStyled>  
             <StyledTable 
@@ -56,7 +72,7 @@ export const ProductsMain = () => {
                 onCellClick={(row, column) => {
                     if(column === "productNumber") {
                         // TODO
-                        console.log(row.productId);
+                        handlerModal(row.productId);
                     }
                 }}
             />
@@ -66,7 +82,11 @@ export const ProductsMain = () => {
             itemsCountPerPage={5}
             activePage={cPage}
             />
-        </ProductsMainStyled>
-        
+            {modal && (
+                <Portal>
+                    <ProductsModal productId={productId} postSuccess={postSuccess} setProductId={setProductId}></ProductsModal>
+                </Portal>
+            )}
+        </ProductsMainStyled>       
     )
 }
