@@ -1,10 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { ApprovalOrderMainStyled } from "./styled";
 import { ApprovalOrderContext } from "../../../../../api/Provider/approval/ApprovalOrderProvider";
-import { useNavigate } from "react-router-dom";
 import { searchApi } from "../../../../../api/ApprovalApi/searchApi";
 import { Approval } from "../../../../../api/api";
-import { IApprovalOrder, IApprovalOrderResponse } from "../../../../../models/interface/IApprovalOrder";
+import { IApprovalOrder, IApprovalOrderResponse } from "../../../../../models/interface/IApproval";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";

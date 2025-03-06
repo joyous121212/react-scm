@@ -6,6 +6,7 @@ import { DashBoard } from "../components/layout/DashBoard/DashBoard";
 import { NotFound } from "../components/common/NotFound/NotFound";
 import { DetailCode } from "../pages/management/DetailCode";
 import { ApprovalOrder } from "../pages/approval/orders";
+import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -21,6 +22,10 @@ const routers: RouteObject[] = [
                         path: "orders",
                         element: <ApprovalOrder />,
                     },
+                    {
+                        path:"shopping-return",
+                        element: <ApprovalShoppingReturn/>
+                    }
                 ],
             },
             {

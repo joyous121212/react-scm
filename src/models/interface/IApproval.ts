@@ -12,3 +12,8 @@ export interface IApprovalOrderResponse {
     orderList: IApprovalOrder[];
     orderCnt: number;
 }
+
+export interface IApprovalShoppingResponse {
+    shoppingReturn: any;
+    shoppingReturnCnt: number;
+}
