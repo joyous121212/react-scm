@@ -30,7 +30,7 @@ export const ShoppingSearch = () => {
     };
     return (
         <ShoppingSearchStyled>
-            <StyledInput ref={customerName}></StyledInput>
+            <StyledInput ref={customerName} placeholder='고객기업명을 입력해주세요.'></StyledInput>
             <StyledInput type='date' onChange={(e) => setStartDate(e.target.value)}></StyledInput>
             <StyledInput type='date' onChange={(e) => setEndDate(e.target.value)}></StyledInput>
             <StyledButton variant='secondary' onClick={handlerSearch}>

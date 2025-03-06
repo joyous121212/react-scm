@@ -22,7 +22,6 @@ export const ShoppingMain = () => {
     const [deliveryId, setDeliveryId] = useState<number>(0);
 
     useEffect(() => {
-        console.log(modal);
         searchShoppingList();
     }, [search]);
 
@@ -54,29 +53,34 @@ export const ShoppingMain = () => {
         searchShoppingList(cPage);
     };
 
+    const columns = [
+        { key: "deliveryId", title: "주문번호", size: 10 },
+        { key: "salesDate", title: "주문일자", size: 20 },
+        { key: "customerName", title: "고객기업명", size: 50 },
+        { key: "count", title: "주문개수", size: 10 },
+    ];
+
     return (
         <>
             <StyledTable>
                 <thead>
                     <tr>
-                        <StyledTh size={10}>주문번호</StyledTh>
-                        <StyledTh size={20}>주문일자</StyledTh>
-                        <StyledTh size={50}>고객기업명</StyledTh>
-                        <StyledTh size={10}>주문개수</StyledTh>
+                        {columns.map((column) => (
+                            <StyledTh key={column.key} size={column.size}>
+                                {column.title}
+                            </StyledTh>
+                        ))}
                     </tr>
                 </thead>
                 <tbody>
                     {deliveryOrderList?.length > 0 ? (
-                        deliveryOrderList.map((shopping) => {
-                            return (
-                                <tr key={shopping.deliveryId} onClick={() => handlerModal(shopping.deliveryId)}>
-                                    <StyledTd>{shopping.deliveryId}</StyledTd>
-                                    <StyledTd>{shopping.salesDate}</StyledTd>
-                                    <StyledTd>{shopping.customerName}</StyledTd>
-                                    <StyledTd>{shopping.count}</StyledTd>
-                                </tr>
-                            );
-                        })
+                        deliveryOrderList.map((shopping) => (
+                            <tr key={shopping.deliveryId} onClick={() => handlerModal(shopping.deliveryId)}>
+                                {columns.map((column) => (
+                                    <StyledTd key={column.key}>{shopping[column.key]}</StyledTd>
+                                ))}
+                            </tr>
+                        ))
                     ) : (
                         <tr>
                             <StyledTd colSpan={4}>데이터가 없습니다.</StyledTd>
