@@ -9,7 +9,6 @@ export const Notice = () => {
                 공지사항
             </ContentBox>
             <NoticeSearch />
-            <NoticeMain />
         </>
     );
 };
