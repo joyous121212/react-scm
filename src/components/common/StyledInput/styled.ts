@@ -12,11 +12,11 @@ export const StyledInputStyled = styled.input<InputProps>`
     ${({ size }) => {
         switch (size) {
             case "small":
-                return `padding: 6px 10px; font-size: 14px;`;
+                return `padding: 6px 10px; font-size: 14px; width: 150px;`;
             case "large":
-                return `padding: 12px 16px; font-size: 18px;`;
+                return `padding: 12px 16px; font-size: 18px; width: 250px;`;
             default:
-                return `padding: 10px 14px; font-size: 16px;`;
+                return `padding: 10px 14px; font-size: 16px; width: 200px;`;
         }
     }}
 
