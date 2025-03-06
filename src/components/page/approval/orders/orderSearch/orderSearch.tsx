@@ -12,7 +12,7 @@ export const ApprovalOrderSearch = () => {
 
     const handlerSearch = () => {
         setSearchKeyword({
-            searchTitle: inputValue,
+            searchTitle: inputValue.current.value,
             searchStDate: startDate,
             searchEdDate: endDate,
         });

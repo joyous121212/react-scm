@@ -17,12 +17,12 @@ export const ApprovalOrderMain = () => {
     const [approvalOrderList, setApprovalOrderList] = useState<IApprovalOrder[]>([]);
 
     const columns = [
-        { key: "supplyName", title: "발주업체명", width: "20%" },
-        { key: "productName", title: "제품명", width: "20%" },
-        { key: "count", title: "수량", width: "10%" },
-        { key: "price", title: "금액", width: "15%" },
-        { key: "orderDate", title: "구매일자", width: "15%" },
-        { key: "actions", title: "", width: "10%" },
+        { key: "supplyName", title: "발주업체명" },
+        { key: "productName", title: "제품명" },
+        { key: "count", title: "수량" },
+        { key: "price", title: "금액" },
+        { key: "orderDate", title: "구매일자" },
+        { key: "actions", title: "" },
     ] as Column<IApprovalOrder>[];
 
     useEffect(() => {

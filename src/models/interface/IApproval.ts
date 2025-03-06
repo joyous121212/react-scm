@@ -8,6 +8,17 @@ export interface IApprovalOrder {
     supplyName: string;
 }
 
+export interface IApprovalShoppingReturn {
+    count: number;
+    isApproved: number;
+    price: number;
+    productName: string;
+    refundId: number;
+    returnDate: string;
+    shoppingDate: string;
+    userName: string;
+}
+
 export interface IApprovalOrderResponse {
     orderList: IApprovalOrder[];
     orderCnt: number;
