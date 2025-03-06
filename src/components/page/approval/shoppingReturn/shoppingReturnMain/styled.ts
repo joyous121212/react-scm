@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const CommonCodeMainStyled = styled.div`
+export const ApprovalShoppingReturnMainStyled = styled.div`
     table {
         width: 100%;
         border-collapse: collapse;
