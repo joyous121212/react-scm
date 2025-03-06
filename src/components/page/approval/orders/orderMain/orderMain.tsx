@@ -8,6 +8,8 @@ import { IApprovalOrder, IApprovalOrderResponse } from "../../../../../models/in
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
+import { postApi } from "../../../../../api/ApprovalApi/postApi";
+import Swal from "sweetalert2";
 
 export const ApprovalOrderMain = () => {
     const { searchKeyword } = useContext(ApprovalOrderContext);
@@ -27,6 +29,19 @@ export const ApprovalOrderMain = () => {
     useEffect(() => {
         searchApprovalOrder();
     }, [searchKeyword]);
+
+    const handlerButton = async (orderId: number) => {
+        const result = await postApi(Approval.approvalOrder, { orderId });
+        if (result.result === "success") {
+            Swal.fire({
+                icon: "success",
+                title: "승인 완료",
+                confirmButtonText: "확인",
+            }).then(() => {
+                searchApprovalOrder(); // 승인 후 실행할 함수
+            });
+        }
+    };
 
     const searchApprovalOrder = async (currentPage?: number) => {
         currentPage = currentPage || 1;
@@ -49,7 +64,11 @@ export const ApprovalOrderMain = () => {
             <StyledTable
                 data={approvalOrderList}
                 columns={columns}
-                renderAction={(row) => <StyledButton size='small'>승인</StyledButton>}
+                renderAction={(row) => (
+                    <StyledButton size='small' onClick={() => handlerButton(row.orderId)}>
+                        승인
+                    </StyledButton>
+                )}
                 renderCell={(row, column) => {
                     if (column.key === "price") {
                         // count * price 계산 후, 원단위로 포맷 (₩)

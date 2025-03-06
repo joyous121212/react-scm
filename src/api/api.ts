@@ -16,5 +16,6 @@ export const Notice = {
 
 
 export const Approval = {
-    searchOrder: "/approval/orderListBody.do"
+    searchOrder: "/approval/orderListBody.do",
+    approvalOrder: "/approval/orderApproveUpdateBody.do"
 }
