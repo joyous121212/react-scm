@@ -1,14 +1,14 @@
 import { useContext, useRef, useState } from "react";
-import { StyledButton } from "../../../../common/StyledButton/StyledButton";
+import { ApprovalShoppingReturnContext } from "../../../../../api/Provider/approval/ApprovalShoppingReturn";
+import { ApprovalShoppingReturnSearchStyled } from "./styled";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
-import { ApprovalOrderSearchStyled } from "./styled";
-import { ApprovalOrderContext } from "../../../../../api/Provider/approval/ApprovalOrderProvider";
+import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 
-export const ApprovalOrderSearch = () => {
+export const ApprovalShoppingReturnSearch = () => {
     const inputValue = useRef<HTMLInputElement>();
     const [startDate, setStartDate] = useState<string>();
     const [endDate, setEndDate] = useState<string>();
-    const { setSearchKeyword } = useContext(ApprovalOrderContext);
+    const { setSearchKeyword } = useContext(ApprovalShoppingReturnContext);
 
     const handlerSearch = () => {
         setSearchKeyword({
@@ -19,15 +19,15 @@ export const ApprovalOrderSearch = () => {
     };
 
     return (
-        <ApprovalOrderSearchStyled>
+        <ApprovalShoppingReturnSearchStyled>
             제품명
             <StyledInput ref={inputValue}></StyledInput>
-            구매일자
+            반품일자
             <StyledInput type='date' onChange={(e) => setStartDate(e.target.value)}></StyledInput>
             <StyledInput type='date' onChange={(e) => setEndDate(e.target.value)}></StyledInput>
             <StyledButton variant='secondary' onClick={handlerSearch}>
                 검색
             </StyledButton>
-        </ApprovalOrderSearchStyled>
+        </ApprovalShoppingReturnSearchStyled>
     );
 };
