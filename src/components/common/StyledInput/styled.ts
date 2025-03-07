@@ -13,13 +13,13 @@ export const StyledInputStyled = styled.input<InputProps & { as?: string }>`
     ${({ size }) => {
         switch (size) {
             case "small":
-                return `padding: 6px 10px; font-size: 14px; width: 150px;`;
+                return `padding: 6px 10px; font-size: 14px; `;
             case "large":
-                return `padding: 12px 16px; font-size: 18px; width: 400px;`;
+                return `padding: 12px 16px; font-size: 18px; `;
             case "modal":
                 return `padding: 6px 10px; font-size: 12px;`;
             default:
-                return `padding: 10px 14px; font-size: 16px; width: 200px;`;
+                return `padding: 10px 14px; font-size: 16px;`;
         }
     }}
 

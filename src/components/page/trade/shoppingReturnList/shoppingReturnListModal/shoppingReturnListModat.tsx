@@ -12,6 +12,8 @@ import {
 import { ShoppingReturnList } from "../../../../../api/api";
 import { transformShoppingReturnData } from "../shoppingReturnListMain/shoppingReturnListMain";
 import { StyledSelectBox } from "../../../../common/StyledSelectBox/StyledSelectBox";
+import { postApi } from "../../../../../api/tradeApi/postApi";
+import Swal from "sweetalert2";
 
 const initShoppingReturn = {
     count: 0,
@@ -56,8 +58,36 @@ export const ShoppingReturnModal: FC<IShoppingReturnListModalProps> = ({ postSuc
         }
     };
 
+    const updateCommonCode = async () => {
+        const result = await Swal.fire({
+            icon: "question",
+            title: "알람",
+            text: "반품승인 요청하시겠습니까?",
+            showCancelButton: true, // cancel 버튼 보이기
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "예",
+            cancelButtonText: "아니오",
+        });
 
-    const updateCommonCode = async () => {};
+        // 사용자가 "예"를 눌렀을 경우 API 호출
+        if (result.isConfirmed) {
+            const response = await postApi(ShoppingReturnList.updateMall, {
+                warehouseId: selectValue,
+                refundId: shoppingReturnId,
+            });
+
+            if (response.result === "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "요청 완료",
+                    confirmButtonText: "확인",
+                }).then(() => {
+                    postSuccess();
+                });
+            }
+        }
+    };
 
     return (
         <ShoppingReturnListModalStyled>
@@ -93,20 +123,28 @@ export const ShoppingReturnModal: FC<IShoppingReturnListModalProps> = ({ postSuc
                         <tr>
                             <th>반품 금액</th>
                             <td>
-                                <StyledInput size='modal' value={shoppingReturn.totalPrice.toLocaleString("ko-KR")} readOnly />
+                                <StyledInput
+                                    size='modal'
+                                    value={shoppingReturn.totalPrice.toLocaleString("ko-KR")}
+                                    readOnly
+                                />
                             </td>
                         </tr>
                         <tr>
                             <th>반품 창고 지정</th>
                             <td>
-                                <StyledSelectBox options={warehouseOptions} value={selectValue} onChange={setSelectValue} />
+                                <StyledSelectBox
+                                    options={warehouseOptions}
+                                    value={selectValue}
+                                    onChange={setSelectValue}
+                                />
                             </td>
                         </tr>
                     </tbody>
                 </table>
 
                 <div className='button-container'>
-                    <button>승인요청</button>
+                    <button onClick={updateCommonCode}>승인요청</button>
                     <button onClick={() => setModal(!modal)}>취소</button>
                 </div>
             </div>

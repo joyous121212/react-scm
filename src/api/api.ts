@@ -33,4 +33,5 @@ export const Approval = {
 export const ShoppingReturnList = {
     searchList: "/trade/shoppingReturnListBody.do",
     searchModal: "/trade/shoppingReturnListModalBody.do",
+    updateMall: "/trade/shoppingReturnUpdateMallBody.do"
 };
