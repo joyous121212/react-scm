@@ -28,6 +28,7 @@ export const ShoppingMain = () => {
     const searchShoppingList = async (currentPage?: number) => {
         currentPage = currentPage || 1;
         const searchParam = new URLSearchParams(search); //key,value를 나눠줌
+        console.log("searchParam: ", searchParam.toString());
         searchParam.append("currentPage", currentPage.toString());
         searchParam.append("pageSize", "5");
 
@@ -37,9 +38,22 @@ export const ShoppingMain = () => {
         );
 
         if (result) {
-            setDeliveryOrderList(result.deliveryOrderList);
-            setDeliveryOrderCnt(result.deliveryOrderCnt);
-            setCPage(currentPage);
+            // 쿼리 파라미터에서 searchSalesDate 값을 추출
+            const searchSalesDate = searchParam.get("searchSalesDate");
+
+            let filteredList = result.deliveryOrderList;
+
+            if (searchSalesDate) {
+                // searchSalesDate가 정확히 일치하는 데이터만 필터링
+                filteredList = filteredList.filter((item) => {
+                    const itemDate = new Date(item.salesDate).toISOString().split("T")[0];
+                    return itemDate === searchSalesDate;
+                });
+            }
+
+            setDeliveryOrderList(filteredList); // 필터링된 리스트 설정
+            setDeliveryOrderCnt(filteredList.length); // 필터링된 항목 수
+            setCPage(currentPage); // 페이지 업데이트
         }
     };
 
