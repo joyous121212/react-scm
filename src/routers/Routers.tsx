@@ -10,6 +10,7 @@ import { OrdersList } from "../pages/tasks/OrdersList";
 import { Products } from "../pages/mall/Products";
 import { ApprovalOrder } from "../pages/approval/orders";
 import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
+import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -18,6 +19,15 @@ const routers: RouteObject[] = [
         path: "/react",
         element: <DashBoard />,
         children: [
+            {
+                path: "trade",
+                children: [
+                    {
+                        path: "shopping-return-list",
+                        element: <ShoppingReturnList />,
+                    },
+                ],
+            },
             {
                 path: "approval",
                 children: [

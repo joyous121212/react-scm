@@ -6,8 +6,11 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
     size?: "small" | "medium" | "large" | "modal"; // ✅ 우리가 원하는 `size` 타입
     fullWidth?: boolean;
     error?: boolean;
+    as?: string;
 }
 
-export const StyledInput = forwardRef<HTMLInputElement, InputProps>(({ ...props }, ref) => {
-    return <StyledInputStyled ref={ref} {...props} />;
-});
+export const StyledInput = forwardRef<HTMLInputElement, InputProps>(
+    ({ as = "input", ...props }, ref) => {
+        return <StyledInputStyled as={as} ref={ref} {...props} />;
+    }
+);
