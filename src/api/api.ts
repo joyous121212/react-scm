@@ -35,3 +35,7 @@ export const ShoppingReturnList = {
     searchModal: "/trade/shoppingReturnListModalBody.do",
     updateMall: "/trade/shoppingReturnUpdateMallBody.do"
 };
+
+export const Inventory = {
+    searchSelectBoxList : "/trade/inventorySelectBoxBody.do"
+}

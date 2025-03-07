@@ -9,6 +9,7 @@ import { ApprovalOrder } from "../pages/approval/orders";
 import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
 import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
 import { Products } from "../pages/mall/Products";
+import { Inventory } from "../pages/trade/inventory";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -23,6 +24,10 @@ const routers: RouteObject[] = [
                     {
                         path: "shopping-return-list",
                         element: <ShoppingReturnList />,
+                    },
+                    {
+                        path: "inventory",
+                        element: <Inventory />,
                     },
                 ],
             },
@@ -67,7 +72,7 @@ const routers: RouteObject[] = [
                 children: [
                     {
                         path: "products",
-                        element: <Products />
+                        element: <Products />,
                     },
                 ],
             },
