@@ -21,8 +21,10 @@ export const Products = {
     searchList: "/mall/productsListBody.do",
     searchDetail: "/mall/productsDetailBody.do",
     category: "/mall/products/category",
-    supplyList: "/mall/products/supplyList"
-}
+    supplyList: "/mall/products/supplyList",
+    historySave: "/mall/historySaveBody.do",
+    cartDetailSave: "/mall/cartDetailSaveBody.do",
+};
 
 export const Approval = {
     searchOrder: "/approval/orderListBody.do",
@@ -31,4 +33,12 @@ export const Approval = {
     approvalShoppingReturn: "/approval/shoppingReturnApproveUpdateBody.do",
 };
 
-}
+export const ShoppingReturnList = {
+    searchList: "/trade/shoppingReturnListBody.do",
+    searchModal: "/trade/shoppingReturnListModalBody.do",
+    updateMall: "/trade/shoppingReturnUpdateMallBody.do",
+};
+
+export const OrderList = {
+    searchList: "/tasks/orderListBody.do",
+};
