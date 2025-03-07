@@ -6,6 +6,7 @@ import DaumPostcode from "react-daum-postcode";
 import { useEffect, useState } from "react";
 import { detailCodeListhApi } from "../../../../../api/UserInfoApi/detailCodeListApi";
 import { UserInfo } from "../../../../../api/api";
+import { useNavigate } from "react-router-dom";
 import {
     IDetailCodeListResponse,
     IDuplicUserIdResponse,
@@ -19,24 +20,16 @@ import axios from "axios";
 import { postUserInfoInsertApi } from "../../../../../api/UserInfoApi/postUserInfoInsertApi";
 import { userInfo } from "os";
 import { ProductsModalStyled } from "../../../Mall/Products/ProductsModal/styled";
+import { UserDetailInfoModalProps } from "../../../../../models/interface/IUserInfo";
+import { FC } from "react";
 // window.daum 타입 확장
 import { useRecoilState } from "recoil";
-export const UserInfoModal = () => {
+export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdetail }) => {
+    // console.log(detailInfo);
+
     //모달 관리
     const [modal, setModal] = useRecoilState(modalState);
-    // 상태 관리
 
-    // classType
-    // :
-    // "기업고객"
-    // detailCode
-    // :
-    // "성실회원"
-    // group_code
-    // :
-    // "G00001A1"
-
-    //user_type: "C"
     const [userData, setUserData] = useState({
         action: "I",
         user_type: "",
@@ -90,6 +83,27 @@ export const UserInfoModal = () => {
         user_address: "우편번호 찾기를 입력해주세요",
         user_dt_address: "상세주로를 입력해주세요",
     };
+
+    useEffect(() => {
+        if (isdetail) {
+            const box: any = { ...detailInfo };
+            var box3 = { ...userData };
+            // console.log(box);
+
+            emailRef.current.value = detailInfo.email;
+            zipcodeRef.current.value = detailInfo.zipCode;
+            addressRef.current.value = detailInfo.address;
+            const [t1, t2, t3] = detailInfo.hp.split("-");
+            box3.userTel1 = t1;
+            box3.userTel2 = t2;
+            box3.userTel3 = t3;
+            setUserData({
+                ...box3,
+                ...box,
+            });
+        }
+        // setUserDetail(null);
+    }, []);
 
     // 유효성을 요하는 변수들 idRef, emailRef
     const idRef = useRef<HTMLInputElement>(null);
@@ -381,40 +395,40 @@ export const UserInfoModal = () => {
     // 형식의 유효성은 전화번호, 비번
     const insertUserInfo = async () => {
         //먼저 빈값을 검사.
-        // for (let key in emptyValiMessage) {
-        //     console.log(key + ": " + userData[key]);
-        // }
-
         for (let key in emptyValiMessage) {
             console.log(key + ": " + userData[key]);
-            if (userData[key] === "" && key != "manager") {
-                alert(emptyValiMessage[key]);
-                return;
-            }
         }
 
-        for (let key in valiPwdMessage) {
-            console.log("받은 네임값:  " + key);
-            if (!validatePassword()) {
-                alert(valiPwdMessage[key]);
-                return;
-            }
-        }
+        // for (let key in emptyValiMessage) {
+        //     console.log(key + ": " + userData[key]);
+        //     if (userData[key] === "" && key != "manager") {
+        //         alert(emptyValiMessage[key]);
+        //         return;
+        //     }
+        // }
 
-        // 특별히 필한 유효성을 검사.
-        for (let key in valiMessage) {
-            console.log("받은 네임값:  " + key);
-            if (!valiSwitch(key)) {
-                alert(valiMessage[key]);
-                return;
-            }
-        }
+        // for (let key in valiPwdMessage) {
+        //     console.log("받은 네임값:  " + key);
+        //     if (!validatePassword()) {
+        //         alert(valiPwdMessage[key]);
+        //         return;
+        //     }
+        // }
 
-        console.log("---마지막 제출전 데이터 확인-----");
-        console.log(userData);
+        // // 특별히 필한 유효성을 검사.
+        // for (let key in valiMessage) {
+        //     console.log("받은 네임값:  " + key);
+        //     if (!valiSwitch(key)) {
+        //         alert(valiMessage[key]);
+        //         return;
+        //     }
+        // }
 
-        const res: IInsertUserInfoResponse = await postUserInfoInsertApi(UserInfo.insertUserInfo, userData);
-        console.log(res);
+        // console.log("---마지막 제출전 데이터 확인-----");
+        // console.log(userData);
+
+        // const res: IInsertUserInfoResponse = await postUserInfoInsertApi(UserInfo.insertUserInfo, userData);
+        // console.log(res);
     };
 
     //특별히 필요한 유효성의 스위치 문이다.
@@ -469,7 +483,11 @@ export const UserInfoModal = () => {
                                     }}
                                     defaultValue={selectValue ? selectValue : "c"}
                                 >
-                                    <option value={"c"}>선택</option>
+                                    {isdetail ? (
+                                        <option value={detailInfo.group_code}>{detailInfo.userClass}</option>
+                                    ) : (
+                                        <option value={"c"}>선택</option>
+                                    )}
                                     <option value={"E10001X1"}>SCM 담당자</option>
                                     <option value={"E10001X1"}>구매 담당자</option>
                                     <option value={"E10001X1"}>회사 임원</option>
@@ -482,7 +500,12 @@ export const UserInfoModal = () => {
                             </th>
                             <td colSpan={3} id='detail_code'>
                                 <select name='detail_code' onChange={handleChange}>
-                                    <option value={"c"}>선택</option>
+                                    {isdetail ? (
+                                        <option value={detailInfo.detailCode}>{detailInfo.userClass}</option>
+                                    ) : (
+                                        <option value={"c"}>선택</option>
+                                    )}
+
                                     {detailCodeList ? (
                                         detailCodeList.map((ele: any, idx: number) => {
                                             console.log(ele);
@@ -504,21 +527,43 @@ export const UserInfoModal = () => {
                                 아이디<span className='font_red'>*</span>
                             </th>
                             <td colSpan={2}>
-                                <StyledInput placeholder='숫자, 영문자 조합으로 6~20자리' ref={idRef} />
+                                {isdetail ? (
+                                    <>
+                                        <StyledInput
+                                            placeholder='숫자, 영문자 조합으로 6~20자리'
+                                            readOnly
+                                            value={detailInfo.loginID}
+                                        />
+                                    </>
+                                ) : (
+                                    <>
+                                        <StyledInput placeholder='숫자, 영문자 조합으로 6~20자리' ref={idRef} />
+                                    </>
+                                )}
+
                                 {isValid ? errorMessage : errorMessage}
                             </td>
                             <td colSpan={1}>
-                                <StyledButton onClick={checkDuplicFnc}>중복확인</StyledButton>
+                                {!isdetail && <StyledButton onClick={checkDuplicFnc}>중복확인</StyledButton>}
                             </td>
                             <th scope='row'>
                                 비밀번호 <span className='font_red'>*</span>
                             </th>
                             <td colSpan={3}>
-                                <StyledInput
-                                    name='password'
-                                    onChange={handleChange2}
-                                    placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
-                                />
+                                {isdetail ? (
+                                    <StyledInput
+                                        name='password'
+                                        value={detailInfo.password}
+                                        onChange={handleChange2}
+                                        placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
+                                    />
+                                ) : (
+                                    <StyledInput
+                                        name='password'
+                                        onChange={handleChange2}
+                                        placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
+                                    />
+                                )}
                             </td>
                         </tr>
                         {/* 3행 시작 */}
@@ -527,17 +572,30 @@ export const UserInfoModal = () => {
                                 이름/회사명 <span className='font_red'>*</span>
                             </th>
                             <td colSpan={3}>
-                                <StyledInput name='name' onChange={handleChange} />
+                                {isdetail ? (
+                                    <StyledInput name='name' value={detailInfo.name} onChange={handleChange} />
+                                ) : (
+                                    <StyledInput name='name' onChange={handleChange} />
+                                )}
                             </td>
                             <th scope='row'>
                                 비밀번호 확인<span className='font_red'>*</span>
                             </th>
                             <td colSpan={3}>
-                                <StyledInput
-                                    name='password1'
-                                    onChange={handleChange2}
-                                    placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
-                                />
+                                {isdetail ? (
+                                    <StyledInput
+                                        name='password1'
+                                        value={detailInfo.password}
+                                        onChange={handleChange2}
+                                        placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
+                                    />
+                                ) : (
+                                    <StyledInput
+                                        name='password1'
+                                        onChange={handleChange2}
+                                        placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
+                                    />
+                                )}
                             </td>
                         </tr>
                         {/* 4행 시작 */}
@@ -546,38 +604,83 @@ export const UserInfoModal = () => {
                                 담당자명
                             </th>
                             <td colSpan={3}>
-                                <StyledInput name='manager' onChange={handleChange} readOnly />
+                                {isdetail ? (
+                                    <StyledInput
+                                        name='manager'
+                                        value={detailInfo.manager}
+                                        onChange={handleChange}
+                                        readOnly
+                                    />
+                                ) : (
+                                    <StyledInput name='manager' onChange={handleChange} readOnly />
+                                )}
                             </td>
                             <th scope='row'>
                                 전화번호<span className='font_red'>*</span>
                             </th>
                             <td colSpan={3}>
-                                <StyledInput
-                                    style={{ width: "20%" }}
-                                    maxLength={3}
-                                    type='text'
-                                    id='tel1'
-                                    name='userTel1'
-                                    onChange={handleChange3}
-                                />
-                                -
-                                <StyledInput
-                                    style={{ width: "20%" }}
-                                    maxLength={4}
-                                    type='text'
-                                    id='tel2'
-                                    name='userTel2'
-                                    onChange={handleChange3}
-                                />
-                                -
-                                <StyledInput
-                                    style={{ width: "20%" }}
-                                    maxLength={4}
-                                    type='text'
-                                    id='tel3'
-                                    name='userTel3'
-                                    onChange={handleChange3}
-                                />
+                                {isdetail ? (
+                                    <>
+                                        <StyledInput
+                                            style={{ width: "20%" }}
+                                            maxLength={3}
+                                            type='text'
+                                            id='tel1'
+                                            name='userTel1'
+                                            value={userData.userTel1}
+                                            onChange={handleChange3}
+                                        />
+                                        -
+                                        <StyledInput
+                                            style={{ width: "20%" }}
+                                            maxLength={4}
+                                            type='text'
+                                            id='tel2'
+                                            name='userTel2'
+                                            value={userData.userTel2}
+                                            onChange={handleChange3}
+                                        />
+                                        -
+                                        <StyledInput
+                                            style={{ width: "20%" }}
+                                            maxLength={4}
+                                            type='text'
+                                            id='tel3'
+                                            name='userTel3'
+                                            value={userData.userTel3}
+                                            onChange={handleChange3}
+                                        />
+                                    </>
+                                ) : (
+                                    <>
+                                        <StyledInput
+                                            style={{ width: "20%" }}
+                                            maxLength={3}
+                                            type='text'
+                                            id='tel1'
+                                            name='userTel1'
+                                            onChange={handleChange3}
+                                        />
+                                        -
+                                        <StyledInput
+                                            style={{ width: "20%" }}
+                                            maxLength={4}
+                                            type='text'
+                                            id='tel2'
+                                            name='userTel2'
+                                            onChange={handleChange3}
+                                        />
+                                        -
+                                        <StyledInput
+                                            style={{ width: "20%" }}
+                                            maxLength={4}
+                                            type='text'
+                                            id='tel3'
+                                            name='userTel3'
+                                            onChange={handleChange3}
+                                        />
+                                    </>
+                                )}
                             </td>
                         </tr>
                         {/* 5
@@ -587,17 +690,34 @@ export const UserInfoModal = () => {
                                 성별<span className='font_red'>*</span>
                             </th>
                             <td colSpan={3} id='rggender_td'>
-                                <select name='sex' onChange={handleChange}>
-                                    <option value=''>선택</option>
-                                    <option value='1'>남자</option>
-                                    <option value='2'>여자</option>
-                                </select>
+                                {isdetail ? (
+                                    <select name='sex' value={detailInfo.sex} onChange={handleChange}>
+                                        <option value=''>선택</option>
+                                        <option value='1'>남자</option>
+                                        <option value='2'>여자</option>
+                                    </select>
+                                ) : (
+                                    <select name='sex' onChange={handleChange}>
+                                        <option value=''>선택</option>
+                                        <option value='1'>남자</option>
+                                        <option value='2'>여자</option>
+                                    </select>
+                                )}
                             </td>
                             <th scope='row' id='birthday1'>
                                 생년월일 <span className='font_red'>*</span>
                             </th>
                             <td colSpan={3}>
-                                <StyledInput name='birthday' type='date' onChange={handleChange2} />
+                                {isdetail ? (
+                                    <StyledInput
+                                        name='birthday'
+                                        type='date'
+                                        value={detailInfo.birthday}
+                                        onChange={handleChange2}
+                                    />
+                                ) : (
+                                    <StyledInput name='birthday' type='date' onChange={handleChange2} />
+                                )}
                             </td>
                         </tr>
 
@@ -608,7 +728,11 @@ export const UserInfoModal = () => {
                                 이메일<span className='font_red'>*</span>
                             </th>
                             <td colSpan={6}>
-                                <StyledInput ref={emailRef} />
+                                {isdetail ? (
+                                    <StyledInput ref={emailRef}></StyledInput>
+                                ) : (
+                                    <StyledInput ref={emailRef}></StyledInput>
+                                )}
                             </td>
                             <td colSpan={1}>
                                 <StyledButton onClick={checkDuplicEmailFnc}>중복확인</StyledButton>
@@ -621,7 +745,11 @@ export const UserInfoModal = () => {
                                 우편번호<span className='font_red'>*</span>
                             </th>
                             <td colSpan={6}>
-                                <StyledInput ref={zipcodeRef} readOnly />
+                                {isdetail ? (
+                                    <StyledInput ref={zipcodeRef} />
+                                ) : (
+                                    <StyledInput ref={zipcodeRef} readOnly />
+                                )}
                             </td>
 
                             <td colSpan={1}>
@@ -634,7 +762,11 @@ export const UserInfoModal = () => {
                                 주소<span className='font_red'>*</span>
                             </th>
                             <td colSpan={8}>
-                                <StyledInput ref={addressRef} readOnly />
+                                {isdetail ? (
+                                    <StyledInput ref={addressRef} readOnly />
+                                ) : (
+                                    <StyledInput ref={addressRef} readOnly />
+                                )}
                             </td>
                         </tr>
                         {/*9행 시작*/}

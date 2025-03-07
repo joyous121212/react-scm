@@ -50,3 +50,59 @@ export interface IInsertUserInfoResponse {
     result: string;
     resultMsg: string;
 }
+
+export interface IUserDetialInfo {
+    // loginID: string;
+    // userType: string;
+    // name: string;
+    // password: string;
+    // sex: string;
+    // hp: string;
+    // email: string;
+    // createdDate: string;
+    // birthday: string;
+    // userClass: string;
+    // statusYn: string;
+    // address: string;
+    // detailAddress: string;
+    // groupCode: string;
+    // detailCode: string;
+    // manager: string;
+    // zipCode: string;
+    user_type: string;
+    classType: string;
+    statusYn: string;
+    group_code: string;
+    detail_code: string;
+    loginID: string;
+    password: string;
+    password1: string;
+    name: string;
+    manager: string;
+    hp: string;
+    userTel1: string;
+    userTel2: string;
+    userTel3: string;
+    birthday: string;
+    user_email: string;
+    user_zipcode: string;
+    user_address: string;
+    user_dt_address: string;
+    detailCode: string;
+    userClass: string;
+    sex: string;
+    email: string;
+    zipCode: string;
+    address: string;
+    ph: string;
+}
+
+export interface IUserInfoDetailResponse {
+    detailValue: IUserDetialInfo;
+}
+
+export interface UserDetailInfoModalProps {
+    detailInfo: IUserDetialInfo; // 프롭 타입 설정
+    isdetail: boolean; // 프롭 타입 설정
+    // setUserDetail: React.Dispatch<React.SetStateAction<any>>;
+}

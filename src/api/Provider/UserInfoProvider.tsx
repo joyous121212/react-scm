@@ -1,26 +1,42 @@
-import React, { FC, createContext, useMemo, useState } from "react";
+import React, { FC, createContext, useState } from "react";
 
-// 초기값의 타입.
-interface ISearchKeyword {
-    searchKeyword?: object;
-    setSearchKeyword?: React.Dispatch<React.SetStateAction<object>>;
+// searchKeyword 객체의 타입 정의
+interface SearchKeyword {
+    groupCodeSelect: string;
+    searchTitle: string;
+    currentPage: number;
+    pageSize: number;
+    inforAll: number;
 }
 
-// 지정된 곳 아무데서나 사용이 가능한 context를 생성함.(생성만 하였고, 사용은 아직입니다)
-export const UserInfoContext = createContext<ISearchKeyword>({});
+// ISearchKeyword에서 searchKeyword와 setSearchKeyword의 타입을 정확히 정의
+interface ISearchKeyword {
+    searchKeyword: SearchKeyword;
+    setSearchKeyword: React.Dispatch<React.SetStateAction<SearchKeyword>>;
+}
 
-// provider를 사용해서 context에 값을 넣어주고, 원하는 곳에 제공할 수 있게함
+// context 생성
+export const UserInfoContext = createContext<ISearchKeyword>({
+    searchKeyword: {
+        groupCodeSelect: "name",
+        searchTitle: "",
+        currentPage: 1,
+        pageSize: 5,
+        inforAll: 0,
+    },
+    setSearchKeyword: () => {},
+});
+
+// provider를 사용해서 context에 값을 넣어주고, 원하는 곳에 제공할 수 있게 함
 export const UserInfoProvider: FC<{ children: React.ReactNode | React.ReactNode[] }> = ({ children }) => {
-    const [searchKeyword, setSearchKeyword] = useState({
+    // 상태 훅을 SearchKeyword 타입으로 초기화
+    const [searchKeyword, setSearchKeyword] = useState<SearchKeyword>({
         groupCodeSelect: "name",
         searchTitle: "",
         currentPage: 1,
         pageSize: 5,
         inforAll: 0,
     });
-
-    // 어차피 searchKeyword가 바뀌도록 사용하는 것이기 때문에, 굳이 memo를 사용할 필요는 없다
-    // const value = useMemo(() => ({ searchKeyword, setSearchKeyword }), [searchKeyword]);
 
     return <UserInfoContext.Provider value={{ searchKeyword, setSearchKeyword }}>{children}</UserInfoContext.Provider>;
 };

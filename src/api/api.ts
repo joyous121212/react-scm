@@ -19,6 +19,7 @@ export const UserInfo = {
     detailsearch: "/management/detailCodeListBody.do",
     checkDuplicUserId: "/management/check_loginIDBody.do",
     insertUserInfo: "/registerScmBody.do",
+    userInfoDetail: "/management/userInfoDetailBody.do",
 };
 
 export const Products = {

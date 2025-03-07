@@ -8,6 +8,5 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 export const StyledButton: FC<ButtonProps> = ({ children, ...props }) => {
-    console.log(props.size);
     return <StyledButtonStyled {...props}>{children}</StyledButtonStyled>;
 };

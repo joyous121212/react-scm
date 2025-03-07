@@ -39,6 +39,8 @@ export const StyledTable = <T extends { [key: string]: any }>({
             ? Object.keys(data[0]).map((key) => ({ key: key as keyof T, title: key, clickable: false }))
             : []);
 
+    console.log(generatedColumns);
+
     return (
         <Table fullWidth={fullWidth} bordered={bordered}>
             <Thead>

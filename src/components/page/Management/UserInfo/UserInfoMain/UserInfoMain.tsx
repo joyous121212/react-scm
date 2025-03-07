@@ -11,46 +11,129 @@ import { ProductsModalStyled } from "../../../Mall/Products/ProductsModal/styled
 import { StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { IProducts } from "../../../../../models/interface/IProducts";
 import { Column } from "../../../../common/StyledTable/StyledTable";
+import { StyledButton } from "../../../../common/StyledButton/StyledButton";
+import { CommonCodeMainStyled } from "../../CommonCode/CommonCodeMain/styled";
+import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
+import { userInfoDetailApi } from "../../../../../api/UserInfoApi/userInfoDetailApi";
+import { IUserInfoDetailResponse } from "../../../../../models/interface/IUserInfo";
+import { IUserDetialInfo } from "../../../../../models/interface/IUserInfo";
 export const UserInfoMain = () => {
     const columns = [
         { key: "groupCode", title: "구분" },
         { key: "name", title: "성명" },
         { key: "userClass", title: "담당업무" },
-        { key: "name", title: "담당자명" },
+        { key: "manager", title: "담당자명" },
         { key: "hp", title: "연락쳐" },
         { key: "statusYn", title: "회원상태" },
-        { key: "수정", title: "비고" },
-    ] as Column<IProducts>[];
+        { key: "actions", title: "비고" },
+    ] as Column<any>[];
 
-    const { searchKeyword } = useContext(UserInfoContext);
+    const { searchKeyword, setSearchKeyword } = useContext(UserInfoContext);
     const [userList, setUserList] = useState(null);
+    const [userInfoCnt, setUserInfoCnt] = useState(null);
+    const [cPage, setCPage] = useState<number>(0);
     //모달 관리
     const [modal, setModal] = useRecoilState(modalState);
+    const [userDetail, setUserDetail] = useState<IUserDetialInfo>({
+        user_type: "",
+        classType: "",
+        statusYn: "",
+        group_code: "",
+        detail_code: "",
+        loginID: "",
+        password: "",
+        password1: "",
+        name: "",
+        manager: "",
+        hp: "",
+        userTel1: "",
+        userTel2: "",
+        userTel3: "",
+        birthday: "",
+        user_email: "",
+        user_zipcode: "",
+        user_address: "",
+        user_dt_address: "",
+        detailCode: "",
+        userClass: "",
+        sex: "",
+        email: "",
+        zipCode: "",
+        address: "",
+        ph: "",
+    });
 
     useEffect(() => {
-        console.log(searchKeyword);
+        console.log("-----제거확인----");
+        console.log(userDetail);
+        console.log("-----제거확인----");
+    }, [userDetail]);
+
+    useEffect(() => {
+        //  console.log(searchKeyword);
         searchUserInfo();
     }, [searchKeyword]);
 
     const searchUserInfo = async () => {
         const result = await userInfoSearchApi<any, any>(UserInfo.search, searchKeyword);
-        console.log(result.userInfo);
+        //  console.log(result.userInfo);
         setUserList(result.userInfo);
+        setUserInfoCnt(result.userInfoCnt);
+    };
+
+    const searchUserInfoSearchApi = async (currentPage?: number) => {
+        currentPage = currentPage || 1;
+        const box = { ...searchKeyword };
+        box.currentPage = currentPage;
+        setSearchKeyword(box);
     };
 
     return (
         <>
             {userList != null ? (
                 <>
-                    <StyledTable data={userList} columns={columns} />
+                    <CommonCodeMainStyled>
+                        <StyledTable
+                            data={userList}
+                            columns={columns}
+                            renderAction={(row) => (
+                                <StyledButton
+                                    size='small'
+                                    onClick={async () => {
+                                        const res: IUserInfoDetailResponse = await userInfoDetailApi(
+                                            UserInfo.userInfoDetail,
+                                            { loginID: row.loginID }
+                                        );
+                                        console.log(res.detailValue);
+                                        setUserDetail(res.detailValue);
+                                        setModal(!modal);
+                                    }}
+                                >
+                                    수정
+                                </StyledButton>
+                            )}
+                        />
+                    </CommonCodeMainStyled>
+                    <PageNavigate
+                        totalItemsCount={userInfoCnt}
+                        onChange={searchUserInfoSearchApi}
+                        itemsCountPerPage={5}
+                        activePage={cPage}
+                    />
                 </>
             ) : (
                 <></>
             )}
 
-            {modal && (
+            {modal && userDetail === undefined && (
                 <Portal>
-                    <UserInfoModal />
+                    <UserInfoModal detailInfo={userDetail} isdetail={false} />
+                </Portal>
+            )}
+
+            {userDetail != undefined && modal && (
+                <Portal>
+                    <UserInfoModal detailInfo={userDetail} isdetail={true} />
                 </Portal>
             )}
         </>
