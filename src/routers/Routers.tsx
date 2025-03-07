@@ -7,6 +7,9 @@ import { NotFound } from "../components/common/NotFound/NotFound";
 import { DetailCode } from "../pages/management/DetailCode";
 import { Shopping } from "../pages/tasks/Shopping";
 import { OrdersList } from "../pages/tasks/OrdersList";
+import { Products } from "../pages/mall/Products";
+import { ApprovalOrder } from "../pages/approval/orders";
+import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -15,6 +18,19 @@ const routers: RouteObject[] = [
         path: "/react",
         element: <DashBoard />,
         children: [
+            {
+                path: "approval",
+                children: [
+                    {
+                        path: "orders",
+                        element: <ApprovalOrder />,
+                    },
+                    {
+                        path: "shopping-return",
+                        element: <ApprovalShoppingReturn />,
+                    },
+                ],
+            },
             {
                 path: "management",
                 children: [
@@ -42,6 +58,21 @@ const routers: RouteObject[] = [
                     {
                         path: "orders",
                         element: <OrdersList />,
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        path: "/react",
+        element: <DashBoard />,
+        children: [
+            {
+                path: "mall",
+                children: [
+                    {
+                        path: "products",
+                        element: <Products />,
                     },
                 ],
             },
