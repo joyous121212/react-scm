@@ -10,6 +10,8 @@ import { ShoppingReturnListContext } from "../../../../../api/Provider/trade/Sho
 import { IShoppingReturn, IShoppingReturnListResponse } from "../../../../../models/interface/IShoppingReturnList";
 import { ShoppingReturnList } from "../../../../../api/api";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
+import { Portal } from "../../../../common/potal/Portal";
+import { ShoppingReturnModal } from "../shoppingReturnListModal/shoppingReturnListModat";
 
 export const ShoppingReturnListMain = () => {
     const { searchKeyword } = useContext(ShoppingReturnListContext);
@@ -63,7 +65,6 @@ export const ShoppingReturnListMain = () => {
     };
 
     const handlerModal = (id: number) => {
-        console.log(id);
         setModal(!modal);
         setShoppingReturnId(id);
     };
@@ -118,6 +119,11 @@ export const ShoppingReturnListMain = () => {
                 itemsCountPerPage={5}
                 activePage={cPage}
             />
+            {modal && (
+                <Portal>
+                    <ShoppingReturnModal  postSuccess={postSuccess}/>
+                </Portal>
+            )}
         </ShoppingReturnListMainStyled>
     );
 };

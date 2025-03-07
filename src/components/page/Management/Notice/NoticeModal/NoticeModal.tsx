@@ -139,10 +139,10 @@ export const NoticeModal: FC<INoticeModalProps> = ({ noticeId, setNoticeId, post
             <div className='container'>
                 <form ref={formRef}>
                     <label>
-                        제목 :<StyledInput type='text' name='fileTitle' defaultValue={detail?.title}></StyledInput>
+                        제목 :<StyledInput type='text' size="large" name='fileTitle' defaultValue={detail?.title}></StyledInput>
                     </label>
                     <label>
-                        내용 : <StyledInput type='text' name='fileContent' defaultValue={detail?.content}></StyledInput>
+                        내용 : <StyledInput as="textarea" size="large" type='text' name='fileContent' defaultValue={detail?.content}></StyledInput>
                     </label>
                     파일 :
                     <StyledInput

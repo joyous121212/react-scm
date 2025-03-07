@@ -13,3 +13,7 @@ export interface IShoppingReturnListResponse {
     shoppingReturnList: IShoppingReturn[];
     shoppingReturnListCnt: number;
 }
+
+export interface IWareHouseSelectList {
+    
+}
