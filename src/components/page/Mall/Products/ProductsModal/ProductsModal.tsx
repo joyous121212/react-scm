@@ -10,6 +10,7 @@ import { searchApi } from '../../../../../api/ProductsApi/searchApi';
 import { Products } from '../../../../../api/api';
 import { IProducts, IProductsBodyResponse, IProductsDetail } from '../../../../../models/interface/IProducts';
 import { Column, StyledTable } from '../../../../common/StyledTable/StyledTable';
+import { ChangeEvent } from 'react';
 
 const HorizontalContainer = styled.div`
   display: flex;
@@ -96,6 +97,19 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
         }
     }
 
+    const handlerFile = (e: ChangeEvent<HTMLInputElement>) => {
+        const fileInfo = e.target.files;
+        if (fileInfo?.length > 0) {
+            const fileSplit = fileInfo[0].name.split(".");
+            const fileType = fileSplit[1].toLowerCase();
+
+            if (fileType === "jpg" || fileType === "gif" || fileType === "png") {
+                setImageUrl(URL.createObjectURL(fileInfo[0]));
+            }
+            setFileName(fileInfo[0].name)
+        }
+    }
+
     return (
         <ProductsModalStyled>
             <div className="container">
@@ -106,20 +120,20 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
                             <img className="product-image" src="product_image_url" alt="상품 이미지" />
                         </th>
                         <th>제품 번호</th>
-                        <td><input type="text" defaultValue={productId} readOnly/></td>
+                        <td><StyledInput size="modal" type="text" defaultValue={productId} readOnly/></td>
                         <th>주문 수량<span className="font_red">*</span></th>
-                        <td><input type="text" placeholder='수량 입력 필수'/></td>
+                        <td><StyledInput size="modal" type="text" placeholder='수량 입력 필수'/></td>
                     </tr>
                     <tr>    
                         <th>제조사</th>
-                        <td><input type="text" defaultValue={detail.supplyName} readOnly/></td>
+                        <td><StyledInput size="modal" type="text" defaultValue={detail.supplyName} readOnly/></td>
                         
                         <th>납품 희망일자<span className="font_red">*</span></th>
-                        <td><input type="date"/></td>
+                        <td><StyledInput size="modal" type="date"/></td>
                     </tr>
                     <tr>
                         <th>판매 가격</th>
-                        <td><input type="text" defaultValue={sellPrice}  readOnly/></td>
+                        <td><StyledInput size="modal" type="text" defaultValue={sellPrice}  readOnly/></td>
                     </tr>
                     <tr>
                         <th colSpan={5}>제품 상세 정보</th>
