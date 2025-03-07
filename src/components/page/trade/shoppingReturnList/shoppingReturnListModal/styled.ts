@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ProductsModalStyled = styled.div`
+export const ShoppingReturnListModalStyled = styled.div`
     width: 100%;
     height: 100%;
     position: fixed;
@@ -19,12 +19,23 @@ export const ProductsModalStyled = styled.div`
         width: auto;
     }
 
+    dt {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        background-color: #3498db;
+        color: white;
+        padding: 10px; /* 텍스트와 배경 사이 간격 추가 */
+        border-radius: 6px; /* 둥근 모서리 효과 */
+    }
+
     table {
         width: 100%;
         border-collapse: collapse;
     }
 
-    th, td {
+    th,
+    td {
         border: 1px solid #ddd;
         padding: 10px;
         text-align: left;
@@ -50,8 +61,6 @@ export const ProductsModalStyled = styled.div`
         border: 1px solid #ccc;
         border-radius: 4px;
         resize: none;
-        box-sizing: border-box;
-
     }
 
     .button-container {
@@ -83,9 +92,4 @@ export const ProductsModalStyled = styled.div`
             transform: translateY(2px);
         }
     }
-
-    .font_red {
-        color:#fe1414;
-    }
-
 `;

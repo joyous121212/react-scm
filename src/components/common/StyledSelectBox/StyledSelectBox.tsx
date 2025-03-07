@@ -3,7 +3,7 @@ import { SelectBox } from "./styled";
 
 interface SelectBoxProps {
     options: { label: string; value: string | number }[];
-    value: string | number;
+    value?: string | number;
     onChange: React.Dispatch<React.SetStateAction<string | number>>;
     variant?: "default" | "primary" | "danger";
     fullwidth?: boolean;
@@ -18,7 +18,6 @@ export const StyledSelectBox: FC<SelectBoxProps> = ({
 }) => {
     return (
         <SelectBox
-            value={value}
             onChange={(e) => onChange(e.target.value)}
             variant={variant}
             fullwidth={fullwidth || undefined}

@@ -8,6 +8,8 @@ import { DetailCode } from "../pages/management/DetailCode";
 import { Products } from "../pages/mall/Products";
 import { ApprovalOrder } from "../pages/approval/orders";
 import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
+import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
+import { Products } from "../pages/mall/Products";
 
 
 const routers: RouteObject[] = [
@@ -18,6 +20,15 @@ const routers: RouteObject[] = [
         element: <DashBoard />,
         children: [
             {
+                path: "trade",
+                children: [
+                    {
+                        path: "shopping-return-list",
+                        element: <ShoppingReturnList />,
+                    },
+                ],
+            },
+            {
                 path: "approval",
                 children: [
                     {
@@ -25,9 +36,9 @@ const routers: RouteObject[] = [
                         element: <ApprovalOrder />,
                     },
                     {
-                        path:"shopping-return",
-                        element: <ApprovalShoppingReturn/>
-                    }
+                        path: "shopping-return",
+                        element: <ApprovalShoppingReturn />,
+                    },
                 ],
             },
             {

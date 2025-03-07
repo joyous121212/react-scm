@@ -47,7 +47,8 @@ export const CommonCodeMain = () => {
         }
     };
 
-    const handlerModal = (id: number) => {
+    const handlerModal = (id: number, e:React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
         setModal(!modal);
         setGroupId(id);
     };
@@ -64,7 +65,7 @@ export const CommonCodeMain = () => {
                 columns={columns}
                 onRowClick={(row) => navigate(`${row.groupIdx}`, { state: { groupCode: row.groupCode } })} // ✅ 특정 테이블에서만 실행!
                 renderAction={(row) => (
-                    <StyledButton size='small' onClick={() => handlerModal(row.groupIdx)}>
+                    <StyledButton size='small' onClick={(e) => handlerModal(row.groupIdx, e)}>
                         수정
                     </StyledButton>
                 )}

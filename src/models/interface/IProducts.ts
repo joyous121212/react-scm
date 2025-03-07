@@ -21,11 +21,12 @@ export interface IProductsListBodyResponse {
     products: IProducts[];
     productsCnt: number;
     userType: string;
+
 }
 
 export interface IProductsBodyResponse {
     detailValue: IProducts;
-    attachmentValue: IProductsDetail;    
+    attachmentValue: IProductsDetail;
 }
 
 export interface ICategory {

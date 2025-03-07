@@ -14,6 +14,7 @@ import { ChangeEvent } from 'react';
 import { postApi } from '../../../../../api/ProductsApi/postApi';
 import { ProductsContext } from '../../../../../api/Provider/ProductsProvider';
 
+
 interface IProductsModalProps {
     productId: number;
     postSuccess: () => void;
@@ -49,10 +50,12 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
 
         productId && productsDetail();
 
+
         return () => {
             setProductId(0);
         }
     }, [productId]);
+
 
     const productsDetail = async () => {
         try {
@@ -65,6 +68,7 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
                 setDetail(result.detailValue);
                 setAttachment(result.attachmentValue);
 
+
                 const { fileType, logicalPath } = result.attachmentValue;
                 if (fileType === "jpg" || fileType === "gif" || fileType === "png") {
                     setImageUrl(logicalPath);
@@ -73,6 +77,7 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
                 }
 
                 setSellPrice(result.detailValue.sellPrice.toLocaleString());
+
             }
         } catch (error) {
             console.error("searchDetail 오류:", error);
@@ -221,6 +226,7 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
                     <button onClick={() => setModal(!modal)}>취소</button>
                 </div>
             </div>
+
 
         </ProductsModalStyled>
     )

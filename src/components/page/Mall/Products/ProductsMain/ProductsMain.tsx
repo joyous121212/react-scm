@@ -1,4 +1,5 @@
 import { ProductsMainStyled } from "./styled"
+
 import { searchApi } from "../../../../../api/ProductsApi/searchApi";
 import { Products } from "../../../../../api/api";
 import { useContext, useEffect, useState } from "react";
@@ -19,6 +20,7 @@ export const ProductsMain = () => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [productId, setProductId] = useState<number>(0);
     const { setUserType } = useContext(ProductsContext);
+
 
     const columns = [
         { key: "productId", title: "제품 ID"},
@@ -48,6 +50,7 @@ export const ProductsMain = () => {
             setProductsCount(result.productsCnt);
             setCPage(currentPage);
             setUserType(result.userType);
+
        }
     }
 
