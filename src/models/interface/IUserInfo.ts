@@ -45,3 +45,8 @@ export interface IDuplicUserId {
 export interface IDuplicUserIdResponse {
     duplicCnt: number;
 }
+
+export interface IInsertUserInfoResponse {
+    result: string;
+    resultMsg: string;
+}

@@ -18,4 +18,5 @@ export const UserInfo = {
     search: "/management/userInfoListBody.do",
     detailsearch: "/management/detailCodeListBody.do",
     checkDuplicUserId: "/management/check_loginIDBody.do",
+    insertUserInfo: "/registerScmBody.do",
 };
