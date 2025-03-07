@@ -1,5 +1,4 @@
 import axios, { AxiosResponse } from "axios";
-import { StyledTable, StyledTd, StyledTh } from "../../../../common/styled/StyledTable";
 import { Modal } from "react-bootstrap";
 import { Portal } from "../../../../common/potal/Portal";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
@@ -10,8 +9,10 @@ import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { shoppingSearchApi } from "../../../../../api/ShoppingApi/searchApi";
 import { Shopping } from "../../../../../api/api";
-import { IShopping, IShoppingBodyResponse } from "../../../../../models/interface/store/IShopping";
+import { IShopping, IShoppingBodyResponse } from "../../../../../models/interface/IShopping";
 import { ShoppingModal } from "../ShoppingModal/ShoppingModal";
+import { ShoppingMainStyled } from "./styled";
+import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 
 export const ShoppingMain = () => {
     const { search } = useLocation();
@@ -68,40 +69,19 @@ export const ShoppingMain = () => {
     };
 
     const columns = [
-        { key: "deliveryId", title: "주문번호", size: 10 },
-        { key: "salesDate", title: "주문일자", size: 20 },
-        { key: "customerName", title: "고객기업명", size: 50 },
-        { key: "count", title: "주문개수", size: 10 },
-    ];
+        { key: "deliveryId", title: "주문번호" },
+        { key: "salesDate", title: "주문일자" },
+        { key: "customerName", title: "고객기업명" },
+        { key: "count", title: "주문개수" },
+    ] as Column<IShopping>[];
 
     return (
-        <>
-            <StyledTable>
-                <thead>
-                    <tr>
-                        {columns.map((column) => (
-                            <StyledTh key={column.key} size={column.size}>
-                                {column.title}
-                            </StyledTh>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {deliveryOrderList?.length > 0 ? (
-                        deliveryOrderList.map((shopping) => (
-                            <tr key={shopping.deliveryId} onClick={() => handlerModal(shopping.deliveryId)}>
-                                {columns.map((column) => (
-                                    <StyledTd key={column.key}>{shopping[column.key]}</StyledTd>
-                                ))}
-                            </tr>
-                        ))
-                    ) : (
-                        <tr>
-                            <StyledTd colSpan={4}>데이터가 없습니다.</StyledTd>
-                        </tr>
-                    )}
-                </tbody>
-            </StyledTable>
+        <ShoppingMainStyled>
+            <StyledTable
+                data={deliveryOrderList}
+                columns={columns}
+                onRowClick={(row) => handlerModal(row.deliveryId)}
+            />
             {cPage} / {deliveryOrderCnt}
             <PageNavigate
                 totalItemsCount={deliveryOrderCnt}
@@ -114,6 +94,6 @@ export const ShoppingMain = () => {
                     <ShoppingModal deliveryId={deliveryId} setDeliveryId={setDeliveryId} postSuccess={postSuccess} />
                 </Portal>
             )}
-        </>
+        </ShoppingMainStyled>
     );
 };

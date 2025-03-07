@@ -30,3 +30,7 @@ export const Approval = {
     searchShoppingReturn: "/approval/shoppingReturnListBody.do",
     approvalShoppingReturn: "/approval/shoppingReturnApproveUpdateBody.do",
 };
+
+export const OrderList = {
+    searchList: "/tasks/orderListBody.do",
+};
