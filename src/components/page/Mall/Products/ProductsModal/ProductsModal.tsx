@@ -48,7 +48,6 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
     useEffect(() => {
 
         productId && productsDetail();
-        console.log("detail=", detail);
 
         return () => {
             setProductId(0);
@@ -61,14 +60,10 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
                 Products.searchDetail,
                 {productId}
             );
-            console.log(result);
 
             if(result) {
                 setDetail(result.detailValue);
                 setAttachment(result.attachmentValue);
-                
-                console.log("detail 설정됨:", result.detailValue);
-                console.log("attachment 설정됨:", result.attachmentValue);
 
                 const { fileType, logicalPath } = result.attachmentValue;
                 if (fileType === "jpg" || fileType === "gif" || fileType === "png") {
