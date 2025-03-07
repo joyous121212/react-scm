@@ -1,6 +1,6 @@
 import { ProductsMainStyled } from "./styled"
 
-import { searchApi } from "../../../../../api/ProductsApi/searchApi";
+import { searchApi } from "../../../../../api/MallApi/searchApi";
 import { Products } from "../../../../../api/api";
 import { useContext, useEffect, useState } from "react";
 import { IProducts, IProductsListBodyResponse } from "../../../../../models/interface/IProducts";

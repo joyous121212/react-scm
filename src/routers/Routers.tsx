@@ -9,6 +9,7 @@ import { Products } from "../pages/mall/Products";
 import { ApprovalOrder } from "../pages/approval/orders";
 import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
 import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
+import { Cart } from "../pages/mall/Cart";
 
 
 const routers: RouteObject[] = [
@@ -57,12 +58,6 @@ const routers: RouteObject[] = [
                     },
                 ],
             },
-        ],
-    },
-    {
-        path: "/react",
-        element: <DashBoard />,
-        children: [
             {
                 path: "mall",
                 children: [
@@ -70,6 +65,11 @@ const routers: RouteObject[] = [
                         path: "products",
                         element: <Products />
                     },
+                    {
+                        path: "cart",
+                        element: <Cart />
+                    },
+
                 ],
             },
         ],

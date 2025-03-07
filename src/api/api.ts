@@ -19,11 +19,13 @@ export const Products = {
     searchDetail: "/mall/productsDetailBody.do",
     category: "/mall/products/category",
     supplyList: "/mall/products/supplyList",
-
     historySave: "/mall/historySaveBody.do",
     cartDetailSave: "/mall/cartDetailSaveBody.do"
-
 };
+
+export const Cart = {
+    searchList: "/mall/cartDetailList.do",
+}
 
 
 export const Approval = {

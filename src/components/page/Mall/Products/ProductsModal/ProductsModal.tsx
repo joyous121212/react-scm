@@ -6,13 +6,14 @@ import { StyledInput } from '../../../../common/StyledInput/StyledInput';
 import { StyledButton } from '../../../../common/StyledButton/StyledButton';
 import styled from 'styled-components';
 import { StyledInputStyled } from '../../../../common/StyledInput/styled';
-import { searchApi } from '../../../../../api/ProductsApi/searchApi';
+import { searchApi } from '../../../../../api/MallApi/searchApi';
 import { Products } from '../../../../../api/api';
 import { IProducts, IProductsBodyResponse, IProductsDetail } from '../../../../../models/interface/IProducts';
 import { Column, StyledTable } from '../../../../common/StyledTable/StyledTable';
 import { ChangeEvent } from 'react';
-import { postApi } from '../../../../../api/ProductsApi/postApi';
+import { postApi } from '../../../../../api/MallApi/postApi';
 import { ProductsContext } from '../../../../../api/Provider/ProductsProvider';
+import Swal from 'sweetalert2';
 
 
 interface IProductsModalProps {
@@ -103,8 +104,13 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
             }
 
             if(result.result === "success") {
-                alert("주문 완료되었습니다.");
-                postSuccess();
+                Swal.fire({
+                    icon: "success",
+                    title: "주문 완료",
+                    confirmButtonText: "확인",
+                }).then(() => {
+                    postSuccess(); // 승인 후 실행할 함수
+                });
             }
         }
 
@@ -124,8 +130,13 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
             const result = await postApi(Products.cartDetailSave, updateDetail);
 
             if(result.result === "success") {
-                alert("장바구니에 추가되었습니다.");
-                postSuccess();
+                Swal.fire({
+                    icon: "success",
+                    title: "담기 완료",
+                    confirmButtonText: "확인",
+                }).then(() => {
+                    postSuccess(); // 승인 후 실행할 함수
+                });
             }
         }
 
