@@ -103,29 +103,25 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
             <table>
                 <tbody>
                     <tr>
-                        <th rowSpan={4}>
+                        <th rowSpan={2}>
                             <img className="product-image" src="product_image_url" alt="상품 이미지" />
                         </th>
                         <th>제품 번호</th>
                         <td><input type="text" value="DS124" /></td>
-                    </tr>
-                    <tr>
                         <th>제조사</th>
                         <td><input type="text" value="시놀로지" /></td>
                     </tr>
                     <tr>
                         <th>판매 가격</th>
                         <td><input type="text" value="1,240,000" /></td>
-                    </tr>
-                    <tr>
                         <th>납품 희망일자</th>
                         <td><input type="date" /></td>
                     </tr>
                     <tr>
-                        <th colSpan={3}>제품 상세 정보</th>
+                        <th colSpan={5}>제품 상세 정보</th>
                     </tr>
                     <tr>
-                        <td colSpan={3}>
+                        <td colSpan={5}>
                             <textarea className="text-area">시놀로지 나스 DS124 1Bay NAS 스토리지 케이스</textarea>
                         </td>
                     </tr>
