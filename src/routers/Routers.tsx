@@ -9,7 +9,6 @@ import { Products } from "../pages/mall/Products";
 import { ApprovalOrder } from "../pages/approval/orders";
 import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
 import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
-import { Products } from "../pages/mall/Products";
 
 
 const routers: RouteObject[] = [
