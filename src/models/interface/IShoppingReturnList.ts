@@ -14,6 +14,24 @@ export interface IShoppingReturnListResponse {
     shoppingReturnListCnt: number;
 }
 
-export interface IWareHouseSelectList {
-    
+export interface IWareHouse {
+    address: string;
+    detailAddress: string;
+    email: string;
+    manager: string;
+    name: string;
+    phone: string;
+    totalProductStock: number;
+    warehouseId: number;
+    zipCode: number;
+}
+
+export interface ISelectOption {
+    label: string;
+    value: number
+}
+
+export interface IShoppingReturnModalResponse {
+    shoppingReturn: IShoppingReturn[];
+    warehouseList: IWareHouse[];
 }

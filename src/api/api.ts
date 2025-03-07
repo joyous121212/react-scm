@@ -18,8 +18,8 @@ export const Products = {
     searchList: "/mall/productsListBody.do",
     searchDetail: "/mall/productsDetailBody.do",
     category: "/mall/products/category",
-    supplyList: "/mall/products/supplyList"
-}
+    supplyList: "/mall/products/supplyList",
+};
 
 export const Approval = {
     searchOrder: "/approval/orderListBody.do",
@@ -32,5 +32,5 @@ export const Approval = {
 
 export const ShoppingReturnList = {
     searchList: "/trade/shoppingReturnListBody.do",
+    searchModal: "/trade/shoppingReturnListModalBody.do",
 };
-

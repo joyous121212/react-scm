@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
-import { useNavigate } from "react-router-dom";
 import { searchApi } from "../../../../../api/CommonCodeApi/searchApi";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { ShoppingReturnListMainStyled } from "./styled";
@@ -13,6 +12,18 @@ import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { Portal } from "../../../../common/potal/Portal";
 import { ShoppingReturnModal } from "../shoppingReturnListModal/shoppingReturnListModat";
 
+export const transformShoppingReturnData = (data: any[]): IShoppingReturn[] => {
+    return data.map((item) => ({
+        count: item.count,
+        isApproved: item.isApproved,
+        name: item.name,
+        price: item.price,
+        productName: item.productName,
+        refundId: item.refundId,
+        returnsRequestDate: item.returnsRequestDate,
+        totalPrice: item.totalPrice,
+    }));
+};
 export const ShoppingReturnListMain = () => {
     const { searchKeyword } = useContext(ShoppingReturnListContext);
     const [cPage, setCPage] = useState<number>(0);
@@ -20,19 +31,6 @@ export const ShoppingReturnListMain = () => {
     const [shoppingReturnListCnt, setShoppingReturnListCnt] = useState<number>(0);
     const [modal, setModal] = useRecoilState(modalState);
     const [shoppingReturnId, setShoppingReturnId] = useState<number>(0);
-
-    const transformShoppingReturnData = (data: any[]): IShoppingReturn[] => {
-        return data.map((item) => ({
-            count: item.count,
-            isApproved: item.isApproved,
-            name: item.name,
-            price: item.price,
-            productName: item.productName,
-            refundId: item.refundId,
-            returnsRequestDate: item.returnsRequestDate,
-            totalPrice: item.totalPrice,
-        }));
-    };
 
     const columns = [
         { key: "refundId", title: "번호" },
@@ -57,7 +55,6 @@ export const ShoppingReturnListMain = () => {
         });
 
         if (result) {
-            console.log(result);
             setShoppingReturnList(transformShoppingReturnData(result.shoppingReturnList));
             setShoppingReturnListCnt(result.shoppingReturnListCnt);
             setCPage(currentPage);
@@ -121,7 +118,7 @@ export const ShoppingReturnListMain = () => {
             />
             {modal && (
                 <Portal>
-                    <ShoppingReturnModal  postSuccess={postSuccess}/>
+                    <ShoppingReturnModal shoppingReturnId={shoppingReturnId} postSuccess={postSuccess} />
                 </Portal>
             )}
         </ShoppingReturnListMainStyled>
