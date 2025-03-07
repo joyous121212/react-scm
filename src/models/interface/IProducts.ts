@@ -20,6 +20,8 @@ export interface IProductsDetail extends IProducts {
 export interface IProductsListBodyResponse {
     products: IProducts[];
     productsCnt: number;
+    userType: string;
+
 }
 
 export interface IProductsBodyResponse {
