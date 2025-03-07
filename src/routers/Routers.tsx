@@ -7,6 +7,8 @@ import { NotFound } from "../components/common/NotFound/NotFound";
 import { DetailCode } from "../pages/management/DetailCode";
 import { ApprovalOrder } from "../pages/approval/orders";
 import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
+import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
+import { Products } from "../pages/mall/Products";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -16,6 +18,15 @@ const routers: RouteObject[] = [
         element: <DashBoard />,
         children: [
             {
+                path: "trade",
+                children: [
+                    {
+                        path: "shopping-return-list",
+                        element: <ShoppingReturnList />,
+                    },
+                ],
+            },
+            {
                 path: "approval",
                 children: [
                     {
@@ -23,9 +34,9 @@ const routers: RouteObject[] = [
                         element: <ApprovalOrder />,
                     },
                     {
-                        path:"shopping-return",
-                        element: <ApprovalShoppingReturn/>
-                    }
+                        path: "shopping-return",
+                        element: <ApprovalShoppingReturn />,
+                    },
                 ],
             },
             {
@@ -42,6 +53,21 @@ const routers: RouteObject[] = [
                     {
                         path: "common-code/:groupIdx",
                         element: <DetailCode />,
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        path: "/react",
+        element: <DashBoard />,
+        children: [
+            {
+                path: "mall",
+                children: [
+                    {
+                        path: "products",
+                        element: <Products />
                     },
                 ],
             },
