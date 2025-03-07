@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const UserInfoModalStyle = styled.div`
+export const ProductsModalStyled = styled.div`
     width: 100%;
     height: 100%;
     position: fixed;
@@ -86,9 +86,5 @@ export const UserInfoModalStyle = styled.div`
 
     .font_red {
         color: #fe1414;
-    }
-
-    .btnArea {
-        display: flex;
     }
 `;

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const CommonCodeMainStyled = styled.div`
+export const ProductsMainStyled = styled.div`
     table {
         width: 100%;
         border-collapse: collapse;
@@ -16,7 +16,7 @@ export const CommonCodeMainStyled = styled.div`
     th,
     td {
         padding: 12px;
-        text-align: center;
+        text-align: left;
     }
 
     th {

@@ -15,6 +15,8 @@ export const StyledInputStyled = styled.input<InputProps>`
                 return `padding: 6px 10px; font-size: 14px;`;
             case "large":
                 return `padding: 12px 16px; font-size: 18px;`;
+            case "modal":
+                return `padding: 6px 10px; font-size: 12px;`;
             default:
                 return `padding: 10px 14px; font-size: 16px;`;
         }

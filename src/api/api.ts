@@ -14,9 +14,26 @@ export const Notice = {
     search: "/management/noticeListBody.do",
 };
 
+
 export const UserInfo = {
     search: "/management/userInfoListBody.do",
     detailsearch: "/management/detailCodeListBody.do",
     checkDuplicUserId: "/management/check_loginIDBody.do",
     insertUserInfo: "/registerScmBody.do",
 };
+
+export const Products = {
+    searchList: "/mall/productsListBody.do",
+    searchDetail: "/mall/productsDetailBody.do",
+    category: "/mall/products/category",
+    supplyList: "/mall/products/supplyList"
+}
+
+export const Approval = {
+    searchOrder: "/approval/orderListBody.do",
+    approvalOrder: "/approval/orderApproveUpdateBody.do",
+    searchShoppingReturn: "/approval/shoppingReturnListBody.do",
+    approvalShoppingReturn: "/approval/shoppingReturnApproveUpdateBody.do"
+
+}
+

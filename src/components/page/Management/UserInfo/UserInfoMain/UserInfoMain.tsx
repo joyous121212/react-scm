@@ -7,6 +7,7 @@ import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { Portal } from "../../../../common/potal/Portal";
 import { UserInfoModal } from "../UserInfoModal/UserInfoModal";
+import { ProductsModalStyled } from "../../../Mall/Products/ProductsModal/styled";
 export const UserInfoMain = () => {
     const { searchKeyword } = useContext(UserInfoContext);
 

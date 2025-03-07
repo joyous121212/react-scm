@@ -1,12 +1,18 @@
 import { RouteObject, createBrowserRouter } from "react-router-dom";
-
 import { CommonCode } from "../../src/pages/management/CommonCode";
 import { Login } from "../../src/pages/Login";
 import { Notice } from "../../src/pages/management/Notice";
 import { DashBoard } from "../components/layout/DashBoard/DashBoard";
 import { NotFound } from "../components/common/NotFound/NotFound";
 import { DetailCode } from "../pages/management/DetailCode";
+
 import { UserInfo } from "../pages/management/UserInfo";
+
+import { Products } from "../pages/mall/Products";
+import { ApprovalOrder } from "../pages/approval/orders";
+import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
+
+
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -15,6 +21,19 @@ const routers: RouteObject[] = [
         path: "/react",
         element: <DashBoard />,
         children: [
+            {
+                path: "approval",
+                children: [
+                    {
+                        path: "orders",
+                        element: <ApprovalOrder />,
+                    },
+                    {
+                        path:"shopping-return",
+                        element: <ApprovalShoppingReturn/>
+                    }
+                ],
+            },
             {
                 path: "management",
                 children: [
@@ -33,6 +52,21 @@ const routers: RouteObject[] = [
                     {
                         path: "user-info",
                         element: <UserInfo />,
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        path: "/react",
+        element: <DashBoard />,
+        children: [
+            {
+                path: "mall",
+                children: [
+                    {
+                        path: "products",
+                        element: <Products />
                     },
                 ],
             },

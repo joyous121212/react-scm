@@ -18,9 +18,12 @@ import { duplicUserIdCheckApi } from "../../../../../api/UserInfoApi/duplicUserI
 import axios from "axios";
 import { postUserInfoInsertApi } from "../../../../../api/UserInfoApi/postUserInfoInsertApi";
 import { userInfo } from "os";
+import { ProductsModalStyled } from "../../../Mall/Products/ProductsModal/styled";
 // window.daum 타입 확장
-
+import { useRecoilState } from "recoil";
 export const UserInfoModal = () => {
+    //모달 관리
+    const [modal, setModal] = useRecoilState(modalState);
     // 상태 관리
 
     // classType
@@ -35,12 +38,12 @@ export const UserInfoModal = () => {
 
     //user_type: "C"
     const [userData, setUserData] = useState({
-        action:"I",
+        action: "I",
         user_type: "",
         classType: "",
         statusYn: "",
         group_code: "",
-        detailCode: "",
+        detail_code: "",
         loginID: "",
         password: "",
         password1: "",
@@ -380,34 +383,38 @@ export const UserInfoModal = () => {
         //먼저 빈값을 검사.
         for (let key in emptyValiMessage) {
             console.log(key + ": " + userData[key]);
-            if (userData[key] === "") {
-                alert(emptyValiMessage[key]);
-                return;
-            }
         }
 
-        for (let key in valiPwdMessage) {
-            console.log("받은 네임값:  " + key);
-            if (!validatePassword()) {
-                alert(valiPwdMessage[key]);
-                return;
-            }
-        }
+        // for (let key in emptyValiMessage) {
+        //     console.log(key + ": " + userData[key]);
+        //     if (userData[key] === "") {
+        //         alert(emptyValiMessage[key]);
+        //         return;
+        //     }
+        // }
 
-        // 특별히 필한 유효성을 검사.
-        for (let key in valiMessage) {
-            console.log("받은 네임값:  " + key);
-            if (!valiSwitch(key)) {
-                alert(valiMessage[key]);
-                return;
-            }
-        }
+        // for (let key in valiPwdMessage) {
+        //     console.log("받은 네임값:  " + key);
+        //     if (!validatePassword()) {
+        //         alert(valiPwdMessage[key]);
+        //         return;
+        //     }
+        // }
 
-        console.log("---마지막 제출전 데이터 확인-----");
-        console.log(userData);
+        // // 특별히 필한 유효성을 검사.
+        // for (let key in valiMessage) {
+        //     console.log("받은 네임값:  " + key);
+        //     if (!valiSwitch(key)) {
+        //         alert(valiMessage[key]);
+        //         return;
+        //     }
+        // }
 
-        const res: IInsertUserInfoResponse = await postUserInfoInsertApi(UserInfo.insertUserInfo, userData);
-        console.log(res);
+        // console.log("---마지막 제출전 데이터 확인-----");
+        // console.log(userData);
+
+        // const res: IInsertUserInfoResponse = await postUserInfoInsertApi(UserInfo.insertUserInfo, userData);
+        // console.log(res);
     };
 
     //특별히 필요한 유효성의 스위치 문이다.
@@ -436,122 +443,334 @@ export const UserInfoModal = () => {
         <UserInfoModalStyle>
             {/* 1열 */}
             <div className='container'>
-                <label>
-                    <span>직원유형*</span>
-                </label>
-                <select
-                    name='group_code'
-                    onChange={(e) => {
-                        // console.log(e.target.selectedOptions[0].text);
-                        setSelectValue(e.target.value);
-                        handleGroupChange(e);
-                    }}
-                    defaultValue={selectValue ? selectValue : "c"}
-                >
-                    <option value={"c"}>선택</option>
-                    <option value={"E10001X1"}>SCM 담당자</option>
-                    <option value={"E10001X1"}>구매 담당자</option>
-                    <option value={"E10001X1"}>회사 임원</option>
-                    <option value={"R20001P1"}>배송 담당자</option>
-                    <option value={"G00001A1"}>기업 고객</option>
-                </select>
-                <br />
-                <label>
-                    <span>아이디*</span>
-                </label>
-                <StyledInput placeholder='숫자, 영문자 조합으로 6~20자리' ref={idRef} />
-                <StyledButton onClick={checkDuplicFnc}>중복확인</StyledButton>
-                {isValid ? errorMessage : errorMessage}
-                <label>
-                    <span>이름/회사명*</span>
-                </label>
-                <StyledInput name='name' onChange={handleChange} />
-                <label>
-                    <span>담당자명</span>
-                </label>
-                <StyledInput name='manager' onChange={handleChange} />
-                <label>
-                    <span>성별*</span>
-                </label>
-                <select name='sex' onChange={handleChange}>
-                    <option value=''>선택</option>
-                    <option value='1'>남자</option>
-                    <option value='2'>여자</option>
-                </select>
-                <label>
-                    <span>이메일*</span>
-                    <StyledInput ref={emailRef} />
-                    <StyledButton onClick={checkDuplicEmailFnc}>중복확인</StyledButton>
-                </label>
+                <table>
+                    <colgroup>
+                        <col width='14%' />
+                        <col width='12%' />
+                        <col width='12%' />
+                        <col width='12%' />
+                        <col width='14%' />
+                        <col width='12%' />
+                        <col width='12%' />
+                        <col width='12%' />
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th scope='row' id='group_codeTh'>
+                                직원 유형<span className='font_red'>*</span>
+                            </th>
+                            <td colSpan={3} id='group_code'>
+                                <select
+                                    name='group_code'
+                                    onChange={(e) => {
+                                        // console.log(e.target.selectedOptions[0].text);
+                                        setSelectValue(e.target.value);
+                                        handleGroupChange(e);
+                                    }}
+                                    defaultValue={selectValue ? selectValue : "c"}
+                                >
+                                    <option value={"c"}>선택</option>
+                                    <option value={"E10001X1"}>SCM 담당자</option>
+                                    <option value={"E10001X1"}>구매 담당자</option>
+                                    <option value={"E10001X1"}>회사 임원</option>
+                                    <option value={"R20001P1"}>배송 담당자</option>
+                                    <option value={"G00001A1"}>기업 고객</option>
+                                </select>
+                            </td>
+                            <th scope='row' id='detail_codeTh'>
+                                담당 업무<span className='font_red'>*</span>
+                            </th>
+                            <td colSpan={3} id='detail_code'>
+                                <select name='detail_code' onChange={handleChange}>
+                                    <option value={"c"}>선택</option>
+                                    {detailCodeList ? (
+                                        detailCodeList.map((ele: any, idx: number) => {
+                                            console.log(ele);
+                                            return (
+                                                <option key={ele.detailCode + idx} value={ele.detailCode}>
+                                                    {ele.detailName}
+                                                </option>
+                                            );
+                                        })
+                                    ) : (
+                                        <></>
+                                    )}
+                                </select>
+                            </td>
+                        </tr>
 
-                <label>
-                    <span>우편번호찾기*</span>
-                    <StyledInput ref={zipcodeRef} readOnly />
+                        <tr>
+                            <th scope='row'>
+                                아이디<span className='font_red'>*</span>
+                            </th>
+                            <td colSpan={2}>
+                                <StyledInput placeholder='숫자, 영문자 조합으로 6~20자리' ref={idRef} />
+                                {isValid ? errorMessage : errorMessage}
+                            </td>
+                            <td colSpan={1}>
+                                <StyledButton onClick={checkDuplicFnc}>중복확인</StyledButton>
+                            </td>
+                            <th scope='row'>
+                                비밀번호 <span className='font_red'>*</span>
+                            </th>
+                            <td colSpan={3}>
+                                <StyledInput
+                                    name='password'
+                                    onChange={handleChange2}
+                                    placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
+                                />
+                            </td>
+                        </tr>
+                        {/* 3행 시작 */}
+                        <tr>
+                            <th scope='row' id='registerName_th'>
+                                이름/회사명 <span className='font_red'>*</span>
+                            </th>
+                            <td colSpan={3}>
+                                <StyledInput name='name' onChange={handleChange} />
+                            </td>
+                            <th scope='row'>
+                                비밀번호 확인<span className='font_red'>*</span>
+                            </th>
+                            <td colSpan={3}>
+                                <StyledInput
+                                    name='password1'
+                                    onChange={handleChange2}
+                                    placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
+                                />
+                            </td>
+                        </tr>
+                        {/* 4행 시작 */}
+                        <tr>
+                            <th scope='row' id='registerManager_th'>
+                                담당자명
+                            </th>
+                            <td colSpan={3}>
+                                <StyledInput name='manager' onChange={handleChange} />
+                            </td>
+                            <th scope='row'>
+                                전화번호<span className='font_red'>*</span>
+                            </th>
+                            <td colSpan={3}>
+                                <StyledInput
+                                    maxLength={3}
+                                    type='text'
+                                    id='tel1'
+                                    name='userTel1'
+                                    onChange={handleChange3}
+                                />
+                                -
+                                <StyledInput
+                                    maxLength={4}
+                                    type='text'
+                                    id='tel2'
+                                    name='userTel2'
+                                    onChange={handleChange3}
+                                />
+                                -
+                                <StyledInput
+                                    maxLength={4}
+                                    type='text'
+                                    id='tel3'
+                                    name='userTel3'
+                                    onChange={handleChange3}
+                                />
+                            </td>
+                        </tr>
+                        {/* 5
+                        행 시작 */}
+                        <tr>
+                            <th scope='row' id='rggender_th'>
+                                성별<span className='font_red'>*</span>
+                            </th>
+                            <td colSpan={3} id='rggender_td'>
+                                <select name='sex' onChange={handleChange}>
+                                    <option value=''>선택</option>
+                                    <option value='1'>남자</option>
+                                    <option value='2'>여자</option>
+                                </select>
+                            </td>
+                            <th scope='row' id='birthday1'>
+                                생년월일 <span className='font_red'>*</span>
+                            </th>
+                            <td colSpan={3}>
+                                <StyledInput name='birthday' type='date' onChange={handleChange2} />
+                            </td>
+                        </tr>
 
-                    <StyledButton onClick={() => setIsPostcodeOpen(true)}>우편번호 찾기</StyledButton>
-                    <span>주소*</span>
-                    <StyledInput ref={addressRef} readOnly />
-                    <span>상세주소*</span>
-                    <StyledInput name='user_dt_address' ref={dtAddressRef} onChange={handleChange} />
+                        {/* 6
+                        행 시작 */}
+                        <tr>
+                            <th scope='row'>
+                                이메일<span className='font_red'>*</span>
+                            </th>
+                            <td colSpan={6}>
+                                <StyledInput ref={emailRef} />
+                            </td>
+                            <td colSpan={1}>
+                                <StyledButton onClick={checkDuplicEmailFnc}>중복확인</StyledButton>
+                            </td>
+                        </tr>
 
-                    {isPostcodeOpen && (
-                        <DaumPostcode
-                            onComplete={handleAddressSelect} // 주소 선택 완료 시 호출되는 함수
-                        />
-                    )}
-                </label>
-            </div>
+                        {/*7행 시작*/}
+                        <tr>
+                            <th scope='row'>
+                                우편번호<span className='font_red'>*</span>
+                            </th>
+                            <td colSpan={6}>
+                                <StyledInput ref={zipcodeRef} readOnly />
+                            </td>
 
-            {/* 2열 */}
-            <div className='container'>
-                <label>
-                    <span>담당업무*</span>
-                </label>
-                <select name='detailCode' onChange={handleChange}>
-                    <option value={"c"}>선택</option>
-                    {detailCodeList ? (
-                        detailCodeList.map((ele: any, idx: number) => {
-                            // console.log(ele.detailIdx);
-                            return (
-                                <option key={ele.detailCode + idx} value={ele.value}>
-                                    {ele.detailName}
-                                </option>
-                            );
-                        })
-                    ) : (
-                        <option value='d'>d</option>
-                    )}
-                </select>
-                <label>
-                    <span>비밀번호*</span>
-                </label>
-                {/* as 이즈 존중으로 비번은 그냥 제출 시에 양문자가 같은지 확인하도록 한다. */}
-                <StyledInput
-                    name='password'
-                    onChange={handleChange2}
-                    placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
-                />
-                <label>
-                    <span>비밀번호 확인*</span>
-                </label>
-                <StyledInput
-                    name='password1'
-                    onChange={handleChange2}
-                    placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
-                />
-                <label>
-                    <span>전화번호*</span>
-                </label>
-                <StyledInput maxLength={3} type='text' id='tel1' name='userTel1' onChange={handleChange3} /> -
-                <StyledInput maxLength={4} type='text' id='tel2' name='userTel2' onChange={handleChange3} /> -
-                <StyledInput maxLength={4} type='text' id='tel3' name='userTel3' onChange={handleChange3} />
-                <label>
-                    <span>생년월일*</span>
-                </label>
-                <StyledInput name='birthday' type='date' onChange={handleChange2} />
-                <label>
+                            <td colSpan={1}>
+                                <StyledButton onClick={() => setIsPostcodeOpen(true)}>우편번호 찾기</StyledButton>
+                            </td>
+                        </tr>
+                        {/*8행 시작*/}
+                        <tr>
+                            <th scope='row'>
+                                주소<span className='font_red'>*</span>
+                            </th>
+                            <td colSpan={8}>
+                                <StyledInput ref={addressRef} readOnly />
+                            </td>
+                        </tr>
+                        {/*9행 시작*/}
+                        <tr>
+                            <th scope='row'>상세주소</th>
+                            <td colSpan={8}>
+                                <StyledInput name='user_dt_address' ref={dtAddressRef} onChange={handleChange} />
+                                {isPostcodeOpen && (
+                                    <DaumPostcode
+                                        onComplete={handleAddressSelect} // 주소 선택 완료 시 호출되는 함수
+                                    />
+                                )}
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    {/* 이제 여기서 보고 위로 옮기자 */}
+                    {/* <label>
+                        <span>직원유형*</span>
+                    </label>
+                    <select
+                        name='group_code'
+                        onChange={(e) => {
+                            // console.log(e.target.selectedOptions[0].text);
+                            setSelectValue(e.target.value);
+                            handleGroupChange(e);
+                        }}
+                        defaultValue={selectValue ? selectValue : "c"}
+                    >
+                        <option value={"c"}>선택</option>
+                        <option value={"E10001X1"}>SCM 담당자</option>
+                        <option value={"E10001X1"}>구매 담당자</option>
+                        <option value={"E10001X1"}>회사 임원</option>
+                        <option value={"R20001P1"}>배송 담당자</option>
+                        <option value={"G00001A1"}>기업 고객</option>
+                    </select>
+                    <br />
+                    <label>
+                        <span>아이디*</span>
+                    </label>
+                    <StyledInput placeholder='숫자, 영문자 조합으로 6~20자리' ref={idRef} />
+                    <StyledButton onClick={checkDuplicFnc}>중복확인</StyledButton>
+                    {isValid ? errorMessage : errorMessage}
+                    <label>
+                        <span>이름/회사명*</span>
+                    </label>
+                    <StyledInput name='name' onChange={handleChange} />
+                    <label>
+                        <span>담당자명</span>
+                    </label>
+                    <StyledInput name='manager' onChange={handleChange} />
+                    <label>
+                        <span>성별*</span>
+                    </label>
+                    <select name='sex' onChange={handleChange}>
+                        <option value=''>선택</option>
+                        <option value='1'>남자</option>
+                        <option value='2'>여자</option>
+                    </select>
+                    <label>
+                        <span>이메일*</span>
+                        <StyledInput ref={emailRef} />
+                        <StyledButton onClick={checkDuplicEmailFnc}>중복확인</StyledButton>
+                    </label>
+                    <label>
+                        <span>우편번호찾기*</span>
+                        <StyledInput ref={zipcodeRef} readOnly />
+
+                        <StyledButton onClick={() => setIsPostcodeOpen(true)}>우편번호 찾기</StyledButton>
+                        <span>주소*</span>
+                        <StyledInput ref={addressRef} readOnly />
+                        <span>상세주소*</span>
+                        <StyledInput name='user_dt_address' ref={dtAddressRef} onChange={handleChange} />
+
+                        {isPostcodeOpen && (
+                            <DaumPostcode
+                                onComplete={handleAddressSelect} // 주소 선택 완료 시 호출되는 함수
+                            />
+                        )}
+                    </label>
+                
+                    <label>
+                        <span>담당업무*</span>
+                    </label>
+                    <select name='detailCode' onChange={handleChange}>
+                        <option value={"c"}>선택</option>
+                        {detailCodeList ? (
+                            detailCodeList.map((ele: any, idx: number) => {
+                                // console.log(ele.detailIdx);
+                                return (
+                                    <option key={ele.detailCode + idx} value={ele.value}>
+                                        {ele.detailName}
+                                    </option>
+                                );
+                            })
+                        ) : (
+                            <option value='d'>d</option>
+                        )}
+                    </select>
+                    <label>
+                        <span>비밀번호*</span>
+                    </label>
+                    <StyledInput
+                        name='password'
+                        onChange={handleChange2}
+                        placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
+                    />
+                    <label>
+                        <span>비밀번호 확인*</span>
+                    </label>
+                    <StyledInput
+                        name='password1'
+                        onChange={handleChange2}
+                        placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
+                    />
+                    <label>
+                        <span>전화번호*</span>
+                    </label>
+                    <StyledInput maxLength={3} type='text' id='tel1' name='userTel1' onChange={handleChange3} /> -
+                    <StyledInput maxLength={4} type='text' id='tel2' name='userTel2' onChange={handleChange3} /> -
+                    <StyledInput maxLength={4} type='text' id='tel3' name='userTel3' onChange={handleChange3} />
+                    <label>
+                        <span>생년월일*</span>
+                    </label>
+                    <StyledInput name='birthday' type='date' onChange={handleChange2} />
+                    <label>
+                        <StyledButton onClick={insertUserInfo}>등록</StyledButton>
+                    </label> */}
+                </table>
+                <div className='btnArea'>
                     <StyledButton onClick={insertUserInfo}>등록</StyledButton>
-                </label>
+                    <StyledButton
+                        onClick={() => {
+                            setModal(!modal);
+                        }}
+                    >
+                        취소
+                    </StyledButton>
+                </div>
             </div>
         </UserInfoModalStyle>
     );
