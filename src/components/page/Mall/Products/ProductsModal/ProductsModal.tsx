@@ -50,19 +50,9 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
     const formRef = useRef<HTMLFormElement>(null);
     const [imageUrl, setImageUrl] = useState<string>("");
     const [fileName, setFileName] = useState<string>("");
-    const [detail, setDetail] = useState<IProducts>();
-
-    const columns = [
-            { key: "productId", title: "제품 ID", width: "200px"},
-            { key: "categoryName", title: "제품 분류", width: "200px"},
-            { key: "productNumber", title: "제품 번호", width: "200px"},
-            { key: "name", title: "제품명", width: "200px"},
-            { key: "supplyName", title: "제조사", width: "200px"},
-            { key: "sellPrice", title: "판매 가격", width: "200px"},
-        ] as Column<IProducts>[];
-    const renderDetails = (row: IProducts) => (
-        <textarea value={row.description || ""} readOnly style={{ width: "100%", height: "100px", resize: "none" }} />
-    );
+    const [detail, setDetail] = useState<IProducts>(initProducts);
+    const [attachment, setAttachment] = useState<IProducts>();
+    const [sellPrice, setSellPrice] = useState<string>("");
 
     useEffect(() => {
         productId && productsDetail();
@@ -71,7 +61,14 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
         return () => {
             setProductId(0);
         }
-    }, [detail])
+    }, [productId]);
+    
+    // detail 값이 변경되면 sellPrice도 업데이트
+    useEffect(() => {
+        if (detail?.sellPrice) {
+            setSellPrice(detail.sellPrice.toLocaleString());
+        }
+    }, [detail]); // detail이 변경될 때만 실행
 
     const productsDetail = async () => {
         try {
@@ -83,7 +80,9 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
 
             if(result) {
                 setDetail(result.detailValue);
+                setAttachment(result.attachmentValue);
                 console.log("detail 설정됨:", result.detailValue);
+                console.log("attachment 설정됨:", result.attachmentValue);
 
                 const { fileType, logicalPath } = result.attachmentValue;
                 if (fileType === "jpg" || fileType === "gif" || fileType === "png") {
@@ -103,26 +102,31 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
             <table>
                 <tbody>
                     <tr>
-                        <th rowSpan={2}>
+                        <th rowSpan={3}>
                             <img className="product-image" src="product_image_url" alt="상품 이미지" />
                         </th>
                         <th>제품 번호</th>
-                        <td><input type="text" value="DS124" /></td>
+                        <td><input type="text" defaultValue={productId} readOnly/></td>
+                        <th>주문 수량<span className="font_red">*</span></th>
+                        <td><input type="text" placeholder='수량 입력 필수'/></td>
+                    </tr>
+                    <tr>    
                         <th>제조사</th>
-                        <td><input type="text" value="시놀로지" /></td>
+                        <td><input type="text" defaultValue={detail.supplyName} readOnly/></td>
+                        
+                        <th>납품 희망일자<span className="font_red">*</span></th>
+                        <td><input type="date"/></td>
                     </tr>
                     <tr>
                         <th>판매 가격</th>
-                        <td><input type="text" value="1,240,000" /></td>
-                        <th>납품 희망일자</th>
-                        <td><input type="date" /></td>
+                        <td><input type="text" defaultValue={sellPrice}  readOnly/></td>
                     </tr>
                     <tr>
                         <th colSpan={5}>제품 상세 정보</th>
                     </tr>
                     <tr>
                         <td colSpan={5}>
-                            <textarea className="text-area">시놀로지 나스 DS124 1Bay NAS 스토리지 케이스</textarea>
+                            <textarea className="text-area" defaultValue={detail.description} readOnly></textarea>
                         </td>
                     </tr>
                 </tbody>

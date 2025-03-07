@@ -82,4 +82,8 @@ export const ProductsModalStyled = styled.div`
             transform: translateY(2px);
         }
     }
+
+    .font_red {
+        color:#fe1414;
+    }
 `;
