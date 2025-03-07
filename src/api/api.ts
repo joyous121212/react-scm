@@ -14,7 +14,6 @@ export const Notice = {
     search: "/management/noticeListBody.do",
 };
 
-
 export const UserInfo = {
     search: "/management/userInfoListBody.do",
     detailsearch: "/management/detailCodeListBody.do",
@@ -26,14 +25,18 @@ export const Products = {
     searchList: "/mall/productsListBody.do",
     searchDetail: "/mall/productsDetailBody.do",
     category: "/mall/products/category",
-    supplyList: "/mall/products/supplyList"
-}
+    supplyList: "/mall/products/supplyList",
+};
 
 export const Approval = {
     searchOrder: "/approval/orderListBody.do",
     approvalOrder: "/approval/orderApproveUpdateBody.do",
     searchShoppingReturn: "/approval/shoppingReturnListBody.do",
-    approvalShoppingReturn: "/approval/shoppingReturnApproveUpdateBody.do"
+    approvalShoppingReturn: "/approval/shoppingReturnApproveUpdateBody.do",
+};
 
-}
-
+export const ShoppingReturnList = {
+    searchList: "/trade/shoppingReturnListBody.do",
+    searchModal: "/trade/shoppingReturnListModalBody.do",
+    updateMall: "/trade/shoppingReturnUpdateMallBody.do",
+};

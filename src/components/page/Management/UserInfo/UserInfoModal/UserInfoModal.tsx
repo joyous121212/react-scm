@@ -381,40 +381,40 @@ export const UserInfoModal = () => {
     // 형식의 유효성은 전화번호, 비번
     const insertUserInfo = async () => {
         //먼저 빈값을 검사.
-        for (let key in emptyValiMessage) {
-            console.log(key + ": " + userData[key]);
-        }
-
         // for (let key in emptyValiMessage) {
         //     console.log(key + ": " + userData[key]);
-        //     if (userData[key] === "") {
-        //         alert(emptyValiMessage[key]);
-        //         return;
-        //     }
         // }
 
-        // for (let key in valiPwdMessage) {
-        //     console.log("받은 네임값:  " + key);
-        //     if (!validatePassword()) {
-        //         alert(valiPwdMessage[key]);
-        //         return;
-        //     }
-        // }
+        for (let key in emptyValiMessage) {
+            console.log(key + ": " + userData[key]);
+            if (userData[key] === "" && key != "manager") {
+                alert(emptyValiMessage[key]);
+                return;
+            }
+        }
 
-        // // 특별히 필한 유효성을 검사.
-        // for (let key in valiMessage) {
-        //     console.log("받은 네임값:  " + key);
-        //     if (!valiSwitch(key)) {
-        //         alert(valiMessage[key]);
-        //         return;
-        //     }
-        // }
+        for (let key in valiPwdMessage) {
+            console.log("받은 네임값:  " + key);
+            if (!validatePassword()) {
+                alert(valiPwdMessage[key]);
+                return;
+            }
+        }
 
-        // console.log("---마지막 제출전 데이터 확인-----");
-        // console.log(userData);
+        // 특별히 필한 유효성을 검사.
+        for (let key in valiMessage) {
+            console.log("받은 네임값:  " + key);
+            if (!valiSwitch(key)) {
+                alert(valiMessage[key]);
+                return;
+            }
+        }
 
-        // const res: IInsertUserInfoResponse = await postUserInfoInsertApi(UserInfo.insertUserInfo, userData);
-        // console.log(res);
+        console.log("---마지막 제출전 데이터 확인-----");
+        console.log(userData);
+
+        const res: IInsertUserInfoResponse = await postUserInfoInsertApi(UserInfo.insertUserInfo, userData);
+        console.log(res);
     };
 
     //특별히 필요한 유효성의 스위치 문이다.
@@ -546,13 +546,14 @@ export const UserInfoModal = () => {
                                 담당자명
                             </th>
                             <td colSpan={3}>
-                                <StyledInput name='manager' onChange={handleChange} />
+                                <StyledInput name='manager' onChange={handleChange} readOnly />
                             </td>
                             <th scope='row'>
                                 전화번호<span className='font_red'>*</span>
                             </th>
                             <td colSpan={3}>
                                 <StyledInput
+                                    style={{ width: "20%" }}
                                     maxLength={3}
                                     type='text'
                                     id='tel1'
@@ -561,6 +562,7 @@ export const UserInfoModal = () => {
                                 />
                                 -
                                 <StyledInput
+                                    style={{ width: "20%" }}
                                     maxLength={4}
                                     type='text'
                                     id='tel2'
@@ -569,6 +571,7 @@ export const UserInfoModal = () => {
                                 />
                                 -
                                 <StyledInput
+                                    style={{ width: "20%" }}
                                     maxLength={4}
                                     type='text'
                                     id='tel3'
@@ -762,8 +765,11 @@ export const UserInfoModal = () => {
                     </label> */}
                 </table>
                 <div className='btnArea'>
-                    <StyledButton onClick={insertUserInfo}>등록</StyledButton>
+                    <StyledButton size={"small"} onClick={insertUserInfo}>
+                        등록
+                    </StyledButton>
                     <StyledButton
+                        size={"small"}
                         onClick={() => {
                             setModal(!modal);
                         }}

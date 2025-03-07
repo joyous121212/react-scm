@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ProductsModalStyled = styled.div`
+export const ShoppingReturnListModalStyled = styled.div`
     width: 100%;
     height: 100%;
     position: fixed;
@@ -17,6 +17,16 @@ export const ProductsModalStyled = styled.div`
         border-radius: 8px;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
         width: auto;
+    }
+
+    dt {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        background-color: #3498db;
+        color: white;
+        padding: 10px; /* 텍스트와 배경 사이 간격 추가 */
+        border-radius: 6px; /* 둥근 모서리 효과 */
     }
 
     table {
