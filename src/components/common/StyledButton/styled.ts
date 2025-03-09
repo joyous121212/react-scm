@@ -12,7 +12,6 @@ export const StyledButtonStyled = styled.button<ButtonProps>`
     border-radius: 6px;
 
     ${({ size }) => {
-        console.log(size);
         switch (size) {
             case "small":
                 return `padding: 6px 12px; font-size: 14px;`;

@@ -8,7 +8,8 @@ import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
-
+import { Portal } from "../../../../common/potal/Portal";
+import { UserInfoModal } from "../UserInfoModal/UserInfoModal";
 export const UserInfoSearch = () => {
     const { searchKeyword, setSearchKeyword } = useContext(UserInfoContext);
     const [selectValue, setSelectValue] = useState<string>("name");
@@ -63,6 +64,11 @@ export const UserInfoSearch = () => {
                 <StyledButton onClick={handlerSearch}>검색</StyledButton>
                 <StyledButton onClick={handlerModal}>등록</StyledButton>
             </CommonCodeSearchStyled>
+              { modal  && (
+                            <Portal>
+                                <UserInfoModal  />
+                            </Portal>
+                        )}
         </>
     );
 };

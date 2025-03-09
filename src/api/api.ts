@@ -19,8 +19,17 @@ export const UserInfo = {
     detailsearch: "/management/detailCodeListBody.do",
     checkDuplicUserId: "/management/check_loginIDBody.do",
     insertUserInfo: "/registerScmBody.do",
+    updateUserInfo:"/management/UpdateScmBody.do",
     userInfoDetail: "/management/userInfoDetailBody.do",
 };
+
+export const SupplierInfo={
+    searchSupplyDetail:"/management/supplyDetailBody.do",
+    updateSupplyDetail:"/management/supplyUpdateBody.do",
+    deleteSupplyDetail:"/management/supplyDeleteBody.do",
+    recoverSupplyDetail:"/management/supplyRecoveryBody.do"
+}
+
 
 export const Products = {
     searchList: "/mall/productsListBody.do",

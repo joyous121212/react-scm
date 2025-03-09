@@ -7,6 +7,7 @@ import { NotFound } from "../components/common/NotFound/NotFound";
 import { DetailCode } from "../pages/management/DetailCode";
 
 import { UserInfo } from "../pages/management/UserInfo";
+import { SupplierInfo } from "../pages/management/SupplierInfo";
 
 import { Products } from "../pages/mall/Products";
 import { ApprovalOrder } from "../pages/approval/orders";
@@ -61,6 +62,10 @@ const routers: RouteObject[] = [
                         path: "user-info",
                         element: <UserInfo />,
                     },
+                    {
+                        path:"supplier-info",
+                        element:<SupplierInfo/>,
+                    }
                 ],
             },
         ],

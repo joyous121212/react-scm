@@ -4,7 +4,7 @@ const setupProxy = (app) => {
     app.use(
         '/api',
         createProxyMiddleware({
-            target: 'http://localhost:80',
+            target: 'http://localhost:90',
             changeOrigin: true,
         })
     );

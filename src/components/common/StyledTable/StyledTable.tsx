@@ -1,6 +1,7 @@
 import { Table, Td, Th, Thead, Tr } from "./styled";
 import noData from "../../../assets/noData.png";
 
+
 export interface Column<T> {
     key: keyof T | "actions";
     title: string;
@@ -20,6 +21,9 @@ interface TableProps<T> {
     renderAction?: (row: T) => React.ReactNode;
     renderCell?: (row: T, column: Column<T>) => React.ReactNode; // 추가
 }
+
+
+
 
 export const StyledTable = <T extends { [key: string]: any }>({
     columns,
