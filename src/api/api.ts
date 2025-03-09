@@ -25,6 +25,8 @@ export const Products = {
 
 export const Cart = {
     searchList: "/mall/cartDetailList.do",
+    deleteCartDetail: "/mall/cartDetailDeleteBody.do",
+    historysSave: "/mall/historysSaveBody.do"
 }
 
 

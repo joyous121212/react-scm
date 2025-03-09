@@ -96,22 +96,28 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
         
         if(checkInput()) {
             const result = await postApi(Products.historySave, updateDetail);
-        
-            confirm("입금하시겠습니까?")
-
+            
             if(!result) {
                 return;
             }
 
-            if(result.result === "success") {
-                Swal.fire({
-                    icon: "success",
-                    title: "주문 완료",
-                    confirmButtonText: "확인",
-                }).then(() => {
-                    postSuccess(); // 승인 후 실행할 함수
-                });
+            if(!confirm("입금하시겠습니까?")) {
+                return;
+            } else {
+                if(result.result === "success") {
+                    Swal.fire({
+                        icon: "success",
+                        title: "주문 완료",
+                        confirmButtonText: "확인",
+                    }).then(() => {
+                        postSuccess(); // 승인 후 실행할 함수
+                    });
+                }
             }
+
+            
+
+            
         }
 
         
