@@ -125,7 +125,7 @@ export const ShoppingReturnModal: FC<IShoppingReturnListModalProps> = ({ postSuc
                             <td>
                                 <StyledInput
                                     size='modal'
-                                    value={shoppingReturn.totalPrice.toLocaleString("ko-KR")}
+                                    value={`${shoppingReturn.totalPrice.toLocaleString("ko-KR")}원`}
                                     readOnly
                                 />
                             </td>

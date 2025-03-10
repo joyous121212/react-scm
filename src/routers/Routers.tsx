@@ -13,6 +13,9 @@ import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
 import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
 import { OrdersReturnList } from "../pages/tasks/OrdersReturnList";
 import { ShoppingReturn } from "../pages/tasks/ShoppingReturn";
+import { Products } from "../pages/mall/Products";
+import { Inventory } from "../pages/trade/inventory";
+import { Cart } from "../pages/mall/Cart";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -27,6 +30,10 @@ const routers: RouteObject[] = [
                     {
                         path: "shopping-return-list",
                         element: <ShoppingReturnList />,
+                    },
+                    {
+                        path: "inventory",
+                        element: <Inventory />,
                     },
                 ],
             },
@@ -90,6 +97,11 @@ const routers: RouteObject[] = [
                         path: "products",
                         element: <Products />,
                     },
+                    {
+                        path: "cart",
+                        element: <Cart />
+                    },
+
                 ],
             },
         ],
