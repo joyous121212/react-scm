@@ -45,8 +45,12 @@ export const ShoppingReturnList = {
     updateMall: "/trade/shoppingReturnUpdateMallBody.do",
 };
 
-export const OrderList = {
+export const Orders = {
     searchList: "/tasks/orderListBody.do",
+};
+
+export const ShoppingReturn = {
+    searchList: "/tasks/shoppingReturnOrderListBody.do",
 };
 
 export const Inventory = {
@@ -54,3 +58,4 @@ export const Inventory = {
     searchList: "/trade/inventoryListBody.do",
     searchDetail: "/trade/inventoryDetailBody.do"
 }
+

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const OrdersListSearchStyled = styled.div`
+export const OrdersSearchStyled = styled.div`
     display: flex;
     gap: 5px;
     align-items: center;

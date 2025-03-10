@@ -41,14 +41,13 @@ export const CommonCodeMain = () => {
             currentPage,
             pageSize: 5,
         });
-        console.log(searchKeyword);
 
         if (result) {
             setCommonCodeList(result.commonCode);
         }
     };
 
-    const handlerModal = (id: number, e:React.MouseEvent<HTMLButtonElement>) => {
+    const handlerModal = (id: number, e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
         setModal(!modal);
         setGroupId(id);

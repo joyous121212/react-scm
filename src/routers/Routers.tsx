@@ -6,10 +6,13 @@ import { DashBoard } from "../components/layout/DashBoard/DashBoard";
 import { NotFound } from "../components/common/NotFound/NotFound";
 import { DetailCode } from "../pages/management/DetailCode";
 import { Shopping } from "../pages/tasks/Shopping";
-import { OrdersList } from "../pages/tasks/OrdersList";
+import { Orders } from "../pages/tasks/Orders";
+import { Products } from "../pages/mall/Products";
 import { ApprovalOrder } from "../pages/approval/orders";
 import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
 import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
+import { OrdersReturnList } from "../pages/tasks/OrdersReturnList";
+import { ShoppingReturn } from "../pages/tasks/ShoppingReturn";
 import { Products } from "../pages/mall/Products";
 import { Inventory } from "../pages/trade/inventory";
 import { Cart } from "../pages/mall/Cart";
@@ -73,7 +76,11 @@ const routers: RouteObject[] = [
                     },
                     {
                         path: "orders",
-                        element: <OrdersList />,
+                        element: <Orders />,
+                    },
+                    {
+                        path: "shopping-return",
+                        element: <ShoppingReturn />,
                     },
                 ],
             },
