@@ -85,6 +85,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
     };
 
     useEffect(() => {
+        console.log("왓??" + isdetail);
         if (isdetail) {
             const box: any = { ...detailInfo };
             var box3 = { ...userData };
@@ -101,9 +102,12 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
                 ...box3,
                 ...box,
             });
+        } else {
+            setUserData(null);
         }
         // setUserDetail(null);
-    }, []);
+        return () => {};
+    }, [detailInfo]);
 
     // 유효성을 요하는 변수들 idRef, emailRef
     const idRef = useRef<HTMLInputElement>(null);
