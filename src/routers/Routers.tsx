@@ -13,6 +13,7 @@ import { Products } from "../pages/mall/Products";
 import { ApprovalOrder } from "../pages/approval/orders";
 import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
 import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
+import { ProductInfo } from "../pages/management/ProductInfo";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -63,13 +64,17 @@ const routers: RouteObject[] = [
                         element: <UserInfo />,
                     },
                     {
-                        path:"supplier-info",
-                        element:<SupplierInfo/>,
+                        path: "supplier-info",
+                        element: <SupplierInfo />,
                     },
                     {
-                        path:"supplier-info/:supplyId",
-                        element: <SupplierInfoList/>
-                    }
+                        path: "supplier-info/:supplyId",
+                        element: <SupplierInfoList />,
+                    },
+                    {
+                        path: "product-info",
+                        element: <ProductInfo />,
+                    },
                 ],
             },
         ],
