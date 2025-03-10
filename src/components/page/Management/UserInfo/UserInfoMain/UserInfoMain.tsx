@@ -4,7 +4,8 @@ import { UserInfoContext } from "../../../../../api/Provider/UserInfoProvider";
 import { userInfoSearchApi } from "../../../../../api/UserInfoApi/userInfoSearchApi";
 import { UserInfo } from "../../../../../api/api";
 import { useRecoilState } from "recoil";
-import { modalState } from "../../../../../stores/modalState";
+
+import { detailModalState } from "../../../../../stores/modalState";
 import { Portal } from "../../../../common/potal/Portal";
 import { UserInfoModal } from "../UserInfoModal/UserInfoModal";
 import { ProductsModalStyled } from "../../../Mall/Products/ProductsModal/styled";
@@ -17,6 +18,7 @@ import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { userInfoDetailApi } from "../../../../../api/UserInfoApi/userInfoDetailApi";
 import { IUserInfoDetailResponse } from "../../../../../models/interface/IUserInfo";
 import { IUserDetialInfo } from "../../../../../models/interface/IUserInfo";
+
 export const UserInfoMain = () => {
     const columns = [
         { key: "groupCode", title: "구분" },
@@ -33,41 +35,13 @@ export const UserInfoMain = () => {
     const [userInfoCnt, setUserInfoCnt] = useState(null);
     const [cPage, setCPage] = useState<number>(0);
     //모달 관리
-    const [modal, setModal] = useRecoilState(modalState);
-    const [userDetail, setUserDetail] = useState<IUserDetialInfo>({
-        user_type: "",
-        classType: "",
-        statusYn: "",
-        group_code: "",
-        detail_code: "",
-        loginID: "",
-        password: "",
-        password1: "",
-        name: "",
-        manager: "",
-        hp: "",
-        userTel1: "",
-        userTel2: "",
-        userTel3: "",
-        birthday: "",
-        user_email: "",
-        user_zipcode: "",
-        user_address: "",
-        user_dt_address: "",
-        detailCode: "",
-        userClass: "",
-        sex: "",
-        email: "",
-        zipCode: "",
-        address: "",
-        ph: "",
-    });
-
-    useEffect(() => {
-        console.log("-----제거확인----");
-        console.log(userDetail);
-        console.log("-----제거확인----");
-    }, [userDetail]);
+  
+const [detailModal, setDetailModal] = useRecoilState(detailModalState);
+   
+    //개인 정보 모달 관리
+    const [isdetail,setIsdetail]=useState(false);
+    //개인 정보 모달 관리
+    const [loginId,setLoginId]=useState("");
 
     useEffect(() => {
         //  console.log(searchKeyword);
@@ -88,6 +62,12 @@ export const UserInfoMain = () => {
         setSearchKeyword(box);
     };
 
+
+    const renderStatusYn = (statusYn: string): string => {
+        console.log(`함수가 받은 값 ${statusYn}`)
+        return statusYn === "1" ? "Y" : "N";
+    };
+
     return (
         <>
             {userList != null ? (
@@ -96,22 +76,35 @@ export const UserInfoMain = () => {
                         <StyledTable
                             data={userList}
                             columns={columns}
+                            
                             renderAction={(row) => (
                                 <StyledButton
                                     size='small'
                                     onClick={async () => {
-                                        const res: IUserInfoDetailResponse = await userInfoDetailApi(
-                                            UserInfo.userInfoDetail,
-                                            { loginID: row.loginID }
-                                        );
-                                        console.log(res.detailValue);
-                                        setUserDetail(res.detailValue);
-                                        setModal(!modal);
+                                        console.log(row);
+                                        setLoginId(row.loginID)
+                                        setDetailModal(!detailModal);
+                                        setIsdetail(true)
+                                        
                                     }}
+                                    
                                 >
                                     수정
                                 </StyledButton>
                             )}
+
+                            renderCell={(row, column) => {
+                                
+                                // 여기서 renderCell이 존재하면 우선적으로 실행됨.
+                                if (column.key === 'statusYn') {
+                                    console.log(`키명: ${column.key}  값  ${row.statusYn}`)
+                                    // statusYn은 renderStatusYn을 사용하여 변환
+                                    return renderStatusYn(row.statusYn);
+                                }
+            
+                                // 그 외 컬럼들은 그대로 데이터 출력
+                                return row[column.key as keyof typeof row];
+                            }}
                         />
                     </CommonCodeMainStyled>
                     <PageNavigate
@@ -124,16 +117,10 @@ export const UserInfoMain = () => {
             ) : (
                 <></>
             )}
-
-            {modal && userDetail === undefined && (
+            {detailModal  && (
+               
                 <Portal>
-                    <UserInfoModal detailInfo={userDetail} isdetail={false} />
-                </Portal>
-            )}
-
-            {userDetail != undefined && modal && (
-                <Portal>
-                    <UserInfoModal detailInfo={userDetail} isdetail={true} />
+                    <UserInfoModal LoginId={loginId} isdetail={isdetail} />
                 </Portal>
             )}
         </>

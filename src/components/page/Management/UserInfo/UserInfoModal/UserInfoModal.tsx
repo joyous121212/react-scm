@@ -1,5 +1,6 @@
 import { UserInfoModalStyle } from "./styled";
 import { modalState } from "../../../../../stores/modalState";
+import { detailModalState } from "../../../../../stores/modalState";
 import { ContentBox } from "../../../../common/ContentBox/ContentBox";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import DaumPostcode from "react-daum-postcode";
@@ -21,15 +22,19 @@ import { postUserInfoInsertApi } from "../../../../../api/UserInfoApi/postUserIn
 import { userInfo } from "os";
 import { ProductsModalStyled } from "../../../Mall/Products/ProductsModal/styled";
 import { UserDetailInfoModalProps } from "../../../../../models/interface/IUserInfo";
+import { IUserInfoDetailResponse } from "../../../../../models/interface/IUserInfo";
 import { FC } from "react";
+import { IUserDetialInfo } from "../../../../../models/interface/IUserInfo";
 // window.daum 타입 확장
 import { useRecoilState } from "recoil";
-export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdetail }) => {
-    // console.log(detailInfo);
+import { userInfoDetailApi } from "../../../../../api/UserInfoApi/userInfoDetailApi";
 
+export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId }) => {
+    console.log("isdetail: " + isdetail);
     //모달 관리
     const [modal, setModal] = useRecoilState(modalState);
 
+    const [detailModal, setDetailModal] = useRecoilState(detailModalState);
     const [userData, setUserData] = useState({
         action: "I",
         user_type: "",
@@ -51,6 +56,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
         user_zipcode: "",
         user_address: "",
         user_dt_address: "",
+        detailName: "",
     });
 
     const valiPwdMessage = {
@@ -69,6 +75,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
     const emptyValiMessage = {
         group_code: "직원 유형을 선택해주세요",
         detailCode: "담당 업무를 선택해주세요",
+        detail_code: "담당 업무를 선택해주세요",
         loginID: "아이디를 입력해주세요",
         password: "비번 을 입력해주세요",
         password1: "비번 을 입력해주세요",
@@ -84,29 +91,108 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
         user_dt_address: "상세주로를 입력해주세요",
     };
 
-    useEffect(() => {
-        console.log("왓??" + isdetail);
-        if (isdetail) {
-            const box: any = { ...detailInfo };
-            var box3 = { ...userData };
-            // console.log(box);
+    //디테일=> 에러 터치면 IUserDetialInfo 으로 수정
+    const [detailInfo, setDetailInfo] = useState<IUserDetialInfo>({
+        groupCode: "",
+        user_type: "",
+        classType: "",
+        statusYn: "",
+        group_code: "",
+        detail_code: "",
+        loginID: "",
+        password: "",
+        password1: "",
+        name: "",
+        manager: "",
+        hp: "",
+        userTel1: "",
+        userTel2: "",
+        userTel3: "",
+        birthday: "",
+        user_email: "",
+        user_zipcode: "",
+        user_address: "",
+        user_dt_address: "",
+        detailCode: "",
+        userClass: "",
+        sex: "",
+        email: "",
+        zipCode: "",
+        address: "",
+        ph: "",
+        detailName: "",
+        userType: "",
+    });
 
-            emailRef.current.value = detailInfo.email;
-            zipcodeRef.current.value = detailInfo.zipCode;
-            addressRef.current.value = detailInfo.address;
-            const [t1, t2, t3] = detailInfo.hp.split("-");
-            box3.userTel1 = t1;
-            box3.userTel2 = t2;
-            box3.userTel3 = t3;
-            setUserData({
-                ...box3,
-                ...box,
-            });
-        } else {
-            setUserData(null);
+    const [detailCode, setDetailCode] = useState<object>();
+    useEffect(() => {
+        if (isdetail && LoginId != undefined) {
+            x();
+        }
+        async function x() {
+            console.log("서버로넘길 파람" + LoginId);
+            const res1: any = await userInfoDetailApi(UserInfo.userInfoDetail, { loginID: LoginId });
+            const res2: any = await userInfoDetailApi(UserInfo.detailsearch, { groupCode: res1.detailValue.groupCode });
+            // console.log(res.detailValue);
+            setDetailInfo(res1.detailValue);
+            setDetailCode(res2.detailCode);
+
+            //
+            setDetailCodeList(res2.detailCode);
         }
         // setUserDetail(null);
         return () => {};
+    }, [detailInfo]);
+
+    const [selectedDetailCode, setSelectedDetailCode] = useState(detailInfo?.detailCode);
+    const [detailCodeList, setDetailCodeList] = useState<any>();
+    //박스
+    useEffect(() => {
+        if (isdetail) {
+            const box: any = { ...detailInfo };
+            const box2: any = { ...detailCode };
+            var box3 = { ...userData };
+            //  console.log(box.detailCode);
+            //  console.log(box.group_code);
+
+            console.log(box2);
+            for (var key in box2) {
+                //console.log(`box2[key].detailCode: ${box2[key].detailCode}   box.detailCode: ${box.detailCode}`);
+                if (box2[key].detailCode === box.detailCode) {
+                    console.log(`하나를 좀 뽑자 : ${box2[key].detailName}`);
+                    box.group_code = box2[key].detailCode;
+                    box3.detailName = box2[key].detailName;
+                    box.detailName = box2[key].detailCode;
+                    // handlerdetailCodeList();
+                }
+            }
+
+            box.group_code = detailInfo?.groupCode;
+            box.gender_cd = detailInfo?.sex;
+            box.detail_code = detailInfo?.detailCode;
+            box.classType = detailInfo?.userClass;
+            box.user_type = detailInfo?.userType;
+            box.user_address = detailInfo?.address;
+            box.password1 = detailInfo?.password;
+            box.group_code = detailInfo?.groupCode;
+            box.user_zipcode = detailInfo?.zipCode;
+            box.user_email = detailInfo?.email;
+            // zipcodeRef.current.value = detailInfo?.zipCode;
+            addressRef.current.value = detailInfo?.address;
+            if (detailInfo?.hp) {
+                const [t1, t2, t3] = detailInfo.hp.split("-");
+                box3.userTel1 = t1;
+                box3.userTel2 = t2;
+                box3.userTel3 = t3;
+                setUserData({
+                    ...box3,
+                    ...box,
+                });
+            }
+            // setSelectedDetailCode(detailInfo?.detailCode);
+        }
+        // alert(box3.detailName);
+        console.log(detailInfo);
     }, [detailInfo]);
 
     // 유효성을 요하는 변수들 idRef, emailRef
@@ -114,7 +200,6 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
     const emailRef = useRef<HTMLInputElement>(null);
 
     const [selectValue, setSelectValue] = useState<string>("선택");
-    const [detailCodeList, setDetailCodeList] = useState<any>();
 
     const [isValid, setIsValid] = useState(true); // 유효성 상태
     const [errorMessage, setErrorMessage] = useState(""); // 오류 메시지
@@ -123,30 +208,42 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
     const [isDaumLoaded, setIsDaumLoaded] = useState(false);
 
     useEffect(() => {
-        //  console.log("바뀐다.!:   " + selectValue);
         if (selectValue != "선택") {
+            console.log("바뀐다.!:   " + selectValue);
+
             handlerdetailCodeList();
         }
     }, [selectValue]);
 
     useEffect(() => {
-        console.log(userData);
-    }, [userData]);
+        if (!isdetail && LoginId === undefined) {
+            alert("다언디파이니팔");
+            handlerdetailCodeList("E10001X1");
+        }
+    }, []);
 
-    const handlerdetailCodeList = async () => {
-        const param = {
-            groupCode: selectValue,
-        };
+    const handlerdetailCodeList = async (defaultValue?: string) => {
+        var param;
+
+        if (defaultValue != undefined) {
+            param = {
+                groupCode: defaultValue,
+            };
+        } else {
+            param = {
+                groupCode: selectValue,
+            };
+        }
 
         const res: IDetailCodeListResponse = await detailCodeListhApi(UserInfo.detailsearch, param);
-        // console.log(res.detailCode);
+
         setDetailCodeList(res.detailCode);
     };
 
     //이벤트가 꼬여 셀렉트 그룹코드 체인지 따로 만듬..
     const handleGroupChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        console.log(`네임: ${name}     밸류: ${value}`);
+        //  console.log(`네임: ${name}     밸류: ${value}`);
 
         const box = { ...userData };
         box.group_code = value;
@@ -180,9 +277,20 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
         }
     };
 
+    const detaileHandleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        //detailInfo
+        console.log(`네임: ${name}     밸류: ${value}`);
+        setDetailInfo((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         console.log(`네임: ${name}     밸류: ${value}`);
+
         setUserData((prevData) => ({
             ...prevData,
             [name]: value,
@@ -327,11 +435,6 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
         setIsPostcodeOpen(false);
     };
 
-    // 1차 2차 패서워드 검증 관련
-    // 유효성을 요하는 변수들 idRef, emailRef
-    const firstPwdRef = useRef<HTMLInputElement>(null);
-    const secondePwdRef = useRef<HTMLInputElement>(null);
-
     const validatePassword = () => {
         // 비밀번호 형식: 숫자, 영문자, 특수문자 조합으로 8~15자리
         const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,15}$/;
@@ -393,46 +496,96 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
         }
     };
 
+    // 마지막제출
     //원작존중 유효성은 막판에 몰아서 검사
     // 단 빈값여부의 유효성과,
     // 형식의 유효성이 있다.
     // 형식의 유효성은 전화번호, 비번
+    const updateUserInfo = async () => {
+        //먼저 빈값을 검사.
+        for (let key in emptyValiMessage) {
+            console.log(key + ": " + userData[key]);
+        }
+
+        for (let key in emptyValiMessage) {
+            console.log(key + ": " + userData[key]);
+            if (userData[key] === "" && key != "manager" && key != "user_dt_address") {
+                alert(emptyValiMessage[key]);
+                return;
+            }
+        }
+
+        for (let key in valiPwdMessage) {
+            console.log("받은 네임값:  " + key);
+            if (!validatePassword()) {
+                alert(valiPwdMessage[key]);
+                return;
+            }
+        }
+
+        // 특별히 필한 유효성을 검사.
+        for (let key in valiMessage) {
+            console.log("받은 네임값:  " + key);
+            if (!valiSwitch(key)) {
+                alert(valiMessage[key]);
+                return;
+            }
+        }
+
+        console.log("---마지막 제출전 데이터 확인-----");
+        console.log(userData);
+
+        const res: any = await postUserInfoInsertApi(UserInfo.updateUserInfo, userData);
+        if (res.result === "SUCCESS") {
+            alert("정보수정에 성공하였습니다.");
+        } else {
+            alert("잠시후 다시 시도해주세요");
+        }
+        window.location.href = "/react/management/user-info";
+    };
+
     const insertUserInfo = async () => {
         //먼저 빈값을 검사.
         for (let key in emptyValiMessage) {
             console.log(key + ": " + userData[key]);
         }
 
-        // for (let key in emptyValiMessage) {
-        //     console.log(key + ": " + userData[key]);
-        //     if (userData[key] === "" && key != "manager") {
-        //         alert(emptyValiMessage[key]);
-        //         return;
-        //     }
-        // }
+        for (let key in emptyValiMessage) {
+            console.log(key + ": " + userData[key]);
+            if (userData[key] === "" && key != "manager" && key != "user_dt_address") {
+                alert(emptyValiMessage[key]);
+                return;
+            }
+        }
 
-        // for (let key in valiPwdMessage) {
-        //     console.log("받은 네임값:  " + key);
-        //     if (!validatePassword()) {
-        //         alert(valiPwdMessage[key]);
-        //         return;
-        //     }
-        // }
+        for (let key in valiPwdMessage) {
+            console.log("받은 네임값:  " + key);
+            if (!validatePassword()) {
+                alert(valiPwdMessage[key]);
+                return;
+            }
+        }
 
-        // // 특별히 필한 유효성을 검사.
-        // for (let key in valiMessage) {
-        //     console.log("받은 네임값:  " + key);
-        //     if (!valiSwitch(key)) {
-        //         alert(valiMessage[key]);
-        //         return;
-        //     }
-        // }
+        // 특별히 필한 유효성을 검사.
+        for (let key in valiMessage) {
+            console.log("받은 네임값:  " + key);
+            if (!valiSwitch(key)) {
+                alert(valiMessage[key]);
+                return;
+            }
+        }
 
-        // console.log("---마지막 제출전 데이터 확인-----");
-        // console.log(userData);
+        console.log("---마지막 제출전 데이터 확인-----");
+        console.log(userData);
 
-        // const res: IInsertUserInfoResponse = await postUserInfoInsertApi(UserInfo.insertUserInfo, userData);
-        // console.log(res);
+        const res: IInsertUserInfoResponse = await postUserInfoInsertApi(UserInfo.insertUserInfo, userData);
+        console.log(res);
+        if (res.resultMsg === "가입 요청 완료") {
+            alert("정보 삽입에 성공하였습니다.");
+        } else {
+            alert("잠시후 다시 시도해주세요");
+        }
+        window.location.href = "/react/management/user-info";
     };
 
     //특별히 필요한 유효성의 스위치 문이다.
@@ -455,6 +608,56 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
             default:
                 return false;
         }
+    };
+
+    const [isRecoverModalOpen, setIsRecoverModalOpen] = useState(false); // 삭제 모달 상태
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // 삭제 모달 상태
+    const [isRestoreModalOpen, setIsRestoreModalOpen] = useState(false); // 복구 모달 상태
+    const [action, setAction] = useState(null); // 예 아니오 응답값
+
+    const openDeleteModal = () => setIsDeleteModalOpen(true); // 삭제 모달 열기
+    const closeDeleteModal = () => setIsDeleteModalOpen(false); // 삭제 모달 닫기
+    const openRecovereModal = () => setIsRecoverModalOpen(true); // 삭제 모달 열기
+    const closeRecoverModal = () => setIsRecoverModalOpen(false); // 삭제 모달 닫기
+
+    const openRestoreModal = () => setIsRestoreModalOpen(true); // 복구 모달 열기
+    const closeRestoreModal = () => setIsRestoreModalOpen(false); // 복구 모달 닫기
+
+    const handleDeleteYes = async () => {
+        setAction("삭제");
+        await axios.post("/management/userDeleteBody.do", { loginID: LoginId }).then((res: any) => {
+            if (res.data.result === "success") {
+                alert("삭제에 성공하였습니다.");
+            } else {
+                alert("잠시후 다시 시도해주세요");
+            }
+            window.location.href = "/react/management/user-info";
+        });
+
+        closeDeleteModal();
+    };
+
+    const handleDeleteNo = () => {
+        setAction("취소");
+        closeDeleteModal();
+    };
+
+    const handleRestoreYes = async () => {
+        setAction("복구");
+        await axios.post("/management/userRecoveryBody.do", { loginID: LoginId }).then((res: any) => {
+            if (res.data.result === "success") {
+                alert("복구에 성공하였습니다.");
+            } else {
+                alert("잠시후 다시 시도해주세요");
+            }
+            window.location.href = "/react/management/user-info";
+        });
+        closeRestoreModal();
+    };
+
+    const handleRestoreNo = () => {
+        setAction("복구 취소");
+        closeRestoreModal();
     };
 
     return (
@@ -481,48 +684,84 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
                                 <select
                                     name='group_code'
                                     onChange={(e) => {
-                                        // console.log(e.target.selectedOptions[0].text);
+                                        //  console.log(e.target.selectedOptions[0].text);
                                         setSelectValue(e.target.value);
                                         handleGroupChange(e);
                                     }}
-                                    defaultValue={selectValue ? selectValue : "c"}
+                                    //  defaultValue={selectValue ? selectValue : "c"}
+                                    //value={detailInfo?.group_code}
                                 >
                                     {isdetail ? (
-                                        <option value={detailInfo.group_code}>{detailInfo.userClass}</option>
+                                        <>
+                                            <option value={"E10001X1"}>SCM 담당자</option>
+                                            <option value={"E10001X1"}>구매 담당자</option>
+                                            <option value={"E10001X1"}>회사 임원</option>
+                                            <option value={"R20001P1"}>배송 담당자</option>
+                                            <option value={"G00001A1"}>기업 고객</option>
+                                        </>
                                     ) : (
-                                        <option value={"c"}>선택</option>
+                                        <>
+                                            <option value={"c"}>선택</option>
+                                            <option value={"E10001X1"}>SCM 담당자</option>
+                                            <option value={"E10001X1"}>구매 담당자</option>
+                                            <option value={"E10001X1"}>회사 임원</option>
+                                            <option value={"R20001P1"}>배송 담당자</option>
+                                            <option value={"G00001A1"}>기업 고객</option>
+                                        </>
                                     )}
-                                    <option value={"E10001X1"}>SCM 담당자</option>
-                                    <option value={"E10001X1"}>구매 담당자</option>
-                                    <option value={"E10001X1"}>회사 임원</option>
-                                    <option value={"R20001P1"}>배송 담당자</option>
-                                    <option value={"G00001A1"}>기업 고객</option>
                                 </select>
                             </td>
                             <th scope='row' id='detail_codeTh'>
                                 담당 업무<span className='font_red'>*</span>
                             </th>
+                            {/* 두번째셀렉트 */}
                             <td colSpan={3} id='detail_code'>
-                                <select name='detail_code' onChange={handleChange}>
-                                    {isdetail ? (
-                                        <option value={detailInfo.detailCode}>{detailInfo.userClass}</option>
+                                {isdetail ? (
+                                    <>
+                                        <select
+                                            name='detailCode'
+                                            value={detailInfo?.detailCode}
+                                            onChange={detaileHandleChange}
+                                        >
+                                            {/* {isdetail ? (
+                                       <option value={detailInfo?.detailCode}>{detailInfo?.detailName}</option>
                                     ) : (
                                         <option value={"c"}>선택</option>
-                                    )}
-
-                                    {detailCodeList ? (
-                                        detailCodeList.map((ele: any, idx: number) => {
-                                            console.log(ele);
-                                            return (
-                                                <option key={ele.detailCode + idx} value={ele.detailCode}>
-                                                    {ele.detailName}
-                                                </option>
-                                            );
-                                        })
-                                    ) : (
-                                        <></>
-                                    )}
-                                </select>
+                                    )} */}
+                                            {/* <option value={"c"}>선택</option> */}
+                                            {detailCodeList ? (
+                                                detailCodeList.map((ele: any, idx: number) => {
+                                                    // console.log(ele);
+                                                    return (
+                                                        <option key={ele.detailCode + idx} value={ele.detailCode}>
+                                                            {ele.detailName}
+                                                        </option>
+                                                    );
+                                                })
+                                            ) : (
+                                                <></>
+                                            )}
+                                        </select>
+                                    </>
+                                ) : (
+                                    <>
+                                        <select name='detail_code' onChange={handleChange}>
+                                            <option value={"c"}>선택</option>
+                                            {detailCodeList ? (
+                                                detailCodeList.map((ele: any, idx: number) => {
+                                                    // console.log(ele);
+                                                    return (
+                                                        <option key={ele.detailCode + idx} value={ele.detailCode}>
+                                                            {ele.detailName}
+                                                        </option>
+                                                    );
+                                                })
+                                            ) : (
+                                                <></>
+                                            )}
+                                        </select>
+                                    </>
+                                )}
                             </td>
                         </tr>
 
@@ -536,7 +775,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
                                         <StyledInput
                                             placeholder='숫자, 영문자 조합으로 6~20자리'
                                             readOnly
-                                            value={detailInfo.loginID}
+                                            value={detailInfo?.loginID}
                                         />
                                     </>
                                 ) : (
@@ -557,7 +796,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
                                 {isdetail ? (
                                     <StyledInput
                                         name='password'
-                                        value={detailInfo.password}
+                                        value={detailInfo?.password}
                                         onChange={handleChange2}
                                         placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
                                     />
@@ -577,7 +816,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
                             </th>
                             <td colSpan={3}>
                                 {isdetail ? (
-                                    <StyledInput name='name' value={detailInfo.name} onChange={handleChange} />
+                                    <StyledInput name='name' value={detailInfo?.name} onChange={detaileHandleChange} />
                                 ) : (
                                     <StyledInput name='name' onChange={handleChange} />
                                 )}
@@ -589,7 +828,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
                                 {isdetail ? (
                                     <StyledInput
                                         name='password1'
-                                        value={detailInfo.password}
+                                        value={detailInfo?.password}
                                         onChange={handleChange2}
                                         placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
                                     />
@@ -611,7 +850,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
                                 {isdetail ? (
                                     <StyledInput
                                         name='manager'
-                                        value={detailInfo.manager}
+                                        value={detailInfo?.manager}
                                         onChange={handleChange}
                                         readOnly
                                     />
@@ -695,7 +934,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
                             </th>
                             <td colSpan={3} id='rggender_td'>
                                 {isdetail ? (
-                                    <select name='sex' value={detailInfo.sex} onChange={handleChange}>
+                                    <select name='sex' value={detailInfo?.sex} onChange={detaileHandleChange}>
                                         <option value=''>선택</option>
                                         <option value='1'>남자</option>
                                         <option value='2'>여자</option>
@@ -716,8 +955,8 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
                                     <StyledInput
                                         name='birthday'
                                         type='date'
-                                        value={detailInfo.birthday}
-                                        onChange={handleChange2}
+                                        value={detailInfo?.birthday}
+                                        onChange={detaileHandleChange}
                                     />
                                 ) : (
                                     <StyledInput name='birthday' type='date' onChange={handleChange2} />
@@ -733,7 +972,11 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
                             </th>
                             <td colSpan={6}>
                                 {isdetail ? (
-                                    <StyledInput ref={emailRef}></StyledInput>
+                                    <StyledInput
+                                        name='email'
+                                        value={detailInfo?.email}
+                                        onChange={detaileHandleChange}
+                                    ></StyledInput>
                                 ) : (
                                     <StyledInput ref={emailRef}></StyledInput>
                                 )}
@@ -750,7 +993,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
                             </th>
                             <td colSpan={6}>
                                 {isdetail ? (
-                                    <StyledInput ref={zipcodeRef} />
+                                    <StyledInput value={detailInfo?.zipCode} />
                                 ) : (
                                     <StyledInput ref={zipcodeRef} readOnly />
                                 )}
@@ -786,134 +1029,107 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ detailInfo, isdeta
                             </td>
                         </tr>
                     </tbody>
-
-                    {/* 이제 여기서 보고 위로 옮기자 */}
-                    {/* <label>
-                        <span>직원유형*</span>
-                    </label>
-                    <select
-                        name='group_code'
-                        onChange={(e) => {
-                            // console.log(e.target.selectedOptions[0].text);
-                            setSelectValue(e.target.value);
-                            handleGroupChange(e);
-                        }}
-                        defaultValue={selectValue ? selectValue : "c"}
-                    >
-                        <option value={"c"}>선택</option>
-                        <option value={"E10001X1"}>SCM 담당자</option>
-                        <option value={"E10001X1"}>구매 담당자</option>
-                        <option value={"E10001X1"}>회사 임원</option>
-                        <option value={"R20001P1"}>배송 담당자</option>
-                        <option value={"G00001A1"}>기업 고객</option>
-                    </select>
-                    <br />
-                    <label>
-                        <span>아이디*</span>
-                    </label>
-                    <StyledInput placeholder='숫자, 영문자 조합으로 6~20자리' ref={idRef} />
-                    <StyledButton onClick={checkDuplicFnc}>중복확인</StyledButton>
-                    {isValid ? errorMessage : errorMessage}
-                    <label>
-                        <span>이름/회사명*</span>
-                    </label>
-                    <StyledInput name='name' onChange={handleChange} />
-                    <label>
-                        <span>담당자명</span>
-                    </label>
-                    <StyledInput name='manager' onChange={handleChange} />
-                    <label>
-                        <span>성별*</span>
-                    </label>
-                    <select name='sex' onChange={handleChange}>
-                        <option value=''>선택</option>
-                        <option value='1'>남자</option>
-                        <option value='2'>여자</option>
-                    </select>
-                    <label>
-                        <span>이메일*</span>
-                        <StyledInput ref={emailRef} />
-                        <StyledButton onClick={checkDuplicEmailFnc}>중복확인</StyledButton>
-                    </label>
-                    <label>
-                        <span>우편번호찾기*</span>
-                        <StyledInput ref={zipcodeRef} readOnly />
-
-                        <StyledButton onClick={() => setIsPostcodeOpen(true)}>우편번호 찾기</StyledButton>
-                        <span>주소*</span>
-                        <StyledInput ref={addressRef} readOnly />
-                        <span>상세주소*</span>
-                        <StyledInput name='user_dt_address' ref={dtAddressRef} onChange={handleChange} />
-
-                        {isPostcodeOpen && (
-                            <DaumPostcode
-                                onComplete={handleAddressSelect} // 주소 선택 완료 시 호출되는 함수
-                            />
-                        )}
-                    </label>
-                
-                    <label>
-                        <span>담당업무*</span>
-                    </label>
-                    <select name='detailCode' onChange={handleChange}>
-                        <option value={"c"}>선택</option>
-                        {detailCodeList ? (
-                            detailCodeList.map((ele: any, idx: number) => {
-                                // console.log(ele.detailIdx);
-                                return (
-                                    <option key={ele.detailCode + idx} value={ele.value}>
-                                        {ele.detailName}
-                                    </option>
-                                );
-                            })
-                        ) : (
-                            <option value='d'>d</option>
-                        )}
-                    </select>
-                    <label>
-                        <span>비밀번호*</span>
-                    </label>
-                    <StyledInput
-                        name='password'
-                        onChange={handleChange2}
-                        placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
-                    />
-                    <label>
-                        <span>비밀번호 확인*</span>
-                    </label>
-                    <StyledInput
-                        name='password1'
-                        onChange={handleChange2}
-                        placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
-                    />
-                    <label>
-                        <span>전화번호*</span>
-                    </label>
-                    <StyledInput maxLength={3} type='text' id='tel1' name='userTel1' onChange={handleChange3} /> -
-                    <StyledInput maxLength={4} type='text' id='tel2' name='userTel2' onChange={handleChange3} /> -
-                    <StyledInput maxLength={4} type='text' id='tel3' name='userTel3' onChange={handleChange3} />
-                    <label>
-                        <span>생년월일*</span>
-                    </label>
-                    <StyledInput name='birthday' type='date' onChange={handleChange2} />
-                    <label>
-                        <StyledButton onClick={insertUserInfo}>등록</StyledButton>
-                    </label> */}
                 </table>
                 <div className='btnArea'>
-                    <StyledButton size={"small"} onClick={insertUserInfo}>
+                    {/* <StyledButton size={"small"} onClick={insertUserInfo}>
                         등록
-                    </StyledButton>
-                    <StyledButton
-                        size={"small"}
-                        onClick={() => {
-                            setModal(!modal);
-                        }}
-                    >
-                        취소
-                    </StyledButton>
+                    </StyledButton> */}
+                    {isdetail ? (
+                        <>
+                            <StyledButton size={"small"} onClick={updateUserInfo}>
+                                수정
+                            </StyledButton>
+
+                            {detailInfo?.statusYn === "1" ? (
+                                <>
+                                    <StyledButton size={"small"} onClick={openDeleteModal}>
+                                        삭제
+                                    </StyledButton>
+                                </>
+                            ) : (
+                                <>
+                                    <StyledButton size={"small"} onClick={openRestoreModal}>
+                                        복구
+                                    </StyledButton>
+                                </>
+                            )}
+
+                            <StyledButton
+                                size={"small"}
+                                onClick={() => {
+                                    setDetailModal(!detailModal);
+                                }}
+                            >
+                                취소
+                            </StyledButton>
+                        </>
+                    ) : (
+                        <>
+                            <StyledButton size={"small"} onClick={insertUserInfo}>
+                                등록
+                            </StyledButton>
+                            <StyledButton
+                                size={"small"}
+                                onClick={() => {
+                                    setModal(!modal);
+                                }}
+                            >
+                                취소
+                            </StyledButton>
+                        </>
+                    )}
                 </div>
             </div>
+            {isDeleteModalOpen && (
+                <div style={modalStyles}>
+                    <div style={modalContentStyles}>
+                        <h2>정말로 삭제하시겠습니까?</h2>
+                        <button onClick={handleDeleteYes}>예</button>
+                        <button onClick={handleDeleteNo}>아니요</button>
+                        <button onClick={closeDeleteModal}>닫기</button>
+                    </div>
+                </div>
+            )}
+
+            {isRestoreModalOpen && (
+                <div style={modalStyles}>
+                    <div style={modalContentStyles}>
+                        <h2>복구하시겠습니까?</h2>
+                        <button onClick={handleRestoreYes}>예</button>
+                        <button onClick={handleRestoreNo}>아니요</button>
+                        <button onClick={closeRestoreModal}>닫기</button>
+                    </div>
+                </div>
+            )}
+            {isRecoverModalOpen && (
+                <div style={modalStyles}>
+                    <div style={modalContentStyles}>
+                        <h2>복구하시겠습니까?</h2>
+                        <button onClick={handleRestoreYes}>예</button>
+                        <button onClick={handleRestoreNo}>아니요</button>
+                        <button onClick={closeRestoreModal}>닫기</button>
+                    </div>
+                </div>
+            )}
         </UserInfoModalStyle>
     );
+};
+// CSSProperties를 사용하여 타입을 지정
+const modalStyles: React.CSSProperties = {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+};
+
+const modalContentStyles: React.CSSProperties = {
+    backgroundColor: "white",
+    padding: "20px",
+    borderRadius: "5px",
+    textAlign: "center",
 };

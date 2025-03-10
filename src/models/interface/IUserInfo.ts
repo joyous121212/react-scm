@@ -69,6 +69,7 @@ export interface IUserDetialInfo {
     // detailCode: string;
     // manager: string;
     // zipCode: string;
+    groupCode:string;
     user_type: string;
     classType: string;
     statusYn: string;
@@ -95,6 +96,8 @@ export interface IUserDetialInfo {
     zipCode: string;
     address: string;
     ph: string;
+    detailName:string;
+    userType:string;
 }
 
 export interface IUserInfoDetailResponse {
@@ -102,7 +105,49 @@ export interface IUserInfoDetailResponse {
 }
 
 export interface UserDetailInfoModalProps {
-    detailInfo: IUserDetialInfo; // 프롭 타입 설정
-    isdetail: boolean; // 프롭 타입 설정
+    LoginId?:string;
+    isdetail?: boolean; // 프롭 타입 설정
     // setUserDetail: React.Dispatch<React.SetStateAction<any>>;
 }
+
+
+
+// 회원가입시키기 요청
+export interface requestRegisterScmDto{  
+    loginID:string;
+    user_type:string;
+    name:string;
+    password:string;
+    gender_cd:string;
+    hp:string;
+    user_email:string;
+    birthday:string;
+    classType:string;
+    user_zipcode:string;
+    user_address:string;
+    user_dt_address:string;
+    group_code:string;
+    detail_code:string;
+    manager:string;
+}
+// 기회원 정보 업데이트
+export interface IrequestRegisterUpdateDto{  
+  user_type:string;
+     name:string;
+      password:string;
+     gender_cd:string;
+     hp:string;
+    user_email:string;     
+     birthday:string;
+    classType:string;
+   user_address:string;
+      user_dt_address:string;
+     group_code:string;
+     detail_code:string;
+      manager:string;
+     user_zipcode:string;
+   loginID:string;
+}
+
+
+
