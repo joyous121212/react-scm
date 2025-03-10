@@ -141,8 +141,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
             setDetailCodeList(res2.detailCode);
         }
         // setUserDetail(null);
-        return () => {};
-    }, [detailInfo]);
+    }, []);
 
     const [selectedDetailCode, setSelectedDetailCode] = useState(detailInfo?.detailCode);
     const [detailCodeList, setDetailCodeList] = useState<any>();
