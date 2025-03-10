@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
-export const postApi = async (api: string, param: object) => {
+export const postApi = async (api: string, param: object = {}) => {
     try {
         const result: AxiosResponse<{ result: string }> = await axios.post(api, param);
 

@@ -21,7 +21,15 @@ export const Products = {
     searchList: "/mall/productsListBody.do",
     searchDetail: "/mall/productsDetailBody.do",
     category: "/mall/products/category",
-    supplyList: "/mall/products/supplyList"
+    supplyList: "/mall/products/supplyList",
+    historySave: "/mall/historySaveBody.do",
+    cartDetailSave: "/mall/cartDetailSaveBody.do"
+};
+
+export const Cart = {
+    searchList: "/mall/cartDetailList.do",
+    deleteCartDetail: "/mall/cartDetailDeleteBody.do",
+    historysSave: "/mall/historysSaveBody.do"
 }
 
 export const Approval = {
