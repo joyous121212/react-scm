@@ -37,5 +37,6 @@ export const ShoppingReturnList = {
 };
 
 export const Inventory = {
-    searchSelectBoxList : "/trade/inventorySelectBoxBody.do"
+    searchSelectBoxList : "/trade/inventorySelectBoxBody.do",
+    searchList: "/trade/inventoryListBody.do"
 }

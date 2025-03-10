@@ -6,21 +6,28 @@ import { InventoryContext } from "../../../../../api/Provider/trade/InventoryPro
 import { searchApi } from "../../../../../api/tradeApi/searchApi";
 import { IInventorySelectBoxResponse } from "../../../../../models/interface/IInventory";
 import { Inventory } from "../../../../../api/api";
-import { ISelectOption } from "../../../../../models/interface/IShoppingReturnList";
+import { ISelectOption, ITempSearchTitle } from "../../../../../models/interface/IShoppingReturnList";
+import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 
 export const InventorySearch = () => {
     const options = [{ label: "전체", value: "" }];
+    const inputValue = useRef<HTMLInputElement>();
     const [selectProduct, setSelectProduct] = useState<number>(0);
     const [selectSupply, setSelectSupply] = useState<number>(0);
     const [selectWarehouse, setSelectWarehouse] = useState<number>(0);
     const [productOptions, setProductOptions] = useState<ISelectOption[]>([]);
     const [supplyOptions, setSupplyOptions] = useState<ISelectOption[]>([]);
     const [warehouseOptions, setWarehouseOptions] = useState<ISelectOption[]>([]);
-    const { searchKeyword, setSearchKeyword } = useContext(InventoryContext);
+    const { searchTitle, setSearchTitle } = useContext(InventoryContext);
+    const [ tempSearchTitle, setTempSearchTitle ] = useState<ITempSearchTitle>({
+        searchProduct: "",
+        searchSupply: "",
+        searchWarehouse: "",
+    });
 
     // 🚀 선택된 검색 조건이 변경될 때 검색어 업데이트
     useEffect(() => {
-        setSearchKeyword({
+        setTempSearchTitle({
             searchProduct: selectProduct ? selectProduct : "",
             searchSupply: selectSupply ? selectSupply : "",
             searchWarehouse: selectWarehouse ? selectWarehouse : "",
@@ -30,21 +37,17 @@ export const InventorySearch = () => {
     // 🚀 검색어가 변경된 후 select box 데이터 가져오기
     useEffect(() => {
         getSelectBox();
-    }, [searchKeyword]); // ✅ 검색어 변경 후 실행
+    }, [tempSearchTitle]); // ✅ 검색어 변경 후 실행
 
     // 🔍 검색 핸들러
     const handlerSearch = () => {
-        setSearchKeyword({
-            searchProduct: selectProduct,
-            searchSupply: selectSupply,
-            searchWarehouse: selectWarehouse,
-        });
+        setSearchTitle({ ...tempSearchTitle, searchKeyword: inputValue.current.value });
     };
 
     // 📦 Select Box 데이터 가져오기
     const getSelectBox = async () => {
         try {
-            const response = await searchApi<IInventorySelectBoxResponse>(Inventory.searchSelectBoxList, searchKeyword);
+            const response = await searchApi<IInventorySelectBoxResponse>(Inventory.searchSelectBoxList, tempSearchTitle);
             if (!response || !response.detailValue) return;
 
             const data = response.detailValue;
@@ -124,6 +127,7 @@ export const InventorySearch = () => {
                     onChange={(newValue: number) => handleSelectChange(newValue, "warehouse")}
                 />
             </label>
+            <StyledInput size='search' ref={inputValue} />
             {/* 검색 버튼 */}
             <StyledButton variant='secondary' onClick={handlerSearch}>
                 검색

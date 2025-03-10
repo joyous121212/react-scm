@@ -31,6 +31,12 @@ export interface ISelectOption {
     value: number | string;
 }
 
+export interface ITempSearchTitle {
+    searchProduct: number | string;
+    searchSupply: number | string;
+    searchWarehouse: number | string;
+}
+
 export interface IShoppingReturnModalResponse {
     shoppingReturn: IShoppingReturn[];
     warehouseList: IWareHouse[];
