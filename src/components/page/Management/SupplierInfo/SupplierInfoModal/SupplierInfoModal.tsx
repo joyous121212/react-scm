@@ -1,18 +1,21 @@
 import DaumPostcode from "react-daum-postcode";
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { UserInfoModalStyle } from "../../UserInfo/UserInfoModal/styled"
 import { FC, useEffect, useState } from "react";
-import { IDeleteSupplyDetailRespose, IRecoverSupplyDetailRespose, ISupplierInfoDetailResponse, IUpdateSupplyDetailRespose } from "../../../../../models/interface/SupplierInfo";
+import { IDeleteSupplyDetailRespose, IRecoverSupplyDetailRespose, ISaveSupplyDetailRespose, ISupplierInfoDetailResponse, IUpdateSupplyDetailRespose } from "../../../../../models/interface/SupplierInfo";
 import { ISupplierInfoDetailDto } from "../../../../../models/interface/SupplierInfo";
 import { searchSupplyDetailApi } from "../../../../../api/SupplierInfoApi/searchSupplyDetailApi";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { useRecoilState } from "recoil";
-import { detailModalState } from "../../../../../stores/modalState";
+import { detailModalState, modalState } from "../../../../../stores/modalState";
 import { ISupplierInfoDetailRequestDto } from "../../../../../models/interface/SupplierInfo";
+import { ISupplierInfoSaveDetailDto } from "../../../../../models/interface/SupplierInfo";
+import { ISupplierSaveDetailRequestDto } from "../../../../../models/interface/SupplierInfo";
+import { postSaveSupplyDetail } from "../../../../../api/SupplierInfoApi/postSaveSupplyDetail";
 
 import { postUpdateSupplyDetail } from "../../../../../api/SupplierInfoApi/postUpdateSupplyDetail";
 import { SupplierInfo } from "../../../../../api/api";
-
+import { ISupplierSaveInfoDetail } from "../../../../../models/interface/SupplierInfo";
 
 export interface SupplierDetailInfoModalProps {
 	supplyId?: string;
@@ -24,6 +27,7 @@ import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { Portal } from "../../../../common/potal/Portal";
 import { useRef } from "react";
 import { postDeleteSupplyDetail } from "../../../../../api/SupplierInfoApi/postDeleteSupplyDetail";
+import { idDuplicCheck } from "../../../../../api/SupplierInfoApi/idDuplicCheck";
 
 const emptyMessage = {
 	//supplyId:string;
@@ -39,6 +43,25 @@ const upDateValiMessage = {
 	phone: "전화번호 형식에 맞지 않습니다.\n ex)하이픈 있던없던[3자리]-[3~4자리]-[3~4자리] (o) "
 }
 
+const saveValiMessage ={
+	supplyLoginID:"중복확인을 먼저 해주셔야합니데이",
+	password: "비밀번호 형식에 맞이 않습니다. \n ex)숫자 영문자 조합으로 6자리 입니다.",
+	phone: "전화번호 형식에 맞지 않습니다.\n ex)하이픈 있던없던[3자리]-[3~4자리]-[3~4자리] (o) "
+}
+
+const saveEmptyMessage = {
+
+	supplyLoginID:"아이디는 필수 입력 사항입니다.",
+	name: "납품업체명은 필수입력 사항입니다.",
+	manager: "담당자는 필수입력 사항입니다.",
+	phone: "연락쳐는 필수입력 사항입니다.",
+	ZipCode: "우편번호는 필수입력 사항입니다.",
+	address: "우편번번호 버튼 클릭후 선택해주세요",
+	password: "비밀번호는 필수입력 사항 입니다.",
+}
+
+
+
 
 
 
@@ -49,24 +72,265 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 
 	const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
 
-
+	const   [modal,setModal]=useRecoilState(modalState);
 	const [detailModal, setDetailModal] = useRecoilState(detailModalState);
 
 	const phRef = useRef<string>("");
+	
+	const [saveDetail,setSaveDetail]=useState<ISupplierSaveInfoDetail>(
+		{
+			// supply_id AS supplyId
+supplyLoginID: "",
+name: "",
+manager: "",	
+phone: "",		
+// zip_code AS zipCode
+zipCode: "",
+address: "",
+	
+// detail_address AS detailAddress
+detailAddress: "",
+loginID: "",
+password: "",		
+// group_code AS groupCode
+groupCode: "S10000T1",
+// create_by AS author		
+author: "",
+// created_date AS createdDate		
+createdDate: "",
+// trade_state AS tradeState	
+tradeState: "Y",
+		}
+	);
+
+	const idRef=useRef<boolean>(false);
+
+
 
 	const [supDetail, setSupDetail] = useState<ISupplierInfoDetail>();
 
+// 이하는 새로운 정보를삽입 하는 로직
+// 또한  아래처럼 보냄을 상기하자.
+
+// var param = {
+// 		name: $("#supplyName").val()
+// 	, 	manager: $("#supplyManager").val()		
+// 	,	phone: $("#supplyPhone").val()				
+// 	,	ZipCode: $("#supplyZipCode").val()				
+// 	,	address: $("#supplyAddress").val()				
+// 	,	detailAddress: $("#supplyDetailAddress").val()
+// 	,	supplyLoginID: $("#supplyLoginID").val()
+// 	,	password: $("#password").val()				
+// 	,	groupCode: $("#groupCode").val()			
+// 	,	tradeState	: $("input[name='TradeState']:checked").val() 
+// }
 
 
+
+
+
+const saveRequest: ISupplierSaveDetailRequestDto = {
+
+	toSaveRequestDto: {
+		name: "",  // 공급자 이름
+		manager: "",  // 관리자 이름
+		phone: "",  // 전화번호
+		ZipCode: "",  // 우편번호
+		address: "",  // 주소
+		detailAddress: "",  // 상세 주소
+		supplyLoginID: "",  // 로그인 ID
+		password: "",  // 비밀번호
+		groupCode: "",  // 그룹 코드
+		tradeState: ""  // 거래 상태
+	}
+}
+
+
+
+
+
+
+
+const closeSaveDetailModal = () => {
+	setModal(!modal);
+}
+
+
+
+const goSaveFnc= async ()=>{
+
+		// 0필수립력 체크: emptyCheck
+		if (!saveEmptyCheck(saveDetail)) {
+			return;
+		}
+
+
+//1 유효성 체크: 업데이트시는  전화번호만 있다.
+for (var key in saveValiMessage) {
+	if (!saveValiSwitch(key)) {
+		alert(saveValiMessage[key]);
+		return;
+	}
+}
+
+
+
+	//3 name값 보정:toSaveRequestDto
+	
+		const request	=toSaveRequestDto(saveDetail)
+
+
+		console.log("---보내기 직전")
+		console.log(request)
+		console.log("---보내기 직전")
+
+	const res:ISaveSupplyDetailRespose=	await  postSaveSupplyDetail(SupplierInfo.saveSupplyDetail,request)
+
+	if(res.result==="success"){
+		alert("정보 삽입에 성공하였습니다.");
+		window.location.href = "/react/management/supplier-info";
+	}else{
+		alert("잠시후 다시 시도해주세요");
+		window.location.href = "/react/management/supplier-info";
+	}
+};
+
+const toSaveRequestDto = (saveDetail): ISupplierInfoSaveDetailDto => {
+	for (var key in saveDetail) {
+		//	console.log(`key:  ${key} `)
+		if (key === "phone") {
+			saveRequest.toSaveRequestDto[key] = phRef.current;
+			//alert("ref"+request.toRequestDto[key])
+		} else {
+			// let changeKey = keyChange(key);
+			saveRequest.toSaveRequestDto[key] = saveDetail[key];
+			//console.log(`key:${key}   변형된 key: ${changeKey} \n  toRequestDto 의 value: ${request.toSaveRequestDto[key]} supDetail 의 valye: ${saveDetail[key]}`)
+		}
+	}
+
+	return saveRequest.toSaveRequestDto
+
+}
+
+const saveEmptyCheck = (saveDetail): boolean => {
+
+	for (var key in saveEmptyMessage) {
+
+
+		if (saveDetail[key]=== "") {
+			alert(saveEmptyMessage[key]);
+			return false;
+		}
+	}
+
+	return true;
+
+}
+
+
+const saveValiSwitch = (name: string): boolean => {
+	switch (
+	true // 항상 true로 설정하고 각 조건을 체크
+	) {
+
+		case name==="supplyLoginID":
+		return idRef.current;
+
+		case name === "phone":
+			// 전화번호 유효성 검사 함수 호출
+			return phoneValidateInput(saveDetail.phone);
+
+
+		case name ==="password":
+		return  PasswordValidateInput(saveDetail.password)
+
+		default:
+			return false;
+	}
+};
+
+
+const PasswordValidateInput = (value: string): boolean => {
+	const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6}$/;
+	return regex.test(value);
+};
+
+
+const handleSaveChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+	const { name, value } = e.target;
+	//detailInfo
+	console.log(`네임: ${name}     밸류: ${value}`);
+	setSaveDetail((prevData) => ({
+		...prevData,
+		[name]: value,
+	}));
+
+}
+
+//아이디 중복체크
+const goIdDuplicCheckFnc= async ()=>{
+	
+//var param = {"loginID" : $("#supplyLoginID").val()};
+//saveDetail.supplyLoginID
+
+const res:number=await idDuplicCheck(SupplierInfo.idDuplicCheck,{loginID:saveDetail.supplyLoginID});
+
+	console.log(res)
+
+if(res===1){
+	alert("이미 사용중인 아이디입니다.");
+	idRef.current=false;
+	return
+}
+alert("사용가능한 아이디 입니다.");
+idRef.current=true;
+
+}
+
+
+
+
+const phoneValidateInput = (value: string): boolean => {
+	//alert(value)
+	// 하이픈을 제외한 숫자만 추출
+	const cleanPhoneNumber = value.replace(/\D/g, '');
+
+	// 10자리 또는 11자리 숫자만 허용
+	if (cleanPhoneNumber.length !== 10 && cleanPhoneNumber.length !== 11) {
+		return false; // 길이가 맞지 않으면 false 반환
+	}
+
+	// 하이픈을 포함한 전화번호 포맷으로 변환
+	const formattedPhoneNumber = cleanPhoneNumber.replace(/^(\d{3})(\d{4})(\d{4})$/, '$1-$2-$3');
+
+	// 하이픈 포함 전화번호 형식이 맞는지 체크
+	const phoneRegex = /^(01[0-9])-(\d{3,4})-(\d{4})$/;
+
+	//console.log("전화번호:  "+formattedPhoneNumber)
+
+
+
+
+	
+	const box= {...saveDetail}
+	box.phone=formattedPhoneNumber;
+	setSaveDetail(box)
+	phRef.current = formattedPhoneNumber;
+	return phoneRegex.test(formattedPhoneNumber);
+};
+
+
+//이하는 업데이트를 위한 로직
 
 
 	const request: ISupplierInfoDetailRequestDto = {
+
 		toRequestDto: {
 			supply_id: "",
 			name: "",
 			manager: "",
 			phone: "",
-			Zip_code: "",
+			zip_code: "",
 			address: "",
 			detail_address: "",
 			loginID: "",
@@ -77,17 +341,6 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 			trade_state: ""
 		}
 	}
-	
-
-	// 상세모달 정보를 보기위한 useEffect
-	useEffect(() => {
-		console.log(supDetail?.ZipCode)
-	}, [supDetail])
-
-
-
-
-
 	// 상세모달 정보를 보기위한 useEffect
 	useEffect(() => {
 		if (supplyId != undefined) {
@@ -133,10 +386,10 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 
 			if(res.result==="success"){
 				alert("정보 수정에 성공하였습니다.");
-				//window.location.href = "/react/management/supplier-info";
+				window.location.href = "/react/management/supplier-info";
 			}else{
 				alert("잠시후 다시 시도해주세요");
-			//	window.location.href = "/react/management/supplier-info";
+				window.location.href = "/react/management/supplier-info";
 			}
 
 
@@ -195,12 +448,6 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 		}
 	};
 
-
-
-
-
-
-
 	const IdValidateInput = (value: string): boolean => {
 		//alert(value)
 		// 하이픈을 제외한 숫자만 추출
@@ -237,7 +484,7 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 	}
 
 
-
+	
 
 	const toRequestDto = (supDetail): ISupplierInfoDetailDto => {
 
@@ -260,17 +507,39 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 
 	}
 
+
+
+
+
+
 	const handleAddressSelect = (data: any) => {
+
+		alert("정보삽입모달: "+modal+"  업데이트 모달:  "+detailModal)
+
+	
+
 		let address = data.roadAddress; // 도로명 주소
 		if (!address) address = data.jibunAddress; // 지번 주소
 		// console.log("우편번호: " + data.zonecode);
 		// console.log("주소: " + address);
-		const box = { ...supDetail };
-		box.ZipCode = data.zonecode
+		let box ;
+		if(detailModal){
+			box = { ...supDetail }
+			box.zipCode = data.zonecode
 		box.address = address
-		alert(box.ZipCode)
+		alert(box.zipCode)
 		setSupDetail(box);
 		setIsPostcodeOpen(false);
+		}else{
+			box = { ...saveDetail }
+			box.zipCode = data.zonecode
+			box.address = address
+			alert(box.zipCode)
+			setSaveDetail(box);
+			setIsPostcodeOpen(false);
+		}
+		
+		
 	};
 
 
@@ -311,7 +580,10 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 						<col width='30%' />
 					</colgroup>
 					<tbody>
+					{supDetail ? (<>
+					
 						<tr id="writer" >
+							
 							<th scope="row">작성자 </th>
 							<td colSpan={1}>
 
@@ -320,8 +592,9 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 									{supDetail ? (
 										<StyledInput name="author" value={supDetail.author} readOnly></StyledInput>
 									) : (
-										<StyledInput type="text"
-											name="author" id="supplyLoginID" placeholder="숫자, 영문자 조합으로 6~20자리" />
+										<></>
+										// <StyledInput type="text"
+										// 	name="author" id="supplyLoginID"  placeholder="숫자, 영문자 조합으로 6~20자리" />
 									)}
 								</div>
 							</td>
@@ -329,16 +602,19 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 							<td colSpan={1}>
 								<div className="inputTxt p100" id="createdDate">
 									{supDetail ? (
-										<StyledInput name="createdDate" value={supDetail.createdDate} readOnly></StyledInput>
+										<StyledInput name="createdDate" value={new Date(supDetail.createdDate).toISOString().split('T')[0]} readOnly></StyledInput>
 									) : (
 										<StyledInput type="text"
-											name="createdDate" id="supplyLoginID" placeholder="숫자, 영문자 조합으로 6~20자리" />
+											name="createdDate" id="supplyLoginID"   placeholder="숫자, 영문자 조합으로 6~20자리" />
 									)}
 
 
 								</div>
 							</td>
 						</tr>
+					
+					</>):(<></>)}
+					
 						<tr>
 							<th scope="row">아이디<span className="font_red">*</span></th>
 							<td colSpan={2}>
@@ -346,7 +622,7 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 									<StyledInput name="loginID" value={supDetail.loginID} readOnly></StyledInput>
 								) : (
 									<StyledInput type="text" className="inputTxt p100"
-										name="supplyLoginID" id="supplyLoginID" placeholder="숫자, 영문자 조합으로 6~20자리" />
+										name="supplyLoginID" id="supplyLoginID"  value={saveDetail.supplyLoginID}  onChange={handleSaveChange} placeholder="숫자, 영문자 조합으로 6~20자리" />
 								)}
 							</td>
 
@@ -356,7 +632,7 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 								<>
 									<td colSpan={1}>
 										<StyledInput type="button" value="중복확인"
-											id="IdCheckBtn"
+											id="IdCheckBtn" onClick={goIdDuplicCheckFnc}
 										/>
 
 									</td>
@@ -376,7 +652,7 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 									<StyledInput name="name" value={supDetail.name} onChange={handleUpdateChange} ></StyledInput>
 								) : (
 									<StyledInput type="text"
-										name="name" id="supplyLoginID" placeholder="숫자, 영문자 조합으로 6~20자리" />
+										name="name" id="supplyLoginID"  value={saveDetail.name}  onChange={handleSaveChange}   placeholder="숫자, 영문자 조합으로 6~20자리" />
 								)}
 
 
@@ -397,7 +673,7 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 									<StyledInput name="manager" value={supDetail.manager} onChange={handleUpdateChange} ></StyledInput>
 								) : (
 									<StyledInput type="text"
-										name="manager" id="supplyLoginID" placeholder="숫자, 영문자 조합으로 6~20자리" />
+										name="manager"  value={saveDetail.manager}  onChange={handleSaveChange}   />
 								)}
 
 
@@ -419,7 +695,7 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 									<StyledInput name="phone" value={supDetail.phone} onChange={handleUpdateChange}></StyledInput>
 								) : (
 									<StyledInput type="text"
-										name="phone" id="supplyLoginID" placeholder="숫자, 영문자 조합으로 6~20자리" />
+										name="phone" id="supplyLoginID"  value={saveDetail.phone}  onChange={handleSaveChange}   placeholder="하이픈상관없이전화번호입력" />
 								)}
 
 							</td>
@@ -432,14 +708,16 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 								*/}
 
 								{supDetail ? (
-									<StyledInput name="ZipCode" value={supDetail.ZipCode} readOnly></StyledInput>
+									<StyledInput name="ZipCode" value={supDetail.zipCode} readOnly></StyledInput>
 								) : (
 									<StyledInput type="text"
-										name="ZipCode" id="supplyLoginID" placeholder="숫자, 영문자 조합으로 6~20자리" />
+										name="ZipCode" id="supplyLoginID" value={saveDetail.zipCode} readOnly />
 								)}
 							</td>
 							<td colSpan={1}>
 								<StyledButton onClick={() => setIsPostcodeOpen(true)}>우편번호 찾기</StyledButton>
+
+								
 							</td>
 						</tr>
 						<tr>
@@ -455,7 +733,7 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 									<StyledInput name="address" value={supDetail.address} readOnly></StyledInput>
 								) : (
 									<StyledInput type="text"
-										name="address" id="supplyLoginID" placeholder="숫자, 영문자 조합으로 6~20자리" />
+										name="address" id="supplyLoginID"  value={saveDetail.address} placeholder="숫자, 영문자 조합으로 6~20자리" />
 								)}
 
 
@@ -490,7 +768,7 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 									<StyledInput name="password" type="password" value={supDetail.password} readOnly></StyledInput>
 								) : (
 									<StyledInput type="text"
-										name="password" id="supplyLoginID" placeholder="숫자, 영문자 조합으로 6~20자리" />
+										name="password" id="supplyLoginID"   value={saveDetail.password}  onChange={handleSaveChange} placeholder="숫자, 영문자 조합으로 6~20자리" />
 								)}
 
 
@@ -513,11 +791,9 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 
 
 									<>
-										<label>
-											<StyledInput type="radio" name="tradeState" id="TradeStateY" value="Y" /> Yes
-										</label>
-										<label>
-											<StyledInput type="radio" name="tradeState" id="TradeStateN" value="N" checked /> No
+									<label>
+											<StyledInput type="radio" name="tradeState" id="TradeStateY" value="Y" checked  onChange={handleSaveChange}/> Yes
+											<StyledInput type="radio" name="tradeState" id="TradeStateN" value="N"  onChange={handleSaveChange} /> No
 										</label>
 
 									</>
@@ -557,10 +833,10 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 
 						: (<>
 
-							<StyledButton >저장</StyledButton>
+							<StyledButton  onClick={goSaveFnc}>저장</StyledButton>
 						</>)}
 
-					{supDetail ? <StyledButton onClick={closeDetailModal}>취소</StyledButton> : <StyledButton>취소</StyledButton>}
+					{supDetail ? <StyledButton onClick={closeDetailModal}>취소</StyledButton> : <StyledButton onClick={closeSaveDetailModal}>취소</StyledButton>}
 
 				</div>
 
@@ -571,7 +847,7 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 
 
 				<DaumPostcode
-					onComplete={handleAddressSelect} // 주소 선택 완료 시 호출되는 함수
+					onComplete={  handleAddressSelect} // 주소 선택 완료 시 호출되는 함수
 				/>
 
 			)}

@@ -1,9 +1,9 @@
 import axios, { AxiosResponse } from "axios";
-import { ISupplierInfoDetailResponse } from "../../models/interface/SupplierInfo";
+import { ISaveSupplyDetailRespose } from "../../models/interface/SupplierInfo";
 
-export const searchSupplyDetailApi = async <T, D>(api: string, param: D) => {
+export const postSaveSupplyDetail = async <T, D>(api: string, param: D) => {
     try {
-        const result: AxiosResponse<any> = await axios.post(api, param);
+        const result: AxiosResponse<ISaveSupplyDetailRespose> = await axios.post(api, param);
 
         console.log(result);
 

@@ -1,7 +1,7 @@
 import { CommonCodeMainStyled } from "../../CommonCode/CommonCodeMain/styled";
 import { useContext ,useEffect, useState} from "react";
 import { SupplierInfoContext } from "../../../../../api/Provider/SupplierInfoProvider";
-import axios from "axios";
+
 import { Column } from "../../../../common/StyledTable/StyledTable";
 import { StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
@@ -9,13 +9,34 @@ import { SupplierInfoModal } from "../SupplierInfoModal/SupplierInfoModal";
 import { Portal } from "../../../../common/potal/Portal";
 import { useRecoilState } from "recoil";
 import { detailModalState } from "../../../../../stores/modalState";
+import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
+import { SupplierInfo } from "../../../../../api/api";
+import { searchSupplierListApi } from "../../../../../api/SupplierInfoApi/searchSupplierListApi";
+import { detailListModalState } from "../../../../../stores/modalState";
+
+import { useNavigate } from "react-router-dom";
+
+
 export const SupplierInfoMain=()=>{
+
+   const  [detailListModal,setDetailListModal]=useRecoilState(detailListModalState)
+  
 const {searchKeyword, setSearchKeyword}= useContext(SupplierInfoContext);
 const [supplierList,setSupplierList]=useState([]);
 const [supplierCnt,setSupplierCnt]=useState(0);
-const [supplyId,setSupplyId]=useState(undefined)
-//
+const [supplyId,setSupplyId]=useState(undefined);
 const [detailModal, setDetailModal] = useRecoilState(detailModalState);
+const [cPage, setCPage] = useState<number>(0);
+//
+const [supCount, setSupCoun] = useState<number>(0);
+
+const suppDetailInfoSearchApi = async (currentPage?: number) => {
+  currentPage = currentPage || 1;
+  const box = { ...searchKeyword };
+  box.currentPage = currentPage;
+  setSearchKeyword(box);
+};
+const navigate = useNavigate();
 const columns = [
   { key: "name", title: "납품업체명" },
   { key: "manager", title: "담당자명" },
@@ -26,11 +47,14 @@ const columns = [
 
 ] as Column<any>[];
 useEffect(()=>{
+
+
+  
      async function searChCall(){
-       const res=  await axios.post("/management/supplierListBody.do",searchKeyword);
-     //  console.log(res.data)
-       setSupplierList(res.data.supplier);
-       setSupplierCnt(res.data.supplierCnt);
+       const res:any=   await searchSupplierListApi(SupplierInfo.searchSupplierList,searchKeyword);
+       console.log(res)
+       setSupplierList(res.supplier);
+       setSupplierCnt(res.supplierCnt);
      } 
      searChCall();
 },[searchKeyword])
@@ -40,7 +64,11 @@ useEffect(()=>{
 })
 
 
+const goNewPage=(supplyId:string)=>{
 
+  setDetailListModal(!detailListModal);
+
+}
 
 
 
@@ -60,18 +88,40 @@ useEffect(()=>{
                                               console.log(row);
                                               setSupplyId(row.supplyId);
                                               setDetailModal(!detailModal);                                              
-                                          }}
-                                          
+                                          }}                            
+
+
+
+
                                       >
                                           수정
                                       </StyledButton>
                                   )}
 
 
+                                  onCellClick={(row, column) => {
+                                    goNewPage(row.supplyId)
+                                    navigate(`${row.supplyId}`, { state: { groupCode: row.groupCode } })
+                
+                                   
+                                }}
+
+
 
 
      />
-     </CommonCodeMainStyled>
+        </CommonCodeMainStyled>
+<>
+   <PageNavigate
+                totalItemsCount={supplierCnt}
+                onChange={suppDetailInfoSearchApi}
+                itemsCountPerPage={5}
+                activePage={cPage}
+            /> 
+</>
+
+
+
     </>):(<></>)
 
     }

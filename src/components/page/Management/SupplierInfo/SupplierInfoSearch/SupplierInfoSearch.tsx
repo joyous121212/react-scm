@@ -5,7 +5,15 @@ import { StyledInput } from "../../../../common/StyledInput/StyledInput"
 import { SupplierInfoContext } from "../../../../../api/Provider/SupplierInfoProvider"
 import { useRef, useState ,useContext, useEffect} from "react"
 import { StyledButton } from "../../../../common/StyledButton/StyledButton"
+import { useRecoilState } from "recoil"
+import { modalState } from "../../../../../stores/modalState"
+import { SupplierInfoModal } from "../SupplierInfoModal/SupplierInfoModal"
+import { Portal } from "../../../../common/potal/Portal"
+
+
 export const SupplierInfoSearch=()=>{
+
+  const   [modal,setModal]=useRecoilState(modalState);
 
 const {searchKeyword, setSearchKeyword}= useContext(SupplierInfoContext);
 const keyWordRef = useRef<HTMLInputElement>();
@@ -29,7 +37,17 @@ const [selectValue, setSelectValue] = useState<string>("searchSupplier");
                     <StyledSelectBox options={options} value={selectValue} onChange={setSelectValue} />
                     <StyledInput ref={keyWordRef} />                    
                     <StyledButton onClick={handlerSearch}>검색</StyledButton>
+                    <StyledButton onClick={()=>{setModal(!modal)}}>등록</StyledButton>
                     {/* <StyledButton onClick={handlerModal}>등록</StyledButton> */}
                 </CommonCodeSearchStyled>
+
+
+                 {modal  && (
+                               
+                                <Portal>
+                                    <SupplierInfoModal />
+                                </Portal>
+                            )}
+                
     </>)
 }
