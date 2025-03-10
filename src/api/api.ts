@@ -39,4 +39,12 @@ export const Approval = {
     approvalShoppingReturn: "/approval/shoppingReturnApproveUpdateBody.do",
 };
 
-}
+export const ShoppingReturnList = {
+    searchList: "/trade/shoppingReturnListBody.do",
+    searchModal: "/trade/shoppingReturnListModalBody.do",
+    updateMall: "/trade/shoppingReturnUpdateMallBody.do",
+};
+
+export const OrderList = {
+    searchList: "/tasks/orderListBody.do",
+};
