@@ -10,7 +10,7 @@ import { IShoppingReturn, IShoppingReturnListResponse } from "../../../../../mod
 import { ShoppingReturnList } from "../../../../../api/api";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { Portal } from "../../../../common/potal/Portal";
-import { ShoppingReturnModal } from "../shoppingReturnListModal/shoppingReturnListModat";
+import { ShoppingReturnModal } from "../shoppingReturnListModal/shoppingReturnListModal";
 
 export const transformShoppingReturnData = (data: any[]): IShoppingReturn[] => {
     return data.map((item) => ({

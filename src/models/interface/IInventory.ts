@@ -25,14 +25,25 @@ export interface IInventory {
     quantity: number;
     supplyId: number;
     supplyName: string;
-    warehouseAddress:string;
+    warehouseAddress: string;
     warehouseCode: string;
     warehouseId: number;
     warehouseManager: string;
     warehouseName: string;
 }
 
+export interface IInventoryPropsOptions {
+    inventoryId: number;
+    productId: number;
+    supplyId: number;
+    warehouseId: number;
+}
+
 export interface IInventoryListResponse {
     inventoryList: IInventory[];
     inventoryCnt: number;
+}
+
+export interface IInventoryDetailResponse {
+    detailValue: IInventory[];
 }

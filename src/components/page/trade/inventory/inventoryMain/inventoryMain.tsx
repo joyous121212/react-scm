@@ -7,13 +7,22 @@ import { Inventory } from "../../../../../api/api";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { InventoryMainStyled } from "./styled";
 import { InventoryContext } from "../../../../../api/Provider/trade/InventoryProvider";
-import { IInventory, IInventoryListResponse } from "../../../../../models/interface/IInventory";
+import { IInventory, IInventoryListResponse, IInventoryPropsOptions } from "../../../../../models/interface/IInventory";
+import { InventorySubGrid } from "../inventorySubGrid/inventorySubGrid";
+
+const initInventoryPropsOptions = {
+    inventoryId: 0,
+    productId: 0,
+    supplyId: 0,
+    warehouseId: 0,
+};
 
 export const InventoryListMain = () => {
     const { searchTitle } = useContext(InventoryContext);
     const [cPage, setCPage] = useState<number>(0);
     const [inventoryList, setInventoryList] = useState<IInventory[]>([]);
     const [inventoryListCnt, setInventoryListCnt] = useState<number>(0);
+    const [inventoryPropsOption, setInventoryPropsOption] = useState<IInventoryPropsOptions>(initInventoryPropsOptions);
     const [modal, setModal] = useRecoilState(modalState);
 
     const columns = [
@@ -31,6 +40,9 @@ export const InventoryListMain = () => {
     }, [searchTitle]);
 
     const searchInventory = async (currentPage?: number) => {
+        if (modal) {
+            setModal(!modal);
+        }
         currentPage = currentPage || 1;
 
         const result = await searchApi<IInventoryListResponse>(Inventory.searchList, {
@@ -40,31 +52,40 @@ export const InventoryListMain = () => {
         });
 
         if (result) {
-            console.log(result.inventoryCnt);
             setInventoryList(result.inventoryList);
             setInventoryListCnt(result.inventoryCnt);
             setCPage(currentPage);
         }
     };
 
-    const handlerModal = (id: number) => {
-        setModal(!modal);
-    };
-
-    const postSuccess = () => {
-        setModal(!modal);
-        searchInventory();
+    const handlerModal = (propsOptions: IInventoryPropsOptions) => {
+        setInventoryPropsOption(propsOptions);
+        if (!modal) {
+            setModal(!modal);
+        }
     };
 
     return (
         <InventoryMainStyled>
-            <StyledTable data={inventoryList} columns={columns} />
+            <StyledTable
+                data={inventoryList}
+                columns={columns}
+                onRowClick={(row) =>
+                    handlerModal({
+                        inventoryId: row.inventoryId,
+                        productId: row.productId,
+                        supplyId: row.supplyId,
+                        warehouseId: row.warehouseId,
+                    })
+                }
+            />
             <PageNavigate
                 totalItemsCount={inventoryListCnt}
                 onChange={searchInventory}
                 itemsCountPerPage={5}
                 activePage={cPage}
             />
+            {modal && <InventorySubGrid inventoryPropsOption={inventoryPropsOption} />}
         </InventoryMainStyled>
     );
 };

@@ -19,6 +19,7 @@ interface TableProps<T> {
     onCellClick?: (row: T, column: keyof T) => void;
     renderAction?: (row: T) => React.ReactNode;
     renderCell?: (row: T, column: Column<T>) => React.ReactNode; // 추가
+    renderHead?: (column: Column<T>) => React.ReactNode;
 }
 
 export const StyledTable = <T extends { [key: string]: any }>({
@@ -32,6 +33,7 @@ export const StyledTable = <T extends { [key: string]: any }>({
     bordered,
     hoverable,
     fullWidth,
+    renderHead,
 }: TableProps<T>) => {
     const generatedColumns =
         columns ??
@@ -45,7 +47,7 @@ export const StyledTable = <T extends { [key: string]: any }>({
                 <tr>
                     {generatedColumns.map((col) => (
                         <Th key={col.key as string} bordered={bordered} style={{ width: col.width }}>
-                            {col.title}
+                            {renderHead ? renderHead(col) : col.title} {/* ✅ renderHead 적용 */}
                         </Th>
                     ))}
                 </tr>
