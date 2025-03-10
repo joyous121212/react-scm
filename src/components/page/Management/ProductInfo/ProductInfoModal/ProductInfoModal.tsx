@@ -2,22 +2,47 @@ import { searchSupplierNameListApi } from "../../../../../api/ProductInfoApi/sea
 import { searchProductDetailApi } from "../../../../../api/ProductInfoApi/searchProductDetailApi";
 import { searchCategoryListApi } from "../../../../../api/ProductInfoApi/searchCategoryListApi";
 import { UserInfoModalStyle } from "../../UserInfo/UserInfoModal/styled";
-import { FC, useEffect } from "react";
+import { ChangeEvent, FC, useEffect } from "react";
 import { ProductInfo } from "../../../../../api/api";
 import { useState } from "react";
 import { IProductDetailResponse } from "../../../../../models/interface/store/IProductInfo";
 import { IProductDetail } from "../../../../../models/interface/store/IProductInfo";
-
+import { IUpdateRequestDto } from "../../../../../models/interface/store/IProductInfo";
+import { useRef } from "react";
+import { StyledButton } from "../../../../common/StyledButton/StyledButton";
+import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 export interface IProductInfoModalProps {
     productId?: string;
 }
 
 export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
-    console.log("프롭스 값:   " + productId);
-
+   // console.log("프롭스 값:   " + productId);
+   const [imageUrl, setImageUrl] = useState<string>("");
+   const [fileName, setFileName] = useState<string>("");
+  
     const [supNameList, setSupNameList] = useState([]);
 
     const [productDetail, setProductDetail] = useState<IProductDetail>();
+
+    const [categoryList ,setCategoryList]=useState([]);
+
+    const [updateData,setUpData]=useState([])
+
+    const updateRef=useRef<IUpdateRequestDto>(
+        {
+            productId: -100,            
+            name: "",                   
+            productNumber: "",          
+            sellPrice: -100,            
+            description: "",            
+            supplierName: -100,         
+            category: "",               
+            fileInput: null,             
+            supplyId: -100,             
+            categoryCode: "",           
+            empty: "",                  
+        }
+    );
 
     useEffect(() => {
         async function initFnc() {
@@ -36,12 +61,80 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
             const res3: any = await searchCategoryListApi(ProductInfo.categoryList);
 
             console.log(res3);
+            setCategoryList(res3)
+            
         }
 
         if (productId != undefined) {
+           
             initFnc();
+            updateRef.current.productId=parseInt(productId);
         }
+        
     }, []);
+
+    
+    useEffect(()=>{
+        console.log(productDetail)
+    },[productDetail])
+
+    const checkout=()=>{
+        console.log(updateRef);
+    }
+
+    const updateInputHandler=(e: React.ChangeEvent<HTMLInputElement>)=>{
+
+    }
+    const updateHandler=(e: React.ChangeEvent<HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        const selectedOption = e.target.selectedOptions[0];
+        const supplyId = selectedOption?.getAttribute('data-supplyId');
+        console.log(`네임: ${name}     밸류: ${value}     공급ID: ${supplyId}`);
+        
+        updateRef.current.supplyId=parseInt(supplyId);
+        updateRef.current.supplierName=parseInt(supplyId);
+//updateRef.current.categoryCode=categoryId;
+
+
+        setProductDetail((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+
+    }
+    const updateCategoryHandler=(e: React.ChangeEvent<HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        const selectedOption = e.target.selectedOptions[0];
+        const categoryId= selectedOption?.getAttribute('data-categoryCode');
+
+        console.log(`네임: ${name}     밸류: ${value}     공급ID: ${categoryId}`);
+        updateRef.current.category=categoryId;
+        updateRef.current.categoryCode=categoryId;
+        setProductDetail((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+
+    }
+
+
+    const handlerFile = (e: ChangeEvent<HTMLInputElement>) => {
+        const fileInfo = e.target.files;
+       
+        updateRef.current.fileInput=fileInfo[0];
+        if (fileInfo?.length > 0) {
+            const fileSplit = fileInfo[0].name.split(".");
+            const fileExt = fileSplit[1].toLowerCase();
+
+            console.log("파일명: "+fileInfo[0].name+" 파일확장자."+fileExt)
+            if (fileExt === "jpg" || fileExt === "gif" || fileExt === "png") {
+                setImageUrl(URL.createObjectURL(fileInfo[0]));
+            }
+            setFileName(fileInfo[0].name);
+        }
+    };
+
+
 
     return (
         <UserInfoModalStyle>
@@ -60,7 +153,7 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                                 제품명 <span className='font_red'>*</span>
                             </th>
                             <td colSpan={3}>
-                                <input type='text' className='inputTxt p100' name='name' id='name' />
+                                <input type='text' className='inputTxt p100' name='name' id='name'  value={productDetail?.name} />
                             </td>
                         </tr>
                         <tr>
@@ -68,7 +161,7 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                                 제품번호 <span className='font_red'>*</span>
                             </th>
                             <td colSpan={3}>
-                                <input type='text' className='inputTxt p100' name='productNumber' id='productNumber' />
+                                <input type='text' className='inputTxt p100' name='productNumber' value={productDetail?.productNumber}  id='productNumber' />
                             </td>
                         </tr>
                         <tr>
@@ -76,7 +169,7 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                                 제품가격<span className='font_red'>*</span>
                             </th>
                             <td colSpan={3}>
-                                <input type='text' className='inputTxt p100' name='sellPrice' id='sellPrice' />
+                                <input type='text' className='inputTxt p100' name='sellPrice' value={productDetail?.sellPrice} id='sellPrice' />
                             </td>
                         </tr>
                         <tr>
@@ -84,7 +177,7 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                                 상세정보<span className='font_red'>*</span>
                             </th>
                             <td colSpan={3}>
-                                <input type='text' className='inputTxt p100' name='description' id='description' />
+                                <input type='text' className='inputTxt p100' name='description' value={productDetail?.description} id='description' />
                             </td>
                         </tr>
                         <tr>
@@ -94,9 +187,9 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                             <td colSpan={3}>
                                 {productDetail !== undefined ? (
                                     <>
-                                        <select name='supplyName' id='supplier' value={productDetail.supplyName}>
+                                        <select name='supplier' id='supplier' value={productDetail.supplier} onChange={updateHandler}>
                                             {supNameList.map((ele) => {
-                                                return <option key={ele.supplyId}>{ele.name}</option>;
+                                                return <option key={ele.supplyId} data-supplyId={ele.supplyId}>{ele.name}</option>;
                                             })}
                                         </select>
                                     </>
@@ -109,10 +202,24 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                         </tr>
                         <tr>
                             <th scope='row'>
+                               
                                 카테고리<span className='font_red'>*</span>
                             </th>
                             <td colSpan={3}>
-                                <select name='category' id='category'></select>
+                            {productDetail !== undefined ? (
+                                    <>
+                                        <select name='category' id='category' value={productDetail.category} onChange={updateCategoryHandler}>
+                                            {categoryList.map((ele) => {
+                                                return <option key={ele.categoryCode} data-categoryCode={ele.categoryCode}>{ele.category}</option>;
+                                            })}
+                                        </select>
+                                    </>
+                                ) : (
+                                    <>
+                                         <select name='category' id='category'></select>
+                                    </>
+                                )}
+                               
                             </td>
                         </tr>
                         <tr id='fileNo'>
@@ -120,29 +227,62 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                                 파일
                             </th>
                             <td colSpan={3}>
-                                {/* <label for="fileInput" className="fileBtn">파일 선택</label> */}
-                                <input type='file' className='inputTxt p80' name='fileInput' id='fileInput' />
-                                <span id='fileNameDisplay'></span>
-                            </td>
-                        </tr>
-                        <tr id='fileYes'>
-                            <th scope='row'>파일</th>
-                            <td colSpan={2}>
-                                <input type='text' className='inputTxt p100' name='fileName' id='fileName' disabled />
-                            </td>
-                            <td colSpan={1}>
-                                {/* <a href='' className='fileBtn' id='btnDeleteFile' name='btn'> */}
-                                <span>파일 삭제</span>
-                                {/* </a> */}
+                            <div className={"button-container"}>
+                            {productDetail!== undefined && productDetail?.fileName!=null ?(<>
+                                {/* <StyledInput type='file' className='inputTxt p80' name='fileInput' id='fileInput' /> */}
+                                <StyledButton type='button'>
+                                삭제
+                            </StyledButton>
+                               
+                            </>) 
+                            :(<>
+                    
+                    <StyledInput
+                        type='file'
+                        id='fileInput'
+                        style={{ display: "none" }}
+                        name='file'
+                        onChange={handlerFile}
+                    ></StyledInput>
+                    <label className='img-label' htmlFor='fileInput'>
+                        파일 첨부하기
+                    </label>
+                                  
+                            </>)}
+                              
+                               
+                               </div>
                             </td>
                         </tr>
                         <tr>
                             <th scope='row'>미리보기</th>
-                            <td colSpan={3} id='preview'></td>
+                            <td colSpan={3} id='preview'>
+                            <div>
+                        {imageUrl ? (
+                            <div>
+                                <img src={imageUrl} />
+                                {/* {fileName || detail.fileName} */}
+                            </div>
+                        ) : (
+                            <></>
+                            // <div>{fileName}</div>
+                        )}
+                    </div>
+
+
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+            
+					<div className="btn_areaC mt30">
+						<StyledButton  onClick={checkout}><span>수정</span></StyledButton>
+						<StyledButton ><span>삭제</span></StyledButton>
+						<StyledButton ><span>취소</span></StyledButton>
+						<StyledButton ><span>저장</span></StyledButton>
+					</div>
         </UserInfoModalStyle>
+        
     );
 };
