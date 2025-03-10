@@ -5,11 +5,15 @@ import { Notice } from "../../src/pages/management/Notice";
 import { DashBoard } from "../components/layout/DashBoard/DashBoard";
 import { NotFound } from "../components/common/NotFound/NotFound";
 import { DetailCode } from "../pages/management/DetailCode";
+import { Shopping } from "../pages/tasks/Shopping";
+import { OrdersList } from "../pages/tasks/OrdersList";
+import { Products } from "../pages/mall/Products";
 import { ApprovalOrder } from "../pages/approval/orders";
 import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
 import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
 import { Products } from "../pages/mall/Products";
 import { Inventory } from "../pages/trade/inventory";
+import { Cart } from "../pages/mall/Cart";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -61,6 +65,19 @@ const routers: RouteObject[] = [
                     },
                 ],
             },
+            {
+                path: "tasks",
+                children: [
+                    {
+                        path: "shopping",
+                        element: <Shopping />,
+                    },
+                    {
+                        path: "orders",
+                        element: <OrdersList />,
+                    },
+                ],
+            },
         ],
     },
     {
@@ -74,6 +91,11 @@ const routers: RouteObject[] = [
                         path: "products",
                         element: <Products />,
                     },
+                    {
+                        path: "cart",
+                        element: <Cart />
+                    },
+
                 ],
             },
         ],

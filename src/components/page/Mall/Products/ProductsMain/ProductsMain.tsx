@@ -1,13 +1,10 @@
 import { ProductsMainStyled } from "./styled"
-import { StyledTd, StyledTh } from './../../../../common/styled/StyledTable';
-import { searchApi } from "../../../../../api/ProductsApi/searchApi";
+
+import { searchApi } from "../../../../../api/MallApi/searchApi";
 import { Products } from "../../../../../api/api";
 import { useContext, useEffect, useState } from "react";
 import { IProducts, IProductsListBodyResponse } from "../../../../../models/interface/IProducts";
-import { useLocation, useNavigate } from "react-router-dom";
-import { ProductsSearchStyled } from "../ProductsSearch/styled";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
-import { Row } from "react-bootstrap";
 import { ProductsContext } from "../../../../../api/Provider/ProductsProvider";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { Portal } from "../../../../common/potal/Portal";
@@ -19,10 +16,11 @@ export const ProductsMain = () => {
     const [productsList, setProductsList] = useState<IProducts[]>([]);
     const [productsCount, setProductsCount] = useState<number>(0);
     const [cPage, setCPage] = useState<number>(0);
-    const navigate = useNavigate();
     const { searchKeyword } = useContext(ProductsContext);
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [productId, setProductId] = useState<number>(0);
+    const { setUserType } = useContext(ProductsContext);
+
 
     const columns = [
         { key: "productId", title: "제품 ID"},
@@ -51,6 +49,8 @@ export const ProductsMain = () => {
             setProductsList(result.products);
             setProductsCount(result.productsCnt);
             setCPage(currentPage);
+            setUserType(result.userType);
+
        }
     }
 

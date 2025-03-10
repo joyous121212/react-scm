@@ -15,7 +15,7 @@ export const StyledInputStyled = styled.input<InputProps & { as?: string }>`
             case "small":
                 return `padding: 6px 10px; font-size: 14px; `;
             case "large":
-                return `padding: 12px 16px; font-size: 18px; `;
+                return `padding: 12px 16px; font-size: 18px;`;
             case "modal":
                 return `padding: 6px 10px; font-size: 12px;`;
             case "search":
