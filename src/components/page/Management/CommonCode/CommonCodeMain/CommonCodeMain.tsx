@@ -41,6 +41,7 @@ export const CommonCodeMain = () => {
             currentPage,
             pageSize: 5,
         });
+        console.log(searchKeyword);
 
         if (result) {
             setCommonCodeList(result.commonCode);
