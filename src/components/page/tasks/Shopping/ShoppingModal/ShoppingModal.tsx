@@ -1,11 +1,9 @@
 import { ShoppingModalStyled } from "./styled";
-import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import { IShopping, IShoppingDetail, IShoppingDetailResponse } from "../../../../../models/interface/IShopping";
 import axios, { AxiosResponse } from "axios";
-import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 
 interface IShoppingModalProps {
@@ -19,22 +17,22 @@ export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDelivery
     const [imageUrl, setImageUrl] = useState<string>("");
     const [fileName, setFileName] = useState<string>("");
     const formRef = useRef<HTMLFormElement>(null);
-    const [detail, setDetail] = useState<IShoppingDetail>();
-    const [deliveryOrderList, setDeliveryOrderList] = useState<IShopping[]>([]);
+    const [shoppingDetail, setShoppingDetail] = useState<IShoppingDetail>();
+    // const [deliveryOrderList, setDeliveryOrderList] = useState<IShopping[]>([]);
 
     useEffect(() => {
-        deliveryId && searchDetail();
+        deliveryId && searchShoppingDetail();
 
         return () => {
             setDeliveryId(0);
         };
     }, []);
 
-    const searchDetail = () => {
+    const searchShoppingDetail = () => {
         axios
             .post("/tasks/deliveryDetailBody.do", { orderId: deliveryId })
             .then((res: AxiosResponse<IShoppingDetailResponse>) => {
-                setDetail(res.data.detailValue);
+                setShoppingDetail(res.data.detailValue);
             });
     };
 
@@ -50,15 +48,6 @@ export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDelivery
             setFileName(fileInfo[0].name);
         }
     };
-
-    const columns = [
-        { key: "salesDate", title: "주문일자" },
-        { key: "customerName", title: "고객기업명" },
-        { key: "productName", title: "제품명" },
-        { key: "count", title: "주문개수" },
-        { key: "deliveryManager", title: "배송담당자" },
-        { key: "paymentStatus", title: "입금여부" },
-    ] as Column<IShopping>[];
 
     return (
         <ShoppingModalStyled>
@@ -100,7 +89,7 @@ export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDelivery
                                     size='modal'
                                     name='count'
                                     type='text'
-                                    defaultValue={detail?.count}
+                                    defaultValue={shoppingDetail?.count}
                                     readOnly
                                 />
                             </td>
@@ -112,7 +101,7 @@ export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDelivery
                                     size='modal'
                                     name='customerName'
                                     type='text'
-                                    defaultValue={detail?.customerName}
+                                    defaultValue={shoppingDetail?.customerName}
                                     readOnly
                                 />
                             </td>
@@ -125,7 +114,7 @@ export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDelivery
                                     size='modal'
                                     name='productName'
                                     type='text'
-                                    defaultValue={detail?.productName}
+                                    defaultValue={shoppingDetail?.productName}
                                     readOnly
                                 />
                             </td>
@@ -137,7 +126,7 @@ export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDelivery
                                     size='modal'
                                     name='deliveryManager'
                                     type='text'
-                                    defaultValue={detail?.deliveryManager}
+                                    defaultValue={shoppingDetail?.deliveryManager}
                                     readOnly
                                 />
                             </td>
@@ -147,7 +136,7 @@ export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDelivery
                                     size='modal'
                                     name='paymentStatus'
                                     type='text'
-                                    defaultValue={detail?.paymentStatus}
+                                    defaultValue={shoppingDetail?.paymentStatus}
                                     readOnly
                                 />
                             </td>

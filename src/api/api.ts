@@ -39,6 +39,10 @@ export const ShoppingReturnList = {
     updateMall: "/trade/shoppingReturnUpdateMallBody.do",
 };
 
-export const OrderList = {
+export const Orders = {
     searchList: "/tasks/orderListBody.do",
+};
+
+export const ShoppingReturn = {
+    searchList: "/tasks/shoppingReturnOrderListBody.do",
 };
