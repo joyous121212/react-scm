@@ -32,6 +32,13 @@ export const Cart = {
     historysSave: "/mall/historysSaveBody.do"
 }
 
+export const History = {
+    searchList: "/mall/historyListBody.do",
+    searchDetail: "/mall/historyDetailBody.do",
+    returnSave: "/mall//historyReturnRequestBody.do",
+    salesComplete: "/mall/historySalesCompleteBody.do",
+}
+
 export const Approval = {
     searchOrder: "/approval/orderListBody.do",
     approvalOrder: "/approval/orderApproveUpdateBody.do",

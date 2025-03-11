@@ -15,6 +15,8 @@ import { ShoppingReturn } from "../pages/tasks/ShoppingReturn";
 import { Products } from "../pages/mall/Products";
 import { Inventory } from "../pages/trade/inventory";
 import { Cart } from "../pages/mall/Cart";
+import { History } from "../pages/mall/History";
+import { HistroyDetail } from "../pages/mall/HistoryDetail";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -83,12 +85,6 @@ const routers: RouteObject[] = [
                     },
                 ],
             },
-        ],
-    },
-    {
-        path: "/react",
-        element: <DashBoard />,
-        children: [
             {
                 path: "mall",
                 children: [
@@ -100,7 +96,14 @@ const routers: RouteObject[] = [
                         path: "cart",
                         element: <Cart />
                     },
-
+                    {
+                        path: "history",
+                        element: <History />
+                    },
+                    {
+                        path: "history/:orderId",
+                        element: <HistroyDetail />,
+                    },
                 ],
             },
         ],
