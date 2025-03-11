@@ -10,7 +10,7 @@ import { IShoppingReturn, IShoppingReturnListResponse } from "../../../../../mod
 import { ShoppingReturnList } from "../../../../../api/api";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { Portal } from "../../../../common/potal/Portal";
-import { ShoppingReturnModal } from "../shoppingReturnListModal/shoppingReturnListModat";
+import { ShoppingReturnModal } from "../shoppingReturnListModal/shoppingReturnListModal";
 
 export const transformShoppingReturnData = (data: any[]): IShoppingReturn[] => {
     return data.map((item) => ({
@@ -81,7 +81,7 @@ export const ShoppingReturnListMain = () => {
                 }} // ✅ 특정 테이블에서만 실행!
                 renderCell={(row, column) => {
                     if (column.key === "totalPrice") {
-                        return row.totalPrice.toLocaleString("ko-KR"); // 숫자를 통화 형식으로 변환
+                        return `${row.totalPrice.toLocaleString("ko-KR")}원`; // 숫자를 통화 형식으로 변환
                     } else if (column.key === "isApproved") {
                         let approvalStatusText = "";
 

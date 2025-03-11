@@ -26,6 +26,12 @@ export const Products = {
     cartDetailSave: "/mall/cartDetailSaveBody.do",
 };
 
+export const Cart = {
+    searchList: "/mall/cartDetailList.do",
+    deleteCartDetail: "/mall/cartDetailDeleteBody.do",
+    historysSave: "/mall/historysSaveBody.do",
+};
+
 export const Approval = {
     searchOrder: "/approval/orderListBody.do",
     approvalOrder: "/approval/orderApproveUpdateBody.do",
@@ -49,4 +55,10 @@ export const ShoppingReturn = {
 
 export const OrdersList = {
     searchList: "/tasks/orderListBody.do",
+};
+
+export const Inventory = {
+    searchSelectBoxList: "/trade/inventorySelectBoxBody.do",
+    searchList: "/trade/inventoryListBody.do",
+    searchDetail: "/trade/inventoryDetailBody.do",
 };

@@ -74,7 +74,7 @@ export const ApprovalShoppingReturnMain = () => {
                     if (column.key === "price") {
                         // count * price 계산 후, 원단위로 포맷 (₩)
                         const totalPrice = row.count * row.price;
-                        return totalPrice.toLocaleString("ko-KR"); // 한국 원화(KRW) 단위
+                        return `${totalPrice.toLocaleString("ko-KR")}원`; // 한국 원화(KRW) 단위
                     }
                     return row[column.key as keyof IApprovalShoppingReturn];
                 }}
