@@ -17,6 +17,7 @@ import { Inventory } from "../pages/trade/inventory";
 import { Cart } from "../pages/mall/Cart";
 import { History } from "../pages/mall/History";
 import { HistroyDetail } from "../pages/mall/HistoryDetail";
+import { Performance } from "../pages/sales/Performance";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -103,6 +104,23 @@ const routers: RouteObject[] = [
                     {
                         path: "history/:orderId",
                         element: <HistroyDetail />,
+                    },
+                ],
+            },
+            {
+                path: "sales",
+                children: [
+                    {
+                        path: "performance",
+                        element: <Performance />,
+                    },
+                    {
+                        path: "cart",
+                        element: <Cart />
+                    },
+                    {
+                        path: "history",
+                        element: <History />
                     },
                 ],
             },
