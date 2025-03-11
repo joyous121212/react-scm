@@ -66,3 +66,8 @@ export const Inventory = {
     searchDetail: "/trade/inventoryDetailBody.do"
 }
 
+export const Sales = {
+    searchList: "/sales/performanceListBody.do",
+    searchDetail: "/sales/performanceDetailBody.do"
+}
+

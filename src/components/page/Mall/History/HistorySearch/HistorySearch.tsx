@@ -5,8 +5,8 @@ import { HistorySearchStyled } from "./styled"
 import { HistoryContext } from "../../../../../api/Provider/HistoryProvider";
 
 export const HistorySearch = () => {
-    const [startDate, setStartDate] = useState<string>();
-    const [endDate, setEndDate] = useState<string>();
+    const [startDate, setStartDate] = useState<string>("");
+    const [endDate, setEndDate] = useState<string>("");
     const title = useRef<HTMLInputElement>();
     const { setSearchKeyword } = useContext(HistoryContext);
 
@@ -23,9 +23,9 @@ export const HistorySearch = () => {
             제품명:
             <StyledInput size='small' ref={title}/>
             주문일자:
-            <StyledInput size='small' type='date' ref={startDate}/>
+            <StyledInput size='small' type='date' onChange={(e) => setStartDate(e.target.value)}/>
             ~
-            <StyledInput size='small' type='date' ref={endDate}/>
+            <StyledInput size='small' type='date' onChange={(e) => setEndDate(e.target.value)}/>
             <StyledButton variant='secondary' onClick={handlerSearch}>
                 검색
             </StyledButton>

@@ -71,7 +71,6 @@ export const ProductsMain = () => {
                 columns={columns}
                 onCellClick={(row, column) => {
                     if(column === "productNumber") {
-                        // TODO
                         handlerModal(row.productId);
                     }
                 }}
