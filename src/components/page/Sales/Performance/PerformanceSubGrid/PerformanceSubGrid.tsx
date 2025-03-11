@@ -9,11 +9,7 @@ import { IPerformanceDetail } from '../../../../../models/interface/IPerformance
 import { useEffect, useState } from "react";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 
-interface IPerformanceModalProps {
-
-}
-
-export const PerformanceModal = ({supplyId}) => {
+export const PerformanceSubGrid = ({supplyId}) => {
     const [modal, setModal] = useRecoilState(modalState);
     const [detail, setDetail] = useState<IPerformanceDetail[]>([]);
 
@@ -26,7 +22,7 @@ export const PerformanceModal = ({supplyId}) => {
 
     useEffect(() => {
         performanceDetail();
-    }, []);
+    }, [supplyId]);
 
     const performanceDetail =  async() => {
         try {

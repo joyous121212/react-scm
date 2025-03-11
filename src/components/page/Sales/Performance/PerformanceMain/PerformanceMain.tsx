@@ -9,7 +9,7 @@ import { PerformanceContext } from "../../../../../api/Provider/PerformanceProvi
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { Portal } from "../../../../common/potal/Portal";
-import { PerformanceModal } from "../PerformanceSubGrid/PerformanceSubGrid";
+import { PerformanceSubGrid } from "../PerformanceSubGrid/PerformanceSubGrid";
 
 export const PerformanceMain = () => {
     const [performance, setPerformance] = useState<IPerformance[]>([]);
@@ -62,6 +62,7 @@ export const PerformanceMain = () => {
                 onCellClick={(row, column) => {
                     if(column === "supplierName") {
                         handlerModal(row.supplyId);
+                        setSupplyId(row.supplyId);
                     }
                 }}
             />
@@ -71,7 +72,7 @@ export const PerformanceMain = () => {
                 itemsCountPerPage={10}
                 activePage={cPage}
             />
-            {modal && <PerformanceModal supplyId={supplyId}/>}
+            {modal && supplyId !== null && <PerformanceSubGrid supplyId={supplyId}/>}
         </PerformanceMainStyled>
     )
 }
