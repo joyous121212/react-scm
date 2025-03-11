@@ -13,6 +13,7 @@ import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
 import { Products } from "../pages/mall/Products";
 import { Inventory } from "../pages/trade/inventory";
 import { Cart } from "../pages/mall/Cart";
+import { ShoppingOrders } from "../pages/trade/shoppingOrders";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -31,6 +32,10 @@ const routers: RouteObject[] = [
                     {
                         path: "inventory",
                         element: <Inventory />,
+                    },
+                    {
+                        path: "shopping-orders",
+                        element: <ShoppingOrders />,
                     },
                 ],
             },

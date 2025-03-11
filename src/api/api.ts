@@ -54,3 +54,7 @@ export const Inventory = {
     searchList: "/trade/inventoryListBody.do",
     searchDetail: "/trade/inventoryDetailBody.do"
 }
+
+export const ShoppingOrders = {
+    searchList: "/trade/shoppingListBody.do",
+}
