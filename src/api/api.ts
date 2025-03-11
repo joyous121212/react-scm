@@ -57,4 +57,6 @@ export const Inventory = {
 
 export const ShoppingOrders = {
     searchList: "/trade/shoppingListBody.do",
+    searchOrderDetail: "/trade/orderingInstructionBody.do",
+    saveOrders: "/tasks/orderInstructionSaveBody.do"
 }

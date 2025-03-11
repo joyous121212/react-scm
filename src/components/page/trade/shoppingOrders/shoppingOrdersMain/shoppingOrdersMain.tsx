@@ -11,7 +11,7 @@ import { IShoppingOrder, IShoppingOrdersResponse } from "../../../../../models/i
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { ShoppingOrdersContext } from "../../../../../api/Provider/trade/ShoppingOrdersProvider";
 import { Spinner } from "../../../../common/Spinner/spinner";
-
+import { ShoppingOrdersOrderModal } from "../shoppingOrdersOrderModal/shoppingOrdersOrderModal";
 
 export const ShoppingOrdersMain = () => {
     const { searchKeyword } = useContext(ShoppingOrdersContext);
@@ -20,6 +20,8 @@ export const ShoppingOrdersMain = () => {
     const [shoppingOrders, setShoppingOrders] = useState<IShoppingOrder[]>([]);
     const [shoppingOrdersCnt, setShoppingOrdersCnt] = useState<number>(0);
     const [modal, setModal] = useRecoilState(modalState);
+    const [modalStatus, setModalStatus] = useState<string>("");
+    const [minimumOrderCount, setMinimumOrderCount] = useState<number>(0);
     const [shoppingOrdersId, setShoppingOrdersId] = useState<number>(0);
 
     const columns = [
@@ -64,13 +66,16 @@ export const ShoppingOrdersMain = () => {
         }
     };
 
-    const handlerOrderModal = (id: number) => {
+    const handlerOrderModal = (id: number, count: number) => {
         setModal(!modal);
+        setMinimumOrderCount(count);
+        setModalStatus("order");
         setShoppingOrdersId(id);
     };
 
     const handlerDeliveryModal = (id: number) => {
         setModal(!modal);
+        setModalStatus("delivery");
         setShoppingOrdersId(id);
     };
 
@@ -93,19 +98,57 @@ export const ShoppingOrdersMain = () => {
                                 return row.requestsReturnDate ? "Y" : "N";
                             }
                             if (column.key === "orderActions") {
-                                return (
-                                    <StyledButton size='small' onClick={() => handlerOrderModal(row.orderId)}>
-                                        발주
-                                    </StyledButton>
-                                );
+                                switch (row.salesState) {
+                                    case "ordering":
+                                        return row.totalQuantity < row.count ? (
+                                            <span style={{ color: "green", fontWeight: "bold" }}>발주 처리</span>
+                                        ) : null;
+
+                                    case "salesRequest":
+                                        return row.totalQuantity < row.count ? (
+                                            <StyledButton
+                                                size='small'
+                                                variant='secondary'
+                                                onClick={() =>
+                                                    handlerOrderModal(row.orderId, row.count - row.totalQuantity)
+                                                }
+                                            >
+                                                발주
+                                            </StyledButton>
+                                        ) : null;
+
+                                    default:
+                                        return null; // ✅ 모든 경우에서 null 반환하여 ESLint 오류 방지
+                                }
                             }
+
                             if (column.key === "deliveryActions") {
-                                return (
-                                    <StyledButton size='small' onClick={() => handlerDeliveryModal(row.orderId)}>
-                                        배송
-                                    </StyledButton>
-                                );
+                                switch (row.salesState) {
+                                    case "ordering":
+                                    case "salesRequest":
+                                        if (row.totalQuantity > row.count) {
+                                            return (
+                                                <StyledButton
+                                                    size='small'
+                                                    onClick={() => handlerDeliveryModal(row.orderId)}
+                                                >
+                                                    배송
+                                                </StyledButton>
+                                            );
+                                        }
+                                        break;
+
+                                    case "delivery":
+                                        return <span style={{ color: "green", fontWeight: "bold" }}>배송중</span>;
+
+                                    case "deliveryComplete":
+                                        return <span style={{ color: "green", fontWeight: "bold" }}>배송완료</span>;
+
+                                    default:
+                                        return null; // ✅ 모든 경우에서 null 반환하여 ESLint 오류 방지
+                                }
                             }
+
                             return row[column.key as keyof IShoppingOrder];
                         }}
                     />
@@ -117,6 +160,26 @@ export const ShoppingOrdersMain = () => {
                 itemsCountPerPage={5}
                 activePage={cPage}
             />
+            {
+                modal &&
+                    (modalStatus === "order" ? (
+                        <Portal>
+                            <ShoppingOrdersOrderModal
+                                shoppingOrderId={shoppingOrdersId}
+                                postSuccess={postSuccess}
+                                minimumOrderCount={minimumOrderCount}
+                            />
+                        </Portal>
+                    ) : modalStatus === "delivery" ? (
+                        <Portal>
+                            <ShoppingOrdersOrderModal
+                                shoppingOrderId={shoppingOrdersId}
+                                postSuccess={postSuccess}
+                                minimumOrderCount={minimumOrderCount}
+                            />
+                        </Portal>
+                    ) : null) // ✅ "order" 또는 "delivery"가 아니면 아무것도 렌더링하지 않음
+            }
         </ShoppingOrdersMainStyled>
     );
 };

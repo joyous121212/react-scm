@@ -4,11 +4,11 @@ export interface IShoppingOrder {
     deliveryManager: string;
     loginID: string;
     orderId: number;
-    paymentStatus: string;
+    paymentStatus: number;
     price: number;
     productId: number;
     productName: string;
-    productNumber: number;
+    productNumber: string;
     quantity: number;
     requestsReturnDate: string;
     returnsDate: string;
@@ -27,3 +27,9 @@ export interface IShoppingOrdersResponse {
     shoppingList: IShoppingOrder[];
     shoppingCnt: number;
 }
+
+
+export interface IShoppingOrdersOrderDetailResponse {
+    orderingInstruction : IShoppingOrder
+}
+
