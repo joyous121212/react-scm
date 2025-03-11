@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
-export const shoppingSearchApi = async <T, D>(api: string, param: D) => {
+export const searchApi = async <T, D>(api: string, param: D) => {
     try {
         const result: AxiosResponse<T> = await axios.post(api, param);
         if (result.status === 200) {

@@ -46,3 +46,7 @@ export const Orders = {
 export const ShoppingReturn = {
     searchList: "/tasks/shoppingReturnOrderListBody.do",
 };
+
+export const OrdersList = {
+    searchList: "/tasks/orderListBody.do",
+};

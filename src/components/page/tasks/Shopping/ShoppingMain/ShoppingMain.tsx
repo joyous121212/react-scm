@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
-import { shoppingSearchApi } from "../../../../../api/ShoppingApi/searchApi";
+import { searchApi } from "../../../../../api/ShoppingApi/searchApi";
 import { Shopping } from "../../../../../api/api";
 import { IShopping, IShoppingBodyResponse } from "../../../../../models/interface/IShopping";
 import { ShoppingModal } from "../ShoppingModal/ShoppingModal";
@@ -19,7 +19,7 @@ export const ShoppingMain = () => {
     const [deliveryOrderList, setDeliveryOrderList] = useState<IShopping[]>([]);
     const [cPage, setCPage] = useState<number>(0);
     const [modal, setModal] = useRecoilState<boolean>(modalState);
-    const [deliveryOrderCnt, setDeliveryOrderCnt] = useState<number>(0);
+    const [deliveryOrderCount, setDeliveryOrderCount] = useState<number>(0);
     const [deliveryId, setDeliveryId] = useState<number>(0);
 
     useEffect(() => {
@@ -29,14 +29,14 @@ export const ShoppingMain = () => {
     const searchShoppingList = async (currentPage?: number) => {
         currentPage = currentPage || 1;
         const searchParam = new URLSearchParams(search); //key,value를 나눠줌
-        console.log("searchParam: ", searchParam.toString());
         searchParam.append("currentPage", currentPage.toString());
         searchParam.append("pageSize", "5");
 
-        const result = await shoppingSearchApi<IShoppingBodyResponse, URLSearchParams>(
-            Shopping.searchList,
-            searchParam
-        );
+        console.log("전송된 파라미터:", searchParam.toString());
+
+        const result = await searchApi<IShoppingBodyResponse, URLSearchParams>(Shopping.searchList, searchParam);
+
+        console.log("API 호출 결과:", result);
 
         if (result) {
             // 쿼리 파라미터에서 searchSalesDate 값을 추출
@@ -53,8 +53,8 @@ export const ShoppingMain = () => {
             }
 
             setDeliveryOrderList(filteredList); // 필터링된 리스트 설정
-            setDeliveryOrderCnt(filteredList.length); // 필터링된 항목 수
-            setCPage(currentPage); // 페이지 업데이트
+            setDeliveryOrderCount(result.deliveryOrderCnt);
+            setCPage(currentPage);
         }
     };
 
@@ -82,9 +82,8 @@ export const ShoppingMain = () => {
                 columns={columns}
                 onRowClick={(row) => handlerModal(row.deliveryId)}
             />
-            {cPage} / {deliveryOrderCnt}
             <PageNavigate
-                totalItemsCount={deliveryOrderCnt}
+                totalItemsCount={deliveryOrderCount}
                 onChange={searchShoppingList}
                 itemsCountPerPage={5}
                 activePage={cPage}

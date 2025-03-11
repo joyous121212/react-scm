@@ -13,6 +13,7 @@ import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
 import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
 import { OrdersReturnList } from "../pages/tasks/OrdersReturnList";
 import { ShoppingReturn } from "../pages/tasks/ShoppingReturn";
+import { OrdersList } from "../pages/tasks/OrdersList";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -74,6 +75,10 @@ const routers: RouteObject[] = [
                     {
                         path: "shopping-return",
                         element: <ShoppingReturn />,
+                    },
+                    {
+                        path: "orders-list",
+                        element: <OrdersList />,
                     },
                 ],
             },

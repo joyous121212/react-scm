@@ -18,7 +18,7 @@ export const ShoppingSearch = () => {
 
     const handlerSearch = () => {
         const query: string[] = [];
-        !customerName.current.value || query.push(`searchCustomerName=${customerName.current.value}`);
+        !customerName.current.value || query.push(`customerName=${customerName.current.value}`);
         !salesDate || query.push(`searchSalesDate=${salesDate}`); // 하나의 날짜로 쿼리 처리
 
         const queryString = query.length > 0 ? `?${query.join("&")}` : "";
@@ -32,7 +32,6 @@ export const ShoppingSearch = () => {
             <StyledButton variant='secondary' onClick={handlerSearch}>
                 검색
             </StyledButton>
-            <StyledButton onClick={() => setModal(!modal)}>등록</StyledButton>
         </ShoppingSearchStyled>
     );
 };
