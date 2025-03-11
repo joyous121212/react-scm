@@ -12,6 +12,8 @@ import { ApprovalOrder } from "../pages/approval/orders";
 import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
 import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
 import { Cart } from "../pages/mall/Cart";
+import { History } from "../pages/mall/History";
+import { HistroyDetail } from "../pages/mall/HistoryDetail";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -72,12 +74,6 @@ const routers: RouteObject[] = [
                     },
                 ],
             },
-        ],
-    },
-    {
-        path: "/react",
-        element: <DashBoard />,
-        children: [
             {
                 path: "mall",
                 children: [
@@ -89,7 +85,14 @@ const routers: RouteObject[] = [
                         path: "cart",
                         element: <Cart />
                     },
-
+                    {
+                        path: "history",
+                        element: <History />
+                    },
+                    {
+                        path: "history/:orderId",
+                        element: <HistroyDetail />,
+                    },
                 ],
             },
         ],
