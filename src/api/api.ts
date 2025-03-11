@@ -39,6 +39,10 @@ export const ProductInfo = {
     productDetail: "/management/productDetailBody.do",
     supplierNameList: "/management/supplierNameListBody.do",
     categoryList: "/management/categoryListBody.do",
+    deleteFile: "/management/productFileDeleteBody.do",
+    updateProductInfo: "/management/productUpdateBody.do",
+    saveProductInfo: "/management/productSaveBody.do",
+    deleteProductInfo: "/management/productDeleteBody.do",
 };
 
 export const Products = {
