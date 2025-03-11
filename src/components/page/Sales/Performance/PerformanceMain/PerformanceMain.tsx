@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react"
 import { searchApi } from "../../../../../api/SalesApi/searchApi";
 import { IPerformance, IPerformanceBodyResponse } from "../../../../../models/interface/IPerformance";
-import { Sales } from "../../../../../api/api";
+import { Performance } from "../../../../../api/api";
 import { PerformanceMainStyled } from "./styled";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
@@ -34,7 +34,7 @@ export const PerformanceMain = () => {
         }
         currentPage = currentPage || 1;
 
-        const result = await searchApi<IPerformanceBodyResponse>(Sales.searchList, {
+        const result = await searchApi<IPerformanceBodyResponse>(Performance.searchList, {
             ...searchKeyword,
             currentPage,
             pageSize: 10,

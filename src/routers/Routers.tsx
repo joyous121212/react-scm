@@ -18,6 +18,7 @@ import { Cart } from "../pages/mall/Cart";
 import { History } from "../pages/mall/History";
 import { HistroyDetail } from "../pages/mall/HistoryDetail";
 import { Performance } from "../pages/sales/Performance";
+import { TopSales } from "../pages/sales/TopSales";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -115,8 +116,8 @@ const routers: RouteObject[] = [
                         element: <Performance />,
                     },
                     {
-                        path: "cart",
-                        element: <Cart />
+                        path: "top-sales",
+                        element: <TopSales />
                     },
                     {
                         path: "history",

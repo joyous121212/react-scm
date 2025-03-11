@@ -4,7 +4,7 @@ import { modalState } from "../../../../../stores/modalState";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { searchApi } from "../../../../../api/SalesApi/searchApi";
 import { IPerformanceDetailResponse } from "../../../../../models/interface/IPerformance";
-import { Sales } from "../../../../../api/api";
+import { Performance } from "../../../../../api/api";
 import { IPerformanceDetail } from '../../../../../models/interface/IPerformance';
 import { useEffect, useState } from "react";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
@@ -27,7 +27,7 @@ export const PerformanceSubGrid = ({supplyId}) => {
     const performanceDetail =  async() => {
         try {
             const result = await searchApi<IPerformanceDetailResponse>(
-                Sales.searchDetail,
+                Performance.searchDetail,
                 {supplyId}
             )
 
