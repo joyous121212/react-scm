@@ -6,12 +6,18 @@ import { PerformanceMainStyled } from "./styled";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { PerformanceContext } from "../../../../../api/Provider/PerformanceProvider";
+import { useRecoilState } from "recoil";
+import { modalState } from "../../../../../stores/modalState";
+import { Portal } from "../../../../common/potal/Portal";
+import { PerformanceModal } from "../PerformanceSubGrid/PerformanceSubGrid";
 
 export const PerformanceMain = () => {
     const [performance, setPerformance] = useState<IPerformance[]>([]);
     const [supplierCnt, setSupplierCnt] = useState<number>();
     const [cPage, setCPage] = useState<number>(0);
     const {searchKeyword} = useContext(PerformanceContext);
+    const [modal, setModal] = useRecoilState<boolean>(modalState);
+    const [supplyId, setSupplyId] = useState<number>();
 
     const columns = [
         { key: "supplierName", title: "기업 고객명", clickable: true},
@@ -23,6 +29,9 @@ export const PerformanceMain = () => {
     }, [searchKeyword]);
 
     const searchPerformance = async(currentPage?: number) => {
+        if (modal) {
+            setModal(!modal);
+        }
         currentPage = currentPage || 1;
 
         const result = await searchApi<IPerformanceBodyResponse>(Sales.searchList, {
@@ -38,11 +47,23 @@ export const PerformanceMain = () => {
         }
     }
 
+    const handlerModal = (id: number) => {
+        setSupplyId(id);
+        if (!modal) {
+            setModal(!modal);
+        }
+    }
+
     return (
         <PerformanceMainStyled>
             <StyledTable 
                 data={performance}
                 columns={columns}
+                onCellClick={(row, column) => {
+                    if(column === "supplierName") {
+                        handlerModal(row.supplyId);
+                    }
+                }}
             />
             <PageNavigate 
                 totalItemsCount={supplierCnt}
@@ -50,6 +71,7 @@ export const PerformanceMain = () => {
                 itemsCountPerPage={10}
                 activePage={cPage}
             />
+            {modal && <PerformanceModal supplyId={supplyId}/>}
         </PerformanceMainStyled>
     )
 }
