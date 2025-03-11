@@ -35,7 +35,7 @@ export const HistoryDetailModal = ( {orderId, returnCount, postSuccess} ) => {
             postSuccess();
         }
     }
-
+    
     return (
         <HistoryDetailModalStyle>
             <div className="container">

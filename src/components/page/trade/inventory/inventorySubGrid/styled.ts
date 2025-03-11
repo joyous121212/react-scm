@@ -1,6 +1,15 @@
 import styled from "styled-components";
 
-export const OrderListMainStyled = styled.div`
+export const InventorySubGridStyled = styled.div`
+    margin-top: 140px;
+
+    .closeButton {
+        display: flex;
+        justify-content: flex-end; /* 오른쪽 정렬 */
+        align-items: center;
+        margin-bottom: 10px;
+    }
+        
     table {
         width: 100%;
         border-collapse: collapse;

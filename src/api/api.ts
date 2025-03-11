@@ -36,6 +36,7 @@ export const History = {
     searchList: "/mall/historyListBody.do",
     searchDetail: "/mall/historyDetailBody.do",
     returnSave: "/mall//historyReturnRequestBody.do",
+    salesComplete: "/mall/historySalesCompleteBody.do",
 }
 
 export const Approval = {
@@ -51,6 +52,17 @@ export const ShoppingReturnList = {
     updateMall: "/trade/shoppingReturnUpdateMallBody.do",
 };
 
-export const OrderList = {
+export const Orders = {
     searchList: "/tasks/orderListBody.do",
 };
+
+export const ShoppingReturn = {
+    searchList: "/tasks/shoppingReturnOrderListBody.do",
+};
+
+export const Inventory = {
+    searchSelectBoxList : "/trade/inventorySelectBoxBody.do",
+    searchList: "/trade/inventoryListBody.do",
+    searchDetail: "/trade/inventoryDetailBody.do"
+}
+

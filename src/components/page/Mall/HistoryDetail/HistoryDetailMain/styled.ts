@@ -33,6 +33,10 @@ export const HistoryDetailMainStyled = styled.div`
         cursor: pointer;
         text-decoration: underline;
     }
+        
+    .font_red {
+        color:#fe1414;
+    }
 `;
 
 export const HistoryDetailStyled = styled.div`

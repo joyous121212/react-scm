@@ -32,20 +32,22 @@ export const HistoryMain = () => {
     },[searchKeyword]);
 
     const searchHistory = async(currentPage?: number) => {
-            currentPage = currentPage || 1;
-    
-            const result = await searchApi<IHistoryListBodyResponse>(History.searchList, {
-                ...searchKeyword,
-                currentPage,
-                pageSize: 5,
-            });
+        currentPage = currentPage || 1;
 
-            if(result) {
-                setHistoryList(result.history);
-                setCPage(currentPage);
-                setHistoryCount(result.historyCnt);
-            }
+        const result = await searchApi<IHistoryListBodyResponse>(History.searchList, {
+            ...searchKeyword,
+            currentPage,
+            pageSize: 5,
+        });
+
+        if(result) {
+            setHistoryList(result.history);
+            setCPage(currentPage);
+            setHistoryCount(result.historyCnt);
         }
+    }
+    
+        
     return (
         <HistoryMainStyled>
             <StyledTable 
