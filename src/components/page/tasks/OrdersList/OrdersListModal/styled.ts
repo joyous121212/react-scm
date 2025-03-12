@@ -84,6 +84,14 @@ export const OrdersListModalStyled = styled.div`
         }
     }
 
+    /* 발주서 전송 완료 상태일 때 */
+    .submitted {
+        background-color: #45a049 !important; /* 초록색 */
+        cursor: default !important;
+        pointer-events: none !important;
+        box-shadow: none !important;
+    }
+
     .font_red {
         color: #fe1414;
     }

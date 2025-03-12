@@ -3,7 +3,7 @@ import { Modal } from "react-bootstrap";
 import { Portal } from "../../../../common/potal/Portal";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
@@ -13,9 +13,10 @@ import { IShopping, IShoppingBodyResponse } from "../../../../../models/interfac
 import { ShoppingModal } from "../ShoppingModal/ShoppingModal";
 import { ShoppingMainStyled } from "./styled";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
+import { ShoppingContext } from "../../../../../api/Provider/ShoppingProvider";
 
 export const ShoppingMain = () => {
-    const { search } = useLocation();
+    const { searchKeyword } = useContext(ShoppingContext);
     const [deliveryOrderList, setDeliveryOrderList] = useState<IShopping[]>([]);
     const [cPage, setCPage] = useState<number>(0);
     const [modal, setModal] = useRecoilState<boolean>(modalState);
@@ -24,35 +25,20 @@ export const ShoppingMain = () => {
 
     useEffect(() => {
         searchShoppingList();
-    }, [search]);
+    }, [searchKeyword]);
 
     const searchShoppingList = async (currentPage?: number) => {
         currentPage = currentPage || 1;
-        const searchParam = new URLSearchParams(search); //key,value를 나눠줌
-        searchParam.append("currentPage", currentPage.toString());
-        searchParam.append("pageSize", "5");
-
-        console.log("전송된 파라미터:", searchParam.toString());
-
-        const result = await searchApi<IShoppingBodyResponse, URLSearchParams>(Shopping.searchList, searchParam);
+        const result = await searchApi<IShoppingBodyResponse>(Shopping.searchList, {
+            ...searchKeyword,
+            currentPage,
+            pageSize: 5,
+        });
 
         console.log("API 호출 결과:", result);
 
         if (result) {
-            // 쿼리 파라미터에서 searchSalesDate 값을 추출
-            const searchSalesDate = searchParam.get("searchSalesDate");
-
-            let filteredList = result.deliveryOrderList;
-
-            if (searchSalesDate) {
-                // searchSalesDate가 정확히 일치하는 데이터만 필터링
-                filteredList = filteredList.filter((item) => {
-                    const itemDate = new Date(item.salesDate).toISOString().split("T")[0];
-                    return itemDate === searchSalesDate;
-                });
-            }
-
-            setDeliveryOrderList(filteredList); // 필터링된 리스트 설정
+            setDeliveryOrderList(result.deliveryOrderList); // 필터링된 리스트 설정
             setDeliveryOrderCount(result.deliveryOrderCnt);
             setCPage(currentPage);
         }

@@ -55,6 +55,9 @@ export const ShoppingReturn = {
 
 export const OrdersList = {
     searchList: "/tasks/orderListBody.do",
+    searchModal: "/tasks/orderDetailJson.do",
+    updateIsPaid: "/tasks/orderPaidUpdateBody.do",
+    statdUpdate: "/tasks/orderStateUpdateBody.do",
 };
 
 export const Inventory = {

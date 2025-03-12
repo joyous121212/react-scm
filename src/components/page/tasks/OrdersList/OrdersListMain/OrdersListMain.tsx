@@ -41,8 +41,6 @@ export const OrdersListMain = () => {
             currentPage,
             pageSize: 5,
         });
-        console.log("API 응답:", result);
-        console.log("응답 키 목록:", Object.keys(result));
 
         if (result) {
             setOrdersList(result.orderList); // 전체 주문 개수 설정
@@ -61,6 +59,28 @@ export const OrdersListMain = () => {
         searchOrdersList(cPage);
     };
 
+    // ✅ 입금확인 버튼 클릭 시 상태 업데이트
+    const handlePaymentConfirm = async (e, orderId) => {
+        e.preventDefault(); // 기본 이벤트 방지
+        e.stopPropagation();
+
+        console.log("전송할 orderId:", orderId);
+
+        try {
+            const result = await searchApi<IOrdersListResponse>(OrdersList.updateIsPaid, { orderId });
+            console.log("입금 확인 API 응답:", result); // 응답 확인
+
+            if (result?.result === "success") {
+                // 업데이트 성공 시, 최신 주문 목록 다시 불러오기
+                await searchOrdersList(cPage);
+            } else {
+                console.error("입금 확인 업데이트 실패");
+            }
+        } catch (error) {
+            console.error("입금 확인 처리 중 오류 발생:", error);
+        }
+    };
+
     return (
         <OrdersListStyled>
             <table>
@@ -73,7 +93,16 @@ export const OrdersListMain = () => {
                 </thead>
                 <tbody>
                     {orderList.map((row) => (
-                        <tr key={row.orderId} onClick={() => handlerModal(row.orderId)}>
+                        <tr
+                            key={row.orderId}
+                            onClick={() => {
+                                if (row.isApproved && row.isPaid) {
+                                    // isApproved가 승인이고 isPaid가 입금인 경우에만 모달 열기
+                                    handlerModal(row.orderId);
+                                }
+                            }}
+                            className={row.isApproved && row.isPaid ? "clickable-row" : ""}
+                        >
                             {columns.map((column) => {
                                 // isApproved 컬럼 변환
                                 if (column.key === "isApproved") {
@@ -82,11 +111,29 @@ export const OrdersListMain = () => {
 
                                 // isPaid 컬럼 변환
                                 if (column.key === "isPaid") {
-                                    return <td key={column.key}>{row.isPaid ? "입금" : "미입금"}</td>;
+                                    return (
+                                        <td key={column.key}>
+                                            {row.isApproved ? ( // isApproved가 승인일 때만 입금확인 버튼을 표시
+                                                row.isPaid ? (
+                                                    "입금"
+                                                ) : (
+                                                    <button onClick={(e) => handlePaymentConfirm(e, row.orderId)}>
+                                                        입금확인
+                                                    </button>
+                                                )
+                                            ) : (
+                                                // isApproved가 미승인일 때는 공란 처리
+                                                ""
+                                            )}
+                                        </td>
+                                    );
                                 }
 
-                                // 나머지 컬럼은 그대로 출력
-                                return <td key={column.key}>{row[column.key]}</td>;
+                                return (
+                                    <td key={column.key} className={row.isApproved && row.isPaid ? "td-pointer" : ""}>
+                                        {row[column.key]}
+                                    </td>
+                                );
                             })}
                         </tr>
                     ))}

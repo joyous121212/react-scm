@@ -24,10 +24,12 @@ export const OrdersListStyled = styled.div`
         font-weight: bold;
     }
 
-    tr:hover {
+    /* 클릭 가능한 행에만 hover 효과를 추가 */
+    .clickable-row:hover {
         background-color: #f1f1f1;
     }
 
+    /* td-pointer에만 hover 효과 추가 */
     .td-pointer:hover {
         cursor: pointer;
         text-decoration: underline;

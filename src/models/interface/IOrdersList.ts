@@ -13,4 +13,18 @@ export interface IOrdersList {
 export interface IOrdersListResponse {
     orderList: IOrdersList[];
     orderCnt: number;
+    result: string;
+}
+
+export interface IOrdersListDetail extends IOrdersList {
+    orderId: number;
+    supplyName: number;
+    productName: number;
+    productNumber: number;
+    count: number;
+}
+
+export interface IOrdersListDetailResponse {
+    detailValue: IOrdersListDetail;
+    attachmentValue: IOrdersListDetail;
 }

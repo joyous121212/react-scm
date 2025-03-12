@@ -16,11 +16,15 @@ export const OrdersListSearch = () => {
     const inputValue = useRef<HTMLInputElement>();
     const [selectSupplyNameValue, setSelectSupplyNameValue] = useState<string>("supplyName");
     const { setSearchKeyword } = useContext(OrdersListContext);
+    const [startDate, setStartDate] = useState<string>();
+    const [endDate, setEndDate] = useState<string>();
 
     const handlerSearch = () => {
         setSearchKeyword({
             searchTag: selectSupplyNameValue,
             searchTitle: inputValue.current ? inputValue.current.value : "",
+            searchStDate: startDate,
+            searchEdDate: endDate,
         });
     };
 
@@ -41,6 +45,8 @@ export const OrdersListSearch = () => {
             {selectSupplyNameValue !== "approved" && selectSupplyNameValue !== "notApproved" && (
                 <>
                     <StyledInput ref={inputValue} />
+                    <StyledInput type='date' onChange={(e) => setStartDate(e.target.value)}></StyledInput>
+                    <StyledInput type='date' onChange={(e) => setEndDate(e.target.value)}></StyledInput>
                     <StyledButton onClick={handlerSearch}>검색</StyledButton>
                 </>
             )}
