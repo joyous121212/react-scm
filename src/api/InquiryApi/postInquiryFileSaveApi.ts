@@ -1,11 +1,8 @@
 import axios, { AxiosResponse } from "axios";
-import { IGetRoleResponse } from "../../models/interface/IInquiry";
-
-export const getRoleApi = async <T, D>(api: string) => {
+import { IInsertInquiryResponse} from "../../models/interface/IInquiry";
+export const postInquiryFileSaveApi = async <T, D>(api: string,param:D) => {
     try {
-        const result: any = await axios.post(api);
-
-        console.log(result);
+        const result: AxiosResponse<IInsertInquiryResponse> = await axios.post(api,param);
 
         if (result.status === 200) {
             return result.data;

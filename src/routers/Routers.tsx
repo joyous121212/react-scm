@@ -45,6 +45,17 @@ const routers: RouteObject[] = [
                     },
                 ],
             },
+
+            {
+                path:"support",
+                children:[
+                    {path:"inquiry",
+                        element:<Inquiry/>
+                    }
+                ]
+
+            },
+
             {
                 path: "management",
                 children: [

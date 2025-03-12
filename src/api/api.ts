@@ -53,7 +53,9 @@ export const WarehouseInfo = {
 };
 
 export const InquiryInfo = {
-    getRole: "/management/getRoleBody.do",
+   
+    inquiryListBody:"/management/inquiryListBody.do",
+    insertInquiry:"/support/inquiryFileSaveBody.do"
 };
 
 export const Products = {
