@@ -27,10 +27,25 @@ export interface IProductInfoModalProps {
     productId?: string;
 }
 
+const updateEmptyCheck = {
+    name: "제품명은 필수입력 사항 입니다.",
+    productNumber: "제품번호 필수 입력 사항 입니다.",
+    sellPrice: "제품 가격은 필수 입력 사항입니다.",
+    description: "상세정보는 필수 입력 사항입니다.",
+};
+
 const emptyCheck = {
     name: "제품명은 필수입력 사항 입니다.",
     sellPrice: "제품 가격은 필수입력 사항 입니다.",
     description: "제품 상세 정보는 필수입력 사항 입니다.",
+};
+
+const updateValiCheck = {
+    sellPrice: "제품 가격은 숫자로, 0보다 큰 양의정수만  입력 가능합니다.",
+};
+
+const valiCheck = {
+    sellPrice: "제품 가격은 숫자로, 0보다 큰 양의정수만  입력 가능합니다.",
 };
 
 export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
@@ -270,7 +285,13 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
     const goUpdate = async () => {
         const formData = toRequestDto();
         console.log(productDetail);
-        logFormData(formData);
+
+        if (!updateEmptyCheckFnc(formData)) {
+            return;
+        }
+        if (!updateValiCheckFnc(formData)) {
+            return;
+        }
 
         // //productId: 23
         const res: IPostResultMessageResponse = await postUpdateProductInfoApi(ProductInfo.updateProductInfo, formData);
@@ -327,17 +348,46 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
         return formData;
     };
 
-    const logFormData = (formData: FormData) => {
-        formData.forEach((value, key) => {
-            console.log(`${key}: ${value}`);
-        });
+    const updateEmptyCheckFnc = (formData: FormData): boolean => {
+        for (var key in updateEmptyCheck) {
+            const formValue: any = formData.get(key); // formData에서 값을 가져오기
+
+            if (formValue === "" || formValue < 0) {
+                alert(updateEmptyCheck[key]);
+                return false;
+            }
+        }
+        return true;
+        // formData.forEach((value, key) => {
+        //     console.log(`${key}: ${value}`);
+        // });
+    };
+
+    const updateValiCheckFnc = (formData: FormData): boolean => {
+        for (var key in updateValiCheck) {
+            const formValue: any = formData.get(key); // formData에서 값을 가져오기
+            const isPositiveInteger = /^[1-9]\d*$/.test(formValue);
+            if (!isPositiveInteger) {
+                alert(updateValiCheck[key]);
+                return false;
+            }
+        }
+
+        return true;
     };
 
     const goInsert = async () => {
         console.log(insertProductDetail);
-        emptyCheckFnc();
+
+        if (!emptyCheckFnc()) {
+            return;
+        }
+        if (!valiCheckFnc()) {
+            return;
+        }
+
         const formData = toInsertRequestDTO();
-        logFormData(formData);
+        // logFormData(formData);
         const res: IPostResultMessageResponse = await postSaveProductInfoApi(ProductInfo.saveProductInfo, formData);
 
         if (res.result === "success") {
@@ -352,13 +402,27 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
         }
     };
 
-    const emptyCheckFnc = () => {
+    const emptyCheckFnc = (): boolean => {
         for (var key in emptyCheck) {
             if (insertProductDetail[key] === "" || insertProductDetail[key] < 0) {
                 alert(emptyCheck[key]);
-                return;
+                return false;
             }
         }
+
+        return true;
+    };
+
+    const valiCheckFnc = (): boolean => {
+        for (var key in valiCheck) {
+            // formData에서 값을 가져오기
+            const isPositiveInteger = /^[1-9]\d*$/.test(insertProductDetail[key]);
+            if (!isPositiveInteger) {
+                alert(valiCheck[key]);
+                return false;
+            }
+        }
+        return true;
     };
 
     const toInsertRequestDTO = () => {

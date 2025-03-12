@@ -14,7 +14,8 @@ import { ApprovalOrder } from "../pages/approval/orders";
 import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
 import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
 import { ProductInfo } from "../pages/management/ProductInfo";
-
+import { WarehouseInfo } from "../pages/management/WarehouseInfo";
+import { Inquiry } from "../pages/management/Inquiry";
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
     { path: "/", element: <Login /> },
@@ -74,6 +75,14 @@ const routers: RouteObject[] = [
                     {
                         path: "product-info",
                         element: <ProductInfo />,
+                    },
+                    {
+                        path: "warehouse-info",
+                        element: <WarehouseInfo />,
+                    },
+                    {
+                        path: "inquiry",
+                        element: <Inquiry />,
                     },
                 ],
             },
