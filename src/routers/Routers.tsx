@@ -16,6 +16,8 @@ import { ShoppingReturn } from "../pages/tasks/ShoppingReturn";
 // import { Products } from "../pages/mall/Products";
 import { Inventory } from "../pages/trade/inventory";
 import { Cart } from "../pages/mall/Cart";
+import { ShoppingList } from "../pages/delivery/ShoppingList";
+import { ShoppingReturnListDe } from "../pages/delivery/ShoppingReturnList";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -81,6 +83,27 @@ const routers: RouteObject[] = [
                     {
                         path: "shopping-return",
                         element: <ShoppingReturn />,
+                    },
+                ],
+            },
+            {
+                path: "delivery",
+                children: [
+                    {
+                        path: "shopping-list",
+                        element: <ShoppingList />,
+                    },
+                    {
+                        path: "shopping-return-list",
+                        element: <ShoppingReturnListDe />,
+                    },
+                    {
+                        path: "orders-list",
+                        element: <ShoppingReturnListDe />,
+                    },
+                    {
+                        path: "orders-return-list",
+                        element: <ShoppingReturnListDe />,
                     },
                 ],
             },
