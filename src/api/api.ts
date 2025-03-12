@@ -23,14 +23,14 @@ export const Products = {
     category: "/mall/products/category",
     supplyList: "/mall/products/supplyList",
     historySave: "/mall/historySaveBody.do",
-    cartDetailSave: "/mall/cartDetailSaveBody.do"
+    cartDetailSave: "/mall/cartDetailSaveBody.do",
 };
 
 export const Cart = {
     searchList: "/mall/cartDetailList.do",
     deleteCartDetail: "/mall/cartDetailDeleteBody.do",
-    historysSave: "/mall/historysSaveBody.do"
-}
+    historysSave: "/mall/historysSaveBody.do",
+};
 
 export const History = {
     searchList: "/mall/historyListBody.do",
@@ -61,13 +61,20 @@ export const ShoppingReturn = {
 };
 
 export const Inventory = {
-    searchSelectBoxList : "/trade/inventorySelectBoxBody.do",
+    searchSelectBoxList: "/trade/inventorySelectBoxBody.do",
     searchList: "/trade/inventoryListBody.do",
-    searchDetail: "/trade/inventoryDetailBody.do"
-}
+    searchDetail: "/trade/inventoryDetailBody.do",
+};
+
+
+export const delivery = {
+    searchShoppingList: "/delivery/shoppingDeliveryListJson.do",
+    searchShoppingReturnList: "/delivery/deliveryReturnListBody.do",
+};
 
 export const Sales = {
     searchList: "/sales/performanceListBody.do",
     searchDetail: "/sales/performanceDetailBody.do"
 }
+
 
