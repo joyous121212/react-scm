@@ -7,7 +7,6 @@ import { NotFound } from "../components/common/NotFound/NotFound";
 import { DetailCode } from "../pages/management/DetailCode";
 import { Shopping } from "../pages/tasks/Shopping";
 import { Orders } from "../pages/tasks/Orders";
-import { Products } from "../pages/mall/Products";
 import { ApprovalOrder } from "../pages/approval/orders";
 import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
 import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
@@ -16,6 +15,15 @@ import { ShoppingReturn } from "../pages/tasks/ShoppingReturn";
 import { OrdersList } from "../pages/tasks/OrdersList";
 import { Inventory } from "../pages/trade/inventory";
 import { Cart } from "../pages/mall/Cart";
+import { ShoppingOrders } from "../pages/trade/shoppingOrders";
+import { ShoppingList } from "../pages/delivery/ShoppingList";
+import { ShoppingReturnListDe } from "../pages/delivery/ShoppingReturnList";
+import { History } from "../pages/mall/History";
+import { HistroyDetail } from "../pages/mall/HistoryDetail";
+import { Performance } from "../pages/sales/Performance";
+import { TopSales } from "../pages/sales/TopSales";
+import { OrdersList } from "../pages/delivery/OrdersList";
+import { OrdersReturnListDe } from "../pages/delivery/OrdersReturnList";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -34,6 +42,10 @@ const routers: RouteObject[] = [
                     {
                         path: "inventory",
                         element: <Inventory />,
+                    },
+                    {
+                        path: "shopping-orders",
+                        element: <ShoppingOrders />,
                     },
                 ],
             },
@@ -88,6 +100,28 @@ const routers: RouteObject[] = [
                     },
                 ],
             },
+
+            {
+                path: "delivery",
+                children: [
+                    {
+                        path: "shopping-list",
+                        element: <ShoppingList />,
+                    },
+                    {
+                        path: "shopping-return-list",
+                        element: <ShoppingReturnListDe />,
+                    },
+                    {
+                        path: "orders-list",
+                        element: <OrdersList />,
+                    },
+                    {
+                        path: "orders-return-list",
+                        element: <OrdersReturnListDe />,
+                    },
+                ],
+            },
         ],
     },
     {
@@ -103,9 +137,35 @@ const routers: RouteObject[] = [
                     },
                     {
                         path: "cart",
-                        element: <Cart />
+                        element: <Cart />,
                     },
 
+                    {
+                        path: "history",
+                        element: <History />,
+                    },
+                    {
+                        path: "history/:orderId",
+                        element: <HistroyDetail />,
+                    },
+                ],
+            },
+            {
+                path: "sales",
+                children: [
+                    {
+                        path: "performance",
+                        element: <Performance />,
+                    },
+                    {
+                        path: "top-sales",
+                        element: <TopSales />
+
+                    },
+                    {
+                        path: "history",
+                        element: <History />,
+                    },
                 ],
             },
         ],
