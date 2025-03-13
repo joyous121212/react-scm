@@ -13,9 +13,11 @@ import { detailModalState } from "../../../../../stores/modalState";
 import { Portal } from "../../../../common/potal/Portal";
 import { WarehouseInfoModal } from "../WarehouseInfoModal/WarehouseInfoModal";
 import { useRef } from "react";
+import { useLocation } from "react-router-dom";
+import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 export const WarehouseInfoMain = () => {
     const [detailModal, setDetailModal] = useRecoilState(detailModalState);
-
+    const { search } = useLocation();
     const columns = [
         { key: "warehouseCode", title: "창고코드" },
         { key: "name", title: "창고명" },
@@ -29,19 +31,31 @@ export const WarehouseInfoMain = () => {
     const { searchKeyword, setSearchKeyword } = useContext(WarehouseInfoContext);
 
     const [warehouseInfoList, setWarehouseInfoList] = useState<IWarehouseInfo[]>();
-    const [warehouseInfoCnt, setWarehouseInfoCnt] = useState<IWarehouseInfoCount>();
-    const warehouseIdRef = useRef<number>(-1);
+    const [warehouseInfoCnt, setWarehouseInfoCnt] = useState<number>();
+    const [cPage, setCPage] = useState<number>(0);
 
-    useEffect(() => {
-        const searychFNC = async () => {
-            const res: ISearchWarehouseInfoList = await searchWarehouseInfoListApi(
-                WarehouseInfo.warehouseInfoList,
-                searchKeyword
-            );
+    const warehouseIdRef = useRef<number>(-1);
+    const searychFNC = async (currentPage?: number) => {
+        currentPage = currentPage || 1;
+        const searchParam = new URLSearchParams(search);
+        searchParam.append("currentPage", currentPage.toString());
+        searchParam.append("pageSize", "5");
+        searchParam.append("searchOption", searchKeyword.searchTarget.toString());
+        searchParam.append("searchKeyword", searchKeyword.searchKeyword.toString());
+
+        const res: ISearchWarehouseInfoList = await searchWarehouseInfoListApi(
+            WarehouseInfo.warehouseInfoList,
+            searchParam
+        );
+
+        if (res) {
             setWarehouseInfoList(res.warehouseInfoList);
             setWarehouseInfoCnt(res.warehouseInfoCnt);
-        };
+            setCPage(currentPage);
+        }
+    };
 
+    useEffect(() => {
         searychFNC();
     }, [searchKeyword]);
 
@@ -60,6 +74,12 @@ export const WarehouseInfoMain = () => {
                     }}
                 />
             </CommonCodeMainStyled>
+            <PageNavigate
+                totalItemsCount={warehouseInfoCnt}
+                onChange={searychFNC}
+                itemsCountPerPage={5}
+                activePage={cPage}
+            />
 
             {detailModal && (
                 <Portal>

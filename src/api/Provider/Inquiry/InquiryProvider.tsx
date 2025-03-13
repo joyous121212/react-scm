@@ -15,7 +15,8 @@ interface IProductSearchKeyword {
     searchKeyword: SearchKeyword;
     setSearchKeyword: React.Dispatch<React.SetStateAction<SearchKeyword>>;
 }
-
+const userInfo = sessionStorage.getItem("userInfo");
+const { userType } = JSON.parse(userInfo);
 // context 생성
 export const InquiryContext = createContext<IProductSearchKeyword>({
     searchKeyword: {
@@ -23,8 +24,8 @@ export const InquiryContext = createContext<IProductSearchKeyword>({
         searchStDate: "",
         searchEdDate: "",
         currentPage: 1,
-        pageSize: 5,
-        userType: null,
+        pageSize: 10,
+        userType: userType,
     },
     setSearchKeyword: () => {}, // 빈 함수로 초기화
 });
@@ -39,7 +40,7 @@ export const InquiryProvider: FC<{ children: React.ReactNode | React.ReactNode[]
         searchEdDate: "",
         currentPage: 1,
         pageSize: 5,
-        userType: null,
+        userType: userType,
     });
 
     return <InquiryContext.Provider value={{ searchKeyword, setSearchKeyword }}>{children}</InquiryContext.Provider>;

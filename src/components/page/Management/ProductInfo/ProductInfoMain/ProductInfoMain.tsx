@@ -11,8 +11,11 @@ import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { ProductInfoModal } from "../ProductInfoModal/ProductInfoModal";
 import { Portal } from "../../../../common/potal/Portal";
+import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
+import { useLocation } from "react-router-dom";
 
 export const ProductInfoMain = () => {
+    const { search } = useLocation();
     const [updateModal, setUpdateModal] = useRecoilState(modalState);
     const productIdRef = useRef("");
 
@@ -20,29 +23,34 @@ export const ProductInfoMain = () => {
 
     const [productList, setProductList] = useState();
     const [productCnt, setProductCnt] = useState();
-
+    const [cPage, setCPage] = useState<number>(0);
     const columns = [
         { key: "productNumber", title: "제품번호" },
         { key: "name", title: "제품명" },
         { key: "supplier", title: "납품업체" },
         { key: "sellPrice", title: "판매가" },
     ] as Column<any>[];
+    async function initFnc(currentPage?: number) {
+        currentPage = currentPage || 1;
+        const searchParam = new URLSearchParams(search);
+        searchParam.append("currentPage", currentPage.toString());
+        searchParam.append("pageSize", "5");
+        searchParam.append("searchOption", searchKeyword.searchOption.toString());
+        searchParam.append("searchKeyword", searchKeyword.searchKeyword.toString());
 
-    useEffect(() => {
-        // map.put("productList", productList);
-        // map.put("productCnt", productCnt
+        const res: any = await searchProductListApi(ProductInfo.productList, searchParam);
 
-        async function initFnc() {
-            const res: any = await searchProductListApi(ProductInfo.productList, searchKeyword);
+        if (res) {
             setProductList(res.productList);
             setProductCnt(res.productCnt);
+            setCPage(currentPage);
         }
+    }
+    useEffect(() => {
         initFnc();
     }, [searchKeyword]);
 
-    useEffect(() => {
-        console.log(updateModal);
-    }, [updateModal]);
+    useEffect(() => {}, [updateModal]);
 
     return (
         <>
@@ -57,6 +65,7 @@ export const ProductInfoMain = () => {
                     }}
                 />
             </CommonCodeMainStyled>
+            <PageNavigate totalItemsCount={productCnt} onChange={initFnc} itemsCountPerPage={5} activePage={cPage} />
 
             {updateModal ? (
                 <>

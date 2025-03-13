@@ -452,8 +452,8 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
     };
 
     const valiLastPassword = () => {
-        console.log("첫 비번  " + userData.password);
-        console.log("둘 비번  " + userData.password1);
+        // console.log("첫 비번  " + userData.password);
+        // console.log("둘 비번  " + userData.password1);
 
         if (userData.password !== userData.password1) {
             alert("비밀번호가 일치하지 않습니다.");

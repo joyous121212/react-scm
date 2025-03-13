@@ -23,6 +23,8 @@ import { postSaveProductInfoApi } from "../../../../../api/ProductInfoApi/postSa
 import { detailModalState } from "../../../../../stores/modalState";
 import { postDeleteProductInfoApi } from "../../../../../api/ProductInfoApi/postDeleteProductInfoApi";
 import { ProductInfoContext } from "../../../../../api/Provider/ProductInfo/ProductInfoProvider";
+import { PostRender } from "../../UserInfo/PostRender/PostRender";
+import { ProductDefaultSearchKeyWord } from "../default/ProductDefaultKeyword";
 export interface IProductInfoModalProps {
     productId?: string;
 }
@@ -300,12 +302,13 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
             alert("제품 정보를 수정하였습니다.");
             setUpdateModal(!updateModal);
             navi("/react/management/product-info");
-            setSearchKeyword({
-                currentPage: 1,
-                pageSize: 5,
-                searchKeyword: "",
-                searchOption: "searchAll",
-            });
+            PostRender(ProductDefaultSearchKeyWord, setSearchKeyword);
+            // setSearchKeyword({
+            //     currentPage: 1,
+            //     pageSize: 5,
+            //     searchKeyword: "",
+            //     searchOption: "searchAll",
+            // });
         } else {
             alert("잠시후다시 시도해주세요");
             setUpdateModal(!updateModal);
@@ -457,12 +460,20 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
         if (res.result === "success") {
             alert("제품정보를 삭제 하였습니다.");
             setUpdateModal(!updateModal);
-            setSearchKeyword({
-                currentPage: 1,
-                pageSize: 5,
-                searchKeyword: "",
-                searchOption: "searchAll",
-            });
+            PostRender(ProductDefaultSearchKeyWord, setSearchKeyword);
+            // setSearchKeyword({
+            //     currentPage: 1,
+            //     pageSize: 5,
+            //     searchKeyword: "",
+            //     searchOption: "searchAll",
+            // });
+        } else if (res.result === "fail") {
+            alert("잠시후 다시 시도해주세요");
+        } else {
+            alert(
+                `해당 제품은 ${productDetail.supplier} 납품업체가 창고에서 운용하는 제품으로` +
+                    "\n  납품업체에게 문의 바랍니다."
+            );
         }
     };
 
@@ -556,6 +567,7 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                                             value={productDetail?.sellPrice}
                                             onChange={updateInputHandler}
                                             id='sellPrice'
+                                            readOnly
                                         />
                                     </>
                                 ) : (

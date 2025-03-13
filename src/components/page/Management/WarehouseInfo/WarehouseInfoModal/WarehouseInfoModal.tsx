@@ -17,6 +17,9 @@ import { IPostWareHouseResponse } from "../../../../../models/interface/IWarehou
 import { WarehouseInfoContext } from "../../../../../api/Provider/WarehouseInfo/WarehouseInfoProvider";
 import { useContext } from "react";
 import { postwarehouseInfoSaveApi } from "../../../../../api/WarehouseInfoApi/postwarehouseInfoSaveApi";
+import { postWarehouseInfoDeleteApi } from "../../../../../api/WarehouseInfoApi/postWarehouseInfoDeleteApi";
+import { DefaultWareSearchKeyWord } from "../defaultSearchKeyWord/DefaultWareSearchKeyWord";
+import { PostRender } from "../../PostRender/PostRender";
 interface IProductInfoModalProps {
     warehouseId: number | undefined;
 }
@@ -153,13 +156,16 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
         );
         if (res.result === "success") {
             alert("창고정보 저장에 성공하였습니다.");
-            setInsertModal(!insertModal);
-            setSearchKeyword({
-                searchTarget: "warehouseName",
-                searchKeyword: "",
-                currentPage: 1,
-                pageSize: 5,
-            });
+
+            PostRender(DefaultWareSearchKeyWord, setSearchKeyword);
+
+            // setInsertModal(!insertModal);
+            // setSearchKeyword({
+            //     searchTarget: "warehouseName",
+            //     searchKeyword: "",
+            //     currentPage: 1,
+            //     pageSize: 5,
+            // });
         }
     };
 
@@ -180,12 +186,13 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
         if (res.result === "success") {
             alert("정보 수정에 성공하였습니다.");
             setDetailModal(!detailModal);
-            setSearchKeyword({
-                searchTarget: "warehouseName",
-                searchKeyword: "",
-                currentPage: 1,
-                pageSize: 5,
-            });
+            PostRender(DefaultWareSearchKeyWord, setSearchKeyword);
+            // setSearchKeyword({
+            //     searchTarget: "warehouseName",
+            //     searchKeyword: "",
+            //     currentPage: 1,
+            //     pageSize: 5,
+            // });
         }
     };
 
@@ -347,6 +354,43 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
         return updateRequestDto;
     };
 
+    const goDeleteFnc = async () => {
+        alert(warehouseId);
+        const res: IPostWareHouseResponse = await postWarehouseInfoDeleteApi(WarehouseInfo.warehouseInfoDelete, {
+            warehouseId: warehouseId,
+        });
+
+        if (res.result === "success") {
+            alert("창고 정보를 삭제 하였습니다.");
+            setInsertModal(!insertModal);
+            PostRender(DefaultWareSearchKeyWord, setSearchKeyword);
+            // setSearchKeyword({
+            //     searchTarget: "warehouseName",
+            //     searchKeyword: "",
+            //     currentPage: 1,
+            //     pageSize: 5,
+            // });
+        } else if (res.result === "fail") {
+            alert("잠시후 다시 시도해주세요");
+        } else {
+            alert(
+                "\n" +
+                    "-창고 철회 거절 메시지-" +
+                    "\n" +
+                    `해당 ${updateDetail.name}  창고는 현재 제품을 운용중에 있습니다. ` +
+                    "\n" +
+                    "\n" +
+                    `해당 창고관리자 이름:${updateDetail.manager} ` +
+                    "\n" +
+                    "\n" +
+                    `해당 창고관리자 연락처 :${updateDetail.phone} ` +
+                    "\n" +
+                    "\n" +
+                    "로 문의 해주시길 바랍니다."
+            );
+        }
+    };
+
     return (
         <>
             <UserInfoModalStyle>
@@ -362,15 +406,7 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
                             <col width='12%' />
                         </colgroup>
                         <thead>
-                            <tr>
-                                {/* <th scope='col'>창고코드</th>
-                                <th scope='col'>창고명</th>
-                                <th scope='col'>담당자</th>
-                                <th scope='col'>이메일</th>
-                                <th scope='col'>전화번호</th>
-                                <th scope='col'>우편번호</th>
-                                <th scope='col'>창고위치</th> */}
-                            </tr>
+                            <tr></tr>
                         </thead>
                         <tbody id='dataList'>
                             <tr>
@@ -609,7 +645,7 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
                         {warehouseId != undefined ? (
                             <>
                                 <StyledButton onClick={goUpdateFnc}>수정</StyledButton>
-                                {/* <StyledButton onClick={goDetateProduct}>삭제</StyledButton> */}
+                                <StyledButton onClick={goDeleteFnc}>삭제</StyledButton>
                             </>
                         ) : (
                             <>

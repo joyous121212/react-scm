@@ -50,12 +50,15 @@ export const WarehouseInfo = {
     warehouseInfoDetail: "/management/warehouseInfoDetailBody.do",
     warehouseInfoUpdate: "/management/warehouseInfoUpdateBody.do",
     warehouseInfoSave: "/management/warehouseInfoSaveBody.do",
+    warehouseInfoDelete: "/management/warehouseInfoDeleteBody.do",
 };
 
 export const InquiryInfo = {
-   
-    inquiryListBody:"/management/inquiryListBody.do",
-    insertInquiry:"/support/inquiryFileSaveBody.do"
+    inquiryListBody: "/management/inquiryListBody.do",
+    insertInquiry: "/support/inquiryFileSaveBody.do",
+    inquiryDetailBody: "/support/inquiryDetailBody.do",
+    inquiryFileUpdateBody: "/support/inquiryFileUpdateBody.do",
+    inquiryFileDelete: "/support/inquiryFileDeleteBody.do",
 };
 
 export const Products = {
