@@ -7,7 +7,7 @@ export const ShoppingOrdersMainStyled = styled.div`
     .table-wrapper {
         overflow-x: auto; /* ✅ 가로 스크롤 활성화 */
         margin-bottom: 10px;
-        width: 1190px !important; /* ✅ 테이블 크기에 맞춰 부모 크기를 강제 적용 */
+        width: 1170px; /* ✅ 테이블 크기에 맞춰 부모 크기를 강제 적용 */
         max-width: 100vw; /* ✅ 뷰포트보다 커지는 것 방지 */
         display: block; /* ✅ flex/grid 영향을 받지 않도록 */
     }
