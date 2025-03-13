@@ -30,6 +30,7 @@ export const OrdersListMain = () => {
     ] as Column<IOrdersList>[];
 
     useEffect(() => {
+        console.log(searchKeyword);
         searchOrdersList();
     }, [searchKeyword]);
 
@@ -59,7 +60,7 @@ export const OrdersListMain = () => {
         searchOrdersList(cPage);
     };
 
-    // ✅ 입금확인 버튼 클릭 시 상태 업데이트
+    // 입금확인 버튼 클릭 시 상태 업데이트
     const handlePaymentConfirm = async (e, orderId) => {
         e.preventDefault(); // 기본 이벤트 방지
         e.stopPropagation();

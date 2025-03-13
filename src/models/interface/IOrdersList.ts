@@ -5,9 +5,9 @@ export interface IOrdersList {
     orderDate: number;
     isApproved: number;
     isPaid: number;
-    productName: number;
+    productName: string;
     productNumber: number;
-    supplyName: number;
+    supplyName: string;
 }
 
 export interface IOrdersListResponse {
@@ -18,8 +18,8 @@ export interface IOrdersListResponse {
 
 export interface IOrdersListDetail extends IOrdersList {
     orderId: number;
-    supplyName: number;
-    productName: number;
+    supplyName: string;
+    productName: string;
     productNumber: number;
     count: number;
 }
