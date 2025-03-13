@@ -70,15 +70,11 @@ export const OrdersList = {
 export const Inventory = {
     searchSelectBoxList: "/trade/inventorySelectBoxBody.do",
     searchList: "/trade/inventoryListBody.do",
-    searchDetail: "/trade/inventoryDetailBody.do",
-};
+    searchDetail: "/trade/inventoryDetailBody.do"
+}
+
 export const Sales = {
     searchList: "/sales/performanceListBody.do",
-    searchDetail: "/sales/performanceDetailBody.do",
-};
+    searchDetail: "/sales/performanceDetailBody.do"
+}
 
-export const OrdersReturnList = {
-    searchList: "/tasks/orderReturnListBody.do",
-    searchModal: "/tasks/ordersReturnModalBody.do",
-    returnUpdate: "/tasks/ordersReturnUpdateBody.do",
-};

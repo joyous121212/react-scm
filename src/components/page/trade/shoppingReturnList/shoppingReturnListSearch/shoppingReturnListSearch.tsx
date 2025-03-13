@@ -16,8 +16,6 @@ export const ShoppingReturnListSearch = () => {
     const { setSearchKeyword } = useContext(ShoppingReturnListContext);
 
     const handlerSearch = () => {
-        if (!inputValue) return;
-
         setSearchKeyword({
             searchOption: selectValue,
             searchKeyword: inputValue,

@@ -15,10 +15,15 @@ import { ShoppingReturn } from "../pages/tasks/ShoppingReturn";
 import { OrdersList } from "../pages/tasks/OrdersList";
 import { Inventory } from "../pages/trade/inventory";
 import { Cart } from "../pages/mall/Cart";
+import { ShoppingOrders } from "../pages/trade/shoppingOrders";
+import { ShoppingList } from "../pages/delivery/ShoppingList";
+import { ShoppingReturnListDe } from "../pages/delivery/ShoppingReturnList";
 import { History } from "../pages/mall/History";
 import { HistroyDetail } from "../pages/mall/HistoryDetail";
 import { Performance } from "../pages/sales/Performance";
 import { Products } from "../pages/mall/Products";
+import { TopSales } from "../pages/sales/TopSales";
+import { OrdersReturnListDe } from "../pages/delivery/OrdersReturnList";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -37,6 +42,10 @@ const routers: RouteObject[] = [
                     {
                         path: "inventory",
                         element: <Inventory />,
+                    },
+                    {
+                        path: "shopping-orders",
+                        element: <ShoppingOrders />,
                     },
                 ],
             },
@@ -95,6 +104,34 @@ const routers: RouteObject[] = [
                     },
                 ],
             },
+
+            {
+                path: "delivery",
+                children: [
+                    {
+                        path: "shopping-list",
+                        element: <ShoppingList />,
+                    },
+                    {
+                        path: "shopping-return-list",
+                        element: <ShoppingReturnListDe />,
+                    },
+                    {
+                        path: "orders-list",
+                        element: <OrdersList />,
+                    },
+                    {
+                        path: "orders-return-list",
+                        element: <OrdersReturnListDe />,
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        path: "/react",
+        element: <DashBoard />,
+        children: [
             {
                 path: "mall",
                 children: [
@@ -106,6 +143,7 @@ const routers: RouteObject[] = [
                         path: "cart",
                         element: <Cart />,
                     },
+
                     {
                         path: "history",
                         element: <History />,
@@ -126,6 +164,10 @@ const routers: RouteObject[] = [
                     {
                         path: "cart",
                         element: <Cart />,
+                    },
+                    {
+                        path: "top-sales",
+                        element: <TopSales />,
                     },
                     {
                         path: "history",
