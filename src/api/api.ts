@@ -72,13 +72,17 @@ export const delivery = {
     searchOrdersList: "/delivery/orderDirectionGroupListBody.do",
 };
 
-export const Sales = {
+export const Performance = {
     searchList: "/sales/performanceListBody.do",
     searchDetail: "/sales/performanceDetailBody.do",
 };
     searchDetail: "/sales/performanceDetailBody.do"
 }
 
+export const TopSales = {
+    selectDate: "/sales/selectDateJson",
+    searchList: "/sales/topSalesListBody.do",
+}
 
 export const ShoppingOrders = {
     searchList: "/trade/shoppingListBody.do",
@@ -87,4 +91,3 @@ export const ShoppingOrders = {
     saveOrders: "/tasks/orderInstructionSaveBody.do",
     saveDelivers:"/tasks/deliveryOrderSaveBody.do"
 }
-

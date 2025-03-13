@@ -21,6 +21,7 @@ import { ShoppingReturnListDe } from "../pages/delivery/ShoppingReturnList";
 import { History } from "../pages/mall/History";
 import { HistroyDetail } from "../pages/mall/HistoryDetail";
 import { Performance } from "../pages/sales/Performance";
+import { TopSales } from "../pages/sales/TopSales";
 import { OrdersList } from "../pages/delivery/OrdersList";
 import { OrdersReturnListDe } from "../pages/delivery/OrdersReturnList";
 
@@ -153,8 +154,9 @@ const routers: RouteObject[] = [
                         element: <Performance />,
                     },
                     {
-                        path: "cart",
-                        element: <Cart />,
+                        path: "top-sales",
+                        element: <TopSales />
+
                     },
                     {
                         path: "history",
