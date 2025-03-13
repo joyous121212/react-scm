@@ -100,4 +100,5 @@ export const OrdersReturnList = {
     searchList: "/tasks/orderReturnListBody.do",
     searchModal: "/tasks/ordersReturnModalBody.do",
     returnUpdate: "/tasks/ordersReturnUpdateBody.do",
+    updateReturnIsPaid: "/tasks/ordersReturnPaidUpdateBody.do",
 };
