@@ -59,6 +59,15 @@ export const PerformanceMain = () => {
             <StyledTable 
                 data={performance}
                 columns={columns}
+                renderCell={(row, column) => {
+                    if (column.key === "supplierName") {
+                        return <span style={{ fontWeight: "bold" }}>{row.supplierName}</span>;
+                    }
+                    if (column.key === "performance") {
+                        return row.performance.toLocaleString("ko-KR");
+                    }
+                    return row[column.key as keyof IPerformance];
+                }}
                 onCellClick={(row, column) => {
                     if(column === "supplierName") {
                         handlerModal(row.supplyId);

@@ -76,10 +76,16 @@ export const Performance = {
     searchList: "/sales/performanceListBody.do",
     searchDetail: "/sales/performanceDetailBody.do",
 };
+
 export const TopSales = {
     selectDate: "/sales/selectDateJson",
     searchList: "/sales/topSalesListBody.do",
 };
+
+export const ProfitCheck = {
+    searchList: "/sales/profitCheckListBody.do",
+    searchDetail: "/sales/profitCheckDetailBody.do",
+}
 
 export const ShoppingOrders = {
     searchList: "/trade/shoppingListBody.do",
