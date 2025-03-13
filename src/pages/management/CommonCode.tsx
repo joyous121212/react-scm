@@ -7,7 +7,7 @@ export const CommonCode = () => {
     return (
         <CommonCodeProvider>
             <ContentBox variant='primary' fontSize='large'>
-                공통코드관리
+                공통코드관리 dd
             </ContentBox>
             <CommonCodeSearch />
             <CommonCodeMain />
