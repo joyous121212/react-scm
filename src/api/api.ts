@@ -76,9 +76,6 @@ export const Performance = {
     searchList: "/sales/performanceListBody.do",
     searchDetail: "/sales/performanceDetailBody.do",
 };
-    searchDetail: "/sales/performanceDetailBody.do"
-}
-
 export const TopSales = {
     selectDate: "/sales/selectDateJson",
     searchList: "/sales/topSalesListBody.do",
