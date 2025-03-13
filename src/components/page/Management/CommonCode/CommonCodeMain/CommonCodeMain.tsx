@@ -11,9 +11,12 @@ import { searchApi } from "../../../../../api/CommonCodeApi/searchApi";
 import { CommonCode } from "../../../../../api/api";
 import { ICommonCode, ICommonCodeResponse } from "../../../../../models/interface/ICommonCode";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
+import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 
 export const CommonCodeMain = () => {
     const { searchKeyword } = useContext(CommonCodeCotext);
+    const [commonCodeCount, setCommonCodeCount] = useState<number>(0);
+    const [cPage, setCPage] = useState<number>(0);
     const [commonCodeList, setCommonCodeList] = useState<ICommonCode[]>([]);
     const [modal, setModal] = useRecoilState(modalState);
     const [groupId, setGroupId] = useState<number>(0);
@@ -43,7 +46,9 @@ export const CommonCodeMain = () => {
         });
 
         if (result) {
+            setCommonCodeCount(result.commonCodeCnt);
             setCommonCodeList(result.commonCode);
+            setCPage(currentPage);
         }
     };
 
@@ -69,6 +74,12 @@ export const CommonCodeMain = () => {
                         수정
                     </StyledButton>
                 )}
+            />
+            <PageNavigate
+                totalItemsCount={commonCodeCount}
+                onChange={searchCommonCode}
+                itemsCountPerPage={5}
+                activePage={cPage}
             />
             {modal && (
                 <Portal>

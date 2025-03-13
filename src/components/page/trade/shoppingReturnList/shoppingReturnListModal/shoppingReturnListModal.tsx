@@ -100,7 +100,7 @@ export const ShoppingReturnModal: FC<IShoppingReturnListModalProps> = ({ postSuc
                         <tr>
                             <th>반품제품명</th>
                             <td>
-                                <StyledInput size='modal' type='text' value={shoppingReturn.productName} readOnly />
+                                <StyledInput size='modal' type='text' value={shoppingReturn?.productName} readOnly />
                             </td>
                         </tr>
                         <tr>

@@ -138,52 +138,76 @@ export const NoticeModal: FC<INoticeModalProps> = ({ noticeId, setNoticeId, post
         <NoticeModalStyled>
             <div className='container'>
                 <form ref={formRef}>
-                    <label>
-                        제목 :<StyledInput type='text' name='fileTitle' defaultValue={detail?.title}></StyledInput>
-                    </label>
-                    <label>
-                        내용 :{" "}
-                        <StyledInput
-                            as='textarea'
-                            type='text'
-                            name='fileContent'
-                            defaultValue={detail?.content}
-                        ></StyledInput>
-                    </label>
-                    파일 :
-                    <StyledInput
-                        type='file'
-                        id='fileInput'
-                        style={{ display: "none" }}
-                        name='file'
-                        onChange={handlerFile}
-                    ></StyledInput>
-                    <label className='img-label' htmlFor='fileInput'>
-                        파일 첨부하기
-                    </label>
-                    <div onClick={fileDownload}>
-                        {imageUrl ? (
-                            <div>
-                                <label>미리보기</label>
-                                <img src={imageUrl} />
-                                {fileName || detail.fileName}
-                            </div>
-                        ) : (
-                            <div>{fileName}</div>
-                        )}
-                    </div>
-                    <div className={"button-container"}>
-                        <StyledButton type='button' onClick={noticeId ? updateNoticeFile : saveNoticeFile}>
+                    <dt>
+                        <strong>공지사항</strong>
+                    </dt>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th>제목</th>
+                                <td>
+                                    <StyledInput
+                                        size='notice'
+                                        type='text'
+                                        name='fileTitle'
+                                        defaultValue={detail?.title}
+                                    ></StyledInput>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>내용</th>
+                                <td>
+                                    <StyledInput
+                                        as='textarea'
+                                        type='text'
+                                        name='fileContent'
+                                        defaultValue={detail?.content}
+                                    ></StyledInput>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>파일</th>
+                                <td>
+                                    <StyledInput
+                                        type='file'
+                                        id='fileInput'
+                                        style={{ display: "none" }}
+                                        name='file'
+                                        onChange={handlerFile}
+                                    ></StyledInput>
+                                    <label className='img-label' htmlFor='fileInput'>
+                                        파일 첨부하기
+                                    </label>
+                                    <span>{imageUrl ? `${fileName || detail.fileName}` : "선택된 파일 없음"}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>미리보기</th>
+                                <td>
+                                    <div onClick={fileDownload}>
+                                        {imageUrl ? (
+                                            <div>
+                                                <img src={imageUrl} />
+                                            </div>
+                                        ) : null}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div className='button-container'>
+                        <button type='button' onClick={noticeId ? updateNoticeFile : saveNoticeFile}>
                             {noticeId ? "수정" : "저장"}
-                        </StyledButton>
+                        </button>
                         {!!noticeId && (
-                            <StyledButton type='button' onClick={noticeDeleteFile}>
+                            <button type='button' onClick={noticeDeleteFile}>
                                 삭제
-                            </StyledButton>
+                            </button>
                         )}
-                        <StyledButton type='button' onClick={() => setModal(!modal)}>
+                        <button type='button' onClick={() => setModal(!modal)}>
                             나가기
-                        </StyledButton>
+                        </button>
                     </div>
                 </form>
             </div>
