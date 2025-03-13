@@ -78,3 +78,11 @@ export const Sales = {
 }
 
 
+export const ShoppingOrders = {
+    searchList: "/trade/shoppingListBody.do",
+    searchOrderDetail: "/trade/orderingInstructionBody.do",
+    searchDeliveryDetail: "/trade/deliveryOrderBody.do",
+    saveOrders: "/tasks/orderInstructionSaveBody.do",
+    saveDelivers:"/tasks/deliveryOrderSaveBody.do"
+}
+
