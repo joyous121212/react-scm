@@ -4,11 +4,14 @@ import { StyledSelectBox } from "../../../../common/StyledSelectBox/StyledSelect
 import { DetailSearchStyled } from "./styled";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { CommonDetailCodeContext } from "../../../../../api/Provider/CommonDetailCodeProvider";
+import { useRecoilState } from "recoil";
+import { modalState } from "../../../../../stores/modalState";
 
 export const DetailSearch = () => {
     // 검색을 데이터
     const [selectValue, setSelectValue] = useState<string>("detailCodeName");
     const inputValue = useRef<HTMLInputElement>();
+    const [modal, setModal] = useRecoilState(modalState);
 
     // 검색 데이터에 담긴 값을 provider를 사용해서 searchKeyword의 값으로 전달해줌
     const { setSearchKeyword } = useContext(CommonDetailCodeContext);
@@ -27,7 +30,7 @@ export const DetailSearch = () => {
             <StyledSelectBox options={options} value={selectValue} onChange={setSelectValue} />
             <StyledInput ref={inputValue} />
             <StyledButton onClick={handlerSearch}>검색</StyledButton>
-            <StyledButton>등록</StyledButton>
+            <StyledButton onClick={() => setModal(!modal)}>등록</StyledButton>
         </DetailSearchStyled>
     );
 };

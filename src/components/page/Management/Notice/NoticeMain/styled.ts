@@ -1,16 +1,10 @@
 import styled from "styled-components";
 
-export const DetailCodeMainStyled = styled.div`
+export const NoticeMainStyled = styled.div`
     table {
         width: 100%;
         border-collapse: collapse;
         margin: 50px 0;
-    }
-
-    .button-container {
-        display: flex;
-        justify-content: flex-end; /* ✅ 버튼을 오른쪽 정렬 */
-        margin-top: 10px;
     }
 
     table,
