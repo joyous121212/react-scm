@@ -37,7 +37,7 @@ export const History = {
     searchDetail: "/mall/historyDetailBody.do",
     returnSave: "/mall//historyReturnRequestBody.do",
     salesComplete: "/mall/historySalesCompleteBody.do",
-}
+};
 
 export const Approval = {
     searchOrder: "/approval/orderListBody.do",
@@ -74,6 +74,11 @@ export const Inventory = {
 };
 export const Sales = {
     searchList: "/sales/performanceListBody.do",
-    searchDetail: "/sales/performanceDetailBody.do"
-}
+    searchDetail: "/sales/performanceDetailBody.do",
+};
 
+export const OrdersReturnList = {
+    searchList: "/tasks/orderReturnListBody.do",
+    searchModal: "/tasks/ordersReturnModalBody.do",
+    returnUpdate: "/tasks/ordersReturnUpdateBody.do",
+};

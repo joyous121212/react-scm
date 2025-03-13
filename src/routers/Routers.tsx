@@ -18,6 +18,7 @@ import { Cart } from "../pages/mall/Cart";
 import { History } from "../pages/mall/History";
 import { HistroyDetail } from "../pages/mall/HistoryDetail";
 import { Performance } from "../pages/sales/Performance";
+import { Products } from "../pages/mall/Products";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -88,6 +89,10 @@ const routers: RouteObject[] = [
                         path: "orders-list",
                         element: <OrdersList />,
                     },
+                    {
+                        path: "orders-return-list",
+                        element: <OrdersReturnList />,
+                    },
                 ],
             },
             {
@@ -99,11 +104,11 @@ const routers: RouteObject[] = [
                     },
                     {
                         path: "cart",
-                        element: <Cart />
+                        element: <Cart />,
                     },
                     {
                         path: "history",
-                        element: <History />
+                        element: <History />,
                     },
                     {
                         path: "history/:orderId",
@@ -120,11 +125,11 @@ const routers: RouteObject[] = [
                     },
                     {
                         path: "cart",
-                        element: <Cart />
+                        element: <Cart />,
                     },
                     {
                         path: "history",
-                        element: <History />
+                        element: <History />,
                     },
                 ],
             },

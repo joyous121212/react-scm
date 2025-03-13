@@ -14,6 +14,7 @@ export interface IOrders {
 export interface IOrdersBodyResponse {
     orderList: IOrders[];
     orderCnt: number;
+    result: string;
 }
 
 export interface IOrdersDetail extends IOrders {

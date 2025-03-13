@@ -3,11 +3,13 @@ import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { OrdersListModalStyled } from "./styled";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
-import axios, { AxiosResponse } from "axios";
-import { IOrdersDetail, IOrdersDetailResponse } from "../../../../../models/interface/IOrders";
 import { searchApi } from "../../../../../api/OrdersListApi/searchApi";
 import { OrdersList } from "../../../../../api/api";
-import { IOrdersListResponse } from "../../../../../models/interface/IOrdersList";
+import {
+    IOrdersListDetail,
+    IOrdersListDetailResponse,
+    IOrdersListResponse,
+} from "../../../../../models/interface/IOrdersList";
 
 interface IOrdersModalProps {
     orderId: number;
@@ -20,7 +22,7 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, po
     const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
     // const [fileName, setFileName] = useState<string>("");
-    const [ordersListDetail, setOrdersListDetail] = useState<IOrdersDetail>();
+    const [ordersListDetail, setOrdersListDetail] = useState<IOrdersListDetail>();
 
     useEffect(() => {
         orderId && searchOrdersDetail();
@@ -31,7 +33,7 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, po
     }, []);
 
     const searchOrdersDetail = async () => {
-        const result = await searchApi<IOrdersDetailResponse>(OrdersList.searchModal, {
+        const result = await searchApi<IOrdersListDetailResponse>(OrdersList.searchModal, {
             orderId: orderId,
         });
 
@@ -57,9 +59,13 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, po
         }
     };
 
+    console.log("ordersListDetail :", ordersListDetail);
     return (
         <OrdersListModalStyled>
             <div className='container'>
+                <dt>
+                    <strong>발주 지시서</strong>
+                </dt>
                 <table>
                     <tbody>
                         <tr>
@@ -67,19 +73,21 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, po
                             <td>
                                 <StyledInput
                                     size='modal'
-                                    name='productId'
+                                    name='orderId'
                                     type='text'
                                     defaultValue={ordersListDetail?.orderId}
                                     readOnly
                                 />
                             </td>
+                        </tr>
+                        <tr>
                             <th>
                                 제품명<span className='font_red'>*</span>
                             </th>
                             <td colSpan={5}>
                                 <StyledInput
                                     size='modal'
-                                    name='count'
+                                    name='productName'
                                     type='text'
                                     defaultValue={ordersListDetail?.productName}
                                     readOnly
@@ -92,27 +100,31 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, po
                             <td>
                                 <StyledInput
                                     size='modal'
-                                    name='customerName'
+                                    name='supplyName'
                                     type='text'
                                     defaultValue={ordersListDetail?.supplyName}
                                     readOnly
                                 />
                             </td>
+                        </tr>
+                        <tr>
                             <th>제품번호</th>
                             <td>
                                 <StyledInput
                                     size='modal'
-                                    name='customerName'
+                                    name='productNumber'
                                     type='text'
                                     defaultValue={ordersListDetail?.productNumber}
                                     readOnly
                                 />
                             </td>
+                        </tr>
+                        <tr>
                             <th>제품수량</th>
                             <td>
                                 <StyledInput
                                     size='modal'
-                                    name='customerName'
+                                    name='count'
                                     type='text'
                                     defaultValue={ordersListDetail?.count}
                                     readOnly
@@ -125,13 +137,6 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, po
                     <button
                         onClick={() => handleStatusUpdate(ordersListDetail.orderId)}
                         disabled={isSubmitted}
-                        // style={{
-                        //     pointerEvents: isSubmitted ? "none" : "auto",
-                        //     cursor: isSubmitted ? "default" : "pointer",
-                        //     opacity: isSubmitted ? 0.6 : 1,
-                        //     backgroundColor: isSubmitted ? "#4CAF50" : "#3bb2ea",
-                        //     transition: "background-color 0.3s ease",
-                        // }}
                         className={isSubmitted ? "submitted" : ""}
                     >
                         {isSubmitted ? "발주서 전송 완료" : "발주서 전송"}
