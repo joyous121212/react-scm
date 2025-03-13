@@ -23,8 +23,8 @@ import { postSaveProductInfoApi } from "../../../../../api/ProductInfoApi/postSa
 import { detailModalState } from "../../../../../stores/modalState";
 import { postDeleteProductInfoApi } from "../../../../../api/ProductInfoApi/postDeleteProductInfoApi";
 import { ProductInfoContext } from "../../../../../api/Provider/ProductInfo/ProductInfoProvider";
-import { PostRender } from "../../UserInfo/PostRender/PostRender";
-import { ProductDefaultSearchKeyWord } from "../default/ProductDefaultKeyword";
+import { PostRender } from "../../PostRender/PostRender";
+import { ProductDefaultSearchKeyWord } from "../defaultSearchKeyWord/ProductDefaultKeyword";
 export interface IProductInfoModalProps {
     productId?: string;
 }
