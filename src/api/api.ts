@@ -72,6 +72,6 @@ export const Performance = {
 }
 
 export const TopSales = {
-    selectDate: "/sales/selectDate",
+    selectDate: "/sales/selectDateJson",
     searchList: "/sales/topSalesListBody.do",
 }

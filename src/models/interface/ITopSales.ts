@@ -1,7 +1,7 @@
 export interface ITopSales {
     supplierName: string;
-    performance: number;
-    currentRank: number;
+    performance: number | string;
+    currentRank: number | string;
     previousRank: number;
 }
 
