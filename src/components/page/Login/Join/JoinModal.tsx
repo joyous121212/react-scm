@@ -10,6 +10,7 @@ declare global {
         daum: any;
     }
 }
+
 interface IJoinFormData {
     action: string;
     user_type: string;

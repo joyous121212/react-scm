@@ -76,10 +76,11 @@ const routers: RouteObject[] = [
             },
 
             {
-                path:"support",
-                children:[
-                    {path:"inquiry",
-                        element:<Inquiry/>
+                path: "support",
+                children: [
+                    {
+                        path: "inquiry",
+                        element: <Inquiry />
                     }
                 ]
 
@@ -200,11 +201,11 @@ const routers: RouteObject[] = [
                     {
                         path: "products",
                         element: <Products />,
+                    },
                     {
                         path: "cart",
                         element: <Cart />,
                     },
-
                     {
                         path: "history",
                         element: <History />,
