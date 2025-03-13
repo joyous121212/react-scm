@@ -31,6 +31,8 @@ export const NoticeMain = () => {
 
         const result = await searchApi<INoticeListBodyResponse, URLSearchParams>(Notice.search, searchParam);
 
+        console.log(result);
+
         if (result) {
             setNoticeList(result.noticeList);
             setNoticeCount(result.noticeCnt);

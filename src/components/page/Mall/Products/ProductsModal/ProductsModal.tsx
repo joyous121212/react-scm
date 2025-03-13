@@ -113,14 +113,8 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
                         postSuccess(); // 승인 후 실행할 함수
                     });
                 }
-            }
-
-            
-
-            
-        }
-
-        
+            }    
+        } 
     }
 
     // 장바구니 담기
