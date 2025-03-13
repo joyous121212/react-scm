@@ -15,3 +15,7 @@ export const detailListModalState = atom<boolean>({
     key: "detailListModalState",
     default: false,
 });
+export const findModalState = atom<boolean>({
+    key: "findModalState",
+    default: false,
+});
