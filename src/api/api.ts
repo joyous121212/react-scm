@@ -60,6 +60,35 @@ export const ShoppingReturn = {
     searchList: "/tasks/shoppingReturnOrderListBody.do",
 };
 
+export const Inventory = {
+    searchSelectBoxList: "/trade/inventorySelectBoxBody.do",
+    searchList: "/trade/inventoryListBody.do",
+    searchDetail: "/trade/inventoryDetailBody.do",
+};
+
+export const delivery = {
+    searchShoppingList: "/delivery/shoppingDeliveryListJson.do",
+    searchShoppingReturnList: "/delivery/deliveryReturnListBody.do",
+    searchOrdersList: "/delivery/orderDirectionGroupListBody.do",
+};
+
+export const Performance = {
+    searchList: "/sales/performanceListBody.do",
+    searchDetail: "/sales/performanceDetailBody.do",
+};
+export const TopSales = {
+    selectDate: "/sales/selectDateJson",
+    searchList: "/sales/topSalesListBody.do",
+};
+
+export const ShoppingOrders = {
+    searchList: "/trade/shoppingListBody.do",
+    searchOrderDetail: "/trade/orderingInstructionBody.do",
+    searchDeliveryDetail: "/trade/deliveryOrderBody.do",
+    saveOrders: "/tasks/orderInstructionSaveBody.do",
+    saveDelivers: "/tasks/deliveryOrderSaveBody.do",
+};
+
 export const OrdersList = {
     searchList: "/tasks/orderListBody.do",
     searchModal: "/tasks/orderDetailJson.do",
@@ -67,14 +96,8 @@ export const OrdersList = {
     statdUpdate: "/tasks/orderStateUpdateBody.do",
 };
 
-export const Inventory = {
-    searchSelectBoxList: "/trade/inventorySelectBoxBody.do",
-    searchList: "/trade/inventoryListBody.do",
-    searchDetail: "/trade/inventoryDetailBody.do"
-}
-
-export const Sales = {
-    searchList: "/sales/performanceListBody.do",
-    searchDetail: "/sales/performanceDetailBody.do"
-}
-
+export const OrdersReturnList = {
+    searchList: "/tasks/orderReturnListBody.do",
+    searchModal: "/tasks/ordersReturnModalBody.do",
+    returnUpdate: "/tasks/ordersReturnUpdateBody.do",
+};
