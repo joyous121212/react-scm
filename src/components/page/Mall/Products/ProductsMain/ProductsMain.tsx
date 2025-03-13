@@ -69,6 +69,12 @@ export const ProductsMain = () => {
             <StyledTable 
                 data={productsList}
                 columns={columns}
+                renderCell={(row, column) => {
+                    if (column.key === "sellPrice") {
+                        return `${row.sellPrice.toLocaleString("ko-KR")}원`;
+                    }
+                    return row[column.key as keyof IProducts];
+                }}
                 onCellClick={(row, column) => {
                     if(column === "productNumber") {
                         handlerModal(row.productId);

@@ -190,6 +190,10 @@ export const HistoryDetailMain = () => {
                         const totalPrice = row.count * row.price;
                         return totalPrice.toLocaleString("ko-KR");
                     }
+
+                    if (column.key === "price") {
+                        return row.price.toLocaleString("ko-KR");
+                    }
                     return row[column.key as keyof IHistoryDetailList];
                 }}
             />

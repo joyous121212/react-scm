@@ -135,7 +135,10 @@ export const CartMain= () => {
                     }
                     if (column.key === "totalPrice") {
                         const totalPrice = row.count * row.price;
-                        return totalPrice.toLocaleString("ko-KR");
+                        return `${totalPrice.toLocaleString("ko-KR")}원`;
+                    }
+                    if (column.key === "price") {
+                        return `${row.price.toLocaleString("ko-KR")}원`;
                     }
                     if (column.key === "requestedDeliveryDate") {
                         return row.requestedDeliveryDate.split(" ")[0]; // 날짜 부분만 출력
