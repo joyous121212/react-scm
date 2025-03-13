@@ -85,3 +85,36 @@ export interface IShoppingReturnListModal {
 export interface IShoppingReturnListModalResponse {
     deliveryReturnModalList: IShoppingReturnListModal;
 }
+
+export interface IOrdersList {
+    orderDirectionDate: string;
+    supplyId: number;
+    supplyName: string;
+    totalAmount: number;
+}
+
+export interface IOrdersListResponse {
+    orderDirectionGroup: IOrdersList[];
+    orderDirectionGroupCnt: number;
+}
+
+export interface IOrdersListDetail {
+    categoryName: string;
+    categoryNumber: string;
+    count: number;
+    orderId: number;
+    productId: number;
+    productName: string;
+    productNumber: string;
+    sellPrice: number;
+    supplyId: number;
+}
+export interface IOrdersListDetailResponse {
+    orderDirectionDetail: IOrdersListDetail;
+    rderDirectionDetailCnt: number;
+}
+
+export interface IOrdersInventory {
+    warehouseId: string;
+    warehouseName: string;
+}
