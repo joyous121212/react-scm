@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { StyledSelectBox } from "../../../../common/StyledSelectBox/StyledSelectBox";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
@@ -16,6 +16,8 @@ export const ShoppingReturnListSearch = () => {
     const { setSearchKeyword } = useContext(ShoppingReturnListContext);
 
     const handlerSearch = () => {
+        if (!inputValue) return;
+
         setSearchKeyword({
             searchOption: selectValue,
             searchKeyword: inputValue,
@@ -34,25 +36,13 @@ export const ShoppingReturnListSearch = () => {
 
             {/* Input 필드 변경 */}
             {selectValue === "searchReturnDate" ? (
-                <StyledInput
-                    size='search'
-                    value={inputValue}
-                    type='date'
-                    onChange={(e) => setInputValue(e.target.value)}
-                />
+                <StyledInput value={inputValue} type='date' onChange={(e) => setInputValue(e.target.value)} />
             ) : (
-                <StyledInput
-                    size='search'
-                    value={inputValue}
-                    type='text'
-                    onChange={(e) => setInputValue(e.target.value)}
-                />
+                <StyledInput value={inputValue} type='text' onChange={(e) => setInputValue(e.target.value)} />
             )}
 
             {/* 검색 버튼 */}
-            <StyledButton variant='secondary' onClick={handlerSearch}>
-                검색
-            </StyledButton>
+            <StyledButton onClick={handlerSearch}>검색</StyledButton>
         </ShoppingReturnListSearchStyled>
     );
 };

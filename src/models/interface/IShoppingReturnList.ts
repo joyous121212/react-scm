@@ -28,13 +28,7 @@ export interface IWareHouse {
 
 export interface ISelectOption {
     label: string;
-    value: number | string;
-}
-
-export interface ITempSearchTitle {
-    searchProduct: number | string;
-    searchSupply: number | string;
-    searchWarehouse: number | string;
+    value: number
 }
 
 export interface IShoppingReturnModalResponse {

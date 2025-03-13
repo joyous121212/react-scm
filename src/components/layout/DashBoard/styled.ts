@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const DashBoardStyled = styled.div`
-    width: 90%;
+    width: 80%;
     padding-top: 20px;
     position: absolute;
     .dashboard-ul {

@@ -3,7 +3,7 @@ import { StyledButtonStyled } from "./styled";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: "primary" | "secondary" | "danger";
-    size?: "small" | "medium" | "large" | "close";
+    size?: "small" | "medium" | "large";
     fullWidth?: boolean;
 }
 
