@@ -14,6 +14,7 @@ import { ChangeEvent } from 'react';
 import { postApi } from '../../../../../api/MallApi/postApi';
 import { ProductsContext } from '../../../../../api/Provider/ProductsProvider';
 import Swal from 'sweetalert2';
+import noData from "../../../../../assets/noData.png";
 
 
 interface IProductsModalProps {
@@ -38,7 +39,7 @@ const initProducts = {
 
 export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, setProductId}) => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
-    const [imageUrl, setImageUrl] = useState<string>("");
+    const [imageUrl, setImageUrl] = useState<string>(noData);
     const [fileName, setFileName] = useState<string>("");
     const [detail, setDetail] = useState<IProducts>(initProducts);
     const [attachment, setAttachment] = useState<IProducts>();
@@ -50,7 +51,6 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
     useEffect(() => {
 
         productId && productsDetail();
-
 
         return () => {
             setProductId(0);
@@ -69,19 +69,24 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
                 setDetail(result.detailValue);
                 setAttachment(result.attachmentValue);
 
-
-                const { fileType, logicalPath } = result.attachmentValue;
-                if (fileType === "jpg" || fileType === "gif" || fileType === "png") {
-                    setImageUrl(logicalPath);
+                if (result.attachmentValue && result.attachmentValue.logicalPath) {
+                    const { fileType, logicalPath } = result.attachmentValue;
+                    if (fileType === "jpg" || fileType === "gif" || fileType === "png") {
+                        setImageUrl(logicalPath);
+                    } else {
+                        setImageUrl(noData); // ✅ 파일 타입이 이미지가 아니면 noData로 설정
+                    }
                 } else {
-                    setImageUrl("");
+                    setImageUrl(noData); // ✅ attachmentValue가 없으면 noData로 설정
                 }
 
                 setSellPrice(result.detailValue.sellPrice.toLocaleString());
-
+            } else {
+                setImageUrl(noData); // ✅ API 응답이 없으면 noData로 설정
             }
         } catch (error) {
             console.error("searchDetail 오류:", error);
+            setImageUrl(noData);
         }
     }
 
@@ -171,12 +176,16 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
         const fileInfo = e.target.files;
         if (fileInfo?.length > 0) {
             const fileSplit = fileInfo[0].name.split(".");
-            const fileType = fileSplit[1].toLowerCase();
+            const fileType = fileSplit[fileSplit.length - 1]?.toLowerCase();
 
             if (fileType === "jpg" || fileType === "gif" || fileType === "png") {
                 setImageUrl(URL.createObjectURL(fileInfo[0]));
+            } else {
+                setImageUrl(noData);
             }
             setFileName(fileInfo[0].name)
+        } else {
+            setImageUrl(noData);
         }
     }
 
@@ -188,7 +197,7 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
                         <tr>
                             <th rowSpan={3}>
                                 <label htmlFor="file-upload">
-                                    <img className="product-image" src={imageUrl || "default_image_url"} alt="상품 이미지" />
+                                    <img className="product-image" src={imageUrl || noData} alt="상품 이미지" onError={() => setImageUrl(noData)}/>
                                 </label>
                                 <input
                                     id="file-upload"
