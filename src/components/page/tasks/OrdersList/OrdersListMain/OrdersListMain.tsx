@@ -10,6 +10,7 @@ import { Portal } from "../../../../common/potal/Portal";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { OrdersListModal } from "../OrdersListModal/OrdersListModal";
+import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 
 export const OrdersListMain = () => {
     const { searchKeyword } = useContext(OrdersListContext);
@@ -118,9 +119,9 @@ export const OrdersListMain = () => {
                                                 row.isPaid ? (
                                                     "입금"
                                                 ) : (
-                                                    <button onClick={(e) => handlePaymentConfirm(e, row.orderId)}>
+                                                    <StyledButton onClick={(e) => handlePaymentConfirm(e, row.orderId)}>
                                                         입금확인
-                                                    </button>
+                                                    </StyledButton>
                                                 )
                                             ) : (
                                                 // isApproved가 미승인일 때는 공란 처리
