@@ -28,8 +28,61 @@ export interface IShoppingOrdersResponse {
     shoppingCnt: number;
 }
 
-
 export interface IShoppingOrdersOrderDetailResponse {
-    orderingInstruction : IShoppingOrder
+    orderingInstruction: IShoppingOrder;
 }
 
+export interface IShoppingDeliveryManager {
+    address: string;
+    birthday: string;
+    createdDate: string;
+    detailAddress: string;
+    detailCode: string;
+    email: string;
+    groupCode: string;
+    hp: string;
+    loginID: string;
+    manager: string;
+    name: string;
+    password: string;
+    sex: string;
+    statusYn: string;
+    userClass: string;
+    userType: string;
+    zipCode: string;
+}
+
+export interface IShoppingWarehouse {
+    address: string;
+    detailAddress: string;
+    email: string;
+    manager: string;
+    name: string;
+    phone: string;
+    totalProductStock: number;
+    warehouseId: number;
+    zipCode: string;
+}
+
+export interface IShoppingOrdersDeliveryDetailResponse {
+    deliveryOrder: IShoppingOrder;
+    warehouseSelectList: IShoppingWarehouse[];
+    deliveryManager: IShoppingDeliveryManager[];
+}
+
+export interface ISelectOption {
+    label: string;
+    value: number | string;
+}
+
+export interface IWarehouseValue {
+    orderCount: number;
+    warehouseId: number;
+}
+
+export interface IWarehouseList {
+    warehouseId:number;
+    warehouseName: string;
+    totalProductStock: number;
+    orderCount: number;
+}

@@ -74,7 +74,7 @@ export const ShoppingOrdersOrderModal: FC<IShoppingOrderModalProps> = ({
         <ShoppingOrdersOrderModalStyled>
             <div className='container'>
                 <dt>
-                    <strong>발주지시서</strong>
+                    <strong>발주지시서 작성 창</strong>
                 </dt>
                 <table>
                     <tbody>

@@ -12,6 +12,7 @@ import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { ShoppingOrdersContext } from "../../../../../api/Provider/trade/ShoppingOrdersProvider";
 import { Spinner } from "../../../../common/Spinner/spinner";
 import { ShoppingOrdersOrderModal } from "../shoppingOrdersOrderModal/shoppingOrdersOrderModal";
+import { ShoppingOrdersDeliveryModal } from "../shoppingOrdersDeliveryModal/shoppingOrdersDeliveryModal";
 
 export const ShoppingOrdersMain = () => {
     const { searchKeyword } = useContext(ShoppingOrdersContext);
@@ -172,10 +173,9 @@ export const ShoppingOrdersMain = () => {
                         </Portal>
                     ) : modalStatus === "delivery" ? (
                         <Portal>
-                            <ShoppingOrdersOrderModal
+                            <ShoppingOrdersDeliveryModal
                                 shoppingOrderId={shoppingOrdersId}
                                 postSuccess={postSuccess}
-                                minimumOrderCount={minimumOrderCount}
                             />
                         </Portal>
                     ) : null) // ✅ "order" 또는 "delivery"가 아니면 아무것도 렌더링하지 않음
