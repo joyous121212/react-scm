@@ -24,6 +24,7 @@ import { Performance } from "../pages/sales/Performance";
 import { TopSales } from "../pages/sales/TopSales";
 import { OrdersList } from "../pages/delivery/OrdersList";
 import { OrdersReturnListDe } from "../pages/delivery/OrdersReturnList";
+import { ProfitCheck } from "../pages/sales/ProfitCheck";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -159,8 +160,8 @@ const routers: RouteObject[] = [
 
                     },
                     {
-                        path: "history",
-                        element: <History />,
+                        path: "profit-check",
+                        element: <ProfitCheck />,
                     },
                 ],
             },

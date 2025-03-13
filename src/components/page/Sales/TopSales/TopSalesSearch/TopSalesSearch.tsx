@@ -63,7 +63,7 @@ export const TopSalesSearch = () => {
 
     return (
         <TopSalesSearchStyled>
-            조회 년월:
+            📅 조회 년월:
             <select 
                 id="searchYear"
                 value={selectYearValue} 

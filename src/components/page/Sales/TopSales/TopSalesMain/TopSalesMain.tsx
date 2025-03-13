@@ -52,6 +52,12 @@ export const TopSalesMain = () => {
                     <StyledTable
                         data={topSales}
                         columns={columns}
+                        renderCell={(row, column) => {
+                            if (column.key === "performance") {
+                                return row.performance.toLocaleString("ko-KR");
+                            }
+                            return row[column.key as keyof ITopSales];
+                        }}
                     />
                 </div>
                 
