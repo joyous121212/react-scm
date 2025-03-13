@@ -44,6 +44,11 @@ export const LoginMain = () => {
             }
         });
     };
+
+    const handleKeyPress = (e) => {
+        return e.key === "Enter" ? loginHandler() : null;
+    };
+
     return (
         <LoginStyled>
             <div className='login-container'>
@@ -83,6 +88,7 @@ export const LoginMain = () => {
                                 <input
                                     required
                                     type='password'
+                                    onKeyDown={handleKeyPress}
                                     onChange={(e) => {
                                         setAccount((prev: IAccount) => {
                                             return { ...prev, pwd: e.target.value };

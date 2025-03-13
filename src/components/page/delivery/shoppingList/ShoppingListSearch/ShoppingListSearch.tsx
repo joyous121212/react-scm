@@ -3,8 +3,6 @@ import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { ShoppingListSearchStyled } from "./styled";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { modalState } from "../../../../../stores/modalState";
 
 export const ShoppingListSearch = () => {
     const title = useRef<HTMLInputElement>();

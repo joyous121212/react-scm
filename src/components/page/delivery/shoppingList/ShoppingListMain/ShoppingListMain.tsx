@@ -4,7 +4,6 @@ import { deliverySearchApi } from "../../../../../api/DeliveryApi/searchApi";
 import { StyledTable, StyledTd, StyledTh } from "../../../../common/styled/StyledTable";
 import { useLocation } from "react-router-dom";
 import { IShoppingList, IShoppingListBodyResponse } from "../../../../../models/interface/IDelivery";
-import axios from "axios";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
@@ -13,12 +12,11 @@ import { ShoppingListModal } from "../ShoppingListModal/ShoppingListModal";
 
 export const ShoppingListMain = () => {
     const [shoppingList, setShoppingList] = useState<IShoppingList[]>([]);
+    const [listDetail, setListDetail] = useState<IShoppingList>();
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [shoppingListCnt, setShoppingListCnt] = useState<number>(0);
     const [cPage, setCPage] = useState<number>(0);
     const { search } = useLocation();
-    const [deliveryId, setDeliveryId] = useState<number>(0);
-    const [deliveryState, setDeliveryState] = useState<string>("");
 
     useEffect(() => {
         searchShoppingList();
@@ -35,6 +33,7 @@ export const ShoppingListMain = () => {
             searchParam
         );
 
+        console.log(result);
         if (result) {
             setShoppingList(result.shoppingDeliveryList);
             setShoppingListCnt(result.shoppingDeliveryListCnt);
@@ -50,10 +49,9 @@ export const ShoppingListMain = () => {
         }, 500); // 500ms (0.5초) 딜레이 후 실행
     };
 
-    const handlerModal = (id: number, state: string) => {
+    const handlerModal = (list: IShoppingList) => {
         setModal(!modal);
-        setDeliveryId(id);
-        setDeliveryState(state);
+        setListDetail(list);
     };
 
     return (
@@ -72,10 +70,7 @@ export const ShoppingListMain = () => {
                     {shoppingList?.length > 0 ? (
                         shoppingList.map((list) => {
                             return (
-                                <tr
-                                    key={list.deliveryId}
-                                    onClick={() => handlerModal(list.deliveryId, list.deliveryState)}
-                                >
+                                <tr key={list.deliveryId} onClick={() => handlerModal(list)}>
                                     <StyledTd>{list.deliveryId}</StyledTd>
                                     <StyledTd>{list.deliveryManager}</StyledTd>
                                     <StyledTd>{list.startLocation}</StyledTd>
@@ -86,7 +81,7 @@ export const ShoppingListMain = () => {
                         })
                     ) : (
                         <tr>
-                            <StyledTd colSpan={4}>데이터가 없습니다.</StyledTd>
+                            <StyledTd colSpan={5}>데이터가 없습니다.</StyledTd>
                         </tr>
                     )}
                 </tbody>
@@ -99,11 +94,7 @@ export const ShoppingListMain = () => {
             />
             {modal && (
                 <Portal>
-                    <ShoppingListModal
-                        deliveryId={deliveryId}
-                        deliveryState={deliveryState}
-                        changeDeliveryState={changeDeliveryState}
-                    />
+                    <ShoppingListModal changeDeliveryState={changeDeliveryState} listDetail={listDetail} />
                 </Portal>
             )}
         </>
