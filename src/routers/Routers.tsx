@@ -13,17 +13,19 @@ import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
 import { OrdersReturnList } from "../pages/tasks/OrdersReturnList";
 import { ShoppingReturn } from "../pages/tasks/ShoppingReturn";
 import { Products } from "../pages/mall/Products";
+import { OrdersList } from "../pages/tasks/OrdersList";
 import { Inventory } from "../pages/trade/inventory";
 import { Cart } from "../pages/mall/Cart";
 import { ShoppingOrders } from "../pages/trade/shoppingOrders";
-
 import { ShoppingList } from "../pages/delivery/ShoppingList";
 import { ShoppingReturnListDe } from "../pages/delivery/ShoppingReturnList";
-
 import { History } from "../pages/mall/History";
 import { HistroyDetail } from "../pages/mall/HistoryDetail";
 import { Performance } from "../pages/sales/Performance";
-
+import { Products } from "../pages/mall/Products";
+import { TopSales } from "../pages/sales/TopSales";
+import { OrdersReturnListDe } from "../pages/delivery/OrdersReturnList";
+import { ProfitCheck } from "../pages/sales/ProfitCheck";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -94,6 +96,14 @@ const routers: RouteObject[] = [
                         path: "shopping-return",
                         element: <ShoppingReturn />,
                     },
+                    {
+                        path: "orders-list",
+                        element: <OrdersList />,
+                    },
+                    {
+                        path: "orders-return-list",
+                        element: <OrdersReturnList />,
+                    },
                 ],
             },
 
@@ -110,11 +120,11 @@ const routers: RouteObject[] = [
                     },
                     {
                         path: "orders-list",
-                        element: <ShoppingReturnListDe />,
+                        element: <OrdersList />,
                     },
                     {
                         path: "orders-return-list",
-                        element: <ShoppingReturnListDe />,
+                        element: <OrdersReturnListDe />,
                     },
                 ],
             },
@@ -124,8 +134,6 @@ const routers: RouteObject[] = [
         path: "/react",
         element: <DashBoard />,
         children: [
-
-
             {
                 path: "mall",
                 children: [
@@ -138,10 +146,9 @@ const routers: RouteObject[] = [
                         element: <Cart />,
                     },
 
-
                     {
                         path: "history",
-                        element: <History />
+                        element: <History />,
                     },
                     {
                         path: "history/:orderId",
@@ -158,13 +165,16 @@ const routers: RouteObject[] = [
                     },
                     {
                         path: "cart",
-                        element: <Cart />
+                        element: <Cart />,
                     },
                     {
-                        path: "history",
-                        element: <History />
+                        path: "top-sales",
+                        element: <TopSales />,
                     },
-
+                    {
+                        path: "profit-check",
+                        element: <ProfitCheck />,
+                    },
                 ],
             },
         ],

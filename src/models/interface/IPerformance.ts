@@ -1,6 +1,7 @@
 export interface IPerformance {
     supplyId: number;
     supplierName: string;
+    performance: number;
 }
 
 export interface IPerformanceBodyResponse {

@@ -45,7 +45,7 @@ export const History = {
     searchDetail: "/mall/historyDetailBody.do",
     returnSave: "/mall//historyReturnRequestBody.do",
     salesComplete: "/mall/historySalesCompleteBody.do",
-}
+};
 
 export const Approval = {
     searchOrder: "/approval/orderListBody.do",
@@ -74,23 +74,44 @@ export const Inventory = {
     searchDetail: "/trade/inventoryDetailBody.do",
 };
 
-
 export const delivery = {
     searchShoppingList: "/delivery/shoppingDeliveryListJson.do",
     searchShoppingReturnList: "/delivery/deliveryReturnListBody.do",
+    searchOrdersList: "/delivery/orderDirectionGroupListBody.do",
 };
 
-export const Sales = {
+export const Performance = {
     searchList: "/sales/performanceListBody.do",
-    searchDetail: "/sales/performanceDetailBody.do"
-}
+    searchDetail: "/sales/performanceDetailBody.do",
+};
 
+export const TopSales = {
+    selectDate: "/sales/selectDateJson",
+    searchList: "/sales/topSalesListBody.do",
+};
+
+export const ProfitCheck = {
+    searchList: "/sales/profitCheckListBody.do",
+    searchDetail: "/sales/profitCheckDetailBody.do",
+}
 
 export const ShoppingOrders = {
     searchList: "/trade/shoppingListBody.do",
     searchOrderDetail: "/trade/orderingInstructionBody.do",
     searchDeliveryDetail: "/trade/deliveryOrderBody.do",
     saveOrders: "/tasks/orderInstructionSaveBody.do",
-    saveDelivers:"/tasks/deliveryOrderSaveBody.do"
-}
+    saveDelivers: "/tasks/deliveryOrderSaveBody.do",
+};
 
+export const OrdersList = {
+    searchList: "/tasks/orderListBody.do",
+    searchModal: "/tasks/orderDetailJson.do",
+    updateIsPaid: "/tasks/orderPaidUpdateBody.do",
+    statdUpdate: "/tasks/orderStateUpdateBody.do",
+};
+
+export const OrdersReturnList = {
+    searchList: "/tasks/orderReturnListBody.do",
+    searchModal: "/tasks/ordersReturnModalBody.do",
+    returnUpdate: "/tasks/ordersReturnUpdateBody.do",
+};
