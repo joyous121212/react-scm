@@ -15,8 +15,13 @@ import { ShoppingReturn } from "../pages/tasks/ShoppingReturn";
 import { Products } from "../pages/mall/Products";
 import { Inventory } from "../pages/trade/inventory";
 import { Cart } from "../pages/mall/Cart";
+import { ShoppingList } from "../pages/delivery/ShoppingList";
+import { ShoppingReturnListDe } from "../pages/delivery/ShoppingReturnList";
 import { History } from "../pages/mall/History";
 import { HistroyDetail } from "../pages/mall/HistoryDetail";
+import { Performance } from "../pages/sales/Performance";
+import { OrdersList } from "../pages/delivery/OrdersList";
+import { OrdersReturnListDe } from "../pages/delivery/OrdersReturnList";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -85,6 +90,34 @@ const routers: RouteObject[] = [
                     },
                 ],
             },
+
+            {
+                path: "delivery",
+                children: [
+                    {
+                        path: "shopping-list",
+                        element: <ShoppingList />,
+                    },
+                    {
+                        path: "shopping-return-list",
+                        element: <ShoppingReturnListDe />,
+                    },
+                    {
+                        path: "orders-list",
+                        element: <OrdersList />,
+                    },
+                    {
+                        path: "orders-return-list",
+                        element: <OrdersReturnListDe />,
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        path: "/react",
+        element: <DashBoard />,
+        children: [
             {
                 path: "mall",
                 children: [
@@ -94,15 +127,33 @@ const routers: RouteObject[] = [
                     },
                     {
                         path: "cart",
-                        element: <Cart />
+                        element: <Cart />,
                     },
+
                     {
                         path: "history",
-                        element: <History />
+                        element: <History />,
                     },
                     {
                         path: "history/:orderId",
                         element: <HistroyDetail />,
+                    },
+                ],
+            },
+            {
+                path: "sales",
+                children: [
+                    {
+                        path: "performance",
+                        element: <Performance />,
+                    },
+                    {
+                        path: "cart",
+                        element: <Cart />,
+                    },
+                    {
+                        path: "history",
+                        element: <History />,
                     },
                 ],
             },

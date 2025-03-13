@@ -28,7 +28,6 @@ export const HistoryMain = () => {
 
     useEffect(() => {
         searchHistory();
-        console.log('searchHistory()');
     },[searchKeyword]);
 
     const searchHistory = async(currentPage?: number) => {
