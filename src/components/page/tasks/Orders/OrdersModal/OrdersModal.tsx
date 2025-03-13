@@ -37,6 +37,9 @@ export const OrdersModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, postSu
     return (
         <OrdersModalStyled>
             <div className='container'>
+                <dt>
+                    <strong>발주 지시서</strong>
+                </dt>
                 <table>
                     <tbody>
                         <tr>
@@ -50,6 +53,8 @@ export const OrdersModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, postSu
                                     readOnly
                                 />
                             </td>
+                        </tr>
+                        <tr>
                             <th>
                                 제품명<span className='font_red'>*</span>
                             </th>
@@ -87,6 +92,8 @@ export const OrdersModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, postSu
                                     readOnly
                                 />
                             </td>
+                        </tr>
+                        <tr>
                             <th>개수</th>
                             <td>
                                 <StyledInput

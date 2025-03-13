@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const OrdersModalStyled = styled.div`
+export const OrdersReturnListModalStyled = styled.div`
     width: 100%;
     height: 100%;
     position: fixed;
@@ -68,6 +68,7 @@ export const OrdersModalStyled = styled.div`
         display: flex;
         justify-content: space-between;
         margin-top: 10px;
+        width: 100%;
     }
 
     button {
@@ -82,6 +83,7 @@ export const OrdersModalStyled = styled.div`
         border-radius: 6px;
         box-shadow: 0 2px #999;
         transition: 0.3s;
+        white-space: nowrap;
 
         &:hover {
             background-color: #45a049;
@@ -92,6 +94,14 @@ export const OrdersModalStyled = styled.div`
             box-shadow: 0 2px #666;
             transform: translateY(2px);
         }
+    }
+
+    /* 발주서 전송 완료 상태일 때 */
+    .submitted {
+        background-color: #45a049 !important; /* 초록색 */
+        cursor: default !important;
+        pointer-events: none !important;
+        box-shadow: none !important;
     }
 
     .font_red {

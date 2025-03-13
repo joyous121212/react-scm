@@ -10,7 +10,7 @@ import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 export const ShoppingReturnMain = () => {
     const { searchKeyword } = useContext(ShoppingReturnContext);
     const [shoppingReturnList, setShoppingReturnList] = useState<IShoppingReturn[]>([]);
-    const [shoppingReturnListCnt, setShoppingReturnListCnt] = useState<number>(0);
+    const [shoppingReturnListCount, setShoppingReturnListCount] = useState<number>(0);
     const [cPage, setCPage] = useState<number>(0);
 
     const columns = [
@@ -38,6 +38,8 @@ export const ShoppingReturnMain = () => {
 
         if (result) {
             setShoppingReturnList(result.shoppingReturnList);
+            setShoppingReturnListCount(result.shoppingReturnListCnt);
+            setCPage(currentPage);
         }
     };
 
@@ -45,7 +47,7 @@ export const ShoppingReturnMain = () => {
         <ShoppingReturnMainStyled>
             <StyledTable data={shoppingReturnList} columns={columns} />
             <PageNavigate
-                totalItemsCount={shoppingReturnListCnt}
+                totalItemsCount={shoppingReturnListCount}
                 onChange={SearchShoppingReturn}
                 itemsCountPerPage={5}
                 activePage={cPage}

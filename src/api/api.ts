@@ -80,7 +80,7 @@ export const Performance = {
 export const TopSales = {
     selectDate: "/sales/selectDateJson",
     searchList: "/sales/topSalesListBody.do",
-}
+};
 
 export const ProfitCheck = {
     searchList: "/sales/profitCheckListBody.do",
@@ -92,5 +92,18 @@ export const ShoppingOrders = {
     searchOrderDetail: "/trade/orderingInstructionBody.do",
     searchDeliveryDetail: "/trade/deliveryOrderBody.do",
     saveOrders: "/tasks/orderInstructionSaveBody.do",
-    saveDelivers:"/tasks/deliveryOrderSaveBody.do"
-}
+    saveDelivers: "/tasks/deliveryOrderSaveBody.do",
+};
+
+export const OrdersList = {
+    searchList: "/tasks/orderListBody.do",
+    searchModal: "/tasks/orderDetailJson.do",
+    updateIsPaid: "/tasks/orderPaidUpdateBody.do",
+    statdUpdate: "/tasks/orderStateUpdateBody.do",
+};
+
+export const OrdersReturnList = {
+    searchList: "/tasks/orderReturnListBody.do",
+    searchModal: "/tasks/ordersReturnModalBody.do",
+    returnUpdate: "/tasks/ordersReturnUpdateBody.do",
+};

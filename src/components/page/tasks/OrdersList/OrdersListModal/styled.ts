@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const OrdersModalStyled = styled.div`
+export const OrdersListModalStyled = styled.div`
     width: 100%;
     height: 100%;
     position: fixed;
@@ -92,6 +92,14 @@ export const OrdersModalStyled = styled.div`
             box-shadow: 0 2px #666;
             transform: translateY(2px);
         }
+    }
+
+    /* 발주서 전송 완료 상태일 때 */
+    .submitted {
+        background-color: #45a049 !important; /* 초록색 */
+        cursor: default !important;
+        pointer-events: none !important;
+        box-shadow: none !important;
     }
 
     .font_red {

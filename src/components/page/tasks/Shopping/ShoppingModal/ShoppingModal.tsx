@@ -36,41 +36,15 @@ export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDelivery
             });
     };
 
-    const handlerFile = (e: ChangeEvent<HTMLInputElement>) => {
-        const fileInfo = e.target.files;
-        if (fileInfo?.length > 0) {
-            const fileSplit = fileInfo[0].name.split(".");
-            const fileType = fileSplit[1].toLowerCase();
-
-            if (fileType === "jpg" || fileType === "gif" || fileType === "png") {
-                setImageUrl(URL.createObjectURL(fileInfo[0]));
-            }
-            setFileName(fileInfo[0].name);
-        }
-    };
-
     return (
         <ShoppingModalStyled>
             <div className='container'>
+                <dt>
+                    <strong>주문배송 지시서</strong>
+                </dt>
                 <table>
                     <tbody>
                         <tr>
-                            <th rowSpan={3}>
-                                <label htmlFor='file-upload'>
-                                    <img
-                                        className='product-image'
-                                        src={imageUrl || "default_image_url"}
-                                        alt='상품 이미지'
-                                    />
-                                </label>
-                                <input
-                                    id='file-upload'
-                                    type='file'
-                                    accept='image/jpg, image/jpeg, image/png, image/gif'
-                                    style={{ display: "none" }}
-                                    onChange={handlerFile}
-                                />
-                            </th>
                             <th>주문 번호</th>
                             <td>
                                 <StyledInput
@@ -81,6 +55,8 @@ export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDelivery
                                     readOnly
                                 />
                             </td>
+                        </tr>
+                        <tr>
                             <th>
                                 주문 수량<span className='font_red'>*</span>
                             </th>
@@ -105,7 +81,8 @@ export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDelivery
                                     readOnly
                                 />
                             </td>
-
+                        </tr>
+                        <tr>
                             <th>
                                 제품명<span className='font_red'>*</span>
                             </th>
@@ -130,6 +107,8 @@ export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDelivery
                                     readOnly
                                 />
                             </td>
+                        </tr>
+                        <tr>
                             <th>입금여부</th>
                             <td>
                                 <StyledInput
@@ -139,14 +118,6 @@ export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDelivery
                                     defaultValue={shoppingDetail?.paymentStatus}
                                     readOnly
                                 />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th colSpan={5}>제품 상세 정보</th>
-                        </tr>
-                        <tr>
-                            <td colSpan={5}>
-                                <textarea className='text-area' readOnly></textarea>
                             </td>
                         </tr>
                     </tbody>
