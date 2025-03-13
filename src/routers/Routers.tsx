@@ -12,7 +12,6 @@ import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
 import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
 import { OrdersReturnList } from "../pages/tasks/OrdersReturnList";
 import { ShoppingReturn } from "../pages/tasks/ShoppingReturn";
-import { Products } from "../pages/mall/Products";
 import { OrdersList } from "../pages/tasks/OrdersList";
 import { Inventory } from "../pages/trade/inventory";
 import { Cart } from "../pages/mall/Cart";
