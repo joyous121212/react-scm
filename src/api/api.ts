@@ -23,21 +23,21 @@ export const Products = {
     category: "/mall/products/category",
     supplyList: "/mall/products/supplyList",
     historySave: "/mall/historySaveBody.do",
-    cartDetailSave: "/mall/cartDetailSaveBody.do"
+    cartDetailSave: "/mall/cartDetailSaveBody.do",
 };
 
 export const Cart = {
     searchList: "/mall/cartDetailList.do",
     deleteCartDetail: "/mall/cartDetailDeleteBody.do",
-    historysSave: "/mall/historysSaveBody.do"
-}
+    historysSave: "/mall/historysSaveBody.do",
+};
 
 export const History = {
     searchList: "/mall/historyListBody.do",
     searchDetail: "/mall/historyDetailBody.do",
     returnSave: "/mall//historyReturnRequestBody.do",
     salesComplete: "/mall/historySalesCompleteBody.do",
-}
+};
 
 export const Approval = {
     searchOrder: "/approval/orderListBody.do",
@@ -61,17 +61,33 @@ export const ShoppingReturn = {
 };
 
 export const Inventory = {
-    searchSelectBoxList : "/trade/inventorySelectBoxBody.do",
+    searchSelectBoxList: "/trade/inventorySelectBoxBody.do",
     searchList: "/trade/inventoryListBody.do",
-    searchDetail: "/trade/inventoryDetailBody.do"
-}
+    searchDetail: "/trade/inventoryDetailBody.do",
+};
+
+export const delivery = {
+    searchShoppingList: "/delivery/shoppingDeliveryListJson.do",
+    searchShoppingReturnList: "/delivery/deliveryReturnListBody.do",
+    searchOrdersList: "/delivery/orderDirectionGroupListBody.do",
+};
 
 export const Performance = {
     searchList: "/sales/performanceListBody.do",
+    searchDetail: "/sales/performanceDetailBody.do",
+};
     searchDetail: "/sales/performanceDetailBody.do"
 }
 
 export const TopSales = {
     selectDate: "/sales/selectDateJson",
     searchList: "/sales/topSalesListBody.do",
+}
+
+export const ShoppingOrders = {
+    searchList: "/trade/shoppingListBody.do",
+    searchOrderDetail: "/trade/orderingInstructionBody.do",
+    searchDeliveryDetail: "/trade/deliveryOrderBody.do",
+    saveOrders: "/tasks/orderInstructionSaveBody.do",
+    saveDelivers:"/tasks/deliveryOrderSaveBody.do"
 }

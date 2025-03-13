@@ -167,15 +167,6 @@ export const FindModal = () => {
             <div className='container'>
                 {!changePw ? (
                     <>
-                        {/* <div style={{ textAlign: "center", marginBottom: "20px" }}>
-                            <button onClick={() => setFindFlag(true)}>
-                                <span>아이디찾기</span>
-                            </button>
-                            <button onClick={() => setFindFlag(false)}>
-                                <span>비밀번호찾기</span>
-                            </button>
-                        </div> */}
-
                         {findFlag ? (
                             <>
                                 <div style={{ textAlign: "center", marginBottom: "25px" }}>
