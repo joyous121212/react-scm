@@ -4,10 +4,13 @@ import { CommonCodeSearch } from "../../components/page/Management/CommonCode/Co
 import { CommonCodeProvider } from "../../api/Provider/CommonCodeProvider";
 
 export const CommonCode = () => {
+    const x = 1;
+    xFNc();
+    function xFNc() {}
     return (
         <CommonCodeProvider>
             <ContentBox variant='primary' fontSize='large'>
-                공통코드관리 dd
+                공통코드관리
             </ContentBox>
             <CommonCodeSearch />
             <CommonCodeMain />
