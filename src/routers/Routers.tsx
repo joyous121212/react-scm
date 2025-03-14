@@ -26,7 +26,7 @@ import { TopSales } from "../pages/sales/TopSales";
 import { OrdersReturnListDe } from "../pages/delivery/OrdersReturnList";
 import { ProfitCheck } from "../pages/sales/ProfitCheck";
 import { Main } from "../pages/main/main";
-
+import { UserInfo } from "../pages/management/UserInfo";
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
     { path: "/", element: <Login /> },
@@ -55,6 +55,7 @@ const routers: RouteObject[] = [
                     },
                 ],
             },
+
             {
                 path: "approval",
                 children: [
@@ -82,6 +83,10 @@ const routers: RouteObject[] = [
                     {
                         path: "common-code/:groupIdx",
                         element: <DetailCode />,
+                    },
+                    {
+                        path: "user-info",
+                        element: <UserInfo />,
                     },
                 ],
             },
