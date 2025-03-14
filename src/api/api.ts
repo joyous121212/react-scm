@@ -80,3 +80,25 @@ export const ShoppingReturnList = {
     searchModal: "/trade/shoppingReturnListModalBody.do",
     updateMall: "/trade/shoppingReturnUpdateMallBody.do",
 };
+
+export const ShoppingOrders = {
+    searchList: "/trade/shoppingListBody.do",
+    searchOrderDetail: "/trade/orderingInstructionBody.do",
+    searchDeliveryDetail: "/trade/deliveryOrderBody.do",
+    saveOrders: "/tasks/orderInstructionSaveBody.do",
+    saveDelivers: "/tasks/deliveryOrderSaveBody.do",
+};
+
+export const OrdersList = {
+    searchList: "/tasks/orderListBody.do",
+    searchModal: "/tasks/orderDetailJson.do",
+    updateIsPaid: "/tasks/orderPaidUpdateBody.do",
+    statdUpdate: "/tasks/orderStateUpdateBody.do",
+};
+
+export const OrdersReturnList = {
+    searchList: "/tasks/orderReturnListBody.do",
+    searchModal: "/tasks/ordersReturnModalBody.do",
+    returnUpdate: "/tasks/ordersReturnUpdateBody.do",
+    updateReturnIsPaid: "/tasks/ordersReturnPaidUpdateBody.do",
+};

@@ -325,8 +325,10 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
                             <WarehouseList warehouseList={warehouseList} deleteWarehouseList={deleteWarehouseList} />
                         )}{" "}
                     </div>
-                    <div className="button-container">
-                    <StyledButton size="small" onClick={() => setModal(!modal)}>취소</StyledButton>
+                    <div className='button-container'>
+                        <StyledButton size='small' onClick={() => setModal(!modal)}>
+                            취소
+                        </StyledButton>
                     </div>
                 </div>
             )}
