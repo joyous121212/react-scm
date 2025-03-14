@@ -29,6 +29,7 @@ import { Main } from "../pages/main/main";
 import { UserInfo } from "../pages/management/UserInfo";
 import { SupplierInfo } from "../pages/management/SupplierInfo";
 import { SupplierInfoList } from "../pages/management/SupplierInfoList";
+import { ProductInfo } from "../pages/management/ProductInfo";
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
     { path: "/", element: <Login /> },
@@ -97,6 +98,10 @@ const routers: RouteObject[] = [
                     {
                         path: "supplier-info/:supplyId",
                         element: <SupplierInfoList />,
+                    },
+                    {
+                        path: "product-info",
+                        element: <ProductInfo />,
                     },
                 ],
             },
