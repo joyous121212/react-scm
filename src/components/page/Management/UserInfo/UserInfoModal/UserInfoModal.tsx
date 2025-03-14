@@ -30,7 +30,6 @@ import { useRecoilState } from "recoil";
 import { userInfoDetailApi } from "../../../../../api/UserInfoApi/userInfoDetailApi";
 
 export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId }) => {
-    console.log("isdetail: " + isdetail);
     const [modal, setModal] = useRecoilState(modalState);
 
     const [detailModal, setDetailModal] = useRecoilState(detailModalState);
