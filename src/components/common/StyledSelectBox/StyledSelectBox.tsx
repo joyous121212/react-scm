@@ -7,11 +7,13 @@ interface SelectBoxProps {
     onChange: React.Dispatch<React.SetStateAction<string | number>>;
     variant?: "default" | "primary" | "danger";
     fullwidth?: boolean;
+    fixedWidth?: boolean;
 }
 
 export const StyledSelectBox: FC<SelectBoxProps> = ({
     options,
     value,
+    fixedWidth,
     onChange,
     variant = "default",
     fullwidth = false,
@@ -19,6 +21,7 @@ export const StyledSelectBox: FC<SelectBoxProps> = ({
     return (
         <SelectBox
             onChange={(e) => onChange(e.target.value)}
+            fixedWidth={fixedWidth}
             variant={variant}
             fullwidth={fullwidth || undefined}
         >

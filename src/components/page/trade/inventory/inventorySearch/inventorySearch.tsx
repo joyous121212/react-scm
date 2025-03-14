@@ -19,7 +19,7 @@ export const InventorySearch = () => {
     const [supplyOptions, setSupplyOptions] = useState<ISelectOption[]>([]);
     const [warehouseOptions, setWarehouseOptions] = useState<ISelectOption[]>([]);
     const { searchTitle, setSearchTitle } = useContext(InventoryContext);
-    const [ tempSearchTitle, setTempSearchTitle ] = useState<ITempSearchTitle>({
+    const [tempSearchTitle, setTempSearchTitle] = useState<ITempSearchTitle>({
         searchProduct: "",
         searchSupply: "",
         searchWarehouse: "",
@@ -47,7 +47,10 @@ export const InventorySearch = () => {
     // 📦 Select Box 데이터 가져오기
     const getSelectBox = async () => {
         try {
-            const response = await searchApi<IInventorySelectBoxResponse>(Inventory.searchSelectBoxList, tempSearchTitle);
+            const response = await searchApi<IInventorySelectBoxResponse>(
+                Inventory.searchSelectBoxList,
+                tempSearchTitle
+            );
             if (!response || !response.detailValue) return;
 
             const data = response.detailValue;

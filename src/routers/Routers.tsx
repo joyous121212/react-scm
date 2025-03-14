@@ -5,7 +5,7 @@ import { Notice } from "../../src/pages/management/Notice";
 import { DashBoard } from "../components/layout/DashBoard/DashBoard";
 import { NotFound } from "../components/common/NotFound/NotFound";
 import { DetailCode } from "../pages/management/DetailCode";
-
+import { Inventory } from "../pages/trade/inventory";
 import { UserInfo } from "../pages/management/UserInfo";
 import { SupplierInfo } from "../pages/management/SupplierInfo";
 import { SupplierInfoList } from "../pages/management/SupplierInfoList";
@@ -51,13 +51,8 @@ const routers: RouteObject[] = [
             },
 
             {
-                path:"support",
-                children:[
-                    {path:"inquiry",
-                        element:<Inquiry/>
-                    }
-                ]
-
+                path: "support",
+                children: [{ path: "inquiry", element: <Inquiry /> }],
             },
 
             {

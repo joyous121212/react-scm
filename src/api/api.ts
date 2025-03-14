@@ -2,6 +2,17 @@ export const Login = {
     login: "/loginProc.do",
 };
 
+export const Inventory = {
+    searchSelectBoxList: "/trade/inventorySelectBoxBody.do",
+    searchList: "/trade/inventoryListBody.do",
+    searchDetail: "/trade/inventoryDetailBody.do",
+};
+
+export const delivery = {
+    searchShoppingList: "/delivery/shoppingDeliveryListJson.do",
+    searchShoppingReturnList: "/delivery/deliveryReturnListBody.do",
+    searchOrdersList: "/delivery/orderDirectionGroupListBody.do",
+};
 export const CommonCode = {
     searchList: "/management/commonCodeListBody.do",
     searchDetail: "/management/commonCodeDetailJson.do",
@@ -79,6 +90,10 @@ export const ShoppingReturnList = {
     searchList: "/trade/shoppingReturnListBody.do",
     searchModal: "/trade/shoppingReturnListModalBody.do",
     updateMall: "/trade/shoppingReturnUpdateMallBody.do",
+};
+
+export const ShoppingReturn = {
+    searchList: "/tasks/shoppingReturnOrderListBody.do",
 };
 
 export const ShoppingOrders = {
