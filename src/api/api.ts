@@ -66,6 +66,7 @@ export const Orders = {
 
 export const ShoppingReturn = {
     searchList: "/tasks/shoppingReturnOrderListBody.do",
+    shoppingReturnDetail: "/tasks/shoppingReturnOrderListDetailBody.do",
 };
 
 export const Inventory = {
@@ -93,7 +94,7 @@ export const TopSales = {
 export const ProfitCheck = {
     searchList: "/sales/profitCheckListBody.do",
     searchDetail: "/sales/profitCheckDetailBody.do",
-}
+};
 
 export const ShoppingOrders = {
     searchList: "/trade/shoppingListBody.do",
