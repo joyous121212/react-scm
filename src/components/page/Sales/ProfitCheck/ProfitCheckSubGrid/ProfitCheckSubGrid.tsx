@@ -39,10 +39,10 @@ export const ProfitCheckSubGrid = ({supplyId}) => {
                 columns={columns}
                 renderCell={(row, column) => {
                     if (column.key === "performance") {
-                        return row.performance.toLocaleString("ko-KR");
+                        return `${row.performance.toLocaleString("ko-KR")}원`;
                     }
                     if (column.key === "returnPrice") {
-                        return row.returnPrice.toLocaleString("ko-KR");
+                        return `${row.returnPrice.toLocaleString("ko-KR")}원`;
                     }
                     return row[column.key as keyof IProfitCheckDetail];
                 }}

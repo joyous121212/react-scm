@@ -55,7 +55,7 @@ export const PerformanceSubGrid = ({supplyId}) => {
                                 <tr key={item.orderId}>
                                     <td>{item.supplierName}</td>
                                     <td>{item.productName}</td>
-                                    <td>{item.performance.toLocaleString("ko-KR")}</td>
+                                    <td>{`${item.performance.toLocaleString("ko-KR")}원`}</td>
                                     <td>{item.salesDate}</td>
                                 </tr>
                             ))

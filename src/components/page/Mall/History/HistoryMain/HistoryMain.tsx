@@ -61,7 +61,7 @@ export const HistoryMain = () => {
                     }
                     if (column.key === "price") {
                         const totalPrice = row.count * row.price;
-                        return totalPrice.toLocaleString("ko-KR");
+                        return `${totalPrice.toLocaleString("ko-KR")}원`;
                     }
                     if (column.key === "deliveryState") {
                         return row.deliveryState === null ? "배송 준비중" : row.deliveryState;
@@ -71,6 +71,7 @@ export const HistoryMain = () => {
                             salesRequest: "주문 완료",
                             delivery: "배송 중",
                             deliveryComplete: "배송 완료",
+                            ordering: "배송 중",
                             salesComplete: "구매 확인",
                             mallReturnsRequest: "반품 신청",
                             mallReturnsComplete: "반품 완료",

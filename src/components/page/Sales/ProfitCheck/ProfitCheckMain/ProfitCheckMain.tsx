@@ -79,15 +79,13 @@ export const ProfitCheckMain = () => {
                         );
                     }
                     if (column.key === "performance") {
-                        return row.performance.toLocaleString("ko-KR");
+                        return `${row.performance.toLocaleString("ko-KR")}원`;
                     }
                     if (column.key === "returnPrice") {
-                        return row.returnPrice.toLocaleString("ko-KR")
-                            && <span style={{ fontWeight: "bold", color: "#F78181" }}>{row.returnPrice}</span>;
+                        return <span style={{ fontWeight: "bold", color: "#F78181" }}>{row.returnPrice.toLocaleString("ko-KR")}원</span>;
                     }
                     if (column.key === "profit") {
-                        return row.profit.toLocaleString("ko-KR")
-                        && <span style={{ fontWeight: "bold", color: "#4a90e2" }}>{row.profit}</span>;
+                        return <span style={{ fontWeight: "bold", color: "#4a90e2" }}>{row.profit.toLocaleString("ko-KR")}원</span>;
                     }
                     return row[column.key as keyof IProfitCheck];
                 }}

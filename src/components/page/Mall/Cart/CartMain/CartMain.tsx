@@ -155,9 +155,9 @@ export const CartMain= () => {
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "10px"}}>
                 <h3>장바구니 총액</h3>            
                 전체금액: 
-                <StyledInput size="small" value={totalAmount.toLocaleString("ko-KR")} readOnly/>  
+                <StyledInput size="small" value={`${totalAmount.toLocaleString("ko-KR")}원`} readOnly/>  
                 선택금액: 
-                <StyledInput size="small" value={selectedPrice.toLocaleString("ko-KR")} readOnly/>          
+                <StyledInput size="small" value={`${selectedPrice.toLocaleString("ko-KR")}원`} readOnly/>          
                 <StyledButton onClick={order}>주문</StyledButton>
             </div>
 

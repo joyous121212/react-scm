@@ -223,7 +223,7 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
                         </tr>
                         <tr>
                             <th>판매 가격</th>
-                            <td><StyledInput size="modal" type="text" name='price' defaultValue={sellPrice}  readOnly/></td>
+                            <td><StyledInput size="modal" type="text" name='price' defaultValue={`${sellPrice}원`}  readOnly/></td>
                         </tr>
                         <tr>
                             <th colSpan={5}>제품 상세 정보</th>

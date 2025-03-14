@@ -9,7 +9,6 @@ import { History } from "../../../../../api/api";
 import { postApi } from "../../../../../api/MallApi/postApi";
 
 export const HistoryDetailModal = ( {orderId, returnCount, postSuccess} ) => {
-    const [selectValue, setSelectValue] = useState<string>("");
     const [modal, setModal] = useRecoilState(modalState);
     const [bank, setBank] = useState<string>("");
     const [accountNumber, setAccountNumber] = useState<string>("");
@@ -22,18 +21,42 @@ export const HistoryDetailModal = ( {orderId, returnCount, postSuccess} ) => {
     ];
 
     const salesReturn = async() => {
-        const result = await postApi(History.returnSave, {
-            orderId,
-            count: returnCount,
-            bank,
-            accountNumber,
-            accountHolder,
-        });
+        if(!checkInput()) {
+            return;
+        } else {
+            const result = await postApi(History.returnSave, {
+                orderId,
+                count: returnCount,
+                bank,
+                accountNumber,
+                accountHolder,
+            });        
+    
+            if (result.result === "success") {
+                alert("반품 처리되었습니다.");
+                postSuccess();
+            }
+        }       
+        
+    }
 
-        if (result.result === "success") {
-            alert("반품 처리되었습니다.");
-            postSuccess();
+    const checkInput = () => {
+        if (bank=== "" || bank === null) {
+            alert("은행을 선택해주세요.");
+            return false;
         }
+
+        if (accountNumber === "" || accountNumber === null) {
+            alert("계좌번호를 입력해주세요.");
+            return false;
+        }
+
+        if (accountHolder === "" || accountHolder === null) {
+            alert("예금주를 입력해주세요.");
+            return false;
+        }
+
+        return true;
     }
     
     return (
@@ -42,14 +65,14 @@ export const HistoryDetailModal = ( {orderId, returnCount, postSuccess} ) => {
                 <label>
                     은행 선택
                     <StyledSelectBox 
-                        value={selectValue}
+                        value={bank}
                         options={options}
-                        onChange={setSelectValue}
+                        onChange={setBank}
                     />
                     계좌번호
-                    <StyledInput type='text' onChange={(e) => setAccountNumber(e.target.value)}/>
+                    <StyledInput type='text' onChange={(e) => setAccountNumber(e.target.value)} placeholder="계좌번호 입력"/>
                     예금주
-                    <StyledInput type='text' onChange={(e) => setAccountHolder(e.target.value)}/>
+                    <StyledInput type='text' onChange={(e) => setAccountHolder(e.target.value)} placeholder="예금주 입력"/>
                 </label>
                 <div className={"button-container"}>
                     <StyledButton onClick={salesReturn}>반품</StyledButton>

@@ -64,7 +64,7 @@ export const PerformanceMain = () => {
                         return <span style={{ fontWeight: "bold" }}>{row.supplierName}</span>;
                     }
                     if (column.key === "performance") {
-                        return row.performance.toLocaleString("ko-KR");
+                        return `${row.performance.toLocaleString("ko-KR")}원`;
                     }
                     return row[column.key as keyof IPerformance];
                 }}

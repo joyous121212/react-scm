@@ -28,7 +28,6 @@ export const HistoryDetailMain = () => {
 
     useEffect(() => {
         searchHistoryDetail();
-        console.log(state.salesState);
     }, []);
 
     const columns = [
@@ -65,9 +64,6 @@ export const HistoryDetailMain = () => {
                     // 데이터가 없는 경우
                     setHistoryDetail([]);
                 }
-                
-                console.log("API Response Type:", typeof result.historyDetail);
-                console.log("API Response:", result.historyDetail);
             }
         } catch (error) {
             console.error("Error fetching history details:", error);
@@ -126,12 +122,10 @@ export const HistoryDetailMain = () => {
     };
 
     const handlerButton = () => {
-        console.log('handlerButton called'); // 함수 호출 확인 로그
         if (state.salesState === "salesRequest" || state.salesState === "salesComplete" ||
                 state.salesState === "mallReturnsRequest" || state.salesState === "mallReturnsComplete") {
             return false;
         } 
-        console.log(handlerButton);
         return true;
         
     }
@@ -188,11 +182,11 @@ export const HistoryDetailMain = () => {
                     
                     if (column.key === "totalPrice") {
                         const totalPrice = row.count * row.price;
-                        return totalPrice.toLocaleString("ko-KR");
+                        return `${totalPrice.toLocaleString("ko-KR")}원`;
                     }
 
                     if (column.key === "price") {
-                        return row.price.toLocaleString("ko-KR");
+                        return `${row.price.toLocaleString("ko-KR")}원`;
                     }
                     return row[column.key as keyof IHistoryDetailList];
                 }}
