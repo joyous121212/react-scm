@@ -17,9 +17,9 @@ interface IProductSearchKeyword {
 }
 const userInfo = sessionStorage.getItem("userInfo");
 
-const { userType } = JSON.parse(userInfo);
-// const parsedUserInfo = userInfo ? JSON.parse(userInfo) : {};
-// const { userType } = parsedUserInfo; // userType이 없으면 undefined가 될 것임
+// const { userType } = JSON.parse(userInfo);
+const parsedUserInfo = userInfo ? JSON.parse(userInfo) : {};
+const { userType } = parsedUserInfo; // userType이 없으면 undefined가 될 것임
 
 // context 생성
 export const InquiryContext = createContext<IProductSearchKeyword>({
