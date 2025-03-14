@@ -30,6 +30,8 @@ import { TopSales } from "../pages/sales/TopSales";
 import { OrdersReturnListDe } from "../pages/delivery/OrdersReturnList";
 import { ProfitCheck } from "../pages/sales/ProfitCheck";
 import { ProductInfo } from "../pages/management/ProductInfo";
+import { Inquiry } from "../pages/management/Inquiry";
+import { WarehouseInfo } from "../pages/management/WarehouseInfo";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -73,6 +75,10 @@ const routers: RouteObject[] = [
                 ],
             },
             {
+                path: "support",
+                children: [{ path: "inquiry", element: <Inquiry /> }],
+            },
+            {
                 path: "management",
                 children: [
                     {
@@ -102,6 +108,14 @@ const routers: RouteObject[] = [
                     {
                         path: "product-info",
                         element: <ProductInfo />,
+                    },
+                    {
+                        path: "warehouse-info",
+                        element: <WarehouseInfo />,
+                    },
+                    {
+                        path: "inquiry",
+                        element: <Inquiry />,
                     },
                 ],
             },
