@@ -61,6 +61,7 @@ export const WarehouseInfo = {
 
 export const InquiryInfo = {
     inquiryListBody: "/management/inquiryListBody.do",
+    inquiryAnsSaveBody: "/management/inquiryAnsSaveBody.do",
     insertInquiry: "/support/inquiryFileSaveBody.do",
     inquiryDetailBody: "/support/inquiryDetailBody.do",
     inquiryFileUpdateBody: "/support/inquiryFileUpdateBody.do",

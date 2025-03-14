@@ -13,6 +13,7 @@ import { modalState, detailModalState } from "../../../../../stores/modalState";
 import { Portal } from "../../../../common/potal/Portal";
 import { InquiryCUserTypeModal } from "../InquiryCUserTypeModal/InquiryCUserTypeModal";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
+import { InquirySUserTypeModal } from "../InquirySUserTypeModal/InquirySUserTypeModal";
 export const InquiryMain = () => {
     const { search } = useLocation();
     const userInfo = sessionStorage.getItem("userInfo");
@@ -36,6 +37,7 @@ export const InquiryMain = () => {
     const [inquiryId, setInquiryId] = useState<number | undefined>();
     async function searchFnc(currentPage?: number) {
         const userType = JSON.parse(sessionStorage.getItem("userInfo")).userType;
+
         currentPage = currentPage || 1;
         const searchParam = new URLSearchParams(search);
         searchParam.append("currentPage", currentPage.toString());
@@ -96,6 +98,11 @@ export const InquiryMain = () => {
             {detailModal && userType === "C" && (
                 <Portal>
                     <InquiryCUserTypeModal inquiryId={inquiryId} />
+                </Portal>
+            )}
+             {detailModal && userType === "S" && (
+                <Portal>
+                    <InquirySUserTypeModal inquiryId={inquiryId} />
                 </Portal>
             )}
         </>
