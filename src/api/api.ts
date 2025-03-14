@@ -51,6 +51,14 @@ export const ProductInfo = {
     deleteProductInfo: "/management/productDeleteBody.do",
 };
 
+export const WarehouseInfo = {
+    warehouseInfoList: "/management/warehouseInfoListBody.do",
+    warehouseInfoDetail: "/management/warehouseInfoDetailBody.do",
+    warehouseInfoUpdate: "/management/warehouseInfoUpdateBody.do",
+    warehouseInfoSave: "/management/warehouseInfoSaveBody.do",
+    warehouseInfoDelete: "/management/warehouseInfoDeleteBody.do",
+};
+
 export const Shopping = {
     searchList: "/tasks/deliveryOrderListBody.do",
 };
