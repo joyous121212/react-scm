@@ -3,8 +3,8 @@ import { StyledButton } from "../../../../common/StyledButton/StyledButton"
 import { StyledSelectBox } from "../../../../common/StyledSelectBox/StyledSelectBox"
 import { TopSalesSearchStyled } from "./styled"
 import { TopSales } from "../../../../../api/api"
-import { getApi } from "../../../../../api/SalesApi/getApi"
 import { TopSalesContext } from "../../../../../api/Provider/TopSalesProvider"
+import { searchApi } from "../../../../../api/SalesApi/searchApi"
 
 export const TopSalesSearch = () => {    
     const [minYearValue, setMinYearValue] = useState<number>();
@@ -21,11 +21,10 @@ export const TopSalesSearch = () => {
             searchYear: String(currentYear),
             searchMonth: String(currentMonth),
         });
-    }, []);
-    
+    }, []);    
 
     const selectDate = async () => {
-        const result = await getApi<{minYear: number}>(TopSales.selectDate, {});
+        const result = await searchApi<{minYear: number}>(TopSales.selectDate, {});
         console.log("result.minYear", result.minYear);
         if(result) {
             setMinYearValue(result.minYear);
