@@ -3,7 +3,7 @@ import { StyledInputStyled } from "./styled";
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
     variant?: "default" | "outline" | "filled";
-    size?: "small" | "medium" | "large" | "modal" | "search" | "tiny" | "password"; // ✅ 우리가 원하는 `size` 타입
+    size?: "small" | "medium" | "large" | "modal" | "search" | "tiny" | "password" | "notice"; // ✅ 우리가 원하는 `size` 타입
     fullWidth?: boolean;
     error?: boolean;
     as?: string;

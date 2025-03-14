@@ -19,8 +19,6 @@ export const ProductsMain = () => {
     const { searchKeyword } = useContext(ProductsContext);
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [productId, setProductId] = useState<number>(0);
-    const { setUserType } = useContext(ProductsContext);
-
 
     const columns = [
         { key: "productId", title: "제품 ID"},
@@ -49,8 +47,6 @@ export const ProductsMain = () => {
             setProductsList(result.products);
             setProductsCount(result.productsCnt);
             setCPage(currentPage);
-            setUserType(result.userType);
-
        }
     }
 
@@ -69,6 +65,12 @@ export const ProductsMain = () => {
             <StyledTable 
                 data={productsList}
                 columns={columns}
+                renderCell={(row, column) => {
+                    if (column.key === "sellPrice") {
+                        return `${row.sellPrice.toLocaleString("ko-KR")}원`;
+                    }
+                    return row[column.key as keyof IProducts];
+                }}
                 onCellClick={(row, column) => {
                     if(column === "productNumber") {
                         handlerModal(row.productId);

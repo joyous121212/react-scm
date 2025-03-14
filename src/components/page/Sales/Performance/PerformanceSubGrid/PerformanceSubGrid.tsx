@@ -1,20 +1,16 @@
 import { useRecoilState } from "recoil";
 import { PerformanceModalStyled } from "./styled"
-import { modalState } from "../../../../../stores/modalState";
+import { modalState, performanceState } from "../../../../../stores/modalState";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { searchApi } from "../../../../../api/SalesApi/searchApi";
 import { IPerformanceDetailResponse } from "../../../../../models/interface/IPerformance";
-import { Sales } from "../../../../../api/api";
+import { Performance } from "../../../../../api/api";
 import { IPerformanceDetail } from '../../../../../models/interface/IPerformance';
 import { useEffect, useState } from "react";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 
-interface IPerformanceModalProps {
-
-}
-
-export const PerformanceModal = ({supplyId}) => {
-    const [modal, setModal] = useRecoilState(modalState);
+export const PerformanceSubGrid = ({supplyId}) => {
+    const [modal, setModal] = useRecoilState(performanceState);
     const [detail, setDetail] = useState<IPerformanceDetail[]>([]);
 
     const columns = [
@@ -26,12 +22,12 @@ export const PerformanceModal = ({supplyId}) => {
 
     useEffect(() => {
         performanceDetail();
-    }, []);
+    }, [supplyId]);
 
     const performanceDetail =  async() => {
         try {
             const result = await searchApi<IPerformanceDetailResponse>(
-                Sales.searchDetail,
+                Performance.searchDetail,
                 {supplyId}
             )
 
@@ -59,7 +55,7 @@ export const PerformanceModal = ({supplyId}) => {
                                 <tr key={item.orderId}>
                                     <td>{item.supplierName}</td>
                                     <td>{item.productName}</td>
-                                    <td>{item.performance.toLocaleString("ko-KR")}</td>
+                                    <td>{`${item.performance.toLocaleString("ko-KR")}원`}</td>
                                     <td>{item.salesDate}</td>
                                 </tr>
                             ))

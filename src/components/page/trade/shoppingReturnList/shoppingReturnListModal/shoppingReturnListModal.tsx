@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { useRecoilState } from "recoil";
-import { modalState } from "../../../../../stores/modalState";
+import { modalState, shoppingReturnListModalState } from "../../../../../stores/modalState";
 import { ShoppingReturnListModalStyled } from "./styled";
 import { searchApi } from "../../../../../api/tradeApi/searchApi";
 import {
@@ -32,7 +32,7 @@ interface IShoppingReturnListModalProps {
 }
 
 export const ShoppingReturnModal: FC<IShoppingReturnListModalProps> = ({ postSuccess, shoppingReturnId }) => {
-    const [modal, setModal] = useRecoilState(modalState);
+    const [shoppingReturnListModal, setShoppingReturnListModal] = useRecoilState(shoppingReturnListModalState);
     const [warehouseOptions, setWarehouseOptions] = useState<ISelectOption[]>([]);
     const [shoppingReturn, setShoppingReturn] = useState<IShoppingReturn>(initShoppingReturn);
     const [selectValue, setSelectValue] = useState<number>(0);
@@ -100,7 +100,7 @@ export const ShoppingReturnModal: FC<IShoppingReturnListModalProps> = ({ postSuc
                         <tr>
                             <th>반품제품명</th>
                             <td>
-                                <StyledInput size='modal' type='text' value={shoppingReturn.productName} readOnly />
+                                <StyledInput size='modal' type='text' value={shoppingReturn?.productName} readOnly />
                             </td>
                         </tr>
                         <tr>
@@ -109,7 +109,7 @@ export const ShoppingReturnModal: FC<IShoppingReturnListModalProps> = ({ postSuc
                                 <StyledInput
                                     size='modal'
                                     type='text'
-                                    value={shoppingReturn.returnsRequestDate}
+                                    value={shoppingReturn?.returnsRequestDate}
                                     readOnly
                                 />
                             </td>
@@ -117,7 +117,7 @@ export const ShoppingReturnModal: FC<IShoppingReturnListModalProps> = ({ postSuc
                         <tr>
                             <th>반품 수량</th>
                             <td>
-                                <StyledInput size='modal' type='text' value={shoppingReturn.count} readOnly />
+                                <StyledInput size='modal' type='text' value={shoppingReturn?.count} readOnly />
                             </td>
                         </tr>
                         <tr>
@@ -125,7 +125,7 @@ export const ShoppingReturnModal: FC<IShoppingReturnListModalProps> = ({ postSuc
                             <td>
                                 <StyledInput
                                     size='modal'
-                                    value={`${shoppingReturn.totalPrice.toLocaleString("ko-KR")}원`}
+                                    value={`${shoppingReturn?.totalPrice.toLocaleString("ko-KR")}원`}
                                     readOnly
                                 />
                             </td>
@@ -145,7 +145,7 @@ export const ShoppingReturnModal: FC<IShoppingReturnListModalProps> = ({ postSuc
 
                 <div className='button-container'>
                     <button onClick={updateCommonCode}>승인요청</button>
-                    <button onClick={() => setModal(!modal)}>취소</button>
+                    <button onClick={() => setShoppingReturnListModal(!shoppingReturnListModal)}>취소</button>
                 </div>
             </div>
         </ShoppingReturnListModalStyled>

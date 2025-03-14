@@ -10,8 +10,34 @@ export const CommonCode = {
     delete: "/management/commonCodeDeleteBody.do",
 } as const;
 
+export const DetailCode = {
+    searchList: "/management/commonDetailCodeListJson.do",
+    searchDetail: "/management/commonDetailCodeDetailBody.do",
+    save: "/management/commonDetailCodeSaveBody.do",
+    update: "/management/commonDetailCodeUpdateBody.do",
+    delete: "/management/commonDetailCodeDeleteBody.do",
+} as const;
+
 export const Notice = {
     search: "/management/noticeListBody.do",
+};
+export const UserInfo = {
+    search: "/management/userInfoListBody.do",
+    detailsearch: "/management/detailCodeListBody.do",
+    checkDuplicUserId: "/management/check_loginIDBody.do",
+    insertUserInfo: "/registerScmBody.do",
+    updateUserInfo: "/management/UpdateScmBody.do",
+    userInfoDetail: "/management/userInfoDetailBody.do",
+};
+export const SupplierInfo = {
+    searchSupplierList: "/management/supplierListBody.do",
+    searchSupplyDetail: "/management/supplyDetailBody.do",
+    searchSupplierDetailList: "/management/supplierDetailBody.do",
+    updateSupplyDetail: "/management/supplyUpdateBody.do",
+    deleteSupplyDetail: "/management/supplyDeleteBody.do",
+    recoverSupplyDetail: "/management/supplyRecoveryBody.do",
+    saveSupplyDetail: "/management/SupplySaveBody.do",
+    idDuplicCheck: "/management/checkLoginIDBody.do",
 };
 
 export const Shopping = {
@@ -58,6 +84,7 @@ export const Orders = {
 
 export const ShoppingReturn = {
     searchList: "/tasks/shoppingReturnOrderListBody.do",
+    shoppingReturnDetail: "/tasks/shoppingReturnOrderListDetailBody.do",
 };
 
 export const Inventory = {
@@ -73,9 +100,19 @@ export const delivery = {
     searchOrdersReturnList: "/delivery/orderReturnGroupListBody.do",
 };
 
-export const Sales = {
+export const Performance = {
     searchList: "/sales/performanceListBody.do",
     searchDetail: "/sales/performanceDetailBody.do",
+};
+
+export const TopSales = {
+    selectDate: "/sales/selectDateJson",
+    searchList: "/sales/topSalesListBody.do",
+};
+
+export const ProfitCheck = {
+    searchList: "/sales/profitCheckListBody.do",
+    searchDetail: "/sales/profitCheckDetailBody.do",
 };
 
 export const ShoppingOrders = {
@@ -84,4 +121,18 @@ export const ShoppingOrders = {
     searchDeliveryDetail: "/trade/deliveryOrderBody.do",
     saveOrders: "/tasks/orderInstructionSaveBody.do",
     saveDelivers: "/tasks/deliveryOrderSaveBody.do",
+};
+
+export const OrdersList = {
+    searchList: "/tasks/orderListBody.do",
+    searchModal: "/tasks/orderDetailJson.do",
+    updateIsPaid: "/tasks/orderPaidUpdateBody.do",
+    statdUpdate: "/tasks/orderStateUpdateBody.do",
+};
+
+export const OrdersReturnList = {
+    searchList: "/tasks/orderReturnListBody.do",
+    searchModal: "/tasks/ordersReturnModalBody.do",
+    returnUpdate: "/tasks/ordersReturnUpdateBody.do",
+    updateReturnIsPaid: "/tasks/ordersReturnPaidUpdateBody.do",
 };

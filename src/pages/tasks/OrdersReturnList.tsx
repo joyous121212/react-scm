@@ -7,7 +7,7 @@ export const OrdersReturnList = () => {
     return (
         <OrdersReturnListProvider>
             <ContentBox variant='primary' fontSize='large'>
-                발주 지시서
+                발주 반품 지시서 목록
             </ContentBox>
 
             <OrdersReturnListSearch />

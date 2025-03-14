@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
+import { ILoginInfo } from "../../../../../models/interface/store/userInfo";
+import { loginInfoState } from "../../../../../stores/userInfo";
 
 export const NoticeSearch = () => {
     const title = useRef<HTMLInputElement>();
@@ -13,6 +15,7 @@ export const NoticeSearch = () => {
     const [endDate, setEndDate] = useState<string>();
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const navigate = useNavigate();
+    const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
 
     useEffect(() => {
         window.location.search && navigate(window.location.pathname, { replace: true });
@@ -31,13 +34,13 @@ export const NoticeSearch = () => {
 
     return (
         <NoticeSearchStyled>
-            <StyledInput size="small" ref={title}></StyledInput>
-            <StyledInput size="small" type='date' onChange={(e) => setStartDate(e.target.value)}></StyledInput>
-            <StyledInput size="small" type='date' onChange={(e) => setEndDate(e.target.value)}></StyledInput>
+            <StyledInput size='small' ref={title}></StyledInput>
+            <StyledInput size='small' type='date' onChange={(e) => setStartDate(e.target.value)}></StyledInput>
+            <StyledInput size='small' type='date' onChange={(e) => setEndDate(e.target.value)}></StyledInput>
             <StyledButton variant='secondary' onClick={handlerSearch}>
                 검색
             </StyledButton>
-            <StyledButton onClick={() => setModal(!modal)}>등록</StyledButton>
+            {userInfo.userType === "S" ? <StyledButton onClick={() => setModal(!modal)}>등록</StyledButton> : null}
         </NoticeSearchStyled>
     );
 };

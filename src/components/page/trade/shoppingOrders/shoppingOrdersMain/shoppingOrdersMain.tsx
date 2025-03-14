@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { modalState } from "../../../../../stores/modalState";
+import { modalState, shoppingOrdersModalState } from "../../../../../stores/modalState";
 import { searchApi } from "../../../../../api/CommonCodeApi/searchApi";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { ShoppingOrders } from "../../../../../api/api";
@@ -20,7 +20,7 @@ export const ShoppingOrdersMain = () => {
     const [cPage, setCPage] = useState<number>(0);
     const [shoppingOrders, setShoppingOrders] = useState<IShoppingOrder[]>([]);
     const [shoppingOrdersCnt, setShoppingOrdersCnt] = useState<number>(0);
-    const [modal, setModal] = useRecoilState(modalState);
+    const [shoppingOrdersModal, setShoppingOrdersModal] = useRecoilState(shoppingOrdersModalState);
     const [modalStatus, setModalStatus] = useState<string>("");
     const [minimumOrderCount, setMinimumOrderCount] = useState<number>(0);
     const [shoppingOrdersId, setShoppingOrdersId] = useState<number>(0);
@@ -68,93 +68,92 @@ export const ShoppingOrdersMain = () => {
     };
 
     const handlerOrderModal = (id: number, count: number) => {
-        setModal(!modal);
+        setShoppingOrdersModal(!shoppingOrdersModal);
         setMinimumOrderCount(count);
         setModalStatus("order");
         setShoppingOrdersId(id);
     };
 
     const handlerDeliveryModal = (id: number) => {
-        setModal(!modal);
+        setShoppingOrdersModal(!shoppingOrdersModal);
         setModalStatus("delivery");
         setShoppingOrdersId(id);
     };
 
     const postSuccess = () => {
-        setModal(!modal);
+        setShoppingOrdersModal(!shoppingOrdersModal);
         searchShoppingOrders();
     };
 
     return (
         <ShoppingOrdersMainStyled>
-            <div className='table-wrapper'>
-                {isLoading ? (
-                    <Spinner />
-                ) : (
-                    <StyledTable
-                        data={shoppingOrders}
-                        columns={columns}
-                        renderCell={(row, column) => {
-                            if (column.key === "requestsReturnDate") {
-                                return row.requestsReturnDate ? "Y" : "N";
-                            }
-                            if (column.key === "orderActions") {
-                                switch (row.salesState) {
-                                    case "ordering":
-                                        return row.totalQuantity < row.count ? (
-                                            <span style={{ color: "green", fontWeight: "bold" }}>발주 처리</span>
-                                        ) : null;
+            {isLoading ? (
+                <Spinner />
+            ) : (
+                <StyledTable
+                    data={shoppingOrders}
+                    columns={columns}
+                    renderCell={(row, column) => {
+                        if (column.key === "requestsReturnDate") {
+                            return row.requestsReturnDate ? "Y" : "N";
+                        }
+                        if (column.key === "orderActions") {
+                            switch (row.salesState) {
+                                case "ordering":
+                                    return row.totalQuantity < row.count ? (
+                                        <span style={{ color: "green", fontWeight: "bold" }}>발주 처리</span>
+                                    ) : null;
 
-                                    case "salesRequest":
-                                        return row.totalQuantity < row.count ? (
+                                case "salesRequest":
+                                    return row.totalQuantity < row.count ? (
+                                        <StyledButton
+                                            size='small'
+                                            variant='secondary'
+                                            onClick={() =>
+                                                handlerOrderModal(row.orderId, row.count - row.totalQuantity)
+                                            }
+                                        >
+                                            발주
+                                        </StyledButton>
+                                    ) : null;
+
+                                default:
+                                    return null; // ✅ 모든 경우에서 null 반환하여 ESLint 오류 방지
+                            }
+                        }
+
+                        if (column.key === "deliveryActions") {
+                            switch (row.salesState) {
+                                case "ordering":
+                                case "salesRequest":
+                                    if (row.totalQuantity > row.count) {
+                                        return (
                                             <StyledButton
                                                 size='small'
-                                                variant='secondary'
-                                                onClick={() =>
-                                                    handlerOrderModal(row.orderId, row.count - row.totalQuantity)
-                                                }
+                                                onClick={() => handlerDeliveryModal(row.orderId)}
                                             >
-                                                발주
+                                                배송
                                             </StyledButton>
-                                        ) : null;
+                                        );
+                                    }
+                                    break;
 
-                                    default:
-                                        return null; // ✅ 모든 경우에서 null 반환하여 ESLint 오류 방지
-                                }
+                                case "delivery":
+                                    return <span style={{ color: "green", fontWeight: "bold" }}>배송중</span>;
+
+                                case "deliveryComplete":
+                                    return <span style={{ color: "green", fontWeight: "bold" }}>배송완료</span>;
+
+                                default:
+                                    return null; // ✅ 모든 경우에서 null 반환하여 ESLint 오류 방지
                             }
+                        }
 
-                            if (column.key === "deliveryActions") {
-                                switch (row.salesState) {
-                                    case "ordering":
-                                    case "salesRequest":
-                                        if (row.totalQuantity > row.count) {
-                                            return (
-                                                <StyledButton
-                                                    size='small'
-                                                    onClick={() => handlerDeliveryModal(row.orderId)}
-                                                >
-                                                    배송
-                                                </StyledButton>
-                                            );
-                                        }
-                                        break;
+                        return row[column.key as keyof IShoppingOrder];
+                    }}
+                />
+            )}
 
-                                    case "delivery":
-                                        return <span style={{ color: "green", fontWeight: "bold" }}>배송중</span>;
-
-                                    case "deliveryComplete":
-                                        return <span style={{ color: "green", fontWeight: "bold" }}>배송완료</span>;
-
-                                    default:
-                                        return null; // ✅ 모든 경우에서 null 반환하여 ESLint 오류 방지
-                                }
-                            }
-
-                            return row[column.key as keyof IShoppingOrder];
-                        }}
-                    />
-                )}
-            </div>
             <PageNavigate
                 totalItemsCount={shoppingOrdersCnt}
                 onChange={searchShoppingOrders}
@@ -162,7 +161,7 @@ export const ShoppingOrdersMain = () => {
                 activePage={cPage}
             />
             {
-                modal &&
+                shoppingOrdersModal &&
                     (modalStatus === "order" ? (
                         <Portal>
                             <ShoppingOrdersOrderModal
@@ -173,10 +172,7 @@ export const ShoppingOrdersMain = () => {
                         </Portal>
                     ) : modalStatus === "delivery" ? (
                         <Portal>
-                            <ShoppingOrdersDeliveryModal
-                                shoppingOrderId={shoppingOrdersId}
-                                postSuccess={postSuccess}
-                            />
+                            <ShoppingOrdersDeliveryModal shoppingOrderId={shoppingOrdersId} postSuccess={postSuccess} />
                         </Portal>
                     ) : null) // ✅ "order" 또는 "delivery"가 아니면 아무것도 렌더링하지 않음
             }

@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
 export const CartMainStyled = styled.div`
+    h3 {
+        margin-bottom: 5px;
+    }
+
     table {
         width: 100%;
         border-collapse: collapse;
@@ -32,4 +36,41 @@ export const CartMainStyled = styled.div`
         cursor: pointer;
         text-decoration: underline;
     }
+
+    img {
+        width:60px; 
+        height:60px;
+    }
+
+    .divTotAmt{
+        width: 200px;
+        text-align: right;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        float: right;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+	}
+
+    .divTotAmt .totTitle{
+		font-size: 16px;
+		font-weight: bold;
+	}
+
+    .divOrder{
+		padding-top: 20px;
+		float: right;
+	}
+
 `;
+
+const HorizonLine = styled.div`
+  width: 100%;
+  display: block;
+  border-bottom: 1px solid #aaa;
+  margin: 0 0 20px;
+`;
+
+export default HorizonLine;

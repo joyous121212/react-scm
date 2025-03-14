@@ -1,28 +1,23 @@
 import styled from "styled-components";
 
-export const DetailModalStyled = styled.div`
+export const DetailCodeModalStyled = styled.div`
     width: 100%;
     height: 100%;
     position: fixed;
     display: flex;
-    flex-flow: row wrep;
     justify-content: center;
     align-items: center;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 1;
+    z-index: 10;
+    font-weight: bold;
 
-    label {
-        font-weight: bold;
+    .radio-group {
         display: flex;
-        flex-direction: column;
-    }
 
-    input[type="text"] {
-        padding: 8px;
-        margin-top: 5px;
-        margin-bottom: 5px;
-        border-radius: 4px;
-        border: 1px solid #ccc;
+        label {
+            font-weight: initial;
+            display: block;
+        }
     }
 
     .container {
@@ -30,27 +25,70 @@ export const DetailModalStyled = styled.div`
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
-        position: relative;
-        width: 400px;
+        width: auto;
+    }
+
+    dt {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        background-color: #3498db;
+        color: white;
+        padding: 10px; /* 텍스트와 배경 사이 간격 추가 */
+        border-radius: 6px; /* 둥근 모서리 효과 */
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background: #f4f4f4;
+        text-align: center;
+    }
+
+    .product-image {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+        border: 1px solid #ddd;
+        background: white;
+    }
+
+    .text-area {
+        width: 100%;
+        height: 60px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: none;
     }
 
     .button-container {
-        text-align: right;
+        display: flex;
+        justify-content: space-between;
         margin-top: 10px;
     }
+
     button {
+        flex: 1;
         background-color: #3bb2ea;
         border: none;
         color: white;
-        padding: 10px 22px;
-        text-align: right;
-        text-decoration: none;
-        display: inline-block;
+        padding: 10px;
+        margin: 0 5px;
         font-size: 16px;
-        margin: 4px 2px;
         cursor: pointer;
-        border-radius: 12px;
-        box-shadow: 0 4px #999;
+        border-radius: 6px;
+        box-shadow: 0 2px #999;
         transition: 0.3s;
 
         &:hover {
@@ -64,12 +102,7 @@ export const DetailModalStyled = styled.div`
         }
     }
 
-    .radio-group {
-        display: flex;
-
-        label {
-            font-weight: initial;
-            display: block;
-        }
+     .font_red {
+        color:#fe1414;
     }
 `;
