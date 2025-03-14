@@ -34,6 +34,10 @@ const routers: RouteObject[] = [
         element: <DashBoard />,
         children: [
             {
+                index: true, // 기본 페이지 설정
+                element: <Inventory />, // 원하는 메인 페이지 컴포넌트
+            },
+            {
                 path: "trade",
                 children: [
                     {
