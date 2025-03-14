@@ -12,9 +12,9 @@ import { IProducts, IProductsBodyResponse, IProductsDetail } from '../../../../.
 import { Column, StyledTable } from '../../../../common/StyledTable/StyledTable';
 import { ChangeEvent } from 'react';
 import { postApi } from '../../../../../api/MallApi/postApi';
-import { ProductsContext } from '../../../../../api/Provider/ProductsProvider';
 import Swal from 'sweetalert2';
 import noData from "../../../../../assets/noData.png";
+import { loginInfoState } from '../../../../../stores/userInfo';
 
 
 interface IProductsModalProps {
@@ -46,7 +46,7 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
     const [sellPrice, setSellPrice] = useState<string>("");
     const [count, setCount] = useState<number>();
     const [requestedDeliveryDate, setRequestedDeliveryDate] = useState<string>("");
-    const { userType } = useContext(ProductsContext);
+    const [userInfo] = useRecoilState(loginInfoState);
     
     useEffect(() => {
 
@@ -237,7 +237,7 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
                 </table>
 
                 <div className="button-container">
-                    {userType !== null && userType !== "S" && (
+                    {userInfo.userType !== null && userInfo.userType !== "S" && (
                         <>
                             <button onClick={addCart}>장바구니 담기</button>
                             <button onClick={saveOrder}>주문</button>

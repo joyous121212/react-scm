@@ -1,9 +1,10 @@
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { ITopSales } from "../../../../../models/interface/ITopSales";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
 // Chart.js에서 필요한 요소 등록
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
 interface TopSalesChartProps {
     topSales: ITopSales[];
@@ -40,9 +41,24 @@ export const TopSalesChart = ({ topSales }: TopSalesChartProps) => {
                         size: 14, // ✅ 글씨 크기 설정
                     },
                 },
-            },
-            title: {display: true, text: "Top Sales Distribution (2025년 3월)"}
-            
+            },           
+            datalabels: {
+                color: "#fff",
+                formatter: function (value: any, context: any) {
+                    const label = context.chart.data.labels[context.dataIndex];
+                    const dataset = context.chart.data.datasets[0].data; // 전체 데이터셋
+                    const total = dataset.reduce((acc: number, curr: number) => acc + curr, 0); // 전체 합계
+                    const percentage = ((value / total) * 100).toFixed(1); // 퍼센트 계산 및 소수점 1자리까지 표시
+                    return `${label}: ${percentage}%`; // 라벨과 값을 함께 표시
+                },
+                anchor: "center" as const, // 중앙에 텍스트 배치
+                align: "center" as const, // 중앙 정렬
+                font: {
+                    size: 15, // 라벨 크기 설정
+                    weight: 700, // 라벨 글씨 두께
+                },
+                padding: 5, // 라벨과 차트 사이의 여백
+            }
         }
     };
 
