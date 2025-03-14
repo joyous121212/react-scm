@@ -10,7 +10,7 @@ import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 export const ShoppingReturnMain = () => {
     const { searchKeyword } = useContext(ShoppingReturnContext);
     const [shoppingReturnList, setShoppingReturnList] = useState<IShoppingReturn[]>([]);
-    const [shoppingReturnListCnt, setShoppingReturnListCnt] = useState<number>(0);
+    const [shoppingReturnListCount, setShoppingReturnListCount] = useState<number>(0);
     const [cPage, setCPage] = useState<number>(0);
 
     const columns = [
@@ -38,14 +38,44 @@ export const ShoppingReturnMain = () => {
 
         if (result) {
             setShoppingReturnList(result.shoppingReturnList);
+            setShoppingReturnListCount(result.shoppingReturnListCnt);
+            setCPage(currentPage);
         }
     };
 
     return (
         <ShoppingReturnMainStyled>
-            <StyledTable data={shoppingReturnList} columns={columns} />
+            <table>
+                <thead>
+                    <tr>
+                        {columns.map((column) => (
+                            <th key={column.key}>{column.title}</th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {shoppingReturnList.map((row) => (
+                        <tr key={row.refundId}>
+                            {columns.map((column) => {
+                                if (column.key === "isApproved") {
+                                    // isApproved 값 변환
+                                    const approvalStatus = [
+                                        "SCM 승인 대기중",
+                                        "임원 승인 대기중",
+                                        "임원 승인 완료",
+                                        "창고 이동 완료",
+                                    ];
+                                    return <td key={column.key}>{approvalStatus[row.isApproved] || "알 수 없음"}</td>;
+                                }
+                                return <td key={column.key}>{row[column.key]}</td>;
+                            })}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            {/* <StyledTable data={shoppingReturnList} columns={columns} /> */}
             <PageNavigate
-                totalItemsCount={shoppingReturnListCnt}
+                totalItemsCount={shoppingReturnListCount}
                 onChange={SearchShoppingReturn}
                 itemsCountPerPage={5}
                 activePage={cPage}

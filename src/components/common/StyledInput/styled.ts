@@ -14,6 +14,10 @@ export const StyledInputStyled = styled.input<InputProps & { as?: string }>`
         switch (size) {
             case "small":
                 return `padding: 6px 10px; font-size: 14px; `;
+            case "notice":
+                return `padding: 6px 10px; font-size: 16px; width:350px;`;
+            case "tiny":
+                return `padding: 5px 20px; font-size: 14px; width:90px; `;
             case "large":
                 return `padding: 12px 16px; font-size: 18px;`;
             case "modal":
@@ -73,6 +77,7 @@ export const StyledInputStyled = styled.input<InputProps & { as?: string }>`
         `
         min-height: 150px;
         display:block;
+        width:350px;
         resize: vertical;
         overflow-wrap: anywhere;
         word-wrap: break-word;
