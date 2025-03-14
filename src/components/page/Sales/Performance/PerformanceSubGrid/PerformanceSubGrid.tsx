@@ -4,12 +4,16 @@ import { modalState } from "../../../../../stores/modalState";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { searchApi } from "../../../../../api/SalesApi/searchApi";
 import { IPerformanceDetailResponse } from "../../../../../models/interface/IPerformance";
-import { Performance } from "../../../../../api/api";
+import { Sales } from "../../../../../api/api";
 import { IPerformanceDetail } from '../../../../../models/interface/IPerformance';
 import { useEffect, useState } from "react";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 
-export const PerformanceSubGrid = ({supplyId}) => {
+interface IPerformanceModalProps {
+
+}
+
+export const PerformanceModal = ({supplyId}) => {
     const [modal, setModal] = useRecoilState(modalState);
     const [detail, setDetail] = useState<IPerformanceDetail[]>([]);
 
@@ -22,12 +26,12 @@ export const PerformanceSubGrid = ({supplyId}) => {
 
     useEffect(() => {
         performanceDetail();
-    }, [supplyId]);
+    }, []);
 
     const performanceDetail =  async() => {
         try {
             const result = await searchApi<IPerformanceDetailResponse>(
-                Performance.searchDetail,
+                Sales.searchDetail,
                 {supplyId}
             )
 

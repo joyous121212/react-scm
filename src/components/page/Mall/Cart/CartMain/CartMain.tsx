@@ -149,7 +149,7 @@ export const CartMain= () => {
                 )}
             />
 
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "10px"}}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end"}}>
                 <h3>장바구니 총액</h3>            
                 전체금액: 
                 <StyledInput size="small" value={totalAmount.toLocaleString("ko-KR")} readOnly/>  

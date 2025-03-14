@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { searchApi } from "../../../../../api/CommonCodeApi/searchApi";
@@ -54,7 +55,6 @@ export const ShoppingReturnListMain = () => {
         });
 
         if (result) {
-            console.log(result.shoppingReturnListCnt);
             setShoppingReturnList(transformShoppingReturnData(result.shoppingReturnList));
             setShoppingReturnListCnt(result.shoppingReturnListCnt);
             setCPage(currentPage);

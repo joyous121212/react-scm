@@ -9,7 +9,6 @@ import { InventoryMainStyled } from "./styled";
 import { InventoryContext } from "../../../../../api/Provider/trade/InventoryProvider";
 import { IInventory, IInventoryListResponse, IInventoryPropsOptions } from "../../../../../models/interface/IInventory";
 import { InventorySubGrid } from "../inventorySubGrid/inventorySubGrid";
-import { Spinner } from "../../../../common/Spinner/spinner";
 
 const initInventoryPropsOptions = {
     inventoryId: 0,
@@ -21,7 +20,6 @@ const initInventoryPropsOptions = {
 export const InventoryListMain = () => {
     const { searchTitle } = useContext(InventoryContext);
     const [cPage, setCPage] = useState<number>(0);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [inventoryList, setInventoryList] = useState<IInventory[]>([]);
     const [inventoryListCnt, setInventoryListCnt] = useState<number>(0);
     const [inventoryPropsOption, setInventoryPropsOption] = useState<IInventoryPropsOptions>(initInventoryPropsOptions);
@@ -46,23 +44,17 @@ export const InventoryListMain = () => {
             setModal(!modal);
         }
         currentPage = currentPage || 1;
-        setIsLoading(true);
-        try {
-            const result = await searchApi<IInventoryListResponse>(Inventory.searchList, {
-                ...searchTitle,
-                currentPage,
-                pageSize: 5,
-            });
 
-            if (result) {
-                setInventoryList(result.inventoryList);
-                setInventoryListCnt(result.inventoryCnt);
-                setCPage(currentPage);
-            }
-        } catch (error) {
-            console.error("Error fetching shopping orders:", error);
-        } finally {
-            setIsLoading(false);
+        const result = await searchApi<IInventoryListResponse>(Inventory.searchList, {
+            ...searchTitle,
+            currentPage,
+            pageSize: 5,
+        });
+
+        if (result) {
+            setInventoryList(result.inventoryList);
+            setInventoryListCnt(result.inventoryCnt);
+            setCPage(currentPage);
         }
     };
 
@@ -75,22 +67,18 @@ export const InventoryListMain = () => {
 
     return (
         <InventoryMainStyled>
-            {isLoading ? (
-                <Spinner />
-            ) : (
-                <StyledTable
-                    data={inventoryList}
-                    columns={columns}
-                    onRowClick={(row) =>
-                        handlerModal({
-                            inventoryId: row.inventoryId,
-                            productId: row.productId,
-                            supplyId: row.supplyId,
-                            warehouseId: row.warehouseId,
-                        })
-                    }
-                />
-            )}
+            <StyledTable
+                data={inventoryList}
+                columns={columns}
+                onRowClick={(row) =>
+                    handlerModal({
+                        inventoryId: row.inventoryId,
+                        productId: row.productId,
+                        supplyId: row.supplyId,
+                        warehouseId: row.warehouseId,
+                    })
+                }
+            />
             <PageNavigate
                 totalItemsCount={inventoryListCnt}
                 onChange={searchInventory}

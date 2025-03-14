@@ -32,9 +32,4 @@ export const CartMainStyled = styled.div`
         cursor: pointer;
         text-decoration: underline;
     }
-
-    img {
-        width:60px; 
-        height:60px;
-    }
 `;

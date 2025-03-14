@@ -24,8 +24,7 @@ export const ProductsModalStyled = styled.div`
         border-collapse: collapse;
     }
 
-    th,
-    td {
+    th, td {
         border: 1px solid #ddd;
         padding: 10px;
         text-align: left;

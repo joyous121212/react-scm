@@ -7,12 +7,6 @@ export const DetailCodeMainStyled = styled.div`
         margin: 50px 0;
     }
 
-    .button-container {
-        display: flex;
-        justify-content: flex-end; /* ✅ 버튼을 오른쪽 정렬 */
-        margin-top: 10px;
-    }
-
     table,
     th,
     td {
@@ -22,11 +16,11 @@ export const DetailCodeMainStyled = styled.div`
     th,
     td {
         padding: 12px;
-        text-align: center;
+        text-align: left;
     }
 
     th {
-        background-color: #f4f4f4;
+        background-color: #bbc2cd;
         font-weight: bold;
     }
 
@@ -34,8 +28,7 @@ export const DetailCodeMainStyled = styled.div`
         background-color: #f1f1f1;
     }
 
-    .td-pointer:hover {
-        cursor: pointer;
-        text-decoration: underline;
+    tbody tr {
+        color: #868686;
     }
 `;
