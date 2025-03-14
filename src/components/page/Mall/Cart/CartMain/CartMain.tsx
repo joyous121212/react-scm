@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable"
-import { CartMainStyled } from "./styled"
+import HorizonLine, { CartMainStyled } from "./styled"
 import { ICart, ICartDetailWithImage, ICartListBodyResponse } from "../../../../../models/interface/ICart";
 import { searchApi } from "../../../../../api/MallApi/searchApi";
 import { Cart } from "../../../../../api/api";
@@ -135,7 +135,10 @@ export const CartMain= () => {
                     }
                     if (column.key === "totalPrice") {
                         const totalPrice = row.count * row.price;
-                        return totalPrice.toLocaleString("ko-KR");
+                        return `${totalPrice.toLocaleString("ko-KR")}원`;
+                    }
+                    if (column.key === "price") {
+                        return `${row.price.toLocaleString("ko-KR")}원`;
                     }
                     if (column.key === "requestedDeliveryDate") {
                         return row.requestedDeliveryDate.split(" ")[0]; // 날짜 부분만 출력
@@ -149,15 +152,23 @@ export const CartMain= () => {
                 )}
             />
 
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "10px"}}>
-                <h3>장바구니 총액</h3>            
-                전체금액: 
-                <StyledInput size="small" value={totalAmount.toLocaleString("ko-KR")} readOnly/>  
-                선택금액: 
-                <StyledInput size="small" value={selectedPrice.toLocaleString("ko-KR")} readOnly/>          
-                <StyledButton onClick={order}>주문</StyledButton>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end"}}>
+                <h3>장바구니 총액</h3>  
+                <HorizonLine style={{ width: "200px" }}/>     
+                <div className="divToAmt" style={{ marginBottom: "20px"}}>
+                    <label><strong>전체금액:<br></br></strong></label>
+                    <StyledInput size="small" value={`${totalAmount.toLocaleString("ko-KR")}원`} readOnly/>  
+                </div>
+                <div className="divToAmt">
+                    <label><strong>선택금액:<br></br></strong> </label>
+                    <StyledInput size="small" value={`${selectedPrice.toLocaleString("ko-KR")}원`} readOnly/>
+                </div>   
+                          
+                <div className="divOrder">
+                    <StyledButton onClick={order}>주문</StyledButton>
+                </div>
+                
             </div>
-
         </CartMainStyled>
     )
 }

@@ -7,16 +7,15 @@ import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable"
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { PerformanceContext } from "../../../../../api/Provider/PerformanceProvider";
 import { useRecoilState } from "recoil";
-import { modalState } from "../../../../../stores/modalState";
-import { Portal } from "../../../../common/potal/Portal";
 import { PerformanceSubGrid } from "../PerformanceSubGrid/PerformanceSubGrid";
+import { performanceState } from "../../../../../stores/modalState";
 
 export const PerformanceMain = () => {
     const [performance, setPerformance] = useState<IPerformance[]>([]);
     const [supplierCnt, setSupplierCnt] = useState<number>();
     const [cPage, setCPage] = useState<number>(0);
     const {searchKeyword} = useContext(PerformanceContext);
-    const [modal, setModal] = useRecoilState<boolean>(modalState);
+    const [modal, setModal] = useRecoilState<boolean>(performanceState);
     const [supplyId, setSupplyId] = useState<number>();
 
     const columns = [
@@ -64,7 +63,7 @@ export const PerformanceMain = () => {
                         return <span style={{ fontWeight: "bold" }}>{row.supplierName}</span>;
                     }
                     if (column.key === "performance") {
-                        return row.performance.toLocaleString("ko-KR");
+                        return `${row.performance.toLocaleString("ko-KR")}원`;
                     }
                     return row[column.key as keyof IPerformance];
                 }}

@@ -1,5 +1,4 @@
 import { TopSalesProvider } from "../../api/Provider/TopSalesProvider"
-import { getApi } from "../../api/SalesApi/getApi"
 import { ContentBox } from "../../components/common/ContentBox/ContentBox"
 import { TopSalesMain } from "../../components/page/Sales/TopSales/TopSalesMain/TopSalesMain"
 import { TopSalesSearch } from "../../components/page/Sales/TopSales/TopSalesSearch/TopSalesSearch"

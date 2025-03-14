@@ -54,7 +54,10 @@ export const TopSalesMain = () => {
                         columns={columns}
                         renderCell={(row, column) => {
                             if (column.key === "performance") {
-                                return row.performance.toLocaleString("ko-KR");
+                                if (row.performance !== "-") {
+                                    return `${row.performance.toLocaleString("ko-KR")}원`;
+                                }
+                                
                             }
                             return row[column.key as keyof ITopSales];
                         }}

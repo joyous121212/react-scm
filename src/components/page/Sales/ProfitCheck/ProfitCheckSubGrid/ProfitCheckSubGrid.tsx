@@ -4,12 +4,12 @@ import { ProfitCheckSubGridStyled } from "./styled"
 import { searchApi } from "../../../../../api/SalesApi/searchApi";
 import { ProfitCheck } from "../../../../../api/api";
 import { useRecoilState } from "recoil";
-import { modalState } from "../../../../../stores/modalState";
+import { modalState, profitCheckState } from "../../../../../stores/modalState";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 
 export const ProfitCheckSubGrid = ({supplyId}) => {
-    const [modal, setModal] = useRecoilState(modalState);
+    const [modal, setModal] = useRecoilState(profitCheckState);
     const [profitCheckDetail, setProfitCheckDetail] = useState<IProfitCheckDetail[]>([]);
 
     const columns = [
@@ -39,10 +39,10 @@ export const ProfitCheckSubGrid = ({supplyId}) => {
                 columns={columns}
                 renderCell={(row, column) => {
                     if (column.key === "performance") {
-                        return row.performance.toLocaleString("ko-KR");
+                        return `${row.performance.toLocaleString("ko-KR")}원`;
                     }
                     if (column.key === "returnPrice") {
-                        return row.returnPrice.toLocaleString("ko-KR");
+                        return `${row.returnPrice.toLocaleString("ko-KR")}원`;
                     }
                     return row[column.key as keyof IProfitCheckDetail];
                 }}

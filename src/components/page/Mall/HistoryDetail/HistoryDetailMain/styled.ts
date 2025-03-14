@@ -17,7 +17,7 @@ export const HistoryDetailMainStyled = styled.div`
     th,
     td {
         padding: 12px;
-        text-align: left;
+        text-align: center;
     }
 
     th {
