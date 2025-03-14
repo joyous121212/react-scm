@@ -1,18 +1,7 @@
 import styled from "styled-components";
 
-export const OrdersListMainStyled = styled.div`
-
-select {
-  padding: 5px;
-  font-size: 14px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  background-color: "#3498db"
-  width: "80px"
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  }
-  table {
+export const OrderReturnMainStyled = styled.div`
+    table {
         width: 100%;
         border-collapse: collapse;
         margin: 50px 0;
@@ -47,7 +36,7 @@ select {
     .highlight {
         background-color: #f1f1f1;
     }
-        
+
     .cancelButton {
         background-color: rgb(234, 59, 59);
         &:hover {

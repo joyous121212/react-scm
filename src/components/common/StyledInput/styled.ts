@@ -22,6 +22,8 @@ export const StyledInputStyled = styled.input<InputProps & { as?: string }>`
                 return `padding: 6px 10px; font-size: 12px;`;
             case "search":
                 return `padding: 6px 10px; font-size: 18px; width:210px;`;
+            case "password":
+                return `padding: 6px 10px; font-size: 14px; width:306px;`;
             default:
                 return `padding: 10px 14px; font-size: 16px;`;
         }

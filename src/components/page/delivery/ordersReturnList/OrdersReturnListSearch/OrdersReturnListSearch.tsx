@@ -5,14 +5,14 @@ import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { StyledSelectBox } from "../../../../common/StyledSelectBox/StyledSelectBox";
 
-export const OrderListSearch = () => {
+export const OrderReturnListSearch = () => {
     const title = useRef<HTMLInputElement>();
     const [startDate, setStartDate] = useState<string>();
     // const [endDate, setEndDate] = useState<string>();
     const navigate = useNavigate();
     const options = [
         { label: "업체명", value: "searchUser" },
-        { label: "발주처리일", value: "searchOrderDate" },
+        { label: "반품처리일", value: "searchReturnDate" },
     ];
     const [selectValue, setSelectValue] = useState<string>("searchUser");
 
@@ -39,8 +39,9 @@ export const OrderListSearch = () => {
         }
 
         const queryString = query.length > 0 ? `?${query.join("&")}` : "";
-        navigate(`/react/delivery/orders-list${queryString}`);
+        navigate(`/react/delivery/orders-return-list${queryString}`);
     };
+
     const handleKeyPress = (e) => {
         return e.key === "Enter" ? handlerSearch() : null;
     };

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { delivery } from "../../../../../api/api";
 import { deliverySearchApi } from "../../../../../api/DeliveryApi/searchApi";
-import { StyledTable, StyledTd, StyledTh } from "../../../../common/styled/StyledTable";
 import { useLocation } from "react-router-dom";
 import { IShoppingList, IShoppingListBodyResponse } from "../../../../../models/interface/IDelivery";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
@@ -9,6 +8,8 @@ import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { Portal } from "../../../../common/potal/Portal";
 import { ShoppingListModal } from "../ShoppingListModal/ShoppingListModal";
+import { ShoppingListStyled } from "./styled";
+import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 
 export const ShoppingListMain = () => {
     const [shoppingList, setShoppingList] = useState<IShoppingList[]>([]);
@@ -53,39 +54,17 @@ export const ShoppingListMain = () => {
         setModal(!modal);
         setListDetail(list);
     };
+    const columns = [
+        { key: "deliveryId", title: "배송번호" },
+        { key: "deliveryManager", title: "배송 담당자" },
+        { key: "startLocation", title: "출발 창고지" },
+        { key: "endLocation", title: "목적지" },
+        { key: "deliveryState", title: "배송 결과" },
+    ] as Column<IShoppingList>[];
 
     return (
-        <>
-            <StyledTable>
-                <thead>
-                    <tr>
-                        <StyledTh size={10}>배송번호</StyledTh>
-                        <StyledTh size={20}>배송 담당자</StyledTh>
-                        <StyledTh size={15}>출발 창고지</StyledTh>
-                        <StyledTh size={40}>목적지</StyledTh>
-                        <StyledTh size={20}>배송 결과</StyledTh>
-                    </tr>
-                </thead>
-                <tbody>
-                    {shoppingList?.length > 0 ? (
-                        shoppingList.map((list) => {
-                            return (
-                                <tr key={list.deliveryId} onClick={() => handlerModal(list)}>
-                                    <StyledTd>{list.deliveryId}</StyledTd>
-                                    <StyledTd>{list.deliveryManager}</StyledTd>
-                                    <StyledTd>{list.startLocation}</StyledTd>
-                                    <StyledTd>{list.endLocation}</StyledTd>
-                                    <StyledTd>{list.deliveryState}</StyledTd>
-                                </tr>
-                            );
-                        })
-                    ) : (
-                        <tr>
-                            <StyledTd colSpan={5}>데이터가 없습니다.</StyledTd>
-                        </tr>
-                    )}
-                </tbody>
-            </StyledTable>
+        <ShoppingListStyled>
+            <StyledTable data={shoppingList} columns={columns} onRowClick={(row) => handlerModal(row)} />
             <PageNavigate
                 totalItemsCount={shoppingListCnt}
                 onChange={searchShoppingList}
@@ -97,6 +76,6 @@ export const ShoppingListMain = () => {
                     <ShoppingListModal changeDeliveryState={changeDeliveryState} listDetail={listDetail} />
                 </Portal>
             )}
-        </>
+        </ShoppingListStyled>
     );
 };

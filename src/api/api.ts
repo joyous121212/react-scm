@@ -70,21 +70,18 @@ export const delivery = {
     searchShoppingList: "/delivery/shoppingDeliveryListJson.do",
     searchShoppingReturnList: "/delivery/deliveryReturnListBody.do",
     searchOrdersList: "/delivery/orderDirectionGroupListBody.do",
+    searchOrdersReturnList: "/delivery/orderReturnGroupListBody.do",
 };
 
 export const Sales = {
     searchList: "/sales/performanceListBody.do",
     searchDetail: "/sales/performanceDetailBody.do",
 };
-    searchDetail: "/sales/performanceDetailBody.do"
-}
-
 
 export const ShoppingOrders = {
     searchList: "/trade/shoppingListBody.do",
     searchOrderDetail: "/trade/orderingInstructionBody.do",
     searchDeliveryDetail: "/trade/deliveryOrderBody.do",
     saveOrders: "/tasks/orderInstructionSaveBody.do",
-    saveDelivers:"/tasks/deliveryOrderSaveBody.do"
-}
-
+    saveDelivers: "/tasks/deliveryOrderSaveBody.do",
+};

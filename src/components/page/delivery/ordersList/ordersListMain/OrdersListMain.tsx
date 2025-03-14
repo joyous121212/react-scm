@@ -10,17 +10,16 @@ import {
     IOrdersListDetailResponse,
     IOrdersListResponse,
 } from "../../../../../models/interface/IDelivery";
-import { StyledTable, StyledTd, StyledTh } from "../../../../common/styled/StyledTable";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import Swal from "sweetalert2";
 import { OrdersListMainStyled } from "./styled";
+import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 
 export const OrdersListMain = () => {
     const [ordersList, setOrdersList] = useState<IOrdersList[]>([]);
     const [ordersListCnt, setOrdersListCnt] = useState<number>(0);
-    const [detailFalg, setDetailFlag] = useState<Boolean>(false);
-    const [ordersListDetail, setOrdersListDetail] = useState<IOrdersListDetail>();
+    const [ordersListDetail, setOrdersListDetail] = useState<IOrdersListDetail[]>([]);
     const [ordersInventory, setOrdersInventory] = useState<IOrdersInventory[]>([]);
     const [cPage, setCPage] = useState<number>(0);
     const [selectedInventory, setSelectedInventory] = useState();
@@ -28,7 +27,8 @@ export const OrdersListMain = () => {
 
     useEffect(() => {
         searchOrdersList();
-        setDetailFlag(false);
+        // setDetailFlag(false);
+        setOrdersListDetail(null);
     }, [search]);
 
     const searchOrdersList = async (currentPage?: number) => {
@@ -43,18 +43,27 @@ export const OrdersListMain = () => {
         );
 
         if (result) {
-            setOrdersList(result.orderDirectionGroup);
+            const updatedItems = result.orderDirectionGroup.map((item, index) => ({
+                ...item, // 기존 객체의 내용을 유지
+                index: index + currentPage, // 순서에 맞게 index 값을 추가
+            }));
+            setOrdersList(updatedItems);
             setOrdersListCnt(result.orderDirectionGroupCnt);
             setCPage(currentPage);
         }
     };
 
     const openGrid = (supplyId: number, orderDirectionDate: string) => {
-        if (detailFalg === false) {
-            setDetailFlag(true);
+        if (!ordersListDetail) {
             OrdersDetail(supplyId, orderDirectionDate);
+            setSelectedInventory(null);
         } else {
-            setDetailFlag(false);
+            if (ordersListDetail[0].supplyId === supplyId) {
+                setSelectedInventory(null);
+            } else {
+                setOrdersListDetail(null);
+                OrdersDetail(supplyId, orderDirectionDate);
+            }
         }
     };
 
@@ -64,11 +73,11 @@ export const OrdersListMain = () => {
                 params: { supplyId: supplyId, orderDirectionDate: orderDirectionDate },
             })
             .then((res: AxiosResponse<IOrdersListDetailResponse>) => {
-                setOrdersListDetail(res.data.orderDirectionDetail[0]);
+                setOrdersListDetail(res.data.orderDirectionDetail);
+                console.log(res.data.orderDirectionDetail);
             });
         axios.get("/delivery/inventoryList.do").then((res) => {
             setOrdersInventory(res.data);
-            console.log(res.data);
         });
     };
 
@@ -77,7 +86,7 @@ export const OrdersListMain = () => {
     };
 
     const updateInventory = () => {
-        if (!selectedInventory) {
+        if (!selectedInventory || selectedInventory === "창고 선택") {
             // alert("창고를 선택해주세요!");
             Swal.fire("창고를 선택해주세요!", "", "warning");
             return;
@@ -98,15 +107,17 @@ export const OrdersListMain = () => {
                 Swal.fire("발주처리 되었습니다.", "", "success");
                 const data = [
                     {
-                        productId: String(ordersListDetail.productId), // Integer를 String으로 변환
-                        supplyId: String(ordersListDetail.supplyId),
-                        orderId: String(ordersListDetail.orderId),
+                        productId: String(ordersListDetail[0].productId), // Integer를 String으로 변환
+                        supplyId: String(ordersListDetail[0].supplyId),
+                        orderId: String(ordersListDetail[0].orderId),
                         warehouseId: String(selectedInventory),
-                        productCnt: String(ordersListDetail.count),
+                        productCnt: String(ordersListDetail[0].count),
                     },
                 ];
                 axios.post("/delivery/orderInventoryUpdate.do", data);
-                setDetailFlag(false);
+                // setDetailFlag(false);
+                setOrdersListDetail(null);
+                setSelectedInventory(null);
                 setTimeout(() => {
                     searchOrdersList(cPage);
                 }, 500);
@@ -114,69 +125,49 @@ export const OrdersListMain = () => {
         });
     };
 
+    const columns = [
+        { key: "index", title: "No." },
+        { key: "supplyName", title: "업체명" },
+        { key: "totalAmount", title: "총액" },
+        { key: "orderDirectionDate", title: "발주처리일" },
+    ] as Column<IOrdersList>[];
+
+    const columns2 = [
+        // { key: "index", title: "번호" },
+        { key: "categoryNumber", title: "장비번호" },
+        { key: "categoryName", title: "장비구분" },
+        { key: "productNumber", title: "모델번호" },
+        { key: "productName", title: "모델명" },
+        { key: "sellPrice", title: "판매가격" },
+        { key: "count", title: "수량" },
+        { key: "supply", title: "발주창고" },
+    ] as Column<IOrdersListDetail>[];
+
     return (
         <OrdersListMainStyled>
-            <StyledTable>
-                <thead>
-                    <tr>
-                        <StyledTh size={10}>번호</StyledTh>
-                        <StyledTh size={30}>업체명</StyledTh>
-                        <StyledTh size={40}>총액</StyledTh>
-                        <StyledTh size={30}>발주처리일</StyledTh>
-                    </tr>
-                </thead>
-                <tbody>
-                    {ordersList?.length > 0 ? (
-                        ordersList.map((list, index) => {
-                            return (
-                                <tr key={index} onClick={() => openGrid(list.supplyId, list.orderDirectionDate)}>
-                                    <StyledTd>{index + 1}</StyledTd>
-                                    <StyledTd>{list.supplyName}</StyledTd>
-                                    <StyledTd>{list.totalAmount}</StyledTd>
-                                    <StyledTd>{list.orderDirectionDate}</StyledTd>
-                                </tr>
-                            );
-                        })
-                    ) : (
-                        <tr>
-                            <StyledTd colSpan={4}>데이터가 없습니다.</StyledTd>
-                        </tr>
-                    )}
-                </tbody>
-            </StyledTable>
-            <div style={{ marginBottom: "10px" }}></div>
+            <StyledTable
+                data={ordersList}
+                columns={columns}
+                onRowClick={(row) => openGrid(row.supplyId, row.orderDirectionDate)}
+            />
             <PageNavigate
                 totalItemsCount={ordersListCnt}
                 onChange={searchOrdersList}
                 itemsCountPerPage={5}
                 activePage={cPage}
             />
-
-            {detailFalg ? (
-                <div style={{ marginTop: "80px" }}>
-                    <StyledTable>
-                        <thead>
-                            <tr>
-                                {/* <StyledTh size={10}>번호</StyledTh> */}
-                                <StyledTh size={30}>장비번호</StyledTh>
-                                <StyledTh size={30}>장비구분</StyledTh>
-                                <StyledTh size={30}>모델번호</StyledTh>
-                                <StyledTh size={30}>모델명</StyledTh>
-                                <StyledTh size={30}>판매가격</StyledTh>
-                                <StyledTh size={20}>수량</StyledTh>
-                                <StyledTh size={40}>발주창고</StyledTh>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {ordersListDetail ? (
-                                <>
-                                    <StyledTd>{ordersListDetail.categoryNumber}</StyledTd>
-                                    <StyledTd>{ordersListDetail.categoryName}</StyledTd>
-                                    <StyledTd>{ordersListDetail.productNumber}</StyledTd>
-                                    <StyledTd>{ordersListDetail.productName}</StyledTd>
-                                    <StyledTd>{ordersListDetail.sellPrice}</StyledTd>
-                                    <StyledTd>{ordersListDetail.count}</StyledTd>
-                                    <StyledTd>
+            {ordersListDetail ? (
+                <div>
+                    <div style={{ marginTop: "130px" }}>
+                        <StyledTable
+                            data={ordersListDetail.map((item) => ({
+                                ...item,
+                                supply: <select></select>,
+                            }))}
+                            columns={columns2}
+                            renderCell={(row, column) => {
+                                if (column.key === "supply") {
+                                    return (
                                         <select className='select' value={selectedInventory} onChange={handleChange}>
                                             <option>창고 선택</option>
                                             {ordersInventory.map((value, index) => (
@@ -185,25 +176,26 @@ export const OrdersListMain = () => {
                                                 </option>
                                             ))}
                                         </select>
-                                    </StyledTd>
-                                </>
-                            ) : (
-                                <tr>{/* <StyledTd colSpan={7}>데이터가 없습니다.</StyledTd> */}</tr>
-                            )}
-                        </tbody>
+                                    );
+                                }
+                                return row[column.key as keyof IOrdersListDetail];
+                            }}
+                        />
                         <div
                             style={{
                                 display: "flex",
                                 justifyContent: "center",
                                 alignItems: "center",
-                                width: "700%",
-                                marginTop: "10px",
+                                width: "100%",
+                                marginTop: "-40px",
                             }}
                         >
-                            <StyledButton onClick={updateInventory}>발주처리</StyledButton>
+                            <StyledButton variant='danger' onClick={updateInventory}>
+                                발주처리
+                            </StyledButton>
                             {/* <StyledButton onClick={() => setDetailFlag(false)}>닫기</StyledButton> */}
                         </div>
-                    </StyledTable>
+                    </div>
                 </div>
             ) : (
                 <></>

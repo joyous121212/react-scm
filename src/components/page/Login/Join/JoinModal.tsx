@@ -1,37 +1,13 @@
 import { useRef, useState } from "react";
-import { JoinStyled } from "./styled";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../stores/modalState";
 import axios, { AxiosResponse } from "axios";
 import { JoinStyled2 } from "./styled2";
+import { StyledInput } from "../../../common/StyledInput/StyledInput";
+import DaumPostcodeEmbed from "react-daum-postcode";
+import { IJoinFormData } from "../../../../models/interface/IDelivery";
+import Swal from "sweetalert2";
 
-declare global {
-    interface Window {
-        daum: any;
-    }
-}
-interface IJoinFormData {
-    action: string;
-    user_type: string;
-    group_code: string;
-    detail_code: string;
-    classType: string;
-    loginID: string;
-    password: string;
-    password1: string;
-    name: string;
-    manager: string;
-    userTel1: string;
-    userTel2: string;
-    userTel3: string;
-    gender_cd: string;
-    birthday: string;
-    user_email: string;
-    user_zipcode: string;
-    user_address: string;
-    user_dt_address: string;
-    hp: string;
-}
 type IJoinPostResponse = number;
 
 export const JoinModal = () => {
@@ -92,7 +68,7 @@ export const JoinModal = () => {
         for (let i = 0; i < fields.length; i++) {
             const { id, message } = fields[i];
             if (!formData[id as keyof typeof formData] || formData[id as keyof typeof formData].trim() === "") {
-                alert(message); // 공백일 경우 경고 메시지 출력
+                Swal.fire(message, "", "warning");
                 return false; // 첫 번째로 발견된 공백에서 종료
             }
         }
@@ -106,18 +82,19 @@ export const JoinModal = () => {
         const data = { loginID: id };
 
         if (id === "") {
-            alert("ID를 입력해 주세요");
+            Swal.fire("ID를 입력해 주세요", "", "warning");
+
             return;
         } else if (!idRules.test(formData.loginID)) {
-            alert("ID는 숫자, 영문자 조합으로 6~20자리를 사용해야 합니다.");
+            Swal.fire("ID는 숫자, 영문자 조합으로 6~20자리를 사용해야 합니다.", "", "warning");
             return;
         }
 
         axios.post("/check_loginIDJson.do", data).then((res: AxiosResponse<IJoinPostResponse>) => {
             if (res.data === 1) {
-                alert("중복된 아이디가 존재합니다!");
+                Swal.fire("중복된 아이디가 존재합니다!", "", "warning");
             } else {
-                alert("사용할 수 있는 아이디입니다.");
+                Swal.fire("사용할 수 있는 아이디입니다.", "", "success");
                 setCkIdcheckreg(1);
             }
         });
@@ -127,16 +104,17 @@ export const JoinModal = () => {
         const emailRules = /^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
         if (!emailRules.test(formData.user_email)) {
-            alert("이메일 형식을 확인해 주세요!");
+            Swal.fire("이메일 형식을 확인해 주세요!", "", "warning");
             return;
         }
         const data = { email: formData.user_email };
 
         axios.post("/check_emailJson.do", data).then((res: AxiosResponse<IJoinPostResponse>) => {
             if (res.data === 1) {
-                alert("중복된 이메일이 존재합니다!");
+                Swal.fire("중복된 이메일이 존재합니다!", "", "warning");
+                return;
             } else {
-                alert("사용 가능한 이메일입니다.");
+                Swal.fire("사용 가능한 이메일입니다.", "", "success");
                 setCkEmailcheckreg(1);
             }
         });
@@ -164,12 +142,6 @@ export const JoinModal = () => {
                     extraRoadAddr = ` (${extraRoadAddr})`;
                 }
 
-                // 상태 업데이트
-                // setPostcode(data.zonecode);
-                // setRoadAddress(roadAddr);
-                // setJibunAddress(data.jibunAddress);
-                // setExtraAddress(roadAddr ? extraRoadAddr : "");
-
                 setFormData((prevState) => ({
                     ...prevState,
                     user_zipcode: data.zonecode,
@@ -192,25 +164,25 @@ export const JoinModal = () => {
         const tel3Rules = /^\d{4}$/;
 
         if (ckIdcheckreg === 0) {
-            alert("아이디 중복체크를 진행해 주세요!");
+            Swal.fire("아이디 중복체크를 진행해 주세요!", "", "warning");
             return;
         } else if (!passwordRules.test(formData.password)) {
-            alert("비밀 번호는 숫자,영문자,특수문자 조합으로 8~15자리를 사용해야 합니다.");
+            Swal.fire("비밀 번호는 숫자,영문자,특수문자 조합으로 8~15자리를 사용해야 합니다.", "", "warning");
             return;
         } else if (formData.password !== formData.password1) {
-            alert("비밀번호와 비밀번호확인이 일치하지 않습니다.");
-            return;
-        } else if (ckEmailcheckreg === 0) {
-            alert("이메일 중복체크를 진행해 주세요!");
+            Swal.fire("비밀번호와 비밀번호확인이 일치하지 않습니다.", "", "warning");
             return;
         } else if (!tel1Rules.test(formData.userTel1)) {
-            alert("첫번째 전화번호를 확인해주세요.(숫자만가능)");
+            Swal.fire("첫번째 전화번호를 확인해주세요.(숫자만가능)", "", "warning");
             return;
         } else if (!tel2Rules.test(formData.userTel2)) {
-            alert("두번째 전화번호를 확인해주세요.(숫자만가능)");
+            Swal.fire("두번째 전화번호를 확인해주세요.(숫자만가능)", "", "warning");
             return;
         } else if (!tel3Rules.test(formData.userTel3)) {
-            alert("세번째 전화번호를 확인해주세요.(숫자만가능)");
+            Swal.fire("세번째 전화번호를 확인해주세요.(숫자만가능)", "", "warning");
+            return;
+        } else if (ckEmailcheckreg === 0) {
+            Swal.fire("이메일 중복체크를 진행해 주세요!", "", "warning");
             return;
         }
         const hp = formData.userTel1 + "-" + formData.userTel2 + "-" + formData.userTel3;
@@ -233,6 +205,7 @@ export const JoinModal = () => {
             axios.post("registerScm.do", param);
 
             alert("회원가입 완료");
+            Swal.fire("회원가입 완료", "", "success");
             setModal(!modal);
 
             return newFormData; // 새로운 객체로 상태를 반환
@@ -242,12 +215,6 @@ export const JoinModal = () => {
     return (
         <JoinStyled2>
             <div id='layer1' className='layerPosition layerPop layerType2 container'>
-                <form>
-                    <input type='hidden' name='action' id='action' value='' />
-                    <input type='hidden' name='ckIdcheckreg' id='ckIdcheckreg' value='0' />
-                    <input type='hidden' name='ckEmailcheckreg' id='ckEmailcheckreg' value='0' />
-                </form>
-
                 <dl>
                     <dt className='signtitle' style={{ textAlign: "center", marginBottom: "25px" }}>
                         <strong style={{ fontSize: "200%" }}>기업 회원가입</strong>
@@ -257,34 +224,19 @@ export const JoinModal = () => {
 
                         <table className='row'>
                             <tbody>
-                                <tr className='hidden' style={{ display: "none" }}>
-                                    <td>
-                                        <input type='text' name='user_type' value='기업고객' readOnly />
-                                    </td>
-                                    <td>
-                                        <input type='text' name='classType' value='기업고객' readOnly />
-                                    </td>
-                                    <td>
-                                        <input type='text' name='group_code' value='G00001A1' readOnly />
-                                    </td>
-                                    <td>
-                                        <input type='text' name='detail_code' value='GB0000T13' readOnly />
-                                    </td>
-                                </tr>
-
                                 <tr>
                                     <th scope='row'>
                                         아이디<span className='font_red'>*</span>
                                     </th>
                                     <td colSpan={3}>
-                                        <input
+                                        <StyledInput
                                             type='text'
-                                            className='inputTxt p100'
                                             name='loginID'
                                             placeholder='숫자, 영문자 조합으로 6~20자리'
                                             value={formData.loginID}
                                             onChange={handleChange}
-                                            style={{ width: "350px", marginRight: "-30px" }}
+                                            size='password'
+                                            autoComplete='off'
                                         />
                                     </td>
                                     <td>
@@ -292,7 +244,7 @@ export const JoinModal = () => {
                                             type='button'
                                             value='중복확인'
                                             onClick={loginIdCheck}
-                                            style={{ width: "142px", height: "25px", marginRight: "-25px" }}
+                                            style={{ width: "142px", height: "25px", marginRight: "0px" }}
                                         />
                                     </td>
                                 </tr>
@@ -302,14 +254,13 @@ export const JoinModal = () => {
                                         비밀번호 <span className='font_red'>*</span>
                                     </th>
                                     <td colSpan={4}>
-                                        <input
+                                        <StyledInput
                                             type='password'
-                                            className='inputTxt p100'
                                             name='password'
                                             placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리'
                                             value={formData.password}
                                             onChange={handleChange}
-                                            style={{ width: "350px", marginRight: "-95px" }}
+                                            size='password'
                                         />
                                     </td>
                                 </tr>
@@ -319,14 +270,13 @@ export const JoinModal = () => {
                                         비밀번호 확인<span className='font_red'>*</span>
                                     </th>
                                     <td colSpan={4}>
-                                        <input
+                                        <StyledInput
                                             type='password'
-                                            className='inputTxt p100'
                                             name='password1'
                                             placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리'
                                             value={formData.password1}
                                             onChange={handleChange}
-                                            style={{ width: "350px", marginRight: "-95px" }}
+                                            size='password'
                                         />
                                     </td>
                                 </tr>
@@ -336,13 +286,12 @@ export const JoinModal = () => {
                                         회사명 <span className='font_red'>*</span>
                                     </th>
                                     <td colSpan={4}>
-                                        <input
+                                        <StyledInput
                                             type='text'
-                                            className='inputTxt p100'
                                             name='name'
                                             value={formData.name}
                                             onChange={handleChange}
-                                            style={{ width: "350px", marginRight: "-95px" }}
+                                            size='password'
                                         />
                                     </td>
                                 </tr>
@@ -352,13 +301,12 @@ export const JoinModal = () => {
                                         담당자명 <span className='font_red'>*</span>
                                     </th>
                                     <td colSpan={4}>
-                                        <input
+                                        <StyledInput
                                             type='text'
-                                            className='inputTxt p100'
                                             name='manager'
                                             value={formData.manager}
                                             onChange={handleChange}
-                                            style={{ width: "350px", marginRight: "-95px" }}
+                                            size='password'
                                         />
                                     </td>
                                 </tr>
@@ -368,34 +316,31 @@ export const JoinModal = () => {
                                         전화번호<span className='font_red'>*</span>
                                     </th>
                                     <td colSpan={4}>
-                                        <input
-                                            className='inputTxt'
-                                            style={{ width: "17%" }}
-                                            maxLength={3}
+                                        <StyledInput
                                             type='text'
                                             name='userTel1'
                                             value={formData.userTel1}
                                             onChange={handleChange}
+                                            size='tiny'
+                                            maxLength={3}
                                         />{" "}
-                                        -
-                                        <input
-                                            className='inputTxt'
-                                            style={{ width: "20%", marginLeft: "5px" }}
-                                            maxLength={4}
+                                        -{" "}
+                                        <StyledInput
                                             type='text'
                                             name='userTel2'
                                             value={formData.userTel2}
                                             onChange={handleChange}
-                                        />{" "}
-                                        -
-                                        <input
-                                            className='inputTxt'
-                                            style={{ width: "20.5%", marginLeft: "5px" }}
+                                            size='tiny'
                                             maxLength={4}
+                                        />{" "}
+                                        -{" "}
+                                        <StyledInput
                                             type='text'
                                             name='userTel3'
                                             value={formData.userTel3}
                                             onChange={handleChange}
+                                            size='tiny'
+                                            maxLength={4}
                                         />
                                     </td>
                                 </tr>
@@ -420,7 +365,7 @@ export const JoinModal = () => {
                                     <td colSpan={4}>
                                         <input
                                             type='date'
-                                            className='inputTxt p100'
+                                            className='joinDate'
                                             name='birthday'
                                             value={formData.birthday}
                                             onChange={handleChange}
@@ -433,14 +378,15 @@ export const JoinModal = () => {
                                         이메일<span className='font_red'>*</span>
                                     </th>
                                     <td colSpan={3}>
-                                        <input
+                                        <StyledInput
                                             type='text'
-                                            className='inputTxt p100'
                                             name='user_email'
-                                            placeholder='happyjob@happyjop.com'
                                             value={formData.user_email}
+                                            placeholder='happyjob@happyjop.com'
                                             onChange={handleChange}
-                                            style={{ width: "350px", marginRight: "-95px" }}
+                                            size='small'
+                                            fullWidth
+                                            autoComplete='off'
                                         />
                                     </td>
                                     <td>
@@ -448,7 +394,7 @@ export const JoinModal = () => {
                                             type='button'
                                             value='중복확인'
                                             onClick={emailCheck}
-                                            style={{ width: "142px", height: "25px", marginRight: "-25px" }}
+                                            style={{ width: "142px", height: "25px", marginRight: "-100px" }}
                                         />
                                     </td>
                                 </tr>
@@ -458,13 +404,13 @@ export const JoinModal = () => {
                                         우편번호<span className='font_red'>*</span>
                                     </th>
                                     <td colSpan={3}>
-                                        <input
+                                        <StyledInput
                                             type='text'
-                                            className='inputTxt p100'
                                             name='user_zipcode'
                                             value={formData.user_zipcode}
-                                            readOnly
-                                            style={{ width: "350px", marginRight: "-95px" }}
+                                            onChange={handleChange}
+                                            size='small'
+                                            fullWidth
                                         />
                                     </td>
                                     <td>
@@ -472,7 +418,7 @@ export const JoinModal = () => {
                                             type='button'
                                             value='우편번호 찾기'
                                             onClick={execDaumPostcode}
-                                            style={{ width: "142px", height: "25px", marginRight: "-14px" }}
+                                            style={{ width: "142px", height: "25px", marginRight: "-100px" }}
                                         />
                                     </td>
                                 </tr>
@@ -482,13 +428,12 @@ export const JoinModal = () => {
                                         주소<span className='font_red'>*</span>
                                     </th>
                                     <td colSpan={4}>
-                                        <input
+                                        <StyledInput
                                             type='text'
-                                            className='inputTxt p100'
                                             name='user_address'
                                             value={formData.user_address}
-                                            readOnly
-                                            style={{ width: "350px", marginRight: "-95px" }}
+                                            onChange={handleChange}
+                                            size='password'
                                         />
                                     </td>
                                 </tr>
@@ -496,13 +441,12 @@ export const JoinModal = () => {
                                 <tr>
                                     <th scope='row'>상세주소</th>
                                     <td colSpan={4}>
-                                        <input
+                                        <StyledInput
                                             type='text'
-                                            className='inputTxt p100'
                                             name='user_dt_address'
                                             value={formData.user_dt_address}
                                             onChange={handleChange}
-                                            style={{ width: "350px", marginRight: "-95px" }}
+                                            size='password'
                                         />
                                     </td>
                                 </tr>
@@ -510,16 +454,10 @@ export const JoinModal = () => {
                         </table>
 
                         <div className='btn_areaC mt30 button-container'>
-                            {/* <a href='javascript:void(0);' className='btnType blue' onClick={CompleteRegister}>
-                                <span>회원가입 완료</span>
-                            </a>
-                            <a href='javascript:void(0);' className='btnType gray' onClick={() => setModal(!modal)}>
-                                <span>취소</span>
-                            </a> */}
                             <button className='btnType blue' onClick={CompleteRegister}>
                                 <span>회원가입 완료</span>
                             </button>
-                            <button className='btnType gray' onClick={() => setModal(!modal)}>
+                            <button className='cancelButton' onClick={() => setModal(!modal)}>
                                 <span>취소</span>
                             </button>
                         </div>

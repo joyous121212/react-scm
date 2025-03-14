@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const StyledTable = styled.table`
     width: 100%;
@@ -26,6 +26,9 @@ export const StyledTable = styled.table`
         background-color: #d3d3d3;
         opacity: 0.9;
         cursor: pointer;
+    }
+    .active {
+        background-color: #d3d3d3;
     }
 `;
 

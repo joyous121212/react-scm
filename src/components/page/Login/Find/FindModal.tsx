@@ -3,6 +3,8 @@ import { findModalState } from "../../../../stores/modalState";
 import { useState } from "react";
 import axios, { AxiosResponse } from "axios";
 import { JoinStyled2 } from "../Join/styled2";
+import { StyledInput } from "../../../common/StyledInput/StyledInput";
+import Swal from "sweetalert2";
 
 interface IPostResponse {
     result: string;
@@ -48,23 +50,23 @@ export const FindModal = () => {
 
     const registerIdCheck = () => {
         if (formData.id === "") {
-            alert("아이디를 입력해 주세요");
+            Swal.fire("아이디를 입력해 주세요", "", "warning");
             return;
         }
         const data = { loginID: formData.id };
         axios.post("/registerIdCheckJson.do", data).then((res: AxiosResponse<IPostResponse>) => {
             if (res.data.result === "SUCCESS") {
-                alert("아이디가 존재합니다");
+                Swal.fire("아이디가 존재합니다", "", "success");
                 setPwIdCheck(true);
             } else {
-                alert("아이디가 존재하지 않습니다");
+                Swal.fire("아이디가 존재하지 않습니다!", "", "warning");
             }
         });
     };
 
     const sendPwdEmail = () => {
         if (formData.emailPwd === "") {
-            alert("이메일을 입력해주세요!");
+            Swal.fire("이메일을 입력해주세요!", "", "warning");
             return true;
         }
 
@@ -72,9 +74,9 @@ export const FindModal = () => {
 
         axios.post("/selectFindInfoPwJson.do", data).then((res: AxiosResponse<IPostResponse>) => {
             if (res.data.result === "FALSE") {
-                alert("이메일이 틀렸습니다.");
+                Swal.fire("이메일이 틀렸습니다!", "", "warning");
             } else {
-                alert("해당 이메일로 인증번호를 전송하였습니다.");
+                Swal.fire("해당 이메일로 인증번호를 전송하였습니다.", "", "success");
                 setEmailSendPwd(true);
                 findMailSendPwd();
             }
@@ -90,49 +92,49 @@ export const FindModal = () => {
 
     const sendCompletePwd = () => {
         if (formData.code === "") {
-            alert("인증번호를 입력해주세요!");
+            Swal.fire("인증번호를 입력해주세요!", "", "warning");
             return;
         } else if (formData.code !== authEmailCode) {
-            alert("인증번호가 틀렸습니다.");
+            Swal.fire("인증번호가 틀렸습니다.", "", "warning");
             return;
         } else if (formData.code === authEmailCode) {
-            alert("인증번호가 맞습니다");
+            Swal.fire("인증번호가 맞습니다. 비밀번호를 변경합니다.", "", "success");
             setChangePw(true);
         }
     };
 
     const changePwd = () => {
         if (formData.password === "") {
-            alert("변경할 비밀번호를 입력하세요.");
+            Swal.fire("변경할 비밀번호를 입력하세요.", "", "warning");
             return;
         } else if (formData.password1 === "") {
-            alert("비밀번호 확인을 입력하세요.");
+            Swal.fire("비밀번호 확인을 입력하세요.", "", "warning");
             return;
         }
         const passwordRules = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
 
         if (!passwordRules.test(formData.password)) {
-            alert("비밀번호는 숫자, 영문자, 특수문자 조합으로 8~15자리를 사용해야 합니다.");
+            Swal.fire("비밀번호는 숫자, 영문자, 특수문자 조합으로 8~15자리를 사용해야 합니다.", "", "warning");
             return;
         } else if (formData.password !== formData.password1) {
-            alert("비밀번호와 비밀번호확인이 맞지 않습니다.");
+            Swal.fire("비밀번호와 비밀번호확인이 맞지 않습니다.", "", "warning");
             return;
         }
 
         const data = { loginID: formData.id, chPassword: formData.password };
         axios.post("/changePwd.do", data).then((res: AxiosResponse<IPostResponse>) => {
             if (res.data.result === "success") {
-                alert("비밀번호 변경 완료!");
+                Swal.fire("비밀번호 변경 완료!", "", "success");
                 setFindModal(!findModal);
             } else {
-                alert("비밀번호 변경 실패");
+                Swal.fire("비밀번호 변경 실패", "", "warning");
             }
         });
     };
 
     const selectFindId = () => {
         if (formData.emailID === "") {
-            alert("이메일을 입력해주세요!");
+            Swal.fire("이메일을 입력해주세요!", "", "warning");
             return;
         }
 
@@ -141,10 +143,10 @@ export const FindModal = () => {
             if (res.data.result === "SUCCESS") {
                 setUserID(res.data.resultModel.loginID);
                 findMailSendPwd();
-                alert("해당 이메일로 인증번호를 전송하였습니다.");
+                Swal.fire("해당 이메일로 인증번호를 전송하였습니다.", "", "success");
                 setEmailSendID(true);
             } else {
-                alert("잘못된 이메일을 입력하셨습니다!");
+                Swal.fire("잘못된 이메일을 입력하셨습니다!", "", "warning");
             }
         });
     };
@@ -152,13 +154,14 @@ export const FindModal = () => {
     const findId = () => {
         if (formData.code === "") {
             alert("인증번호를 입력해주세요!");
+            Swal.fire("인증번호를 입력해주세요!", "", "warning");
             return;
         } else if (formData.code !== authEmailCode) {
-            alert("인증번호가 틀렸습니다.");
+            Swal.fire("인증번호가 틀렸습니다.", "", "warning");
             return;
         } else if (formData.code === authEmailCode) {
             setFindModal(!findModal);
-            alert(`귀하의 아이디는 "${userID}" 입니다.`);
+            Swal.fire(`귀하의 아이디는 "${userID}" 입니다.`, "", "warning");
         }
     };
 
@@ -188,11 +191,13 @@ export const FindModal = () => {
                                             이메일<span className='font_red'>*</span>
                                         </th>
                                         <td>
-                                            <input
+                                            <StyledInput
                                                 type='text'
                                                 name='emailID'
                                                 value={formData.emailID}
                                                 onChange={handleChange}
+                                                size='small'
+                                                autoComplete='off'
                                             />
                                         </td>
                                         <td>
@@ -210,11 +215,13 @@ export const FindModal = () => {
                                                 인증번호<span className='font_red'>*</span>
                                             </th>
                                             <td>
-                                                <input
+                                                <StyledInput
                                                     type='text'
                                                     name='code'
                                                     value={formData.code}
                                                     onChange={handleChange}
+                                                    size='small'
+                                                    autoComplete='off'
                                                 />
                                             </td>
                                             <td>
@@ -252,7 +259,14 @@ export const FindModal = () => {
                                             아이디<span className='font_red'>*</span>
                                         </th>
                                         <td>
-                                            <input type='text' name='id' value={formData.id} onChange={handleChange} />
+                                            <StyledInput
+                                                type='text'
+                                                name='id'
+                                                value={formData.id}
+                                                onChange={handleChange}
+                                                size='small'
+                                                autoComplete='off'
+                                            />
                                         </td>
                                         <td>
                                             <input
@@ -269,11 +283,13 @@ export const FindModal = () => {
                                                 이메일<span className='font_red'>*</span>
                                             </th>
                                             <td>
-                                                <input
+                                                <StyledInput
                                                     type='text'
                                                     name='emailPwd'
                                                     value={formData.emailPwd}
                                                     onChange={handleChange}
+                                                    size='small'
+                                                    autoComplete='off'
                                                 />
                                             </td>
                                             <td>
@@ -294,11 +310,13 @@ export const FindModal = () => {
                                                 인증번호<span className='font_red'>*</span>
                                             </th>
                                             <td>
-                                                <input
+                                                <StyledInput
                                                     type='text'
                                                     name='code'
                                                     value={formData.code}
                                                     onChange={handleChange}
+                                                    size='small'
+                                                    autoComplete='off'
                                                 />
                                             </td>
                                             <td>
@@ -324,14 +342,13 @@ export const FindModal = () => {
                                 새 비밀번호<span className='font_red'>*</span>
                             </th>
                             <td>
-                                <input
+                                <StyledInput
                                     type='password'
-                                    className='inputTxt p100'
                                     name='password'
                                     placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리'
                                     value={formData.password}
                                     onChange={handleChange}
-                                    style={{ width: "274px" }}
+                                    size='password'
                                 />
                             </td>
                         </tr>
@@ -340,14 +357,13 @@ export const FindModal = () => {
                                 비밀번호 확인<span className='font_red'>*</span>
                             </th>
                             <td>
-                                <input
+                                <StyledInput
                                     type='password'
-                                    className='inputTxt p100'
                                     name='password1'
                                     placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리'
                                     value={formData.password1}
                                     onChange={handleChange}
-                                    style={{ width: "274px" }}
+                                    size='password'
                                 />
                             </td>
                         </tr>
@@ -356,7 +372,11 @@ export const FindModal = () => {
                 <div style={{ textAlign: "center", marginTop: "15px" }}>
                     {changePw ? <button onClick={changePwd}>비밀번호 변경</button> : <></>}
 
-                    <button style={{ width: "100px" }} onClick={() => setFindModal(!findModal)}>
+                    <button
+                        style={{ width: "100px" }}
+                        onClick={() => setFindModal(!findModal)}
+                        className='cancelButton'
+                    >
                         <span>취소</span>
                     </button>
                 </div>

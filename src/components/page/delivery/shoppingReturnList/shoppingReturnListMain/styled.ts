@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const OrdersListMainStyled = styled.div`
+export const ShoppingReturnListStyled = styled.div`
 
 select {
   padding: 5px;
@@ -46,17 +46,5 @@ select {
     }
     .highlight {
         background-color: #f1f1f1;
-    }
-        
-    .cancelButton {
-        background-color: rgb(234, 59, 59);
-        &:hover {
-            background-color: rgb(170, 12, 12);
-        }
-        &:active {
-            background-color: rgb(170, 12, 12);
-            box-shadow: 0 2px #666;
-            transform: translateY(2px);
-        }
     }
 `;
