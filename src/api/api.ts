@@ -29,6 +29,16 @@ export const UserInfo = {
     updateUserInfo: "/management/UpdateScmBody.do",
     userInfoDetail: "/management/userInfoDetailBody.do",
 };
+export const SupplierInfo = {
+    searchSupplierList: "/management/supplierListBody.do",
+    searchSupplyDetail: "/management/supplyDetailBody.do",
+    searchSupplierDetailList: "/management/supplierDetailBody.do",
+    updateSupplyDetail: "/management/supplyUpdateBody.do",
+    deleteSupplyDetail: "/management/supplyDeleteBody.do",
+    recoverSupplyDetail: "/management/supplyRecoveryBody.do",
+    saveSupplyDetail: "/management/SupplySaveBody.do",
+    idDuplicCheck: "/management/checkLoginIDBody.do",
+};
 
 export const Shopping = {
     searchList: "/tasks/deliveryOrderListBody.do",

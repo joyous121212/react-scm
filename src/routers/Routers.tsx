@@ -27,6 +27,8 @@ import { OrdersReturnListDe } from "../pages/delivery/OrdersReturnList";
 import { ProfitCheck } from "../pages/sales/ProfitCheck";
 import { Main } from "../pages/main/main";
 import { UserInfo } from "../pages/management/UserInfo";
+import { SupplierInfo } from "../pages/management/SupplierInfo";
+import { SupplierInfoList } from "../pages/management/SupplierInfoList";
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
     { path: "/", element: <Login /> },
@@ -87,6 +89,14 @@ const routers: RouteObject[] = [
                     {
                         path: "user-info",
                         element: <UserInfo />,
+                    },
+                    {
+                        path: "supplier-info",
+                        element: <SupplierInfo />,
+                    },
+                    {
+                        path: "supplier-info/:supplyId",
+                        element: <SupplierInfoList />,
                     },
                 ],
             },
