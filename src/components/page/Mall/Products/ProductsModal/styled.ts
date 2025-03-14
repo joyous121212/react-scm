@@ -24,8 +24,7 @@ export const ProductsModalStyled = styled.div`
         border-collapse: collapse;
     }
 
-    th,
-    td {
+    th, td {
         border: 1px solid #ddd;
         padding: 10px;
         text-align: left;
@@ -51,6 +50,8 @@ export const ProductsModalStyled = styled.div`
         border: 1px solid #ccc;
         border-radius: 4px;
         resize: none;
+        box-sizing: border-box;
+
     }
 
     .button-container {
@@ -82,4 +83,9 @@ export const ProductsModalStyled = styled.div`
             transform: translateY(2px);
         }
     }
+
+    .font_red {
+        color:#fe1414;
+    }
+
 `;
