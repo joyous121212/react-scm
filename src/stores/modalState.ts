@@ -8,3 +8,12 @@ export const findModalState = atom<boolean>({
     key: "findModalState",
     default: false,
 });
+
+export const performanceState = atom<boolean>({
+    key: "performanceState",
+    default: false,
+});
+export const profitCheckState = atom<boolean>({
+    key: "profitCheckState",
+    default: false,
+});

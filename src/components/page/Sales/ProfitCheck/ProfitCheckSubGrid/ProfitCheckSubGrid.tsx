@@ -4,10 +4,9 @@ import { ProfitCheckSubGridStyled } from "./styled"
 import { searchApi } from "../../../../../api/SalesApi/searchApi";
 import { ProfitCheck } from "../../../../../api/api";
 import { useRecoilState } from "recoil";
-import { modalState } from "../../../../../stores/modalState";
+import { modalState, profitCheckState } from "../../../../../stores/modalState";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
-import { profitCheckState } from "../../../../../stores/profitCheckState";
 
 export const ProfitCheckSubGrid = ({supplyId}) => {
     const [modal, setModal] = useRecoilState(profitCheckState);

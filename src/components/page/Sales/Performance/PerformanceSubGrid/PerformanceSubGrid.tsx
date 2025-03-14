@@ -1,6 +1,6 @@
 import { useRecoilState } from "recoil";
 import { PerformanceModalStyled } from "./styled"
-import { modalState } from "../../../../../stores/modalState";
+import { modalState, performanceState } from "../../../../../stores/modalState";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { searchApi } from "../../../../../api/SalesApi/searchApi";
 import { IPerformanceDetailResponse } from "../../../../../models/interface/IPerformance";
@@ -8,7 +8,6 @@ import { Performance } from "../../../../../api/api";
 import { IPerformanceDetail } from '../../../../../models/interface/IPerformance';
 import { useEffect, useState } from "react";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
-import { performanceState } from "../../../../../stores/performanceState";
 
 export const PerformanceSubGrid = ({supplyId}) => {
     const [modal, setModal] = useRecoilState(performanceState);

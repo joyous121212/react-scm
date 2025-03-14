@@ -8,7 +8,7 @@ import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { PerformanceContext } from "../../../../../api/Provider/PerformanceProvider";
 import { useRecoilState } from "recoil";
 import { PerformanceSubGrid } from "../PerformanceSubGrid/PerformanceSubGrid";
-import { performanceState } from "../../../../../stores/performanceState";
+import { performanceState } from "../../../../../stores/modalState";
 
 export const PerformanceMain = () => {
     const [performance, setPerformance] = useState<IPerformance[]>([]);

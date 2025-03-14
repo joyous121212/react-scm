@@ -7,6 +7,7 @@ import { modalState } from "../../../../../stores/modalState";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { History } from "../../../../../api/api";
 import { postApi } from "../../../../../api/MallApi/postApi";
+import Swal from "sweetalert2";
 
 export const HistoryDetailModal = ( {orderId, returnCount, postSuccess} ) => {
     const [modal, setModal] = useRecoilState(modalState);
@@ -30,12 +31,21 @@ export const HistoryDetailModal = ( {orderId, returnCount, postSuccess} ) => {
                 bank,
                 accountNumber,
                 accountHolder,
-            });        
-    
-            if (result.result === "success") {
-                alert("반품 처리되었습니다.");
-                postSuccess();
-            }
+            });  
+            
+            if(!confirm('반품하시겠습니까?')) {
+                return;
+            } else {
+                if (result.result === "success") {
+                    Swal.fire({
+                        icon: "success",
+                        title: "반품 신청 완료",
+                        confirmButtonText: "확인",
+                    }).then(() => {
+                        postSuccess(); // 승인 후 실행할 함수
+                    });
+                }
+            }           
         }       
         
     }

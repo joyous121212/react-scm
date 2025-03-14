@@ -7,9 +7,8 @@ import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable"
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { ProfitCheckContext } from "../../../../../api/Provider/ProfitCheckProvider";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import { modalState } from "../../../../../stores/modalState";
+import { modalState, profitCheckState } from "../../../../../stores/modalState";
 import { ProfitCheckSubGrid } from "../ProfitCheckSubGrid/ProfitCheckSubGrid";
-import { profitCheckState } from "../../../../../stores/profitCheckState";
 
 export const ProfitCheckMain = () => {
     const [profitCheck, setProfitCheck] = useState<IProfitCheck[]>([]);
