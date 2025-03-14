@@ -17,16 +17,23 @@ export const TopSalesChart = ({ topSales }: TopSalesChartProps) => {
     const data = {
         labels: labels,
         datasets: [
-            {   
+            {
                 data: dataValues,
                 backgroundColor: [
-                    "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40",
-                    "#FFCD56", "#C9CBCF", "#4D5360", "#6A1B9A"
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56",
+                    "#4BC0C0",
+                    "#9966FF",
+                    "#FF9F40",
+                    "#FFCD56",
+                    "#C9CBCF",
+                    "#4D5360",
+                    "#6A1B9A",
                 ],
                 hoverOffset: 4,
-            }
-        ]
-        
+            },
+        ],
     };
 
     const options = {
@@ -34,16 +41,15 @@ export const TopSalesChart = ({ topSales }: TopSalesChartProps) => {
         plugins: {
             legend: {
                 display: true, // ✅ 범례 표시 활성화
-                position: "top"as const, // ✅ 범례를 차트 상단에 배치
+                position: "top" as const, // ✅ 범례를 차트 상단에 배치
                 labels: {
                     font: {
                         size: 14, // ✅ 글씨 크기 설정
                     },
                 },
             },
-            title: {display: true, text: "Top Sales Distribution (2025년 3월)"}
-            
-        }
+            title: { display: true, text: "Top Sales Distribution (2025년 3월)" },
+        },
     };
 
     return <Pie data={data} options={options} />;

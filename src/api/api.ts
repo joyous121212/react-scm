@@ -25,6 +25,10 @@ export const Notice = {
     search: "/management/noticeListBody.do",
 };
 
+export const Shopping = {
+    searchList: "/tasks/deliveryOrderListBody.do",
+};
+
 export const UserInfo = {
     search: "/management/userInfoListBody.do",
     detailsearch: "/management/detailCodeListBody.do",
@@ -79,6 +83,19 @@ export const Products = {
     supplyList: "/mall/products/supplyList",
 };
 
+export const Cart = {
+    searchList: "/mall/cartDetailList.do",
+    deleteCartDetail: "/mall/cartDetailDeleteBody.do",
+    historysSave: "/mall/historysSaveBody.do",
+};
+
+export const History = {
+    searchList: "/mall/historyListBody.do",
+    searchDetail: "/mall/historyDetailBody.do",
+    returnSave: "/mall//historyReturnRequestBody.do",
+    salesComplete: "/mall/historySalesCompleteBody.do",
+};
+
 export const Approval = {
     searchOrder: "/approval/orderListBody.do",
     approvalOrder: "/approval/orderApproveUpdateBody.do",
@@ -90,6 +107,25 @@ export const ShoppingReturnList = {
     searchList: "/trade/shoppingReturnListBody.do",
     searchModal: "/trade/shoppingReturnListModalBody.do",
     updateMall: "/trade/shoppingReturnUpdateMallBody.do",
+};
+
+export const Orders = {
+    searchList: "/tasks/orderListBody.do",
+};
+
+export const Performance = {
+    searchList: "/sales/performanceListBody.do",
+    searchDetail: "/sales/performanceDetailBody.do",
+};
+
+export const TopSales = {
+    selectDate: "/sales/selectDateJson",
+    searchList: "/sales/topSalesListBody.do",
+};
+
+export const ProfitCheck = {
+    searchList: "/sales/profitCheckListBody.do",
+    searchDetail: "/sales/profitCheckDetailBody.do",
 };
 
 export const ShoppingReturn = {
