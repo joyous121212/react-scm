@@ -22,6 +22,10 @@ export const Notice = {
     search: "/management/noticeListBody.do",
 };
 
+export const Shopping = {
+    searchList: "/tasks/deliveryOrderListBody.do",
+};
+
 export const UserInfo = {
     search: "/management/userInfoListBody.do",
     detailsearch: "/management/detailCodeListBody.do",
@@ -81,7 +85,6 @@ export const Approval = {
     searchShoppingReturn: "/approval/shoppingReturnListBody.do",
     approvalShoppingReturn: "/approval/shoppingReturnApproveUpdateBody.do",
 };
-   
 
 export const ShoppingReturnList = {
     searchList: "/trade/shoppingReturnListBody.do",
@@ -122,7 +125,7 @@ export const TopSales = {
 export const ProfitCheck = {
     searchList: "/sales/profitCheckListBody.do",
     searchDetail: "/sales/profitCheckDetailBody.do",
-}
+};
 
 export const ShoppingOrders = {
     searchList: "/trade/shoppingListBody.do",
