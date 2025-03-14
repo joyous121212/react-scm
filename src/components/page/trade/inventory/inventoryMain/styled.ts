@@ -4,7 +4,7 @@ export const InventoryMainStyled = styled.div`
     table {
         width: 100%;
         border-collapse: collapse;
-        margin: 50px 0;
+        margin: 25px 0;
     }
 
     table,

@@ -115,17 +115,12 @@ export const OrdersListMain = () => {
                                 if (column.key === "isPaid") {
                                     return (
                                         <td key={column.key}>
-                                            {row.isApproved ? ( // isApproved가 승인일 때만 입금확인 버튼을 표시
-                                                row.isPaid ? (
-                                                    "입금"
-                                                ) : (
-                                                    <StyledButton onClick={(e) => handlePaymentConfirm(e, row.orderId)}>
-                                                        입금확인
-                                                    </StyledButton>
-                                                )
+                                            {row.isPaid === 0 ? ( // isPaid가 0이면 무조건 버튼 표시
+                                                <StyledButton onClick={(e) => handlePaymentConfirm(e, row.orderId)}>
+                                                    입금확인
+                                                </StyledButton>
                                             ) : (
-                                                // isApproved가 미승인일 때는 공란 처리
-                                                ""
+                                                "입금"
                                             )}
                                         </td>
                                     );

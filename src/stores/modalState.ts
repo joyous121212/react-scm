@@ -17,3 +17,18 @@ export const profitCheckState = atom<boolean>({
     key: "profitCheckState",
     default: false,
 });
+
+export const inventoryModalState = atom<boolean>({
+    key: "inventoryModalState",
+    default: false,
+});
+
+export const shoppingReturnListModalState = atom<boolean>({
+    key: "shoppingReturnListModalState",
+    default: false,
+});
+
+export const shoppingOrdersModalState = atom<boolean>({
+    key: "shoppingOrdersModalState",
+    default: false,
+});

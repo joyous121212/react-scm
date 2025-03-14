@@ -25,6 +25,7 @@ import { Products } from "../pages/mall/Products";
 import { TopSales } from "../pages/sales/TopSales";
 import { OrdersReturnListDe } from "../pages/delivery/OrdersReturnList";
 import { ProfitCheck } from "../pages/sales/ProfitCheck";
+import { Main } from "../pages/main/main";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -35,7 +36,7 @@ const routers: RouteObject[] = [
         children: [
             {
                 index: true, // 기본 페이지 설정
-                element: <Inventory />, // 원하는 메인 페이지 컴포넌트
+                element: <Main />, // 원하는 메인 페이지 컴포넌트
             },
             {
                 path: "trade",

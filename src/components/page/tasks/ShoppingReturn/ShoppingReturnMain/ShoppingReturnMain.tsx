@@ -1,17 +1,23 @@
 import { useContext, useEffect, useState } from "react";
 import { ShoppingReturnContext } from "../../../../../api/Provider/ShoppingReturnProvider";
 import { IShoppingReturn, IShoppingReturnBodyResponse } from "../../../../../models/interface/IShoppingReturn";
-import { shoppingReturnSearchApi } from "../../../../../api/ShoppingReturnApi/searchApi";
+import { searchApi } from "../../../../../api/ShoppingReturnApi/searchApi";
 import { ShoppingReturn } from "../../../../../api/api";
 import { ShoppingReturnMainStyled } from "./styled";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
+import { Portal } from "../../../../common/potal/Portal";
+import { ShoppingReturnModal } from "../ShoppingReturnModal/ShoppingReturnModal";
+import { useRecoilState } from "recoil";
+import { modalState } from "../../../../../stores/modalState";
 
 export const ShoppingReturnMain = () => {
     const { searchKeyword } = useContext(ShoppingReturnContext);
     const [shoppingReturnList, setShoppingReturnList] = useState<IShoppingReturn[]>([]);
     const [shoppingReturnListCount, setShoppingReturnListCount] = useState<number>(0);
     const [cPage, setCPage] = useState<number>(0);
+    const [modal, setModal] = useRecoilState<boolean>(modalState);
+    const [refundId, setRefundId] = useState<number>(0);
 
     const columns = [
         { key: "refundId", title: "번호" },
@@ -24,13 +30,13 @@ export const ShoppingReturnMain = () => {
     ] as Column<IShoppingReturn>[];
 
     useEffect(() => {
-        SearchShoppingReturn();
+        searchShoppingReturn();
     }, [searchKeyword]);
 
-    const SearchShoppingReturn = async (currentPage?: number) => {
+    const searchShoppingReturn = async (currentPage?: number) => {
         currentPage = currentPage || 1;
 
-        const result = await shoppingReturnSearchApi<IShoppingReturnBodyResponse>(ShoppingReturn.searchList, {
+        const result = await searchApi<IShoppingReturnBodyResponse>(ShoppingReturn.searchList, {
             ...searchKeyword,
             currentPage,
             pageSize: 5,
@@ -41,6 +47,20 @@ export const ShoppingReturnMain = () => {
             setShoppingReturnListCount(result.shoppingReturnListCnt);
             setCPage(currentPage);
         }
+    };
+
+    const handlerModal = (refundId: number) => {
+        console.log("Modal status before:", modal); // 로그 추가
+
+        setModal(!modal);
+        setRefundId(refundId);
+
+        console.log("Modal status after:", modal); // 로그 추가
+    };
+
+    const postSuccess = () => {
+        searchShoppingReturn();
+        searchShoppingReturn(cPage);
     };
 
     return (
@@ -55,7 +75,7 @@ export const ShoppingReturnMain = () => {
                 </thead>
                 <tbody>
                     {shoppingReturnList.map((row) => (
-                        <tr key={row.refundId}>
+                        <tr onClick={() => handlerModal(row.refundId)} key={row.refundId}>
                             {columns.map((column) => {
                                 if (column.key === "isApproved") {
                                     // isApproved 값 변환
@@ -76,10 +96,15 @@ export const ShoppingReturnMain = () => {
             {/* <StyledTable data={shoppingReturnList} columns={columns} /> */}
             <PageNavigate
                 totalItemsCount={shoppingReturnListCount}
-                onChange={SearchShoppingReturn}
+                onChange={searchShoppingReturn}
                 itemsCountPerPage={5}
                 activePage={cPage}
             />
+            {modal && (
+                <Portal>
+                    <ShoppingReturnModal refundId={refundId} setRefundId={setRefundId} postSuccess={postSuccess} />
+                </Portal>
+            )}
         </ShoppingReturnMainStyled>
     );
 };

@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { useRecoilState } from "recoil";
-import { modalState } from "../../../../../stores/modalState";
+import { modalState, shoppingOrdersModalState } from "../../../../../stores/modalState";
 import { ShoppingOrders } from "../../../../../api/api";
 import { postApi } from "../../../../../api/tradeApi/postApi";
 import Swal from "sweetalert2";
@@ -26,7 +26,7 @@ interface IShoppingOrderModalProps {
 }
 
 export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ postSuccess, shoppingOrderId }) => {
-    const [modal, setModal] = useRecoilState(modalState);
+    const [shoppingOrdersModal, setShoppingOrdersModal] = useRecoilState(shoppingOrdersModalState);
     const [warehouseOptions, setWarehouseOptions] = useState<ISelectOption[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [managerOptions, setManagerOptions] = useState<ISelectOption[]>([]);
@@ -326,7 +326,7 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
                         )}{" "}
                     </div>
                     <div className="button-container">
-                    <StyledButton size="small" onClick={() => setModal(!modal)}>취소</StyledButton>
+                    <StyledButton size="small" onClick={() => setShoppingOrdersModal(!shoppingOrdersModal)}>취소</StyledButton>
                     </div>
                 </div>
             )}
