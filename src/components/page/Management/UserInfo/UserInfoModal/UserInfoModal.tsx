@@ -31,7 +31,6 @@ import { userInfoDetailApi } from "../../../../../api/UserInfoApi/userInfoDetail
 
 export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId }) => {
     console.log("isdetail: " + isdetail);
-    //모달 관리
     const [modal, setModal] = useRecoilState(modalState);
 
     const [detailModal, setDetailModal] = useRecoilState(detailModalState);

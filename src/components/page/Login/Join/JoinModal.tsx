@@ -5,11 +5,6 @@ import { modalState } from "../../../../stores/modalState";
 import axios, { AxiosResponse } from "axios";
 import { JoinStyled2 } from "./styled2";
 
-// declare global {
-//     interface Window {
-//         daum2: any;
-//     }
-// }
 interface IJoinFormData {
     action: string;
     user_type: string;
