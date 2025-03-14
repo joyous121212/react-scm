@@ -5,11 +5,11 @@ import { modalState } from "../../../../stores/modalState";
 import axios, { AxiosResponse } from "axios";
 import { JoinStyled2 } from "./styled2";
 
-declare global {
-    interface Window {
-        daum2: any;
-    }
-}
+// declare global {
+//     interface Window {
+//         daum2: any;
+//     }
+// }
 interface IJoinFormData {
     action: string;
     user_type: string;
@@ -143,7 +143,7 @@ export const JoinModal = () => {
     };
 
     const execDaumPostcode = () => {
-        new window.daum2.Postcode({
+        new window.daum.Postcode({
             oncomplete: function (data: any) {
                 // 도로명 주소 및 참고 항목 처리
                 const roadAddr = data.roadAddress;
