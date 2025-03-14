@@ -59,6 +59,14 @@ export const WarehouseInfo = {
     warehouseInfoDelete: "/management/warehouseInfoDeleteBody.do",
 };
 
+export const InquiryInfo = {
+    inquiryListBody: "/management/inquiryListBody.do",
+    insertInquiry: "/support/inquiryFileSaveBody.do",
+    inquiryDetailBody: "/support/inquiryDetailBody.do",
+    inquiryFileUpdateBody: "/support/inquiryFileUpdateBody.do",
+    inquiryFileDelete: "/support/inquiryFileDeleteBody.do",
+};
+
 export const Shopping = {
     searchList: "/tasks/deliveryOrderListBody.do",
 };

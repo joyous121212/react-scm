@@ -31,6 +31,7 @@ import { SupplierInfo } from "../pages/management/SupplierInfo";
 import { SupplierInfoList } from "../pages/management/SupplierInfoList";
 import { ProductInfo } from "../pages/management/ProductInfo";
 import { WarehouseInfo } from "../pages/management/WarehouseInfo";
+import { Inquiry } from "../pages/management/Inquiry";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -74,6 +75,17 @@ const routers: RouteObject[] = [
                     },
                 ],
             },
+
+            {
+                path: "support",
+                children: [{ path: "inquiry", element: <Inquiry /> }],
+            },
+
+            {
+                path: "support",
+                children: [{ path: "inquiry", element: <Inquiry /> }],
+            },
+
             {
                 path: "management",
                 children: [
@@ -105,10 +117,14 @@ const routers: RouteObject[] = [
                         path: "product-info",
                         element: <ProductInfo />,
                     },
-                     {
-                                            path: "warehouse-info",
-                                            element: <WarehouseInfo />,
-                                        },
+                    {
+                        path: "warehouse-info",
+                        element: <WarehouseInfo />,
+                    },
+                    {
+                        path: "inquiry",
+                        element: <Inquiry />,
+                    },
                 ],
             },
             {
