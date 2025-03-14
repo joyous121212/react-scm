@@ -10,6 +10,7 @@ import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable"
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { Portal } from "../../../../common/potal/Portal";
 import { OrdersReturnListModal } from "../OrdersReturnListModal/OrdersReturnListModal";
+import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 
 export const OrdersReturnListMain = () => {
     const { searchValue } = useContext(OrdersReturnListContext);
@@ -50,22 +51,94 @@ export const OrdersReturnListMain = () => {
         searchOrdersReturnList(cPage);
     };
 
+    // 입금확인 버튼 클릭 시 상태 업데이트
+    const handlePaymentConfirm = async (e, orderRequestsId) => {
+        e.preventDefault(); // 기본 이벤트 방지
+        e.stopPropagation();
+
+        console.log("전송할 orderId:", orderRequestsId);
+
+        try {
+            const result = await searchApi<IOrdersReturnListResponse>(OrdersReturnList.updateReturnIsPaid, {
+                orderRequestsId,
+            });
+            console.log("입금 확인 API 응답:", result); // 응답 확인
+
+            if (result?.result === "success") {
+                // 업데이트 성공 시, 최신 주문 목록 다시 불러오기
+                await searchOrdersReturnList(cPage);
+            } else {
+                console.error("입금 확인 업데이트 실패");
+            }
+        } catch (error) {
+            console.error("입금 확인 처리 중 오류 발생:", error);
+        }
+    };
+
     const columns = [
         { key: "orderRequestsId", title: "반품번호" },
         { key: "supplyName", title: "반품회사" },
         { key: "productName", title: "반품제품" },
         { key: "count", title: "반품수량" },
         { key: "requestsOrderDate", title: "날짜" },
-        { key: "isPaid", title: "입금확인" },
+        { key: "returnIsPaid", title: "입금확인" },
     ] as Column<IOrdersReturnList>[];
 
     return (
         <OrdersReturnListMainStyled>
-            <StyledTable
+            <table>
+                <thead>
+                    <tr>
+                        {columns.map((column) => (
+                            <th key={column.key}>{column.title}</th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {ordersReturnList.map((row) => (
+                        <tr
+                            key={row.orderRequestsId}
+                            onClick={() => {
+                                if (row.returnIsPaid) {
+                                    // returnIsPaid가 입금인 경우에만 모달 열기
+                                    handlerModal(row.orderRequestsId);
+                                }
+                            }}
+                            className={row.returnIsPaid ? "clickable-row" : ""}
+                        >
+                            {columns.map((column) => {
+                                // returnIsPaid 컬럼 변환
+                                if (column.key === "returnIsPaid") {
+                                    return (
+                                        <td key={column.key}>
+                                            {row.returnIsPaid ? (
+                                                "입금"
+                                            ) : (
+                                                <StyledButton
+                                                    onClick={(e) => handlePaymentConfirm(e, row.orderRequestsId)}
+                                                >
+                                                    입금확인
+                                                </StyledButton>
+                                            )}
+                                        </td>
+                                    );
+                                }
+
+                                return (
+                                    <td key={column.key} className={row.returnIsPaid ? "td-pointer" : ""}>
+                                        {row[column.key]}
+                                    </td>
+                                );
+                            })}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            {/* <StyledTable
                 data={ordersReturnList}
                 columns={columns}
                 onRowClick={(row) => handlerModal(row.orderRequestsId)}
-            />
+            /> */}
             <PageNavigate
                 totalItemsCount={ordersRetrunCount}
                 onChange={searchOrdersReturnList}

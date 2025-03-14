@@ -10,6 +10,14 @@ export const CommonCode = {
     delete: "/management/commonCodeDeleteBody.do",
 } as const;
 
+export const DetailCode = {
+    searchList: "/management/commonDetailCodeListJson.do",
+    searchDetail: "/management/commonDetailCodeDetailBody.do",
+    save: "/management/commonDetailCodeSaveBody.do",
+    update: "/management/commonDetailCodeUpdateBody.do",
+    delete: "/management/commonDetailCodeDeleteBody.do",
+} as const;
+
 export const Notice = {
     search: "/management/noticeListBody.do",
 };
@@ -106,4 +114,5 @@ export const OrdersReturnList = {
     searchList: "/tasks/orderReturnListBody.do",
     searchModal: "/tasks/ordersReturnModalBody.do",
     returnUpdate: "/tasks/ordersReturnUpdateBody.do",
+    updateReturnIsPaid: "/tasks/ordersReturnPaidUpdateBody.do",
 };

@@ -45,7 +45,35 @@ export const ShoppingReturnMain = () => {
 
     return (
         <ShoppingReturnMainStyled>
-            <StyledTable data={shoppingReturnList} columns={columns} />
+            <table>
+                <thead>
+                    <tr>
+                        {columns.map((column) => (
+                            <th key={column.key}>{column.title}</th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {shoppingReturnList.map((row) => (
+                        <tr key={row.refundId}>
+                            {columns.map((column) => {
+                                if (column.key === "isApproved") {
+                                    // isApproved 값 변환
+                                    const approvalStatus = [
+                                        "SCM 승인 대기중",
+                                        "임원 승인 대기중",
+                                        "임원 승인 완료",
+                                        "창고 이동 완료",
+                                    ];
+                                    return <td key={column.key}>{approvalStatus[row.isApproved] || "알 수 없음"}</td>;
+                                }
+                                return <td key={column.key}>{row[column.key]}</td>;
+                            })}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            {/* <StyledTable data={shoppingReturnList} columns={columns} /> */}
             <PageNavigate
                 totalItemsCount={shoppingReturnListCount}
                 onChange={SearchShoppingReturn}

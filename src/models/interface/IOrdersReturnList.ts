@@ -15,6 +15,7 @@ export interface IOrdersReturnList {
     detailName: string;
     productName: string;
     warehouseId: number;
+    returnIsPaid: number;
 }
 
 export interface IOrdersReturnListResponse {

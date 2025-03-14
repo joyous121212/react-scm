@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ShoppingOrdersMainStyled = styled.div`
+export const NoticeMainStyled = styled.div`
     table {
         width: 100%;
         border-collapse: collapse;
@@ -15,9 +15,8 @@ export const ShoppingOrdersMainStyled = styled.div`
 
     th,
     td {
-        padding: 13px;
+        padding: 12px;
         text-align: center;
-        font-size:12px;
     }
 
     th {
