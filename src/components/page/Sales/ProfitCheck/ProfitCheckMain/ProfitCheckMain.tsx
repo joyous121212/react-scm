@@ -6,9 +6,10 @@ import { ProfitCheck } from "../../../../../api/api";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { ProfitCheckContext } from "../../../../../api/Provider/ProfitCheckProvider";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { ProfitCheckSubGrid } from "../ProfitCheckSubGrid/ProfitCheckSubGrid";
+import { profitCheckState } from "../../../../../stores/profitCheckState";
 
 export const ProfitCheckMain = () => {
     const [profitCheck, setProfitCheck] = useState<IProfitCheck[]>([]);
@@ -16,7 +17,7 @@ export const ProfitCheckMain = () => {
     const [cPage, setCPage] = useState<number>(0);
     const {searchKeyword} = useContext(ProfitCheckContext);
     const [supplyId, setSupplyId] = useState<number>();
-    const [modal, setModal] = useRecoilState<boolean>(modalState);
+    const [modal, setModal] = useRecoilState<boolean>(profitCheckState);
 
     const columns = [
         { key: "supplierName", title: "기업명" , clickable: true },

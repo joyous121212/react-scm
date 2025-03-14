@@ -8,9 +8,10 @@ import { Performance } from "../../../../../api/api";
 import { IPerformanceDetail } from '../../../../../models/interface/IPerformance';
 import { useEffect, useState } from "react";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
+import { performanceState } from "../../../../../stores/performanceState";
 
 export const PerformanceSubGrid = ({supplyId}) => {
-    const [modal, setModal] = useRecoilState(modalState);
+    const [modal, setModal] = useRecoilState(performanceState);
     const [detail, setDetail] = useState<IPerformanceDetail[]>([]);
 
     const columns = [

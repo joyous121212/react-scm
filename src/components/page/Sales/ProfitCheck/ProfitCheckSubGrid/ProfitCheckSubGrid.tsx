@@ -7,9 +7,10 @@ import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
+import { profitCheckState } from "../../../../../stores/profitCheckState";
 
 export const ProfitCheckSubGrid = ({supplyId}) => {
-    const [modal, setModal] = useRecoilState(modalState);
+    const [modal, setModal] = useRecoilState(profitCheckState);
     const [profitCheckDetail, setProfitCheckDetail] = useState<IProfitCheckDetail[]>([]);
 
     const columns = [
