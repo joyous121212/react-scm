@@ -35,7 +35,7 @@ export const InquiryMain = () => {
     const [cPage, setCPage] = useState<number>(0);
     const [inquiryId, setInquiryId] = useState<number | undefined>();
     async function searchFnc(currentPage?: number) {
-        console.log(searchKeyword);
+        const userType = JSON.parse(sessionStorage.getItem("userInfo")).userType;
         currentPage = currentPage || 1;
         const searchParam = new URLSearchParams(search);
         searchParam.append("currentPage", currentPage.toString());
@@ -43,7 +43,7 @@ export const InquiryMain = () => {
         searchParam.append("searchTitle", searchKeyword.searchTitle.toString());
         searchParam.append("searchStDate", searchKeyword.searchStDate.toString());
         searchParam.append("searchEdDate", searchKeyword.searchEdDate.toString());
-        searchParam.append("userType", searchKeyword.userType.toString());
+        searchParam.append("userType", userType);
         const res: ISearcInquiryListApiResponse = await searcinquiryListApi(InquiryInfo.inquiryListBody, searchParam);
         if (res) {
             setInquiry(res.inquiry);
@@ -53,7 +53,7 @@ export const InquiryMain = () => {
     }
 
     useEffect(() => {
-        alert("post레더 에서 두번이상 계속 떠야함");
+        // alert("post레더 에서 두번이상 계속 떠야함");
         searchFnc();
     }, [searchKeyword]);
 
