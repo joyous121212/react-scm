@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { modalState } from "../../../../../stores/modalState";
+import { inventoryModalState, modalState } from "../../../../../stores/modalState";
 import { searchApi } from "../../../../../api/CommonCodeApi/searchApi";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { Inventory } from "../../../../../api/api";
@@ -25,7 +25,7 @@ export const InventoryListMain = () => {
     const [inventoryList, setInventoryList] = useState<IInventory[]>([]);
     const [inventoryListCnt, setInventoryListCnt] = useState<number>(0);
     const [inventoryPropsOption, setInventoryPropsOption] = useState<IInventoryPropsOptions>(initInventoryPropsOptions);
-    const [modal, setModal] = useRecoilState(modalState);
+    const [inventoryModal, setInventoryModal] = useRecoilState(inventoryModalState);
 
     const columns = [
         { key: "productId", title: "번호" },
@@ -42,8 +42,8 @@ export const InventoryListMain = () => {
     }, [searchTitle]);
 
     const searchInventory = async (currentPage?: number) => {
-        if (modal) {
-            setModal(!modal);
+        if (inventoryModal) {
+            setInventoryModal(!inventoryModal);
         }
         currentPage = currentPage || 1;
         setIsLoading(true);
@@ -68,8 +68,8 @@ export const InventoryListMain = () => {
 
     const handlerModal = (propsOptions: IInventoryPropsOptions) => {
         setInventoryPropsOption(propsOptions);
-        if (!modal) {
-            setModal(!modal);
+        if (!inventoryModal) {
+            setInventoryModal(!inventoryModal);
         }
     };
 
@@ -97,7 +97,7 @@ export const InventoryListMain = () => {
                 itemsCountPerPage={5}
                 activePage={cPage}
             />
-            {modal && <InventorySubGrid inventoryPropsOption={inventoryPropsOption} />}
+            {inventoryModal && <InventorySubGrid inventoryPropsOption={inventoryPropsOption} />}
         </InventoryMainStyled>
     );
 };

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { modalState } from "../../../../../stores/modalState";
+import { modalState, shoppingReturnListModalState } from "../../../../../stores/modalState";
 import { searchApi } from "../../../../../api/CommonCodeApi/searchApi";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { ShoppingReturnListMainStyled } from "./styled";
@@ -28,7 +28,7 @@ export const ShoppingReturnListMain = () => {
     const [cPage, setCPage] = useState<number>(0);
     const [shoppingReturnList, setShoppingReturnList] = useState<IShoppingReturn[]>([]);
     const [shoppingReturnListCnt, setShoppingReturnListCnt] = useState<number>(0);
-    const [modal, setModal] = useRecoilState(modalState);
+    const [shoppingReturnListModal, setShoppingReturnListModal] = useRecoilState(shoppingReturnListModalState);
     const [shoppingReturnId, setShoppingReturnId] = useState<number>(0);
 
     const columns = [
@@ -62,12 +62,12 @@ export const ShoppingReturnListMain = () => {
     };
 
     const handlerModal = (id: number) => {
-        setModal(!modal);
+        setShoppingReturnListModal(!shoppingReturnListModal);
         setShoppingReturnId(id);
     };
 
     const postSuccess = () => {
-        setModal(!modal);
+        setShoppingReturnListModal(!shoppingReturnListModal);
         searchShoppingReturn();
     };
 
@@ -116,7 +116,7 @@ export const ShoppingReturnListMain = () => {
                 itemsCountPerPage={5}
                 activePage={cPage}
             />
-            {modal && (
+            {shoppingReturnListModal && (
                 <Portal>
                     <ShoppingReturnModal shoppingReturnId={shoppingReturnId} postSuccess={postSuccess} />
                 </Portal>

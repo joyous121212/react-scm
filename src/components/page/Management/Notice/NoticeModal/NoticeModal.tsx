@@ -6,6 +6,8 @@ import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import axios, { AxiosResponse } from "axios";
 import { INoticeDetail, INoticeDetailResponse, IPostResponse } from "../../../../../models/interface/INotice";
+import { ILoginInfo } from "../../../../../models/interface/store/userInfo";
+import { loginInfoState } from "../../../../../stores/userInfo";
 
 interface INoticeModalProps {
     noticeId: number;
@@ -19,8 +21,10 @@ export const NoticeModal: FC<INoticeModalProps> = ({ noticeId, setNoticeId, post
     const formRef = useRef<HTMLFormElement>(null);
     const [imageUrl, setImageUrl] = useState<string>("");
     const [fileName, setFileName] = useState<string>("");
+    const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
 
     useEffect(() => {
+        console.log(userInfo);
         noticeId && searchDetail();
 
         return () => {
@@ -197,10 +201,12 @@ export const NoticeModal: FC<INoticeModalProps> = ({ noticeId, setNoticeId, post
                     </table>
 
                     <div className='button-container'>
-                        <button type='button' onClick={noticeId ? updateNoticeFile : saveNoticeFile}>
-                            {noticeId ? "수정" : "저장"}
-                        </button>
-                        {!!noticeId && (
+                        {userInfo.userType === "S" ? (
+                            <button type='button' onClick={noticeId ? updateNoticeFile : saveNoticeFile}>
+                                {noticeId ? "수정" : "저장"}
+                            </button>
+                        ) : null}
+                        {!!noticeId && userInfo.userType === "S" && (
                             <button type='button' onClick={noticeDeleteFile}>
                                 삭제
                             </button>

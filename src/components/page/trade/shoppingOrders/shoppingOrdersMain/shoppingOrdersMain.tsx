@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { modalState } from "../../../../../stores/modalState";
+import { modalState, shoppingOrdersModalState } from "../../../../../stores/modalState";
 import { searchApi } from "../../../../../api/CommonCodeApi/searchApi";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { ShoppingOrders } from "../../../../../api/api";
@@ -20,7 +20,7 @@ export const ShoppingOrdersMain = () => {
     const [cPage, setCPage] = useState<number>(0);
     const [shoppingOrders, setShoppingOrders] = useState<IShoppingOrder[]>([]);
     const [shoppingOrdersCnt, setShoppingOrdersCnt] = useState<number>(0);
-    const [modal, setModal] = useRecoilState(modalState);
+    const [shoppingOrdersModal, setShoppingOrdersModal] = useRecoilState(shoppingOrdersModalState);
     const [modalStatus, setModalStatus] = useState<string>("");
     const [minimumOrderCount, setMinimumOrderCount] = useState<number>(0);
     const [shoppingOrdersId, setShoppingOrdersId] = useState<number>(0);
@@ -68,20 +68,20 @@ export const ShoppingOrdersMain = () => {
     };
 
     const handlerOrderModal = (id: number, count: number) => {
-        setModal(!modal);
+        setShoppingOrdersModal(!shoppingOrdersModal);
         setMinimumOrderCount(count);
         setModalStatus("order");
         setShoppingOrdersId(id);
     };
 
     const handlerDeliveryModal = (id: number) => {
-        setModal(!modal);
+        setShoppingOrdersModal(!shoppingOrdersModal);
         setModalStatus("delivery");
         setShoppingOrdersId(id);
     };
 
     const postSuccess = () => {
-        setModal(!modal);
+        setShoppingOrdersModal(!shoppingOrdersModal);
         searchShoppingOrders();
     };
 
@@ -161,7 +161,7 @@ export const ShoppingOrdersMain = () => {
                 activePage={cPage}
             />
             {
-                modal &&
+                shoppingOrdersModal &&
                     (modalStatus === "order" ? (
                         <Portal>
                             <ShoppingOrdersOrderModal
