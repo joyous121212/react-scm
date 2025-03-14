@@ -24,7 +24,6 @@ export const SupplierInfoMain = () => {
     const [supplyId, setSupplyId] = useState(undefined);
     const [detailModal, setDetailModal] = useRecoilState(detailModalState);
     const [cPage, setCPage] = useState<number>(0);
-    //
     const [supCount, setSupCoun] = useState<number>(0);
 
     // 페이지 네이션 돌아가서 주석처리함. 잠시 삭제는 대기
