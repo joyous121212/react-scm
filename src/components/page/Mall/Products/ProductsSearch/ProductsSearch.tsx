@@ -3,8 +3,8 @@ import { StyledSelectBox } from "../../../../common/StyledSelectBox/StyledSelect
 import { ProductsSearchStyled } from "./styled"
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
-import { searchApi } from "../../../../../api/MallApi/searchApi";
-import { getApi } from "../../../../../api/MallApi/getApi";
+import { searchApi } from "../../../../../api/ProductsApi/searchApi";
+import { getApi } from "../../../../../api/ProductsApi/getApi";
 import { ICategory, ISupplyList } from "../../../../../models/interface/IProducts";
 import { Products } from "../../../../../api/api";
 import { ProductsContext } from "../../../../../api/Provider/ProductsProvider";

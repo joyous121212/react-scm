@@ -4,7 +4,14 @@ export const modalState = atom<boolean>({
     key: "modalState",
     default: false,
 });
-export const findModalState = atom<boolean>({
-    key: "findModalState",
+
+export const detailModalState = atom<boolean>({
+    key: "detailModalState",
+    default: false,
+});
+
+
+export const detailListModalState = atom<boolean>({
+    key: "detailListModalState",
     default: false,
 });
