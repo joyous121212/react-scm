@@ -20,12 +20,12 @@ export const PerformanceSearch = () => {
 
     return (
         <PerformanceSearchStyled>
-            🔎 기업 고객명 :
+            기업 고객명:
             <StyledInput size="small" ref={supplierName}/>
-            📅 조회 기간 :
+            조회 기간:
             <StyledInput size="small" type="date" onChange={(e) => setStartDate(e.target.value)}/>
             ~
-            <StyledInput size="small" type="date" onChange={(e) => setEndDate(e.target.value)}/>
+            <StyledInput size="small" type="date" onChange={(e) => setEndDate(e.target.value)} />
             <StyledButton variant='secondary' onClick={handlerSearch}>
                 검색
             </StyledButton>

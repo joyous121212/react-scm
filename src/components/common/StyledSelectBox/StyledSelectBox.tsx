@@ -2,8 +2,8 @@ import { FC } from "react";
 import { SelectBox } from "./styled";
 
 interface SelectBoxProps {
-    options: { label: string; value: string| number }[];
-    value?: string | number ;
+    options: { label: string; value: string | number }[];
+    value?: string | number;
     onChange: React.Dispatch<React.SetStateAction<string | number>>;
     variant?: "default" | "primary" | "danger";
     fullwidth?: boolean;

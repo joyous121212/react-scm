@@ -1,18 +1,18 @@
 import { createContext, FC, ReactNode, useState } from "react";
 
-interface ISearchValue {
-    searchValue?: object;
-    setSearchValue?: React.Dispatch<React.SetStateAction<object>>;
+interface ISearchKeyword {
+    searchKeyword?: object;
+    setSearchKeyword?: React.Dispatch<React.SetStateAction<object>>;
 }
 
-export const OrdersReturnListContext = createContext<ISearchValue>({});
+export const OrdersReturnListContext = createContext<ISearchKeyword>({});
 
 export const OrdersReturnListProvider: FC<{
     children: React.ReactNode | React.ReactNode[];
 }> = ({ children }) => {
-    const [searchValue, setSearchValue] = useState<object>({});
+    const [searchKeyword, setSearchKeyword] = useState<object>({});
     return (
-        <OrdersReturnListContext.Provider value={{ searchValue, setSearchValue }}>
+        <OrdersReturnListContext.Provider value={{ searchKeyword, setSearchKeyword }}>
             {children}
         </OrdersReturnListContext.Provider>
     );

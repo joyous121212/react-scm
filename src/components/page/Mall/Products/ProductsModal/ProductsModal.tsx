@@ -15,19 +15,6 @@ import { postApi } from '../../../../../api/MallApi/postApi';
 import { ProductsContext } from '../../../../../api/Provider/ProductsProvider';
 import Swal from 'sweetalert2';
 
-const HorizontalContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px; // 요소 간 간격
-  margin-bottom: 15px; // 다음 입력 필드와의 간격
-`;
-
-// 라벨과 입력 필드를 그룹화하는 컴포넌트
-const InputGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1; // 공간을 균등하게 차지
-`;
 
 interface IProductsModalProps {
     productId: number;
@@ -46,10 +33,10 @@ const initProducts = {
     supplyName: "",
     fileName: null,
     fileSize: 0,
-    logicalPath: null,
-};
+    logicalPath: null, 
+}
 
-export const ProductsModal: FC<IProductsModalProps> = ({ productId, postSuccess, setProductId }) => {
+export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, setProductId}) => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [imageUrl, setImageUrl] = useState<string>("");
     const [fileName, setFileName] = useState<string>("");
@@ -78,7 +65,7 @@ export const ProductsModal: FC<IProductsModalProps> = ({ productId, postSuccess,
                 {productId}
             );
 
-            if (result) {
+            if(result) {
                 setDetail(result.detailValue);
                 setAttachment(result.attachmentValue);
 
@@ -253,5 +240,5 @@ export const ProductsModal: FC<IProductsModalProps> = ({ productId, postSuccess,
 
 
         </ProductsModalStyled>
-    );
-};
+    )
+}

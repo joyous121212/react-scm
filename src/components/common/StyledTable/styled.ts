@@ -3,7 +3,7 @@ import styled from "styled-components";
 // ✅ 불필요한 속성이 DOM에 전달되지 않도록 설정
 export const Table = styled.table.withConfig({
     shouldForwardProp: (prop) => !["bordered", "fullWidth"].includes(prop),
-})<{ fullWidth?: boolean; bordered?: boolean;}>`
+})<{ fullWidth?: boolean; bordered?: boolean }>`
     width: ${({ fullWidth }) => (fullWidth ? "100%" : "auto")};
     border-collapse: collapse;
     ${({ bordered }) => (bordered ? "border: 1px solid #ddd;" : "")}

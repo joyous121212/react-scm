@@ -1,110 +1,89 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { DetailCodeMainStyled } from "./styled";
+import axios, { AxiosResponse } from "axios";
 import { useContext, useEffect, useState } from "react";
 import { CommonDetailCodeContext } from "../../../../../api/Provider/CommonDetailCodeProvider";
-import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
-import { ICommonDetailCode, ICommonDetailResponse } from "../../../../../models/interface/ICommonCode";
-import { useRecoilState } from "recoil";
-import { modalState } from "../../../../../stores/modalState";
-import { searchApi } from "../../../../../api/CommonCodeApi/searchApi";
-import { DetailCode } from "../../../../../api/api";
-import { Spinner } from "../../../../common/Spinner/spinner";
-import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
-import { Portal } from "../../../../common/potal/Portal";
-import { DetailCodeModal } from "../DetailModal/DetailModal";
+
+interface ICommonDetailCode {
+    detailIdx: number;
+    groupCode: string;
+    detailCode: string;
+    detailName: string;
+    useYn: "Y" | "N";
+    author: string;
+    createdDate: string;
+    note: string;
+}
+
+interface ICommonDetailResponse {
+    commonDetailCodeCnt: number;
+    commonDetailCode: ICommonDetailCode[];
+}
 
 export const DetailCodeMain = () => {
     const navigate = useNavigate();
     const { state } = useLocation();
-    const [commonDetailCodeCount, setCommonDetailCodeCount] = useState<number>(0);
-    const [cPage, setCPage] = useState<number>(0);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [detailCodeId, setDetailCodeId] = useState<number>(0);
-    const [modal, setModal] = useRecoilState(modalState);
-    const [commonDetailCodeList, setDetailCodeList] = useState<ICommonDetailCode[]>();
-    const { searchKeyword, setGroupCode } = useContext(CommonDetailCodeContext);
-
-    const columns = [
-        { key: "detailIdx", title: "번호" },
-        { key: "groupCode", title: "그룹코드" },
-        { key: "detailCode", title: "상세코드" },
-        { key: "detailName", title: "상세코드명" },
-        { key: "note", title: "상세 코드 설명" },
-        { key: "useYn", title: "사용여부" },
-        { key: "actions", title: "비고" },
-    ] as Column<ICommonDetailCode>[];
+    const { groupIdx } = useParams();
+    const [commonDetailCodeList, setCommonCodeList] = useState<ICommonDetailCode[]>();
+    const { searchKeyword } = useContext(CommonDetailCodeContext);
 
     useEffect(() => {
         searchDetailCode();
     }, [searchKeyword]);
 
-    const searchDetailCode = async (currentPage?: number) => {
-        currentPage = currentPage || 1;
-        setIsLoading(true);
-        try {
-            const result = await searchApi<ICommonDetailResponse>(DetailCode.searchList, {
+    const searchDetailCode = () => {
+        axios
+            .post("/management/commonDetailCodeListJson.do", {
                 ...searchKeyword,
                 groupCode: state.groupCode,
-                currentPage,
+                currentPage: 1,
                 pageSize: 5,
+            })
+            .then((res: AxiosResponse<ICommonDetailResponse>) => {
+                setCommonCodeList(res.data.commonDetailCode);
             });
-
-            if (result) {
-                setCommonDetailCodeCount(result.commonDetailCodeCnt);
-                setDetailCodeList(result.commonDetailCode);
-                setCPage(currentPage);
-                setGroupCode(result.commonDetailCode[0].groupCode);
-            }
-        } catch (error) {
-            console.error("Error fetching shopping orders:", error);
-        } finally {
-            setIsLoading(false);
-        }
     };
 
-    const handlerModal = (id: number) => {
-        setModal(!modal);
-        setDetailCodeId(id);
-    };
-
-    const postSuccess = () => {
-        setModal(!modal);
-        searchDetailCode();
-    };
     return (
         <DetailCodeMainStyled>
-            {isLoading ? (
-                <Spinner />
-            ) : (
-                <StyledTable
-                    data={commonDetailCodeList}
-                    columns={columns}
-                    renderAction={(row) => (
-                        <StyledButton size='small' onClick={(e) => handlerModal(row.detailIdx)}>
-                            수정
-                        </StyledButton>
+            <table>
+                <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>그룹코드</th>
+                        <th>상세코드</th>
+                        <th>상세코드명</th>
+                        <th>상세코드설명</th>
+                        <th>사용여부</th>
+                        <th>비고</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {commonDetailCodeList?.length > 0 ? (
+                        commonDetailCodeList.map((commonDetailCode) => {
+                            return (
+                                <tr key={commonDetailCode.detailIdx}>
+                                    <td>{commonDetailCode.detailIdx}</td>
+                                    <td>{commonDetailCode.groupCode}</td>
+                                    <td>{commonDetailCode.detailCode}</td>
+                                    <td>{commonDetailCode.detailName}</td>
+                                    <td>{commonDetailCode.note}</td>
+                                    <td>{commonDetailCode.useYn}</td>
+                                    <td>
+                                        <StyledButton>수정</StyledButton>
+                                    </td>
+                                </tr>
+                            );
+                        })
+                    ) : (
+                        <tr>
+                            <td colSpan={7}>조회 내역이 없습니다.</td>
+                        </tr>
                     )}
-                />
-            )}
-            <PageNavigate
-                totalItemsCount={commonDetailCodeCount}
-                onChange={searchDetailCode}
-                itemsCountPerPage={5}
-                activePage={cPage}
-            />
-            <div className='button-container'>
-                <StyledButton onClick={() => navigate(-1)}>뒤로가기</StyledButton>
-            </div>
-            {modal && (
-                <Portal>
-                    <DetailCodeModal
-                        detailCodeId={detailCodeId}
-                        postSuccess={postSuccess}
-                        setDetailCodeId={setDetailCodeId}
-                    />
-                </Portal>
-            )}
+                </tbody>
+            </table>
+            <StyledButton onClick={() => navigate(-1)}>뒤로가기</StyledButton>
         </DetailCodeMainStyled>
     );
 };

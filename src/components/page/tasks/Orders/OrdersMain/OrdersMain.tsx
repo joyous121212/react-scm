@@ -7,6 +7,7 @@ import { OrdersContext } from "../../../../../api/Provider/OrdersProvider";
 import { searchApi } from "../../../../../api/CommonCodeApi/searchApi";
 import { Orders } from "../../../../../api/api";
 import { OrdersMainStyled } from "./styled";
+import { Modal } from "react-bootstrap";
 import { Portal } from "../../../../common/potal/Portal";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
@@ -15,9 +16,10 @@ import { IOrders, IOrdersBodyResponse } from "../../../../../models/interface/IO
 
 export const OrdersMain = () => {
     const { searchKeyword } = useContext(OrdersContext);
+    const { search } = useLocation();
     const [cPage, setCPage] = useState<number>(0);
-    const [orderList, setOrderList] = useState<IOrders[]>([]);
-    const [orderCount, setOrderCount] = useState<number>(0);
+    const [orderList, setOrders] = useState<IOrders[]>([]);
+    const [ordersCnt, setOrdersCnt] = useState<number>(0);
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [orderId, setOrderId] = useState<number>(0);
 
@@ -30,10 +32,10 @@ export const OrdersMain = () => {
     ] as Column<IOrders>[];
 
     useEffect(() => {
-        searchOrders();
+        SearchOrders();
     }, [searchKeyword]);
 
-    const searchOrders = async (currentPage?: number) => {
+    const SearchOrders = async (currentPage?: number) => {
         currentPage = currentPage || 1;
 
         const result = await searchApi<IOrdersBodyResponse>(Orders.searchList, {
@@ -43,9 +45,7 @@ export const OrdersMain = () => {
         });
 
         if (result) {
-            setOrderList(result.orderList);
-            setOrderCount(result.orderCnt);
-            setCPage(currentPage);
+            setOrders(result.orderList);
         }
     };
 
@@ -55,20 +55,18 @@ export const OrdersMain = () => {
     };
 
     const postSuccess = () => {
-        searchOrders();
-        searchOrders(cPage);
+        SearchOrders();
     };
 
     return (
         <OrdersMainStyled>
             <StyledTable data={orderList} columns={columns} onRowClick={(row) => handlerModal(row.orderId)} />
             <PageNavigate
-                totalItemsCount={orderCount}
-                onChange={searchOrders}
+                totalItemsCount={ordersCnt}
+                onChange={SearchOrders}
                 itemsCountPerPage={5}
                 activePage={cPage}
             />
-
             {modal && (
                 <Portal>
                     <OrdersModal orderId={orderId} setOrderId={setOrderId} postSuccess={postSuccess} />

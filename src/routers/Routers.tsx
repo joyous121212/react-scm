@@ -5,11 +5,6 @@ import { Notice } from "../../src/pages/management/Notice";
 import { DashBoard } from "../components/layout/DashBoard/DashBoard";
 import { NotFound } from "../components/common/NotFound/NotFound";
 import { DetailCode } from "../pages/management/DetailCode";
-import { Inventory } from "../pages/trade/inventory";
-import { UserInfo } from "../pages/management/UserInfo";
-import { SupplierInfo } from "../pages/management/SupplierInfo";
-import { SupplierInfoList } from "../pages/management/SupplierInfoList";
-import { Products } from "../pages/mall/Products";
 import { Shopping } from "../pages/tasks/Shopping";
 import { Orders } from "../pages/tasks/Orders";
 import { ApprovalOrder } from "../pages/approval/orders";
@@ -17,20 +12,16 @@ import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
 import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
 import { OrdersReturnList } from "../pages/tasks/OrdersReturnList";
 import { ShoppingReturn } from "../pages/tasks/ShoppingReturn";
-import { OrdersList } from "../pages/tasks/OrdersList";
+import { Products } from "../pages/mall/Products";
+import { Inventory } from "../pages/trade/inventory";
 import { Cart } from "../pages/mall/Cart";
-import { ShoppingOrders } from "../pages/trade/shoppingOrders";
 import { ShoppingList } from "../pages/delivery/ShoppingList";
 import { ShoppingReturnListDe } from "../pages/delivery/ShoppingReturnList";
 import { History } from "../pages/mall/History";
 import { HistroyDetail } from "../pages/mall/HistoryDetail";
 import { Performance } from "../pages/sales/Performance";
-import { TopSales } from "../pages/sales/TopSales";
+import { OrdersList } from "../pages/delivery/OrdersList";
 import { OrdersReturnListDe } from "../pages/delivery/OrdersReturnList";
-import { ProfitCheck } from "../pages/sales/ProfitCheck";
-import { ProductInfo } from "../pages/management/ProductInfo";
-import { Inquiry } from "../pages/management/Inquiry";
-import { WarehouseInfo } from "../pages/management/WarehouseInfo";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -39,10 +30,6 @@ const routers: RouteObject[] = [
         path: "/react",
         element: <DashBoard />,
         children: [
-            {
-                index: true, // 기본 페이지 설정
-                element: <Inventory />, // 원하는 메인 페이지 컴포넌트
-            },
             {
                 path: "trade",
                 children: [
@@ -53,10 +40,6 @@ const routers: RouteObject[] = [
                     {
                         path: "inventory",
                         element: <Inventory />,
-                    },
-                    {
-                        path: "shopping-orders",
-                        element: <ShoppingOrders />,
                     },
                 ],
             },
@@ -73,16 +56,6 @@ const routers: RouteObject[] = [
                     },
                 ],
             },
-
-            {
-                path: "support",
-                children: [{ path: "inquiry", element: <Inquiry /> }],
-            },
-
-            {
-                path: "support",
-                children: [{ path: "inquiry", element: <Inquiry /> }],
-            },
             {
                 path: "management",
                 children: [
@@ -97,30 +70,6 @@ const routers: RouteObject[] = [
                     {
                         path: "common-code/:groupIdx",
                         element: <DetailCode />,
-                    },
-                    {
-                        path: "user-info",
-                        element: <UserInfo />,
-                    },
-                    {
-                        path: "supplier-info",
-                        element: <SupplierInfo />,
-                    },
-                    {
-                        path: "supplier-info/:supplyId",
-                        element: <SupplierInfoList />,
-                    },
-                    {
-                        path: "product-info",
-                        element: <ProductInfo />,
-                    },
-                    {
-                        path: "warehouse-info",
-                        element: <WarehouseInfo />,
-                    },
-                    {
-                        path: "inquiry",
-                        element: <Inquiry />,
                     },
                 ],
             },
@@ -138,14 +87,6 @@ const routers: RouteObject[] = [
                     {
                         path: "shopping-return",
                         element: <ShoppingReturn />,
-                    },
-                    {
-                        path: "orders-list",
-                        element: <OrdersList />,
-                    },
-                    {
-                        path: "orders-return-list",
-                        element: <OrdersReturnList />,
                     },
                 ],
             },
@@ -211,12 +152,8 @@ const routers: RouteObject[] = [
                         element: <Cart />,
                     },
                     {
-                        path: "top-sales",
-                        element: <TopSales />,
-                    },
-                    {
-                        path: "profit-check",
-                        element: <ProfitCheck />,
+                        path: "history",
+                        element: <History />,
                     },
                 ],
             },
