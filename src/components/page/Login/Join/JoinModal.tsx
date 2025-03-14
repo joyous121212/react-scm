@@ -7,7 +7,7 @@ import { JoinStyled2 } from "./styled2";
 
 declare global {
     interface Window {
-        daum: any;
+        daum2: any;
     }
 }
 interface IJoinFormData {
@@ -143,7 +143,7 @@ export const JoinModal = () => {
     };
 
     const execDaumPostcode = () => {
-        new window.daum.Postcode({
+        new window.daum2.Postcode({
             oncomplete: function (data: any) {
                 // 도로명 주소 및 참고 항목 처리
                 const roadAddr = data.roadAddress;
