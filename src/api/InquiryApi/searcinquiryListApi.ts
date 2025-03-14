@@ -1,8 +1,8 @@
 import axios, { AxiosResponse } from "axios";
 import { ISearcInquiryListApiResponse } from "../../models/interface/IInquiry";
-export const searcinquiryListApi = async <T, D>(api: string,param:D) => {
+export const searcinquiryListApi = async <T, D>(api: string, param: D) => {
     try {
-        const result: AxiosResponse<ISearcInquiryListApiResponse> = await axios.post(api,param);
+        const result: AxiosResponse<ISearcInquiryListApiResponse> = await axios.post(api, param);
 
         if (result.status === 200) {
             return result.data;

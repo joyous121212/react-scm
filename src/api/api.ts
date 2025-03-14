@@ -2,23 +2,20 @@ export const Login = {
     login: "/loginProc.do",
 };
 
-export const Inventory = {
-    searchSelectBoxList: "/trade/inventorySelectBoxBody.do",
-    searchList: "/trade/inventoryListBody.do",
-    searchDetail: "/trade/inventoryDetailBody.do",
-};
-
-export const delivery = {
-    searchShoppingList: "/delivery/shoppingDeliveryListJson.do",
-    searchShoppingReturnList: "/delivery/deliveryReturnListBody.do",
-    searchOrdersList: "/delivery/orderDirectionGroupListBody.do",
-};
 export const CommonCode = {
     searchList: "/management/commonCodeListBody.do",
     searchDetail: "/management/commonCodeDetailJson.do",
     save: "/management/commonCodeSaveBody.do",
     update: "/management/commonCodeUpdateBody.do",
     delete: "/management/commonCodeDeleteBody.do",
+} as const;
+
+export const DetailCode = {
+    searchList: "/management/commonDetailCodeListJson.do",
+    searchDetail: "/management/commonDetailCodeDetailBody.do",
+    save: "/management/commonDetailCodeSaveBody.do",
+    update: "/management/commonDetailCodeUpdateBody.do",
+    delete: "/management/commonDetailCodeDeleteBody.do",
 } as const;
 
 export const Notice = {
@@ -81,6 +78,8 @@ export const Products = {
     searchDetail: "/mall/productsDetailBody.do",
     category: "/mall/products/category",
     supplyList: "/mall/products/supplyList",
+    historySave: "/mall/historySaveBody.do",
+    cartDetailSave: "/mall/cartDetailSaveBody.do",
 };
 
 export const Cart = {
@@ -111,6 +110,18 @@ export const ShoppingReturnList = {
 
 export const Orders = {
     searchList: "/tasks/orderListBody.do",
+};
+
+export const Inventory = {
+    searchSelectBoxList: "/trade/inventorySelectBoxBody.do",
+    searchList: "/trade/inventoryListBody.do",
+    searchDetail: "/trade/inventoryDetailBody.do",
+};
+
+export const delivery = {
+    searchShoppingList: "/delivery/shoppingDeliveryListJson.do",
+    searchShoppingReturnList: "/delivery/deliveryReturnListBody.do",
+    searchOrdersList: "/delivery/orderDirectionGroupListBody.do",
 };
 
 export const Performance = {

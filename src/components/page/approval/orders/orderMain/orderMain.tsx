@@ -9,8 +9,10 @@ import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { postApi } from "../../../../../api/ApprovalApi/postApi";
 import Swal from "sweetalert2";
+import { Spinner } from "../../../../common/Spinner/spinner";
 
 export const ApprovalOrderMain = () => {
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const { searchKeyword } = useContext(ApprovalOrderContext);
     const [approvalOrderCount, setApprovalOrderCount] = useState<number>(0);
     const [cPage, setCPage] = useState<number>(0);
@@ -44,39 +46,49 @@ export const ApprovalOrderMain = () => {
 
     const searchApprovalOrder = async (currentPage?: number) => {
         currentPage = currentPage || 1;
+        setIsLoading(true);
+        try {
+            const result = await searchApi<IApprovalOrderResponse>(Approval.searchOrder, {
+                ...searchKeyword,
+                currentPage,
+                pageSize: 5,
+            });
 
-        const result = await searchApi<IApprovalOrderResponse>(Approval.searchOrder, {
-            ...searchKeyword,
-            currentPage,
-            pageSize: 5,
-        });
-
-        if (result) {
-            setApprovalOrderList(result.orderList);
-            setApprovalOrderCount(result.orderCnt);
-            setCPage(currentPage);
+            if (result) {
+                setApprovalOrderList(result.orderList);
+                setApprovalOrderCount(result.orderCnt);
+                setCPage(currentPage);
+            }
+        } catch (error) {
+            console.error("Error fetching shopping orders:", error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
         <ApprovalOrderMainStyled>
-            <StyledTable
-                data={approvalOrderList}
-                columns={columns}
-                renderAction={(row) => (
-                    <StyledButton size='small' onClick={() => handlerButton(row.orderId)}>
-                        승인
-                    </StyledButton>
-                )}
-                renderCell={(row, column) => {
-                    if (column.key === "price") {
-                        // count * price 계산 후, 원단위로 포맷 (₩)
-                        const totalPrice = row.count * row.price;
-                        return totalPrice.toLocaleString("ko-KR"); // 한국 원화(KRW) 단위
-                    }
-                    return row[column.key as keyof IApprovalOrder];
-                }}
-            />
+            {isLoading ? (
+                <Spinner />
+            ) : (
+                <StyledTable
+                    data={approvalOrderList}
+                    columns={columns}
+                    renderAction={(row) => (
+                        <StyledButton size='small' onClick={() => handlerButton(row.orderId)}>
+                            승인
+                        </StyledButton>
+                    )}
+                    renderCell={(row, column) => {
+                        if (column.key === "price") {
+                            // count * price 계산 후, 원단위로 포맷 (₩)
+                            const totalPrice = row.count * row.price;
+                            return `${totalPrice.toLocaleString("ko-KR")}원`; // 한국 원화(KRW) 단위
+                        }
+                        return row[column.key as keyof IApprovalOrder];
+                    }}
+                />
+            )}
             <PageNavigate
                 totalItemsCount={approvalOrderCount}
                 onChange={searchApprovalOrder}
