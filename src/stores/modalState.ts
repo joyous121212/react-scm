@@ -5,6 +5,11 @@ export const modalState = atom<boolean>({
     default: false,
 });
 
+export const findModalState = atom<boolean>({
+    key: "findModalState",
+    default: false,
+});
+
 export const detailModalState = atom<boolean>({
     key: "detailModalState",
     default: false,

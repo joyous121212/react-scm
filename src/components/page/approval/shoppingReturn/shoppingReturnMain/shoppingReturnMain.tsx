@@ -10,8 +10,10 @@ import { postApi } from "../../../../../api/ApprovalApi/postApi";
 import Swal from "sweetalert2";
 import { ApprovalShoppingReturnMainStyled } from "./styled";
 import { ApprovalShoppingReturnContext } from "../../../../../api/Provider/approval/ApprovalShoppingReturn";
+import { Spinner } from "../../../../common/Spinner/spinner";
 
 export const ApprovalShoppingReturnMain = () => {
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const { searchKeyword } = useContext(ApprovalShoppingReturnContext);
     const [approvalShoppingReturnCount, setApprovalShoppingReturnCount] = useState<number>(0);
     const [cPage, setCPage] = useState<number>(0);
@@ -46,39 +48,50 @@ export const ApprovalShoppingReturnMain = () => {
 
     const searchApprovalShoppingReturn = async (currentPage?: number) => {
         currentPage = currentPage || 1;
+        setIsLoading(true);
 
-        const result = await searchApi<IApprovalShoppingResponse>(Approval.searchShoppingReturn, {
-            ...searchKeyword,
-            currentPage,
-            pageSize: 5,
-        });
+        try {
+            const result = await searchApi<IApprovalShoppingResponse>(Approval.searchShoppingReturn, {
+                ...searchKeyword,
+                currentPage,
+                pageSize: 5,
+            });
 
-        if (result) {
-            setApprovalShoppingReturnList(result.shoppingReturn);
-            setCPage(currentPage);
-            setApprovalShoppingReturnCount(result.shoppingReturnCnt);
+            if (result) {
+                setApprovalShoppingReturnList(result.shoppingReturn);
+                setCPage(currentPage);
+                setApprovalShoppingReturnCount(result.shoppingReturnCnt);
+            }
+        } catch (error) {
+            console.error("Error fetching shopping orders:", error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
         <ApprovalShoppingReturnMainStyled>
-            <StyledTable
-                data={approvalShoppingReturnList}
-                columns={columns}
-                renderAction={(row) => (
-                    <StyledButton size='small' onClick={() => handlerButton(row.refundId)}>
-                        승인
-                    </StyledButton>
-                )}
-                renderCell={(row, column) => {
-                    if (column.key === "price") {
-                        // count * price 계산 후, 원단위로 포맷 (₩)
-                        const totalPrice = row.count * row.price;
-                        return totalPrice.toLocaleString("ko-KR"); // 한국 원화(KRW) 단위
-                    }
-                    return row[column.key as keyof IApprovalShoppingReturn];
-                }}
-            />
+            {isLoading ? (
+                <Spinner />
+            ) : (
+                <StyledTable
+                    data={approvalShoppingReturnList}
+                    columns={columns}
+                    renderAction={(row) => (
+                        <StyledButton size='small' onClick={() => handlerButton(row.refundId)}>
+                            승인
+                        </StyledButton>
+                    )}
+                    renderCell={(row, column) => {
+                        if (column.key === "price") {
+                            // count * price 계산 후, 원단위로 포맷 (₩)
+                            const totalPrice = row.count * row.price;
+                            return `${totalPrice.toLocaleString("ko-KR")}원`; // 한국 원화(KRW) 단위
+                        }
+                        return row[column.key as keyof IApprovalShoppingReturn];
+                    }}
+                />
+            )}
             <PageNavigate
                 totalItemsCount={approvalShoppingReturnCount}
                 onChange={searchApprovalShoppingReturn}

@@ -10,9 +10,25 @@ import { UserInfo } from "../pages/management/UserInfo";
 import { SupplierInfo } from "../pages/management/SupplierInfo";
 import { SupplierInfoList } from "../pages/management/SupplierInfoList";
 import { Products } from "../pages/mall/Products";
+import { Shopping } from "../pages/tasks/Shopping";
+import { Orders } from "../pages/tasks/Orders";
 import { ApprovalOrder } from "../pages/approval/orders";
 import { ApprovalShoppingReturn } from "../pages/approval/shoppingReturn";
 import { ShoppingReturnList } from "../pages/trade/shoppingReturnList";
+import { OrdersReturnList } from "../pages/tasks/OrdersReturnList";
+import { ShoppingReturn } from "../pages/tasks/ShoppingReturn";
+import { OrdersList } from "../pages/tasks/OrdersList";
+import { Inventory } from "../pages/trade/inventory";
+import { Cart } from "../pages/mall/Cart";
+import { ShoppingOrders } from "../pages/trade/shoppingOrders";
+import { ShoppingList } from "../pages/delivery/ShoppingList";
+import { ShoppingReturnListDe } from "../pages/delivery/ShoppingReturnList";
+import { History } from "../pages/mall/History";
+import { HistroyDetail } from "../pages/mall/HistoryDetail";
+import { Performance } from "../pages/sales/Performance";
+import { TopSales } from "../pages/sales/TopSales";
+import { OrdersReturnListDe } from "../pages/delivery/OrdersReturnList";
+import { ProfitCheck } from "../pages/sales/ProfitCheck";
 import { ProductInfo } from "../pages/management/ProductInfo";
 
 const routers: RouteObject[] = [
@@ -23,11 +39,23 @@ const routers: RouteObject[] = [
         element: <DashBoard />,
         children: [
             {
+                index: true, // 기본 페이지 설정
+                element: <Inventory />, // 원하는 메인 페이지 컴포넌트
+            },
+            {
                 path: "trade",
                 children: [
                     {
                         path: "shopping-return-list",
                         element: <ShoppingReturnList />,
+                    },
+                    {
+                        path: "inventory",
+                        element: <Inventory />,
+                    },
+                    {
+                        path: "shopping-orders",
+                        element: <ShoppingOrders />,
                     },
                 ],
             },
@@ -77,18 +105,50 @@ const routers: RouteObject[] = [
                     },
                 ],
             },
-        ],
-    },
-    {
-        path: "/react",
-        element: <DashBoard />,
-        children: [
             {
-                path: "mall",
+                path: "tasks",
                 children: [
                     {
-                        path: "products",
-                        element: <Products />,
+                        path: "shopping",
+                        element: <Shopping />,
+                    },
+                    {
+                        path: "orders",
+                        element: <Orders />,
+                    },
+                    {
+                        path: "shopping-return",
+                        element: <ShoppingReturn />,
+                    },
+                    {
+                        path: "orders-list",
+                        element: <OrdersList />,
+                    },
+                    {
+                        path: "orders-return-list",
+                        element: <OrdersReturnList />,
+                    },
+                ],
+            },
+
+            {
+                path: "delivery",
+                children: [
+                    {
+                        path: "shopping-list",
+                        element: <ShoppingList />,
+                    },
+                    {
+                        path: "shopping-return-list",
+                        element: <ShoppingReturnListDe />,
+                    },
+                    {
+                        path: "orders-list",
+                        element: <OrdersList />,
+                    },
+                    {
+                        path: "orders-return-list",
+                        element: <OrdersReturnListDe />,
                     },
                 ],
             },
@@ -104,6 +164,40 @@ const routers: RouteObject[] = [
                     {
                         path: "products",
                         element: <Products />,
+                    },
+                    {
+                        path: "cart",
+                        element: <Cart />,
+                    },
+
+                    {
+                        path: "history",
+                        element: <History />,
+                    },
+                    {
+                        path: "history/:orderId",
+                        element: <HistroyDetail />,
+                    },
+                ],
+            },
+            {
+                path: "sales",
+                children: [
+                    {
+                        path: "performance",
+                        element: <Performance />,
+                    },
+                    {
+                        path: "cart",
+                        element: <Cart />,
+                    },
+                    {
+                        path: "top-sales",
+                        element: <TopSales />,
+                    },
+                    {
+                        path: "profit-check",
+                        element: <ProfitCheck />,
                     },
                 ],
             },

@@ -11,9 +11,14 @@ import { searchApi } from "../../../../../api/CommonCodeApi/searchApi";
 import { CommonCode } from "../../../../../api/api";
 import { ICommonCode, ICommonCodeResponse } from "../../../../../models/interface/ICommonCode";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
+import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
+import { Spinner } from "../../../../common/Spinner/spinner";
 
 export const CommonCodeMain = () => {
     const { searchKeyword } = useContext(CommonCodeCotext);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [commonCodeCount, setCommonCodeCount] = useState<number>(0);
+    const [cPage, setCPage] = useState<number>(0);
     const [commonCodeList, setCommonCodeList] = useState<ICommonCode[]>([]);
     const [modal, setModal] = useRecoilState(modalState);
     const [groupId, setGroupId] = useState<number>(0);
@@ -35,19 +40,27 @@ export const CommonCodeMain = () => {
 
     const searchCommonCode = async (currentPage?: number) => {
         currentPage = currentPage || 1;
+        setIsLoading(true);
+        try {
+            const result = await searchApi<ICommonCodeResponse>(CommonCode.searchList, {
+                ...searchKeyword,
+                currentPage,
+                pageSize: 5,
+            });
 
-        const result = await searchApi<ICommonCodeResponse>(CommonCode.searchList, {
-            ...searchKeyword,
-            currentPage,
-            pageSize: 5,
-        });
-
-        if (result) {
-            setCommonCodeList(result.commonCode);
+            if (result) {
+                setCommonCodeCount(result.commonCodeCnt);
+                setCommonCodeList(result.commonCode);
+                setCPage(currentPage);
+            }
+        } catch (error) {
+            console.error("Error fetching shopping orders:", error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
-    const handlerModal = (id: number, e:React.MouseEvent<HTMLButtonElement>) => {
+    const handlerModal = (id: number, e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
         setModal(!modal);
         setGroupId(id);
@@ -60,15 +73,25 @@ export const CommonCodeMain = () => {
 
     return (
         <CommonCodeMainStyled>
-            <StyledTable
-                data={commonCodeList}
-                columns={columns}
-                onRowClick={(row) => navigate(`${row.groupIdx}`, { state: { groupCode: row.groupCode } })} // ✅ 특정 테이블에서만 실행!
-                renderAction={(row) => (
-                    <StyledButton size='small' onClick={(e) => handlerModal(row.groupIdx, e)}>
-                        수정
-                    </StyledButton>
-                )}
+            {isLoading ? (
+                <Spinner />
+            ) : (
+                <StyledTable
+                    data={commonCodeList}
+                    columns={columns}
+                    onRowClick={(row) => navigate(`${row.groupIdx}`, { state: { groupCode: row.groupCode } })} // ✅ 특정 테이블에서만 실행!
+                    renderAction={(row) => (
+                        <StyledButton size='small' onClick={(e) => handlerModal(row.groupIdx, e)}>
+                            수정
+                        </StyledButton>
+                    )}
+                />
+            )}
+            <PageNavigate
+                totalItemsCount={commonCodeCount}
+                onChange={searchCommonCode}
+                itemsCountPerPage={5}
+                activePage={cPage}
             />
             {modal && (
                 <Portal>
