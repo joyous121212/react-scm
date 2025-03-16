@@ -21,7 +21,11 @@ export interface IProductsListBodyResponse {
     products: IProducts[];
     productsCnt: number;
     userType: string;
+}
 
+export interface IMainProductsListBodyResponse {
+    productList: IProductsDetail[];
+    productCnt: number;
 }
 
 export interface IProductsBodyResponse {

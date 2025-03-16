@@ -73,6 +73,7 @@ export const NoticeMain = () => {
         <NoticeMainStyled>
             {isLoading ? (
                 <Spinner />
+                
             ) : (
                 <StyledTable
                     data={noticeList}
