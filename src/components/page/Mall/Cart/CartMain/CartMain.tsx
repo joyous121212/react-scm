@@ -16,6 +16,7 @@ export const CartMain= () => {
     const [totalAmount, setTotalAmount] = useState<number>(0);
     const [selectedPrice, setSelectedPrice] = useState<number>(0);
     const [cartdetailIdList, setCartdetailIdList] = useState<any[]>([]);
+    const [image, setImage] = useState<string>();
     
     const columns = [
         { key: "select", title: "선택" },
@@ -120,7 +121,7 @@ export const CartMain= () => {
             <StyledTable
                 data={cartList.map(item => ({
                     ...item.cartDetail,
-                    image: <img src = {item.image?.logicalPath || noData} />,
+                    image: item?.image?.logicalPath || null,
                     select: <input type="checkbox"></input>
                 }))}
                 columns={columns}
@@ -131,6 +132,17 @@ export const CartMain= () => {
                                 type="checkbox"
                                 checked={selectedRows.includes(row.cartdetailId)}
                                 onChange={() => handlerCheckboxChange(row.cartdetailId)}
+                            />
+                        );
+                    }
+                    if (column.key === "image") {
+                        return (
+                            <img 
+                                src={row.image || noData} 
+                                onError={(e) => {
+                                    e.currentTarget.src = noData;
+                                }}
+                                style={{ maxWidth: '100px', maxHeight: '100px' }}
                             />
                         );
                     }

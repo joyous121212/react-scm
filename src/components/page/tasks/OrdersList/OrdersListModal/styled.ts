@@ -68,6 +68,7 @@ export const OrdersListModalStyled = styled.div`
         display: flex;
         justify-content: space-between;
         margin-top: 10px;
+        width: 100%;
     }
 
     button {
@@ -82,6 +83,7 @@ export const OrdersListModalStyled = styled.div`
         border-radius: 6px;
         box-shadow: 0 2px #999;
         transition: 0.3s;
+        white-space: nowrap;
 
         &:hover {
             background-color: #45a049;
