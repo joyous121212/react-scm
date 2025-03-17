@@ -1,9 +1,8 @@
 import axios, { AxiosResponse } from "axios";
-import { IPostResultMessageResponse } from "../../models/interface/IProductInfoS";
-
-export const postDeleteProductInfoApi = async <T, D>(api: string, param: D) => {
+import { IInsertInquiryResponse } from "../../models/interface/IInquiry";
+export const postInquiryFileRemoveApi = async <T, D>(api: string, param: D) => {
     try {
-        const result: AxiosResponse<IPostResultMessageResponse> = await axios.post(api, param);
+        const result: AxiosResponse<IInsertInquiryResponse> = await axios.post(api, param);
 
         if (result.status === 200) {
             return result.data;

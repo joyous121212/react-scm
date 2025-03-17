@@ -68,7 +68,7 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
             if(result) {
                 setDetail(result.detailValue);
                 setAttachment(result.attachmentValue);
-
+              
                 if (result.attachmentValue && result.attachmentValue.logicalPath) {
                     const { fileType, logicalPath } = result.attachmentValue;
                     if (fileType === "jpg" || fileType === "gif" || fileType === "png") {
@@ -79,7 +79,6 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
                 } else {
                     setImageUrl(noData); // ✅ attachmentValue가 없으면 noData로 설정
                 }
-
                 setSellPrice(result.detailValue.sellPrice.toLocaleString());
             } else {
                 setImageUrl(noData); // ✅ API 응답이 없으면 noData로 설정
@@ -223,7 +222,7 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
                         </tr>
                         <tr>
                             <th>판매 가격</th>
-                            <td><StyledInput size="modal" type="text" name='price' defaultValue={`${sellPrice}원`}  readOnly/></td>
+                            <td><StyledInput size="modal" type="text" name='price' value={`${sellPrice}원`} readOnly/></td>
                         </tr>
                         <tr>
                             <th colSpan={5}>제품 상세 정보</th>
