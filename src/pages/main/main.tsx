@@ -3,7 +3,8 @@ import { NoticeMain } from "../../components/page/Management/Notice/NoticeMain/N
 import { MainStyled } from "./styled";
 import { ILoginInfo } from "../../models/interface/store/userInfo";
 import { loginInfoState } from "../../stores/userInfo";
-import { SCMMain } from "./scmMain";
+import { SCMMain } from "./SCMMain/scmMain";
+import { CustomerMain } from "./customerMain/customerMain";
 
 export const Main = () => {
     const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
@@ -11,6 +12,8 @@ export const Main = () => {
         switch (userInfo.userType) {
             case "S":
                 return <SCMMain />;
+            case "C":
+                return <CustomerMain />;
         }
     };
     return (

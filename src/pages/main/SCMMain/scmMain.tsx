@@ -1,6 +1,6 @@
-import { InventoryListMain } from "../../components/page/trade/inventory/inventoryMain/inventoryMain";
-import { ShoppingOrdersMain } from "../../components/page/trade/shoppingOrders/shoppingOrdersMain/shoppingOrdersMain";
-import { ShoppingReturnListMain } from "../../components/page/trade/shoppingReturnList/shoppingReturnListMain/shoppingReturnListMain";
+import { InventoryListMain } from "../../../components/page/trade/inventory/inventoryMain/inventoryMain";
+import { ShoppingOrdersMain } from "../../../components/page/trade/shoppingOrders/shoppingOrdersMain/shoppingOrdersMain";
+import { ShoppingReturnListMain } from "../../../components/page/trade/shoppingReturnList/shoppingReturnListMain/shoppingReturnListMain";
 
 export const SCMMain = () => {
     return (

@@ -26,6 +26,12 @@ import { TopSales } from "../pages/sales/TopSales";
 import { OrdersReturnListDe } from "../pages/delivery/OrdersReturnList";
 import { ProfitCheck } from "../pages/sales/ProfitCheck";
 import { Main } from "../pages/main/main";
+import { UserInfo } from "../pages/management/UserInfo";
+import { SupplierInfo } from "../pages/management/SupplierInfo";
+import { SupplierInfoList } from "../pages/management/SupplierInfoList";
+import { ProductInfo } from "../pages/management/ProductInfo";
+import { WarehouseInfo } from "../pages/management/WarehouseInfo";
+import { Inquiry } from "../pages/management/Inquiry";
 
 const routers: RouteObject[] = [
     { path: "*", element: <NotFound /> },
@@ -55,6 +61,7 @@ const routers: RouteObject[] = [
                     },
                 ],
             },
+
             {
                 path: "approval",
                 children: [
@@ -68,6 +75,17 @@ const routers: RouteObject[] = [
                     },
                 ],
             },
+
+            {
+                path: "support",
+                children: [{ path: "inquiry", element: <Inquiry /> }],
+            },
+
+            {
+                path: "support",
+                children: [{ path: "inquiry", element: <Inquiry /> }],
+            },
+
             {
                 path: "management",
                 children: [
@@ -82,6 +100,30 @@ const routers: RouteObject[] = [
                     {
                         path: "common-code/:groupIdx",
                         element: <DetailCode />,
+                    },
+                    {
+                        path: "user-info",
+                        element: <UserInfo />,
+                    },
+                    {
+                        path: "supplier-info",
+                        element: <SupplierInfo />,
+                    },
+                    {
+                        path: "supplier-info/:supplyId",
+                        element: <SupplierInfoList />,
+                    },
+                    {
+                        path: "product-info",
+                        element: <ProductInfo />,
+                    },
+                    {
+                        path: "warehouse-info",
+                        element: <WarehouseInfo />,
+                    },
+                    {
+                        path: "inquiry",
+                        element: <Inquiry />,
                     },
                 ],
             },

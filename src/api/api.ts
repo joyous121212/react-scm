@@ -21,11 +21,58 @@ export const DetailCode = {
 export const Notice = {
     search: "/management/noticeListBody.do",
 };
+export const UserInfo = {
+    search: "/management/userInfoListBody.do",
+    detailsearch: "/management/detailCodeListBody.do",
+    checkDuplicUserId: "/management/check_loginIDBody.do",
+    insertUserInfo: "/registerScmBody.do",
+    updateUserInfo: "/management/UpdateScmBody.do",
+    userInfoDetail: "/management/userInfoDetailBody.do",
+};
+export const SupplierInfo = {
+    searchSupplierList: "/management/supplierListBody.do",
+    searchSupplyDetail: "/management/supplyDetailBody.do",
+    searchSupplierDetailList: "/management/supplierDetailBody.do",
+    updateSupplyDetail: "/management/supplyUpdateBody.do",
+    deleteSupplyDetail: "/management/supplyDeleteBody.do",
+    recoverSupplyDetail: "/management/supplyRecoveryBody.do",
+    saveSupplyDetail: "/management/SupplySaveBody.do",
+    idDuplicCheck: "/management/checkLoginIDBody.do",
+};
+
+export const ProductInfo = {
+    productList: "/management/productListBody.do",
+    productDetail: "/management/productDetailBody.do",
+    supplierNameList: "/management/supplierNameListBody.do",
+    categoryList: "/management/categoryListBody.do",
+    deleteFile: "/management/productFileDeleteBody.do",
+    updateProductInfo: "/management/productUpdateBody.do",
+    saveProductInfo: "/management/productSaveBody.do",
+    deleteProductInfo: "/management/productDeleteBody.do",
+};
+
+export const WarehouseInfo = {
+    warehouseInfoList: "/management/warehouseInfoListBody.do",
+    warehouseInfoDetail: "/management/warehouseInfoDetailBody.do",
+    warehouseInfoUpdate: "/management/warehouseInfoUpdateBody.do",
+    warehouseInfoSave: "/management/warehouseInfoSaveBody.do",
+    warehouseInfoDelete: "/management/warehouseInfoDeleteBody.do",
+};
+
+export const InquiryInfo = {
+    inquiryListBody: "/management/inquiryListBody.do",
+    inquiryAnsSaveBody: "/management/inquiryAnsSaveBody.do",
+    insertInquiry: "/support/inquiryFileSaveBody.do",
+    inquiryDetailBody: "/support/inquiryDetailBody.do",
+    inquiryFileUpdateBody: "/support/inquiryFileUpdateBody.do",
+    inquiryFileDelete: "/support/inquiryFileDeleteBody.do",
+};
 
 export const Shopping = {
     searchList: "/tasks/deliveryOrderListBody.do",
 };
 export const Products = {
+    searchMainProductList:"/management//productListBody.do",
     searchList: "/mall/productsListBody.do",
     searchDetail: "/mall/productsDetailBody.do",
     category: "/mall/products/category",
