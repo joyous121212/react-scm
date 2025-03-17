@@ -48,8 +48,11 @@ export const StyledTable = <T extends { [key: string]: any }>({
             : []);
 
     const handleRowClick = (row: T, index: number) => {
-        setSelectRow(!selectRow);
-        setSelectedRow((prevIndex) => (prevIndex === index ? null : index));
+        setSelectedRow((prevIndex) => {
+            const isSameRow = prevIndex === index;
+            setSelectRow(!isSameRow); // ✅ 같은 행이면 false, 아니면 true
+            return isSameRow ? null : index; // ✅ 같은 행이면 선택 해제(null), 아니면 index 설정
+        });
         onRowClick?.(row);
     };
 
