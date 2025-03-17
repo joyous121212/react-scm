@@ -11,6 +11,7 @@ import { SupplierInfoContext } from "../../../../../api/Provider/SupplierInfoPro
 import { useContext } from "react";
 export const SupplierInfoListMain = () => {
     const navigate = useNavigate();
+    const { search } = useLocation();
     // const { state } = useLocation();
 
     // 또 서버에선 as 보내내
@@ -19,14 +20,8 @@ export const SupplierInfoListMain = () => {
     // ,	p.sell_price AS sellPrice
     // ,	d.detail_name AS detailName
     // ,	s.name AS supplyName
-    const [cPage, setCPage] = useState(0);
+    const [cPage, setCPage] = useState<number>(0);
     const { detailSearchKeyword, setDetailSearchKeyword } = useContext(SupplierInfoContext);
-    const detailPageFncApi = async (currentPage?: number) => {
-        currentPage = currentPage || 1;
-        const box = { ...detailSearchKeyword };
-        box.currentPage = currentPage;
-        setDetailSearchKeyword(box);
-    };
 
     const columns = [
         { key: "supplyName", title: "납품업체명" },
@@ -39,20 +34,29 @@ export const SupplierInfoListMain = () => {
     const [productList, setProductList] = useState([]);
     const [productCnt, setProductCnt] = useState();
     const { supplyId } = useParams();
-    useEffect(() => {
-        if (supplyId != undefined) {
-            initFnc();
-        }
-        async function initFnc() {
-            const res: any = await searchSupplyDetailApi(SupplierInfo.searchSupplierDetailList, {
-                supplyId: supplyId,
-                currentPage: 1,
-                pageSize: 5,
-            });
-            console.log(res);
 
+    async function searchFnc(currentPage?: number) {
+        currentPage = currentPage || 1;
+        const searchParam = new URLSearchParams(search);
+        searchParam.append("supplyId", supplyId);
+        searchParam.append("pageSize", "5");
+        searchParam.append("currentPage", currentPage.toString());
+
+        console.log(searchParam);
+
+        const res: any = await searchSupplyDetailApi(SupplierInfo.searchSupplierDetailList, searchParam);
+        console.log(res);
+
+        if (res) {
             setProductList(res.productList);
             setProductCnt(res.productCnt);
+            setCPage(currentPage);
+        }
+    }
+
+    useEffect(() => {
+        if (supplyId != undefined) {
+            searchFnc();
         }
     }, [supplyId]);
 
@@ -68,12 +72,7 @@ export const SupplierInfoListMain = () => {
                 )}
             </CommonCodeMainStyled>
 
-            <PageNavigate
-                totalItemsCount={productCnt}
-                onChange={detailPageFncApi}
-                itemsCountPerPage={5}
-                activePage={cPage}
-            />
+            <PageNavigate totalItemsCount={productCnt} onChange={searchFnc} itemsCountPerPage={5} activePage={cPage} />
 
             <div className='' style={BtnArea}>
                 <StyledButton
