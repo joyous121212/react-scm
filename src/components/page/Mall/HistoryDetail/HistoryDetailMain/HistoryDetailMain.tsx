@@ -13,6 +13,7 @@ import { Portal } from "../../../../common/potal/Portal";
 import { HistoryDetailModal } from "../HistoryDetailModal/HistoryDetailModal";
 import { postApi } from "../../../../../api/MallApi/postApi";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
+import Swal from "sweetalert2";
 
 export const HistoryDetailMain = () => {
     const navigate = useNavigate();
@@ -75,11 +76,26 @@ export const HistoryDetailMain = () => {
     
     const salesComplete = async() => {
             if (selectedOrders.length === 0) {
-                alert("구매 확정할 주문을 선택해주세요.");
+                Swal.fire({
+                    icon: "warning",
+                    title: "구매 확정할 주문을 선택해주세요.",
+                    confirmButtonText: "확인",
+                });
                 return;
             }
 
-            if(!confirm('구매 확정하시겠습니까?')) {
+            const confirm = await Swal.fire({
+                icon: "question",
+                title: "알람",
+                text: '구매 확정하시겠습니까?',
+                showCancelButton: true, // cancel 버튼 보이기
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "예",
+                cancelButtonText: "아니오",
+            });
+
+            if(!confirm.isConfirmed) {
                 return;
             } else {
                 const result = await postApi(History.salesComplete, {
@@ -87,8 +103,13 @@ export const HistoryDetailMain = () => {
                 });
         
                 if (result.result === "success") {
-                    alert("구매 확정되었습니다.");
-                    postSuccess();
+                    Swal.fire({
+                        icon: "success",
+                        title: "구매 확정되었습니다.",
+                        confirmButtonText: "확인",
+                    }).then(() => {
+                        navigate("/react/mall/history");
+                    });
                 }
             }            
         }
@@ -97,18 +118,24 @@ export const HistoryDetailMain = () => {
         e.stopPropagation();
 
         if (selectedOrders.length === 0) {
-            alert("반품할 주문을 선택해주세요.");
+            Swal.fire({
+                icon: "warning",
+                title: "반품할 주문을 선택해주세요.",
+                confirmButtonText: "확인",
+            });
             return;
         }
 
         if (count === 0) {
-            alert("반품 수량을 1개 이상 입력해주세요.");
+            Swal.fire({
+                icon: "warning",
+                title: "반품 수량을 1개 이상 입력해주세요.",
+                confirmButtonText: "확인",
+            });
             return;
         }
         setModal(!modal);
-    }
-
-    
+    } 
 
     const postSuccess = () => {
         setModal(!modal);

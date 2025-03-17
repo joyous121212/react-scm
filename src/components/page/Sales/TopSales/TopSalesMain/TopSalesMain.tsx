@@ -4,9 +4,9 @@ import { searchApi } from "../../../../../api/SalesApi/searchApi"
 import { TopSalesMainStyled } from "./styled"
 import { ITopSales, ITopSalesResponse } from "../../../../../models/interface/ITopSales"
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable"
-import { Bar } from "react-chartjs-2";
 import { TopSalesChart } from "../TopSalesChart/TopSalesChart"
 import { TopSalesContext } from "../../../../../api/Provider/TopSalesProvider"
+import noData from "../../../../../assets/noData.png";
 
 export const TopSalesMain = () => {
     const [topSales, setTopSales] = useState<ITopSales[]>([]);
@@ -65,7 +65,9 @@ export const TopSalesMain = () => {
                 </div>
                 
                 <div className="performanceChart">
-                    <TopSalesChart topSales={chartData} />
+                    {chartData.length > 0 
+                        ? <TopSalesChart topSales={chartData} /> 
+                        : <img src={noData}/> }
                 </div>   
                 
             </div>
