@@ -41,6 +41,12 @@ export const ShoppingReturnModal: FC<IShoppingReturnListModalProps> = ({ postSuc
         shoppingReturnModal();
     }, []);
 
+    useEffect(() => {
+        if (warehouseOptions.length > 0) {
+            setSelectValue(warehouseOptions[0]?.value as number);
+        }
+    }, [warehouseOptions]);
+
     const shoppingReturnModal = async () => {
         const result = await searchApi<IShoppingReturnModalResponse>(ShoppingReturnList.searchModal, {
             orderId: shoppingReturnId,
