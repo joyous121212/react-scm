@@ -167,6 +167,7 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
         setLimitOrderCount(newLimitOrderCount);
         setTotalOrderCount(0);
         setWarehouseList([]);
+        setSelectWarehouseValueList([]);
     };
 
     const deleteWarehouseList = (warehouseId: number, closeCount: number) => {
@@ -211,7 +212,7 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
                 const updatedList = [...prevList];
                 const newOrderCount = updatedList[existingIndex].orderCount + orderCount;
                 if (newOrderCount > totalProductStock) {
-                    alert(`최대 주문 가능 수량은 ${totalProductStock}개입니다.`);
+                    alert(`최대 주문 가능 수량은 ${totalProductStock}개입니다.22222222`);
                     return prevList; // 🚨 기존 상태 그대로 유지 (변경 없음)
                 }
 
@@ -237,7 +238,7 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
                 const updatedList = [...prevList];
                 const newOrderCount = updatedList[existingIndex].orderCount + orderCount;
                 if (newOrderCount > totalProductStock) {
-                    alert(`최대 주문 가능 수량은 ${totalProductStock}개입니다.`);
+                    alert(`최대 주문 가능 수량은 ${totalProductStock}개입니다.3333333333`);
                     return prevList; // 🚨 기존 상태 그대로 유지 (변경 없음)
                 }
 
