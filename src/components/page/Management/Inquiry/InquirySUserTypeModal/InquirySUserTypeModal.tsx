@@ -90,7 +90,6 @@ export const InquirySUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
         };
 
         if (res.fileValue != null) {
-            alert(res?.fileValue.logicalPath);
             setImageUrl(res?.fileValue.logicalPath);
         } else {
             setImageUrl(null);
