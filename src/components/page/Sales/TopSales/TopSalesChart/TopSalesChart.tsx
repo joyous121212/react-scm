@@ -43,7 +43,7 @@ export const TopSalesChart = ({ topSales }: TopSalesChartProps) => {
                 },
             },           
             datalabels: {
-                color: "#fff",
+                color: "#000000",
                 formatter: function (value: any, context: any) {
                     const label = context.chart.data.labels[context.dataIndex];
                     const dataset = context.chart.data.datasets[0].data; // 전체 데이터셋
