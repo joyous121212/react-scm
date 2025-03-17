@@ -119,7 +119,7 @@ export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDelivery
                                     size='modal'
                                     name='paymentStatus'
                                     type='text'
-                                    defaultValue={shoppingDetail?.paymentStatus}
+                                    value={shoppingDetail?.paymentStatus === 0 ? "입금" : "미입금"}
                                     readOnly
                                 />
                             </td>

@@ -76,7 +76,13 @@ export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({
         }
     };
 
-    console.log("ordersReturnListDetail :", ordersReturnListDetail);
+    const formatDate = (date: string) => {
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = (d.getMonth() + 1).toString().padStart(2, "0");
+        const day = d.getDate().toString().padStart(2, "0");
+        return `${year}-${month}-${day}`;
+    };
 
     return (
         <OrdersReturnListModalStyled>
@@ -144,7 +150,7 @@ export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({
                                                 size='modal'
                                                 name='requestsOrderDate'
                                                 type='text'
-                                                value={order.requestsOrderDate}
+                                                value={formatDate(order.requestsOrderDate)}
                                                 readOnly
                                             />
                                         </td>
