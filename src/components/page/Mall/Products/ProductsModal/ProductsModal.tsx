@@ -99,15 +99,21 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
         }
         
         if(checkInput()) {
-            const result = await postApi(Products.historySave, updateDetail);
-            
-            if(!result) {
-                return;
-            }
+            const confirm = await Swal.fire({
+                icon: "question",
+                title: "알람",
+                text: "입금하시겠습니까?",
+                showCancelButton: true, // cancel 버튼 보이기
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "예",
+                cancelButtonText: "아니오",
+            });
 
-            if(!confirm("입금하시겠습니까?")) {
+            if(!confirm.isConfirmed) {
                 return;
             } else {
+                const result = await postApi(Products.historySave, updateDetail);
                 if(result.result === "success") {
                     Swal.fire({
                         icon: "success",
@@ -155,17 +161,33 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
         inputDate.setHours(0, 0, 0, 0);
 
         if(!count) {
-            alert('주문 수량을 입력해주세요.');
+            Swal.fire({
+                icon: "warning",
+                title: '주문 수량을 입력해주세요.',
+                confirmButtonText: "확인",
+            });
             return false;
         } else if(count < 1) {
-            alert('주문 수량은 최소 1개입니다.');
+            Swal.fire({
+                icon: "warning",
+                title: '주문 수량은 최소 1개입니다.',
+                confirmButtonText: "확인",
+            });
             return false;
         }
         if(!requestedDeliveryDate) {
-            alert('납품 희망일자를 입력해주세요.');
+            Swal.fire({
+                icon: "warning",
+                title: '납품 희망일자를 입력해주세요.',
+                confirmButtonText: "확인",
+            });
             return false;
         } else if(inputDate < currentDate) {
-            alert('배송일을 과거 날짜로 선택할 수 없습니다.');
+            Swal.fire({
+                icon: "warning",
+                title: '배송일을 과거 날짜로 선택할 수 없습니다.',
+                confirmButtonText: "확인",
+            });
             return false;
         }
         return true;
