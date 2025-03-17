@@ -79,7 +79,6 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
                 } else {
                     setImageUrl(noData); // ✅ attachmentValue가 없으면 noData로 설정
                 }
-
                 setSellPrice(result.detailValue.sellPrice.toLocaleString());
             } else {
                 setImageUrl(noData); // ✅ API 응답이 없으면 noData로 설정

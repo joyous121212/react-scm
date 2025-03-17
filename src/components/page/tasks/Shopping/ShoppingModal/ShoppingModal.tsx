@@ -5,6 +5,8 @@ import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import { IShopping, IShoppingDetail, IShoppingDetailResponse } from "../../../../../models/interface/IShopping";
 import axios, { AxiosResponse } from "axios";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
+import { searchApi } from "../../../../../api/ShoppingApi/searchApi";
+import { Shopping } from "../../../../../api/api";
 
 interface IShoppingModalProps {
     deliveryId: number;
@@ -28,12 +30,14 @@ export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDelivery
         };
     }, []);
 
-    const searchShoppingDetail = () => {
-        axios
-            .post("/tasks/deliveryDetailBody.do", { orderId: deliveryId })
-            .then((res: AxiosResponse<IShoppingDetailResponse>) => {
-                setShoppingDetail(res.data.detailValue);
-            });
+    const searchShoppingDetail = async () => {
+        const result = await searchApi<IShoppingDetailResponse>(Shopping.deliveryDetail, {
+            deliveryId: deliveryId,
+        });
+
+        if (result) {
+            setShoppingDetail(result.detailValue);
+        }
     };
 
     return (

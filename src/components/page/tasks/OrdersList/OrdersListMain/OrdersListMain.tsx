@@ -4,7 +4,7 @@ import { searchApi } from "../../../../../api/OrdersListApi/searchApi";
 import { OrdersListContext } from "../../../../../api/Provider/OrdersListProvider";
 import { IOrdersList, IOrdersListResponse } from "../../../../../models/interface/IOrdersList";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
-import { OrdersListStyled } from "./styled";
+import { OrdersListMainStyled } from "./styled";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { Portal } from "../../../../common/potal/Portal";
 import { useRecoilState } from "recoil";
@@ -84,7 +84,7 @@ export const OrdersListMain = () => {
     };
 
     return (
-        <OrdersListStyled>
+        <OrdersListMainStyled>
             <table>
                 <thead>
                     <tr>
@@ -98,12 +98,12 @@ export const OrdersListMain = () => {
                         <tr
                             key={row.orderId}
                             onClick={() => {
-                                if (row.isApproved && row.isPaid) {
+                                if (row.isPaid) {
                                     // isApproved가 승인이고 isPaid가 입금인 경우에만 모달 열기
                                     handlerModal(row.orderId);
                                 }
                             }}
-                            className={row.isApproved && row.isPaid ? "clickable-row" : ""}
+                            className={row.isPaid ? "clickable-row" : ""}
                         >
                             {columns.map((column) => {
                                 // isApproved 컬럼 변환
@@ -149,6 +149,6 @@ export const OrdersListMain = () => {
                     <OrdersListModal orderId={orderId} setOrderId={setOrderId} postSuccess={postSuccess} />
                 </Portal>
             )}
-        </OrdersListStyled>
+        </OrdersListMainStyled>
     );
 };

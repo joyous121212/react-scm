@@ -5,6 +5,8 @@ import { OrdersModalStyled } from "./styled";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { IOrdersDetail, IOrdersDetailResponse } from "../../../../../models/interface/IOrders";
 import axios, { AxiosResponse } from "axios";
+import { searchApi } from "../../../../../api/OrdersApi/searchApi";
+import { Orders } from "../../../../../api/api";
 
 interface IOrdersModalProps {
     orderId: number;
@@ -26,12 +28,14 @@ export const OrdersModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, postSu
         };
     }, []);
 
-    const searchOrdersDetail = () => {
-        axios
-            .post("/tasks/orderDetailJson.do", { orderId: orderId })
-            .then((res: AxiosResponse<IOrdersDetailResponse>) => {
-                setOrdersDetail(res.data.detailValue);
-            });
+    const searchOrdersDetail = async () => {
+        const result = await searchApi<IOrdersDetailResponse>(Orders.orderDetail, {
+            orderId: orderId,
+        });
+
+        if (result) {
+            setOrdersDetail(result.detailValue);
+        }
     };
 
     return (

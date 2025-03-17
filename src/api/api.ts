@@ -70,9 +70,9 @@ export const InquiryInfo = {
 
 export const Shopping = {
     searchList: "/tasks/deliveryOrderListBody.do",
+    deliveryDetail: "/tasks/deliveryDetailBody.do",
 };
 export const Products = {
-    searchMainProductList:"/management//productListBody.do",
     searchList: "/mall/productsListBody.do",
     searchDetail: "/mall/productsDetailBody.do",
     category: "/mall/products/category",
@@ -109,6 +109,7 @@ export const ShoppingReturnList = {
 
 export const Orders = {
     searchList: "/tasks/orderListBody.do",
+    orderDetail: "/tasks/orderDetailJson.do",
 };
 
 export const ShoppingReturn = {
