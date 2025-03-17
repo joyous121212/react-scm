@@ -2,7 +2,7 @@ import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { useEffect, useState } from "react";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
-import { ShoppingModalStyled } from "./styled";
+import { ShoppingReturnModalStyled } from "./styled";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import {
     IShoppingReturnDetailResponse,
@@ -34,7 +34,7 @@ export const ShoppingReturnModal = ({ refundId, setRefundId, postSuccess }) => {
     };
 
     return (
-        <ShoppingModalStyled>
+        <ShoppingReturnModalStyled>
             <div className='container'>
                 <dt>
                     <strong>주문반품 지시서</strong>
@@ -134,6 +134,6 @@ export const ShoppingReturnModal = ({ refundId, setRefundId, postSuccess }) => {
                 <div className='button-container'></div>
                 <StyledButton onClick={() => setModal(!modal)}>나가기</StyledButton>
             </div>
-        </ShoppingModalStyled>
+        </ShoppingReturnModalStyled>
     );
 };

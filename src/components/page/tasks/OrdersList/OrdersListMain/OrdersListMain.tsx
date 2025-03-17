@@ -4,7 +4,7 @@ import { searchApi } from "../../../../../api/OrdersListApi/searchApi";
 import { OrdersListContext } from "../../../../../api/Provider/OrdersListProvider";
 import { IOrdersList, IOrdersListResponse } from "../../../../../models/interface/IOrdersList";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
-import { OrdersListStyled } from "./styled";
+import { OrdersListMainStyled } from "./styled";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { Portal } from "../../../../common/potal/Portal";
 import { useRecoilState } from "recoil";
@@ -84,7 +84,7 @@ export const OrdersListMain = () => {
     };
 
     return (
-        <OrdersListStyled>
+        <OrdersListMainStyled>
             <table>
                 <thead>
                     <tr>
@@ -149,6 +149,6 @@ export const OrdersListMain = () => {
                     <OrdersListModal orderId={orderId} setOrderId={setOrderId} postSuccess={postSuccess} />
                 </Portal>
             )}
-        </OrdersListStyled>
+        </OrdersListMainStyled>
     );
 };
