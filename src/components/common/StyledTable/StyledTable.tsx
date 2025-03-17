@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Table, Td, Th, Thead, Tr } from "./styled";
 import noData from "../../../assets/noData.png";
 
@@ -15,10 +16,10 @@ interface TableProps<T> {
     bordered?: boolean;
     hoverable?: boolean;
     fullWidth?: boolean;
-    onRowClick?: (row: T) => void; // 추가
+    onRowClick?: (row: T) => void;
     onCellClick?: (row: T, column: keyof T) => void;
     renderAction?: (row: T) => React.ReactNode;
-    renderCell?: (row: T, column: Column<T>) => React.ReactNode; // 추가
+    renderCell?: (row: T, column: Column<T>) => React.ReactNode;
     renderHead?: (column: Column<T>) => React.ReactNode;
 }
 
@@ -35,11 +36,18 @@ export const StyledTable = <T extends { [key: string]: any }>({
     fullWidth,
     renderHead,
 }: TableProps<T>) => {
+    const [selectedRow, setSelectedRow] = useState<number | null>(null);
+
     const generatedColumns =
         columns ??
         (data.length > 0
             ? Object.keys(data[0]).map((key) => ({ key: key as keyof T, title: key, clickable: false }))
             : []);
+
+    const handleRowClick = (row: T, index: number) => {
+        setSelectedRow((prevIndex) => (prevIndex === index ? null : index));
+        onRowClick?.(row);
+    };
 
     return (
         <Table fullWidth={fullWidth} bordered={bordered}>
@@ -47,7 +55,7 @@ export const StyledTable = <T extends { [key: string]: any }>({
                 <tr>
                     {generatedColumns.map((col) => (
                         <Th key={col.key as string} bordered={bordered} style={{ width: col.width }}>
-                            {renderHead ? renderHead(col) : col.title} {/* ✅ renderHead 적용 */}
+                            {renderHead ? renderHead(col) : col.title}
                         </Th>
                     ))}
                 </tr>
@@ -55,7 +63,13 @@ export const StyledTable = <T extends { [key: string]: any }>({
             <tbody>
                 {data?.length > 0 ? (
                     data?.map((row, index) => (
-                        <Tr key={index} striped={striped} hoverable={hoverable} onClick={() => onRowClick?.(row)}>
+                        <Tr
+                            key={index}
+                            striped={striped}
+                            hoverable={hoverable}
+                            onClick={() => handleRowClick(row, index)}
+                            className={selectedRow === index ? "selected" : ""}
+                        >
                             {columns.map((col) => (
                                 <Td
                                     key={col.key as string}
@@ -63,12 +77,11 @@ export const StyledTable = <T extends { [key: string]: any }>({
                                     clickable={col.clickable}
                                     onClick={() => onCellClick?.(row, col.key)}
                                 >
-                                    {/* renderCell이 있으면 사용, 없으면 기본 데이터 출력 */}
-                                    {col.key === "actions" && renderAction // actions 컬럼이면 renderAction 실행
+                                    {col.key === "actions" && renderAction
                                         ? renderAction(row)
-                                        : renderCell // renderCell이 존재하면 실행
+                                        : renderCell
                                           ? renderCell(row, col)
-                                          : (row[col.key as keyof T] as React.ReactNode)}{" "}
+                                          : (row[col.key as keyof T] as React.ReactNode)}
                                 </Td>
                             ))}
                         </Tr>

@@ -44,7 +44,7 @@ select {
         cursor: pointer;
         text-decoration: underline;
     }
-    .highlight {
+    .selected {
         background-color: #f1f1f1;
     }
         

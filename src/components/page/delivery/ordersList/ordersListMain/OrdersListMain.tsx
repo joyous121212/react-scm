@@ -150,7 +150,9 @@ export const OrdersListMain = () => {
             <StyledTable
                 data={ordersList}
                 columns={columns}
-                onRowClick={(row) => openGrid(row.supplyId, row.orderDirectionDate, row.index)}
+                onRowClick={(row) => {
+                    openGrid(row.supplyId, row.orderDirectionDate, row.index);
+                }}
             />
             <PageNavigate
                 totalItemsCount={ordersListCnt}
