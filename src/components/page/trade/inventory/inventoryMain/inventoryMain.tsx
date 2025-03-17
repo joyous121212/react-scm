@@ -28,7 +28,6 @@ export const InventoryListMain = () => {
     const [inventoryModal, setInventoryModal] = useRecoilState(inventoryModalState);
 
     const columns = [
-        { key: "productId", title: "번호" },
         { key: "categoryName", title: "장비구분" },
         { key: "productNumber", title: "모델번호" },
         { key: "productName", title: "모델명" },
