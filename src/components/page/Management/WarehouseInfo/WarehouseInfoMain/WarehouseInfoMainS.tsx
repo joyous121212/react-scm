@@ -40,7 +40,7 @@ export const WarehouseInfoMain = () => {
         const searchParam = new URLSearchParams(search);
         searchParam.append("currentPage", currentPage.toString());
         searchParam.append("pageSize", "5");
-        searchParam.append("searchOption", searchKeyword.searchTarget.toString());
+        searchParam.append("searchTarget", searchKeyword.searchTarget.toString());
         searchParam.append("searchKeyword", searchKeyword.searchKeyword.toString());
 
         const res: ISearchWarehouseInfoList = await searchWarehouseInfoListApi(
