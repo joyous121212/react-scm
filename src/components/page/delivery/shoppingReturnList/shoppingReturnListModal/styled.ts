@@ -85,7 +85,17 @@ export const ShoppingReturnListModalStyled = styled.div`
             transform: translateY(2px);
         }
     }
-
+    .cancelButton {
+        background-color: rgb(234, 59, 59);
+        &:hover {
+            background-color: rgb(170, 12, 12);
+        }
+        &:active {
+            background-color: rgb(170, 12, 12);
+            box-shadow: 0 2px #666;
+            transform: translateY(2px);
+        }
+    }
     .font_red {
         color: #fe1414;
     }

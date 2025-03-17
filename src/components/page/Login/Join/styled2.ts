@@ -35,7 +35,7 @@ export const JoinStyled2 = styled.div`
     th {
         background: #f4f4f4;
         text-align: center;
-        width: 120px;
+        width: 140px;
     }
 
     .product-image {
@@ -86,6 +86,19 @@ export const JoinStyled2 = styled.div`
         }
     }
 
+    .cancelButton{
+         background-color:rgb(234, 59, 59);
+         &:hover {
+            background-color: rgb(170, 12, 12);
+            
+        }
+            &:active {
+            background-color: rgb(170, 12, 12);
+            box-shadow: 0 2px #666;
+            transform: translateY(2px);
+        }
+    }
+
     .font_red {
         color: #fe1414;
     }
@@ -93,4 +106,18 @@ export const JoinStyled2 = styled.div`
     .findTitle {
         cursor: pointer;
     }
+
+    select, .joinDate {
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: "#3498db"
+  width: "80px"
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  }
+  joinInput{
+  padding: 6px 10px; font-size: 14px; width:355px;
+  }
 `;
