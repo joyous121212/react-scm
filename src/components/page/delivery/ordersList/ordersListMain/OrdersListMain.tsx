@@ -23,12 +23,11 @@ export const OrdersListMain = () => {
     const [ordersInventory, setOrdersInventory] = useState<IOrdersInventory[]>([]);
     const [flagIndex, setFlagIndex] = useState<number>(-1);
     const [cPage, setCPage] = useState<number>(0);
-    const [selectedInventory, setSelectedInventory] = useState();
+    const [selectedInventory, setSelectedInventory] = useState(0);
     const { search } = useLocation();
 
     useEffect(() => {
         searchOrdersList();
-        // setDetailFlag(false);
         setOrdersListDetail(null);
     }, [search]);
 
@@ -58,15 +57,15 @@ export const OrdersListMain = () => {
         if (!ordersListDetail) {
             setFlagIndex(index);
             OrdersDetail(supplyId, orderDirectionDate);
-            // setSelectedInventory(null);
+            setSelectedInventory(0);
         } else {
             if (flagIndex === index) {
                 setFlagIndex(-1);
-                // setSelectedInventory(null);
                 setOrdersListDetail(null);
+                setSelectedInventory(0);
             } else {
+                setSelectedInventory(0);
                 setFlagIndex(index);
-                // setOrdersListDetail(null);
                 OrdersDetail(supplyId, orderDirectionDate);
             }
         }
@@ -79,7 +78,6 @@ export const OrdersListMain = () => {
             })
             .then((res: AxiosResponse<IOrdersListDetailResponse>) => {
                 setOrdersListDetail(res.data.orderDirectionDetail);
-                console.log(res.data.orderDirectionDetail);
             });
         axios.get("/delivery/inventoryList.do").then((res) => {
             setOrdersInventory(res.data);
@@ -91,7 +89,7 @@ export const OrdersListMain = () => {
     };
 
     const updateInventory = () => {
-        if (!selectedInventory || selectedInventory === "창고 선택") {
+        if (!selectedInventory || selectedInventory === 0) {
             // alert("창고를 선택해주세요!");
             Swal.fire("창고를 선택해주세요!", "", "warning");
             return;
@@ -108,7 +106,6 @@ export const OrdersListMain = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 // 만약 모달창에서 confirm 버튼을 눌렀다면
-
                 Swal.fire("발주처리 되었습니다.", "", "success");
                 const data = [
                     {

@@ -74,26 +74,36 @@ export const ShoppingListModal: FC<IDeliveryModalProps> = ({ changeDeliveryState
                 <dt className='signtitle' style={{ textAlign: "center", marginBottom: "25px" }}>
                     <strong style={{ fontSize: "140%" }}>주문 배송 목록 상세</strong>
                 </dt>
-                <table>
-                    <tr>
-                        <th>제품명</th>
-                        <th>제품수량</th>
-                    </tr>
-                    <tr>
-                        <td>{detail?.productName}</td>
-                        <td>{detail?.count}</td>
-                    </tr>
-                </table>
-                <div style={{ textAlign: "center", marginTop: "15px" }}>
-                    {listDetail.deliveryState !== "배송완료" ? (
-                        <button onClick={updateDeliveryState}>배송완료</button>
-                    ) : (
-                        <></>
-                    )}
-                    <button style={{ width: "80px" }} onClick={() => setModal(!modalState)} className='cancelButton'>
-                        닫기
-                    </button>
-                </div>
+                {detail ? (
+                    <>
+                        <table>
+                            <tr>
+                                <th>제품명</th>
+                                <th>제품수량</th>
+                            </tr>
+                            <tr>
+                                <td>{detail?.productName}</td>
+                                <td>{detail?.count}</td>
+                            </tr>
+                        </table>
+                        <div style={{ textAlign: "center", marginTop: "15px" }}>
+                            {listDetail.deliveryState !== "배송완료" ? (
+                                <button onClick={updateDeliveryState}>배송완료</button>
+                            ) : (
+                                <></>
+                            )}
+                            <button
+                                style={{ width: "80px" }}
+                                onClick={() => setModal(!modalState)}
+                                className='cancelButton'
+                            >
+                                닫기
+                            </button>
+                        </div>
+                    </>
+                ) : (
+                    <div style={{ width: "100%", textAlign: "center" }}>목록 불러오는중...</div>
+                )}
             </div>
         </ShoppingListModalStyled>
     );
