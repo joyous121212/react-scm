@@ -72,7 +72,6 @@ export const Shopping = {
     searchList: "/tasks/deliveryOrderListBody.do",
 };
 export const Products = {
-    searchMainProductList:"/management//productListBody.do",
     searchList: "/mall/productsListBody.do",
     searchDetail: "/mall/productsDetailBody.do",
     category: "/mall/products/category",

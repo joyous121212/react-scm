@@ -6,9 +6,9 @@ import { GoChevronLeft, GoChevronRight } from "react-icons/go";
 import { CardWrapper, SliderContainer } from "./styled";
 import { searchApi } from "../../../../../api/CommonCodeApi/searchApi";
 import { IMainProductsListBodyResponse, IProductsDetail } from "../../../../../models/interface/IProducts";
-import { Products } from "../../../../../api/api";
 import noImage from "../../../../../assets/noImage.jpg";
 import { Spinner } from "../../../../common/Spinner/spinner";
+import { ProductInfo } from "../../../../../api/api";
 
 // 화살표 props 타입 정의
 interface ArrowProps {
@@ -47,14 +47,14 @@ export const ProductSlideshow: React.FC = () => {
 
     const searchProductsList = async (currentPage?: number) => {
         setIsLoading(true);
-        try {
-            const result = await searchApi<IMainProductsListBodyResponse>(Products.searchMainProductList, {
-                searchKeyword: "",
-                searchOption: "searchAll",
-                currentPage: 1,
-                pageSize: 10000,
-            });
 
+        const searchParam = new URLSearchParams();
+        searchParam.append("currentPage", "1");
+        searchParam.append("pageSize", "1000000");
+        searchParam.append("searchOption", "searchAll");
+        searchParam.append("searchKeyword", "");
+        try {
+            const result = await searchApi<IMainProductsListBodyResponse>(ProductInfo.productList, searchParam);
             if (result) {
                 console.log(result.productList);
                 setProductsList(result.productList);
