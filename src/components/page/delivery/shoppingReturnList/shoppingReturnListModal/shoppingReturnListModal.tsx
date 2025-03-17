@@ -60,36 +60,46 @@ export const ShoppingReturnListModalDe: FC<IDeliveryModalProps> = ({ refundId, c
                 <dt className='signtitle' style={{ textAlign: "center", marginBottom: "25px" }}>
                     <strong style={{ fontSize: "140%" }}>주문 반품 목록 상세</strong>
                 </dt>
-                <table>
-                    <tr>
-                        <th>번호</th>
-                        <th>장비번호</th>
-                        <th>장비구분</th>
-                        <th>모델명</th>
-                        <th>제조사</th>
-                        <th>단가</th>
-                        <th>개수</th>
-                        <th>총 금액</th>
-                        <th>창고</th>
-                    </tr>
-                    <tr>
-                        <td>{detail?.refundId}</td>
-                        <td>{detail?.productNumber}</td>
-                        <td>{detail?.detailName}</td>
-                        <td>{detail?.productName}</td>
-                        <td>{detail?.supplyName}</td>
-                        <td>{detail?.price}</td>
-                        <td>{detail?.count}</td>
-                        <td>{detail?.totalPrice}</td>
-                        <td>{detail?.warehouseName}</td>
-                    </tr>
-                </table>
-                <div style={{ textAlign: "center", marginTop: "15px" }}>
-                    <button onClick={changeInventory}>재고 처리</button>
-                    <button style={{ width: "80px" }} onClick={() => setModal(!modalState)} className='cancelButton'>
-                        닫기
-                    </button>
-                </div>
+                {detail ? (
+                    <>
+                        <table>
+                            <tr>
+                                <th>번호</th>
+                                <th>장비번호</th>
+                                <th>장비구분</th>
+                                <th>모델명</th>
+                                <th>제조사</th>
+                                <th>단가</th>
+                                <th>개수</th>
+                                <th>총 금액</th>
+                                <th>창고</th>
+                            </tr>
+                            <tr>
+                                <td>{detail?.refundId}</td>
+                                <td>{detail?.productNumber}</td>
+                                <td>{detail?.detailName}</td>
+                                <td>{detail?.productName}</td>
+                                <td>{detail?.supplyName}</td>
+                                <td>{detail?.price}</td>
+                                <td>{detail?.count}</td>
+                                <td>{detail?.totalPrice}</td>
+                                <td>{detail?.warehouseName}</td>
+                            </tr>
+                        </table>
+                        <div style={{ textAlign: "center", marginTop: "15px" }}>
+                            <button onClick={changeInventory}>재고 처리</button>
+                            <button
+                                style={{ width: "80px" }}
+                                onClick={() => setModal(!modalState)}
+                                className='cancelButton'
+                            >
+                                닫기
+                            </button>
+                        </div>
+                    </>
+                ) : (
+                    <div style={{ width: "100%", textAlign: "center" }}>목록 불러오는중...</div>
+                )}
             </div>
         </ShoppingReturnListModalStyled>
     );
