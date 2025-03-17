@@ -68,6 +68,7 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
             if(result) {
                 setDetail(result.detailValue);
                 setAttachment(result.attachmentValue);
+              
                 if (result.attachmentValue && result.attachmentValue.logicalPath) {
                     const { fileType, logicalPath } = result.attachmentValue;
                     if (fileType === "jpg" || fileType === "gif" || fileType === "png") {
@@ -75,7 +76,6 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
                     } else {
                         setImageUrl(noData); // ✅ 파일 타입이 이미지가 아니면 noData로 설정
                     }
-
                 } else {
                     setImageUrl(noData); // ✅ attachmentValue가 없으면 noData로 설정
                 }
