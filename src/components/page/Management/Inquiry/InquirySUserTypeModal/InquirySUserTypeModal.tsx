@@ -20,6 +20,7 @@ import { postInquiryAnsSaveApi } from "../../../../../api/InquiryApi/postInquiry
 import { DefaultInquriySearch } from "../DefaultInquriySearch/DefaultInquriySearch";
 import { PostRender } from "../../PostRender/PostRender";
 import { postInquiryFileDeleteApi } from "../../../../../api/InquiryApi/postInquiryFileDeleteApi";
+import { postInquiryFileRemoveApi } from "../../../../../api/InquiryApi/postInquiryFileRemoveApi";
 const emptyCheck = {
     fileCategory: "카테고리 항목 선택은 필수 입니다.",
     fileTitle: "질문제목  입력은 필수 입니다.",
@@ -40,6 +41,7 @@ export const InquirySUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
 
     const formRef = useRef<HTMLFormElement>(null);
     const [imageUrl, setImageUrl] = useState<string>("");
+    const [imageFile, setImageFile] = useState<File | null>(null);
     const [fileName, setFileName] = useState<string>("");
     const [ansContent, setAnsContent] = useState(null);
     const authoRef = useRef<String>();
@@ -86,6 +88,13 @@ export const InquirySUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
             fileInput: null,
             empty: "empty",
         };
+
+        if (res.fileValue != null) {
+            alert(res?.fileValue.logicalPath);
+            setImageUrl(res?.fileValue.logicalPath);
+        } else {
+            setImageUrl(null);
+        }
 
         authoRef.current = res.detailValue.author;
         createdDateRef.current = res.detailValue.createdDate;
@@ -138,13 +147,30 @@ export const InquirySUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
             PostRender(DefaultInquriySearch, setSearchKeyword);
         }
     };
+
+    //질문자가 등록한 사진 파일만 삭제
+    const deleteFile = async () => {
+        const res: IInsertInquiryResponse = await postInquiryFileRemoveApi(InquiryInfo.inquiryFileRemove, {
+            inquiryId: inquiryId,
+        });
+        if (res.result === "success") {
+            alert("질문자의 등록 파일만을 삭제하였습니다.");
+            PostRender(DefaultInquriySearch, setSearchKeyword);
+            setDetailMoal(false);
+        } else {
+            alert("잠시후 다시 시도해주세요");
+            PostRender(DefaultInquriySearch, setSearchKeyword);
+            setDetailMoal(false);
+        }
+    };
+
     return (
         <>
             <UserInfoModalStyle>
                 <div className='container'>
                     <form ref={formRef}>
                         <table className='row'>
-                            <caption>제품등록</caption>
+                            <caption>고객 문의 답변</caption>
                             <colgroup>
                                 <col width='120px' />
                                 <col width='150px' />
@@ -271,9 +297,15 @@ export const InquirySUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
                                             readOnly
                                             // onChange={inquiryId != undefined ? handlerUpdateFile : handlerFile}
                                         ></StyledInput>
-                                        <label className='img-label' htmlFor='fileInput'>
-                                            파일 첨부하기
-                                        </label>
+                                        {imageUrl != null ? (
+                                            <>
+                                                <StyledButton onClick={deleteFile}>질문자 파일삭제</StyledButton>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <StyledButton>질문자의 사진이 없습니다</StyledButton>
+                                            </>
+                                        )}
                                     </td>
                                 </tr>
                                 {/* {fileName && (

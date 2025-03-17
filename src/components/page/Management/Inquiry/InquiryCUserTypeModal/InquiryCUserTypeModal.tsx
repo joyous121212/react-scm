@@ -20,6 +20,7 @@ import { postInquiryFileUpdateApi } from "../../../../../api/InquiryApi/postInqu
 import { postInquiryFileDeleteApi } from "../../../../../api/InquiryApi/postInquiryFileDeleteApi";
 import { DefaultInquriySearch } from "../DefaultInquriySearch/DefaultInquriySearch";
 import { PostRender } from "../../PostRender/PostRender";
+import { postInquiryFileRemoveApi } from "../../../../../api/InquiryApi/postInquiryFileRemoveApi";
 const emptyCheck = {
     fileCategory: "카테고리 항목 선택은 필수 입니다.",
     fileTitle: "질문제목  입력은 필수 입니다.",
@@ -37,8 +38,9 @@ export const InquiryCUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
     const { loginId } = JSON.parse(userInfo);
     const { userType } = JSON.parse(userInfo);
     const formRef = useRef<HTMLFormElement>(null);
-    const [imageUrl, setImageUrl] = useState<string>("");
+    const [imageUrl, setImageUrl] = useState(null);
     const [fileName, setFileName] = useState<string>("");
+    const [ansState, setAnsState] = useState<string>("");
     const [ansContent, setAnsContent] = useState(null);
     const [detailValue, setDetailValue] = useState<IInsertInquiryReqDTO>({
         inquiryId: null,
@@ -72,10 +74,6 @@ export const InquiryCUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
         }
     }, []);
 
-    useEffect(() => {
-        console.log(ansContent);
-    }, [ansContent]);
-
     async function searchDetail(inquiryId: number) {
         const res: IInquiryDetailResponse = await searchInquiryDetailApi(InquiryInfo.inquiryDetailBody, {
             inquiryId: inquiryId,
@@ -89,6 +87,12 @@ export const InquiryCUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
             fileInput: null,
             empty: "empty",
         };
+        if (res.fileValue != null) {
+            setImageUrl(res?.fileValue.logicalPath);
+        } else {
+            setImageUrl(null);
+        }
+        setAnsState(res.detailValue.ansState);
         setAnsContent(res.detailValue.ansContent);
         setCreateAt(res.detailValue.createdDate);
         requestUpdateDTO.fileCategory = res.detailValue.category;
@@ -233,13 +237,29 @@ export const InquiryCUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
         }
     };
 
+    //질문자가 등록한 사진 파일만 삭제
+    const deleteFile = async () => {
+        const res: IInsertInquiryResponse = await postInquiryFileRemoveApi(InquiryInfo.inquiryFileRemove, {
+            inquiryId: inquiryId,
+        });
+        if (res.result === "success") {
+            alert("질문자의 등록 파일만을 삭제하였습니다.");
+            PostRender(DefaultInquriySearch, setSearchKeyword);
+            setDetailMoal(false);
+        } else {
+            alert("잠시후 다시 시도해주세요");
+            PostRender(DefaultInquriySearch, setSearchKeyword);
+            setDetailMoal(false);
+        }
+    };
+
     return (
         <>
             <UserInfoModalStyle>
                 <div className='container'>
                     <form ref={formRef}>
                         <table className='row'>
-                            <caption>제품등록</caption>
+                            <caption>문의하기</caption>
                             <colgroup>
                                 <col width='120px' />
                                 <col width='150px' />
@@ -386,46 +406,38 @@ export const InquiryCUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
                                     <></>
                                 )}
 
-                                <tr id='fileNo'>
-                                    <th scope='row'>파일</th>
-                                    <td colSpan={3}>
-                                        <StyledInput
-                                            type='file'
-                                            id='fileInput'
-                                            style={{ display: "none" }}
-                                            name='file'
-                                            onChange={inquiryId != undefined ? handlerUpdateFile : handlerFile}
-                                        ></StyledInput>
-                                        <label className='img-label' htmlFor='fileInput'>
-                                            파일 첨부하기
-                                        </label>
-                                    </td>
-                                </tr>
-                                {/* {fileName && (
-          <tr id="fileYes">
-            <th scope="row">파일</th>
-            <td colSpan={3}>
-              <input
-                type="text"
-                className="inputTxt p100"
-                name="fileName"
-                id="fileName"
-                value={fileName}
-                disabled
-              />
-            </td>
-            <td colSpan={1}>
-              <a
-                href="#"
-                className="btnType blue"
-                id="btnRemoveFile"
-                onClick={handleRemoveFile}
-              >
-                <span>파일삭제</span>
-              </a>
-            </td>
-          </tr>
-        )} */}
+                                {ansState === "Y" ? (
+                                    <></>
+                                ) : (
+                                    <>
+                                        <tr id='fileNo'>
+                                            <th scope='row'>파일</th>
+
+                                            <td colSpan={3}>
+                                                <StyledInput
+                                                    type='file'
+                                                    id='fileInput'
+                                                    style={{ display: "none" }}
+                                                    name='file'
+                                                    onChange={inquiryId != undefined ? handlerUpdateFile : handlerFile}
+                                                ></StyledInput>
+                                                {imageUrl != null ? (
+                                                    <>
+                                                        <StyledButton onClick={deleteFile}>
+                                                            질문자 파일삭제
+                                                        </StyledButton>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <label className='img-label' htmlFor='fileInput'>
+                                                            파일 첨부하기
+                                                        </label>
+                                                    </>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    </>
+                                )}
                                 <tr>
                                     <th scope='row'>미리보기</th>
                                     <td colSpan={3}>
@@ -445,8 +457,17 @@ export const InquiryCUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
                     <div className='btn_areaC mt30'>
                         {inquiryId != undefined && userType === "C" ? (
                             <>
-                                <StyledButton onClick={goUpdate}>수정</StyledButton>
-                                <StyledButton onClick={goDelete}>삭제</StyledButton>
+                                {ansState === "Y" ? (
+                                    <>
+                                        {" "}
+                                        <StyledButton onClick={goDelete}>삭제</StyledButton>
+                                    </>
+                                ) : (
+                                    <>
+                                        {" "}
+                                        <StyledButton onClick={goUpdate}>수정</StyledButton>
+                                    </>
+                                )}
                             </>
                         ) : (
                             <StyledButton onClick={goInsert}>저장</StyledButton>
