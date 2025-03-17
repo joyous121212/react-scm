@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Table, Td, Th, Thead, Tr } from "./styled";
 import noData from "../../../assets/noData.png";
+import { useRecoilState } from "recoil";
+import { selectRowState } from "../../../stores/modalState";
 
 export interface Column<T> {
     key: keyof T | "actions";
@@ -37,6 +39,7 @@ export const StyledTable = <T extends { [key: string]: any }>({
     renderHead,
 }: TableProps<T>) => {
     const [selectedRow, setSelectedRow] = useState<number | null>(null);
+    const [selectRow, setSelectRow] = useRecoilState(selectRowState);
 
     const generatedColumns =
         columns ??
@@ -45,6 +48,7 @@ export const StyledTable = <T extends { [key: string]: any }>({
             : []);
 
     const handleRowClick = (row: T, index: number) => {
+        setSelectRow(!selectRow);
         setSelectedRow((prevIndex) => (prevIndex === index ? null : index));
         onRowClick?.(row);
     };
@@ -68,7 +72,7 @@ export const StyledTable = <T extends { [key: string]: any }>({
                             striped={striped}
                             hoverable={hoverable}
                             onClick={() => handleRowClick(row, index)}
-                            className={selectedRow === index ? "selected" : ""}
+                            className={selectedRow === index && selectRow ? "selected" : ""}
                         >
                             {columns.map((col) => (
                                 <Td
