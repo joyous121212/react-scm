@@ -98,12 +98,12 @@ export const OrdersListMain = () => {
                         <tr
                             key={row.orderId}
                             onClick={() => {
-                                if (row.isApproved && row.isPaid) {
+                                if (row.isPaid) {
                                     // isApproved가 승인이고 isPaid가 입금인 경우에만 모달 열기
                                     handlerModal(row.orderId);
                                 }
                             }}
-                            className={row.isApproved && row.isPaid ? "clickable-row" : ""}
+                            className={row.isPaid ? "clickable-row" : ""}
                         >
                             {columns.map((column) => {
                                 // isApproved 컬럼 변환

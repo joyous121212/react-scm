@@ -136,10 +136,10 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, po
                 <div className='button-container'>
                     <button
                         onClick={() => handleStatusUpdate(ordersListDetail.orderId)}
-                        disabled={isSubmitted}
-                        className={isSubmitted ? "submitted" : ""}
+                        disabled={isSubmitted || !!ordersListDetail?.isApproved}
+                        className={isSubmitted || ordersListDetail?.isApproved ? "submitted" : ""}
                     >
-                        {isSubmitted ? "발주서 전송 완료" : "발주서 전송"}
+                        {isSubmitted || ordersListDetail?.isApproved ? "발주서 전송 완료" : "발주서 전송"}
                     </button>
                     <button onClick={() => setModal(!modal)}>나가기</button>
                 </div>

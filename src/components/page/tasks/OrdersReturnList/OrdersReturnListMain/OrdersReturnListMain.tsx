@@ -75,6 +75,14 @@ export const OrdersReturnListMain = () => {
         }
     };
 
+    const formatDate = (date: string) => {
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = (d.getMonth() + 1).toString().padStart(2, "0");
+        const day = d.getDate().toString().padStart(2, "0");
+        return `${year}-${month}-${day}`;
+    };
+
     const columns = [
         { key: "orderRequestsId", title: "반품번호" },
         { key: "supplyName", title: "반품회사" },
@@ -107,7 +115,10 @@ export const OrdersReturnListMain = () => {
                             className={row.returnIsPaid ? "clickable-row" : ""}
                         >
                             {columns.map((column) => {
-                                // returnIsPaid 컬럼 변환
+                                if (column.key === "requestsOrderDate") {
+                                    return <td key={column.key}>{formatDate(row.requestsOrderDate)}</td>;
+                                }
+
                                 if (column.key === "returnIsPaid") {
                                     return (
                                         <td key={column.key}>
@@ -134,11 +145,7 @@ export const OrdersReturnListMain = () => {
                     ))}
                 </tbody>
             </table>
-            {/* <StyledTable
-                data={ordersReturnList}
-                columns={columns}
-                onRowClick={(row) => handlerModal(row.orderRequestsId)}
-            /> */}
+
             <PageNavigate
                 totalItemsCount={ordersRetrunCount}
                 onChange={searchOrdersReturnList}

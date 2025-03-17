@@ -66,6 +66,7 @@ export const InquiryInfo = {
     inquiryDetailBody: "/support/inquiryDetailBody.do",
     inquiryFileUpdateBody: "/support/inquiryFileUpdateBody.do",
     inquiryFileDelete: "/support/inquiryFileDeleteBody.do",
+    inquiryFileRemove: "/support/inquiryFileRemoveBody.do",
 };
 
 export const Shopping = {

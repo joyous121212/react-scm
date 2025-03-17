@@ -8,6 +8,7 @@ import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { postApi } from "../../../../../api/MallApi/postApi";
 import Swal from "sweetalert2";
+import noData from "../../../../../assets/noData.png";
 
 export const CartMain= () => {
     const [cartList, setCartList] = useState<ICartDetailWithImage[]>([]);
@@ -119,7 +120,7 @@ export const CartMain= () => {
             <StyledTable
                 data={cartList.map(item => ({
                     ...item.cartDetail,
-                    image: <img src = {item.image.logicalPath || "default_image_url"} />,
+                    image: <img src = {item.image?.logicalPath || noData} />,
                     select: <input type="checkbox"></input>
                 }))}
                 columns={columns}
