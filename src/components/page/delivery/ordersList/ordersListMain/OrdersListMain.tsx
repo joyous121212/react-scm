@@ -21,6 +21,7 @@ export const OrdersListMain = () => {
     const [ordersListCnt, setOrdersListCnt] = useState<number>(0);
     const [ordersListDetail, setOrdersListDetail] = useState<IOrdersListDetail[]>([]);
     const [ordersInventory, setOrdersInventory] = useState<IOrdersInventory[]>([]);
+    const [flagIndex, setFlagIndex] = useState<number>(-1);
     const [cPage, setCPage] = useState<number>(0);
     const [selectedInventory, setSelectedInventory] = useState();
     const { search } = useLocation();
@@ -53,15 +54,19 @@ export const OrdersListMain = () => {
         }
     };
 
-    const openGrid = (supplyId: number, orderDirectionDate: string) => {
+    const openGrid = (supplyId: number, orderDirectionDate: string, index: number) => {
         if (!ordersListDetail) {
+            setFlagIndex(index);
             OrdersDetail(supplyId, orderDirectionDate);
-            setSelectedInventory(null);
+            // setSelectedInventory(null);
         } else {
-            if (ordersListDetail[0].supplyId === supplyId) {
-                setSelectedInventory(null);
-            } else {
+            if (flagIndex === index) {
+                setFlagIndex(-1);
+                // setSelectedInventory(null);
                 setOrdersListDetail(null);
+            } else {
+                setFlagIndex(index);
+                // setOrdersListDetail(null);
                 OrdersDetail(supplyId, orderDirectionDate);
             }
         }
@@ -148,7 +153,7 @@ export const OrdersListMain = () => {
             <StyledTable
                 data={ordersList}
                 columns={columns}
-                onRowClick={(row) => openGrid(row.supplyId, row.orderDirectionDate)}
+                onRowClick={(row) => openGrid(row.supplyId, row.orderDirectionDate, row.index)}
             />
             <PageNavigate
                 totalItemsCount={ordersListCnt}

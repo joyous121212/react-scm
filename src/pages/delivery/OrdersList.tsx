@@ -2,7 +2,7 @@ import { ContentBox } from "../../components/common/ContentBox/ContentBox";
 import { OrdersListMain } from "../../components/page/delivery/ordersList/ordersListMain/OrdersListMain";
 import { OrderListSearch } from "../../components/page/delivery/ordersList/ordersListSearch/OrderListSearch";
 
-export const OrdersList = () => {
+export const OrdersListDe = () => {
     return (
         <>
             <ContentBox variant='primary' fontSize='large'>
