@@ -40,8 +40,37 @@ export const SupplierInfo = {
     idDuplicCheck: "/management/checkLoginIDBody.do",
 };
 
+export const ProductInfo = {
+    productList: "/management/productListBody.do",
+    productDetail: "/management/productDetailBody.do",
+    supplierNameList: "/management/supplierNameListBody.do",
+    categoryList: "/management/categoryListBody.do",
+    deleteFile: "/management/productFileDeleteBody.do",
+    updateProductInfo: "/management/productUpdateBody.do",
+    saveProductInfo: "/management/productSaveBody.do",
+    deleteProductInfo: "/management/productDeleteBody.do",
+};
+
+export const WarehouseInfo = {
+    warehouseInfoList: "/management/warehouseInfoListBody.do",
+    warehouseInfoDetail: "/management/warehouseInfoDetailBody.do",
+    warehouseInfoUpdate: "/management/warehouseInfoUpdateBody.do",
+    warehouseInfoSave: "/management/warehouseInfoSaveBody.do",
+    warehouseInfoDelete: "/management/warehouseInfoDeleteBody.do",
+};
+
+export const InquiryInfo = {
+    inquiryListBody: "/management/inquiryListBody.do",
+    inquiryAnsSaveBody: "/management/inquiryAnsSaveBody.do",
+    insertInquiry: "/support/inquiryFileSaveBody.do",
+    inquiryDetailBody: "/support/inquiryDetailBody.do",
+    inquiryFileUpdateBody: "/support/inquiryFileUpdateBody.do",
+    inquiryFileDelete: "/support/inquiryFileDeleteBody.do",
+};
+
 export const Shopping = {
     searchList: "/tasks/deliveryOrderListBody.do",
+    deliveryDetail: "/tasks/deliveryDetailBody.do",
 };
 export const Products = {
     searchList: "/mall/productsListBody.do",
@@ -80,6 +109,7 @@ export const ShoppingReturnList = {
 
 export const Orders = {
     searchList: "/tasks/orderListBody.do",
+    orderDetail: "/tasks/orderDetailJson.do",
 };
 
 export const ShoppingReturn = {
