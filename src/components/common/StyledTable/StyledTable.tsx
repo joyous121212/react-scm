@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Table, Td, Th, Thead, Tr } from "./styled";
 import noData from "../../../assets/noData.png";
 import { useRecoilState } from "recoil";
@@ -51,11 +51,11 @@ export const StyledTable = <T extends { [key: string]: any }>({
             : []);
 
     const handleRowClick = (row: T, index: number) => {
-        setSelectedRow((prevIndex) => {
-            const isSameRow = prevIndex === index;
-            setSelectRow(!isSameRow); // ✅ 같은 행이면 false, 아니면 true
-            return isSameRow ? null : index; // ✅ 같은 행이면 선택 해제(null), 아니면 index 설정
-        });
+        const isSameRow = selectedRow === index;
+        setSelectedRow(isSameRow ? null : index);
+
+        // ✅ 다음 프레임에서 `setSelectRow` 실행
+        setSelectRow(!isSameRow);
         onRowClick?.(row);
     };
 

@@ -66,9 +66,13 @@ export const InventoryListMain = () => {
     };
 
     const handlerModal = (propsOptions: IInventoryPropsOptions) => {
-        setInventoryPropsOption(propsOptions);
-        if (!inventoryModal) {
-            setInventoryModal(!inventoryModal);
+        const isSameInventory = propsOptions.inventoryId === inventoryPropsOption.inventoryId;
+
+        if (isSameInventory) {
+            setInventoryModal(false); // 동일한 아이템을 클릭하면 모달 닫기
+        } else {
+            setInventoryPropsOption(propsOptions); // 새 아이템 설정
+            setInventoryModal(true); // 새로운 아이템을 선택하면 모달 열기
         }
     };
 
