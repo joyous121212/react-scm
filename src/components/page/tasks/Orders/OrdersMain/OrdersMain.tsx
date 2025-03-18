@@ -52,11 +52,6 @@ export const OrdersMain = () => {
         setOrderId(orderId);
     };
 
-    const postSuccess = () => {
-        searchOrders();
-        searchOrders(cPage);
-    };
-
     return (
         <OrdersMainStyled>
             <StyledTable data={orderList} columns={columns} onRowClick={(row) => handlerModal(row.orderId)} />
@@ -69,7 +64,7 @@ export const OrdersMain = () => {
 
             {modal && (
                 <Portal>
-                    <OrdersModal orderId={orderId} setOrderId={setOrderId} postSuccess={postSuccess} />
+                    <OrdersModal orderId={orderId} setOrderId={setOrderId} />
                 </Portal>
             )}
         </OrdersMainStyled>

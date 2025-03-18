@@ -10,10 +10,9 @@ import { Orders } from "../../../../../api/api";
 interface IOrdersModalProps {
     orderId: number;
     setOrderId: React.Dispatch<React.SetStateAction<number>>;
-    postSuccess: () => void;
 }
 
-export const OrdersModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, postSuccess }) => {
+export const OrdersModal: FC<IOrdersModalProps> = ({ orderId, setOrderId }) => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [ordersDetail, setOrdersDetail] = useState<IOrdersDetail>();
 

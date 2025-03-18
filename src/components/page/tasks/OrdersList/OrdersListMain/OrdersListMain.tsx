@@ -33,7 +33,6 @@ export const OrdersListMain = () => {
     ] as Column<IOrdersList>[];
 
     useEffect(() => {
-        console.log(searchKeyword);
         searchOrdersList();
     }, [searchKeyword]);
 
@@ -58,11 +57,6 @@ export const OrdersListMain = () => {
         setOrderId(orderId);
     };
 
-    const postSuccess = () => {
-        setModal(!modal);
-        searchOrdersList(cPage);
-    };
-
     const handlePaymentConfirm = async (e, orderId) => {
         e.preventDefault();
         e.stopPropagation();
@@ -71,7 +65,6 @@ export const OrdersListMain = () => {
 
         try {
             const result = await searchApi<IOrdersListResponse>(OrdersList.updateIsPaid, { orderId });
-            console.log("입금 확인 API 응답:", result);
 
             if (result?.result === "success") {
                 await searchOrdersList(cPage);
@@ -161,7 +154,6 @@ export const OrdersListMain = () => {
                         setOrderId={setOrderId}
                         setOrderState={setOrderState}
                         orderState={orderState}
-                        postSuccess={postSuccess}
                     />
                 </Portal>
             )}

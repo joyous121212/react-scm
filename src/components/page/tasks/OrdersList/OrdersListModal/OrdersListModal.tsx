@@ -15,22 +15,13 @@ import Swal from "sweetalert2";
 interface IOrdersModalProps {
     orderId: number;
     setOrderId: React.Dispatch<React.SetStateAction<number>>;
-    postSuccess: () => void;
     orderState: string;
     setOrderState: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export const OrdersListModal: FC<IOrdersModalProps> = ({
-    orderId,
-    setOrderId,
-    orderState,
-    setOrderState,
-    postSuccess,
-}) => {
+export const OrdersListModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, orderState, setOrderState }) => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [ordersListDetail, setOrdersListDetail] = useState<IOrdersListDetail>();
-    // const [isApproved, setIsApproved] = useState(ordersListDetail?.isApproved);
-    // const [orderStateDetail, setOrderStateDetail] = useState(ordersListDetail?.orderState);
 
     useEffect(() => {
         orderId && searchOrdersDetail();
@@ -64,7 +55,6 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({
             showCancelButton: true,
         }).then((result) => {
             if (result.isConfirmed) {
-                // 여기에서 주문 ID 전달
                 handleStatusUpdate(orderId);
             }
         });
@@ -73,8 +63,6 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({
     const handleStatusUpdate = async (orderId) => {
         try {
             const result = await searchApi<IOrdersListResponse>(OrdersList.statdUpdate, { orderId });
-
-            console.log("전송할 orderId:", orderId);
 
             if (result?.result === "success") {
                 setOrdersListDetail((prev) =>

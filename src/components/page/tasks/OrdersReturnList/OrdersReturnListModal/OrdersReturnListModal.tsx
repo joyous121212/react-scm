@@ -15,14 +15,9 @@ import Swal from "sweetalert2";
 interface IOrdersReturnListModalProps {
     orderRequestsId: number;
     setOrderRequestsId: React.Dispatch<React.SetStateAction<number>>;
-    postSuccess: () => void;
 }
 
-export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({
-    orderRequestsId,
-    setOrderRequestsId,
-    postSuccess,
-}) => {
+export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({ orderRequestsId, setOrderRequestsId }) => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
     const [ordersReturnListDetail, setOrdersReturnListDetail] = useState<IOrdersReturnModal[]>([]);
@@ -46,19 +41,14 @@ export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({
     }, [orderRequestsId, ordersReturnListDetail, isSubmitted]);
 
     const searchOrdersReturnListDetail = async () => {
-        console.log("보내는 데이터:", { orderRequestsId });
-
         const result = await searchApi<IOrdersReturnModalResponse>(OrdersReturnList.searchModal, {
             orderRequestsId: orderRequestsId,
         });
 
         if (result) {
-            // 단일 객체 타입인 IOrdersReturnModal이 객체배열 [{...}]로 반환중이라 ordersReturnListDetail.orderRequestsId로 접근이 안됨.
-            // 배열 IOrdersReturnModal[]로 변환하여 useState
             setOrdersReturnListDetail(
                 Array.isArray(result.ordersReturnModal) ? result.ordersReturnModal : [result.ordersReturnModal]
             );
-            console.log("result.ordersReturnModal :", result.ordersReturnModal);
         }
     };
 
@@ -68,7 +58,6 @@ export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({
                 productId,
                 orderRequestsId,
             });
-            console.log("전송할 productId :", productId);
 
             if (result?.result === "success") {
                 setIsSubmitted(true);
@@ -99,7 +88,7 @@ export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({
                         <tbody>
                             {ordersReturnListDetail.map((order, index) => (
                                 <>
-                                    <tr key={index}>
+                                    <tr>
                                         <th>반품번호</th>
                                         <td>
                                             <StyledInput
@@ -111,7 +100,7 @@ export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({
                                             />
                                         </td>
                                     </tr>
-                                    <tr key={index + 1}>
+                                    <tr>
                                         <th>반품회사</th>
                                         <td>
                                             <StyledInput
@@ -123,7 +112,7 @@ export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({
                                             />
                                         </td>
                                     </tr>
-                                    <tr key={index + 2}>
+                                    <tr>
                                         <th>반품제품</th>
                                         <td>
                                             <StyledInput
@@ -135,7 +124,7 @@ export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({
                                             />
                                         </td>
                                     </tr>
-                                    <tr key={index + 3}>
+                                    <tr>
                                         <th>반품수량</th>
                                         <td>
                                             <StyledInput
@@ -147,7 +136,7 @@ export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({
                                             />
                                         </td>
                                     </tr>
-                                    <tr key={index + 4}>
+                                    <tr>
                                         <th>날짜</th>
                                         <td>
                                             <StyledInput
