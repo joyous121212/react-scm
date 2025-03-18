@@ -83,7 +83,7 @@ export interface IShoppingReturnListModal {
 }
 
 export interface IShoppingReturnListModalResponse {
-    deliveryReturnModalList: IShoppingReturnListModal;
+    deliveryReturnModalList: IShoppingReturnListModal[];
 }
 
 export interface IOrdersList {

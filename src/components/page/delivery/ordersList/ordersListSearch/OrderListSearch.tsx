@@ -1,14 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ShoppingListSearchStyled } from "../../shoppingList/ShoppingListSearch/styled";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { StyledSelectBox } from "../../../../common/StyledSelectBox/StyledSelectBox";
+import { DeliveryContext } from "../../../../../api/Provider/DeliveryProvider";
 
 export const OrderListSearch = () => {
     const title = useRef<HTMLInputElement>();
     const [startDate, setStartDate] = useState<string>();
     // const [endDate, setEndDate] = useState<string>();
+    const { setSearchKeyword } = useContext(DeliveryContext);
     const navigate = useNavigate();
     const options = [
         { label: "업체명", value: "searchUser" },
@@ -27,19 +29,10 @@ export const OrderListSearch = () => {
     }, [selectValue]);
 
     const handlerSearch = () => {
-        // 검색 데이터를 url에 queryParam으로 옮겨 줄꺼입니다.
-        const query: string[] = [];
-
-        if (selectValue === "searchUser") {
-            !title.current.value || query.push(`searchKeyword=${title.current.value}`);
-            query.push(`searchOption=${selectValue}`);
-        } else {
-            !startDate || query.push(`searchKeyword=${startDate}`);
-            query.push(`searchOption=${selectValue}`);
-        }
-
-        const queryString = query.length > 0 ? `?${query.join("&")}` : "";
-        navigate(`/react/delivery/orders-list${queryString}`);
+        setSearchKeyword({
+            searchOption: selectValue,
+            searchKeyword: selectValue === "searchUser" ? title.current.value : startDate,
+        });
     };
     const handleKeyPress = (e) => {
         return e.key === "Enter" ? handlerSearch() : null;
