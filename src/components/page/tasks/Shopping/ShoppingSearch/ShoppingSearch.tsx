@@ -1,12 +1,10 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useRef, useState } from "react";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { ShoppingSearchStyled } from "./styled";
 import { ShoppingContext } from "../../../../../api/Provider/ShoppingProvider";
 
 export const ShoppingSearch = () => {
-    // const customerName = useRef<HTMLInputElement>();
     const customerName = useRef<HTMLInputElement>();
     const [startDate, setStartDate] = useState<string>();
     const [endDate, setEndDate] = useState<string>();

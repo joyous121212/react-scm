@@ -1,10 +1,9 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { OrdersModalStyled } from "./styled";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { IOrdersDetail, IOrdersDetailResponse } from "../../../../../models/interface/IOrders";
-import axios, { AxiosResponse } from "axios";
 import { searchApi } from "../../../../../api/OrdersApi/searchApi";
 import { Orders } from "../../../../../api/api";
 
@@ -16,8 +15,6 @@ interface IOrdersModalProps {
 
 export const OrdersModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, postSuccess }) => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
-    // const [imageUrl, setImageUrl] = useState<string>("");
-    const [fileName, setFileName] = useState<string>("");
     const [ordersDetail, setOrdersDetail] = useState<IOrdersDetail>();
 
     useEffect(() => {
