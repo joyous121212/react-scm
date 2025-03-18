@@ -10,6 +10,7 @@ import {
     IOrdersListDetailResponse,
     IOrdersListResponse,
 } from "../../../../../models/interface/IOrdersList";
+import Swal from "sweetalert2";
 
 interface IOrdersModalProps {
     orderId: number;
@@ -53,6 +54,20 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({
         if (result) {
             setOrdersListDetail(result.detailValue);
         }
+    };
+
+    const handleButtonClick = () => {
+        Swal.fire({
+            icon: "warning",
+            title: "발주서를 전송 하시겠습니까?",
+            confirmButtonText: "확인",
+            showCancelButton: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // 여기에서 주문 ID 전달
+                handleStatusUpdate(orderId);
+            }
+        });
     };
 
     const handleStatusUpdate = async (orderId) => {
@@ -150,7 +165,7 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({
                 </table>
                 <div className='button-container'>
                     <button
-                        onClick={() => handleStatusUpdate(orderId)}
+                        onClick={handleButtonClick}
                         disabled={!(ordersListDetail?.orderState === "purchase" && ordersListDetail?.isApproved === 0)}
                         className={
                             ordersListDetail?.orderState === "purchase" && ordersListDetail?.isApproved === 0

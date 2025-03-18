@@ -37,7 +37,7 @@ export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({
         }
 
         if (isSubmitted) {
-            setModal(false); // isSubmitted가 true로 변경되었을 때 모달을 닫음
+            setModal(false);
         }
 
         return () => {
