@@ -43,7 +43,6 @@ export const ProductsMain = () => {
        });
         
        if(result) {
-        console.log(result);
             setProductsList(result.products);
             setProductsCount(result.productsCnt);
             setCPage(currentPage);
