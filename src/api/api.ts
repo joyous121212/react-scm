@@ -131,6 +131,19 @@ export const delivery = {
     searchOrdersReturnList: "/delivery/orderReturnGroupListBody.do",
 };
 
+export const DeliveryShopping = {
+    shoppingModal: "/delivery/shoppingDeliveryModalBody.do",
+    updateDelivery: "/delivery/updateDeliveryStateBody.do",
+    shoppingReturnModal: "/delivery/deliveryReturnModalListBody.do",
+    updateInventory: "/delivery/deliveryReturnInsertInventoryBody.do",
+};
+
+export const DeliveryOrders = {
+    ordersDetial: "/delivery/orderDirectionDetailListBody.do",
+    ordersReturnDetail: "/delivery/orderReturnDetailListBody.do",
+    updateInventory: "/delivery/returnProductInventoryUpdateBody.do",
+};
+
 export const Performance = {
     searchList: "/sales/performanceListBody.do",
     searchDetail: "/sales/performanceDetailBody.do",

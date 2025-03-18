@@ -89,6 +89,12 @@ export const FindModal = () => {
             setAuthEmailCode(res.data.authNumId);
         });
     };
+    const findMailSendID = () => {
+        const data = { emailPwd: formData.id, email: formData.emailID, authNumIdPwd: formData.code };
+        axios.post("/sendmailJson.do", data).then((res: AxiosResponse<IPostResponse>) => {
+            setAuthEmailCode(res.data.authNumId);
+        });
+    };
 
     const sendCompletePwd = () => {
         if (formData.code === "") {
@@ -142,7 +148,7 @@ export const FindModal = () => {
         axios.post("/selectFindInfoIdJson.do", data).then((res: AxiosResponse<IPostResponse>) => {
             if (res.data.result === "SUCCESS") {
                 setUserID(res.data.resultModel.loginID);
-                findMailSendPwd();
+                findMailSendID();
                 Swal.fire("해당 이메일로 인증번호를 전송하였습니다.", "", "success");
                 setEmailSendID(true);
             } else {

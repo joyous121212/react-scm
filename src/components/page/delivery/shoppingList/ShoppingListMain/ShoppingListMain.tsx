@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { delivery } from "../../../../../api/api";
 import { deliverySearchApi } from "../../../../../api/DeliveryApi/searchApi";
-import { useLocation } from "react-router-dom";
 import { IShoppingList, IShoppingListBodyResponse } from "../../../../../models/interface/IDelivery";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { useRecoilState } from "recoil";
@@ -10,6 +9,7 @@ import { Portal } from "../../../../common/potal/Portal";
 import { ShoppingListModal } from "../ShoppingListModal/ShoppingListModal";
 import { ShoppingListStyled } from "./styled";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
+import { DeliveryContext } from "../../../../../api/Provider/DeliveryProvider";
 
 export const ShoppingListMain = () => {
     const [shoppingList, setShoppingList] = useState<IShoppingList[]>([]);
@@ -17,24 +17,19 @@ export const ShoppingListMain = () => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [shoppingListCnt, setShoppingListCnt] = useState<number>(0);
     const [cPage, setCPage] = useState<number>(0);
-    const { search } = useLocation();
+    const { searchKeyword } = useContext(DeliveryContext);
 
     useEffect(() => {
         searchShoppingList();
-    }, [search]);
+    }, [searchKeyword]);
 
     const searchShoppingList = async (currentPage?: number) => {
         currentPage = currentPage || 1;
-        const searchParam = new URLSearchParams(search);
-        searchParam.append("currentPage", currentPage.toString());
-        searchParam.append("pageSize", "5");
-
-        const result = await deliverySearchApi<IShoppingListBodyResponse, URLSearchParams>(
-            delivery.searchShoppingList,
-            searchParam
-        );
-
-        console.log(result);
+        const result = await deliverySearchApi<IShoppingListBodyResponse>(delivery.searchShoppingList, {
+            ...searchKeyword,
+            currentPage: String(currentPage),
+            pageSize: "5",
+        });
         if (result) {
             setShoppingList(result.shoppingDeliveryList);
             setShoppingListCnt(result.shoppingDeliveryListCnt);
@@ -44,10 +39,7 @@ export const ShoppingListMain = () => {
 
     const changeDeliveryState = () => {
         setModal(!modal);
-        // searchShoppingList(cPage);
-        setTimeout(() => {
-            searchShoppingList(cPage);
-        }, 500); // 500ms (0.5초) 딜레이 후 실행
+        searchShoppingList(cPage);
     };
 
     const handlerModal = (list: IShoppingList) => {

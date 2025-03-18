@@ -1,7 +1,6 @@
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { FC, useEffect, useState } from "react";
-import axios, { AxiosResponse } from "axios";
 import { ShoppingListModalStyled } from "./styled";
 import {
     IShoppingList,
@@ -9,6 +8,8 @@ import {
     IShoppingListModalresponse,
 } from "../../../../../models/interface/IDelivery";
 import Swal from "sweetalert2";
+import { deliveryPostApi } from "../../../../../api/DeliveryApi/postApi";
+import { DeliveryShopping } from "../../../../../api/api";
 
 interface IDeliveryModalProps {
     changeDeliveryState: () => void;
@@ -25,15 +26,18 @@ export const ShoppingListModal: FC<IDeliveryModalProps> = ({ changeDeliveryState
         console.log(listDetail.count);
     }, []);
 
-    const deliveryDetail = () => {
-        axios
-            .get("/delivery/shoppingDeliveryModal.do", { params: { deliveryId: listDetail.deliveryId } })
-            .then((res: AxiosResponse<IShoppingListModalresponse>) => {
-                setDetail(res.data.shoppingDeliveryModal);
-            });
+    const deliveryDetail = async () => {
+        const data = { deliveryId: listDetail.deliveryId };
+        const result = await deliveryPostApi<IShoppingListModalresponse>(DeliveryShopping.shoppingModal, data);
+        setDetail(result.shoppingDeliveryModal);
+        // axios
+        //     .get("/delivery/shoppingDeliveryModal.do", { params: { deliveryId: listDetail.deliveryId } })
+        //     .then((res: AxiosResponse<IShoppingListModalresponse>) => {
+        //         setDetail(res.data.shoppingDeliveryModal);
+        //     });
     };
 
-    const updateDeliveryState = () => {
+    const updateConfirm = async () => {
         Swal.fire({
             title: "배송완료로 변경하시겠습니까?",
             icon: "question",
@@ -45,27 +49,22 @@ export const ShoppingListModal: FC<IDeliveryModalProps> = ({ changeDeliveryState
             reverseButtons: false, // 버튼 순서 거꾸로
         }).then((result) => {
             if (result.isConfirmed) {
-                axios
-                    .get("/delivery/updateDeliveryState.do", {
-                        params: {
-                            deliveryId: listDetail.deliveryId,
-                            deliveryState: "배송완료",
-                            salesState: "deliveryComplete",
-                            supplyId: listDetail.supplyId,
-                            productId: listDetail.productId,
-                            output: detail.count,
-                            startLocation: listDetail.startLocation,
-                            orderId: listDetail.orderId,
-                        },
-                    })
-                    .then((res) => {
-                        console.log(res.data);
-                    });
-                changeDeliveryState();
+                updateDeliveryState();
             }
         });
+    };
 
-        // setModal(!modal);
+    const updateDeliveryState = async () => {
+        const data = {
+            ...listDetail,
+            output: detail.count,
+            deliveryState: "배송완료",
+            salesState: "deliveryComplete",
+        };
+        const result = await deliveryPostApi(DeliveryShopping.updateDelivery, data);
+        if (result) {
+            changeDeliveryState();
+        }
     };
 
     return (
@@ -88,7 +87,7 @@ export const ShoppingListModal: FC<IDeliveryModalProps> = ({ changeDeliveryState
                         </table>
                         <div style={{ textAlign: "center", marginTop: "15px" }}>
                             {listDetail.deliveryState !== "배송완료" ? (
-                                <button onClick={updateDeliveryState}>배송완료</button>
+                                <button onClick={updateConfirm}>배송완료</button>
                             ) : (
                                 <></>
                             )}

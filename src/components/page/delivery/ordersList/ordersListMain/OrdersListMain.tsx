@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { delivery } from "../../../../../api/api";
+import { useContext, useEffect, useState } from "react";
+import { delivery, DeliveryOrders } from "../../../../../api/api";
 import { deliverySearchApi } from "../../../../../api/DeliveryApi/searchApi";
 import axios, { AxiosResponse } from "axios";
 import {
@@ -15,6 +14,8 @@ import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import Swal from "sweetalert2";
 import { OrdersListMainStyled } from "./styled";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
+import { DeliveryContext } from "../../../../../api/Provider/DeliveryProvider";
+import { deliveryPostApi } from "../../../../../api/DeliveryApi/postApi";
 
 export const OrdersListMain = () => {
     const [ordersList, setOrdersList] = useState<IOrdersList[]>([]);
@@ -23,24 +24,22 @@ export const OrdersListMain = () => {
     const [ordersInventory, setOrdersInventory] = useState<IOrdersInventory[]>([]);
     const [flagIndex, setFlagIndex] = useState<number>(-1);
     const [cPage, setCPage] = useState<number>(0);
-    const [selectedInventory, setSelectedInventory] = useState(0);
-    const { search } = useLocation();
+    // 각 행별로 창고 상태 관리
+    const [selectedInventory, setSelectedInventory] = useState<{ [key: number]: number }>({});
+    const { searchKeyword } = useContext(DeliveryContext);
 
     useEffect(() => {
         searchOrdersList();
         setOrdersListDetail(null);
-    }, [search]);
+    }, [searchKeyword]);
 
     const searchOrdersList = async (currentPage?: number) => {
         currentPage = currentPage || 1;
-        const searchParam = new URLSearchParams(search);
-        searchParam.append("currentPage", currentPage.toString());
-        searchParam.append("pageSize", "5");
-
-        const result = await deliverySearchApi<IOrdersListResponse, URLSearchParams>(
-            delivery.searchOrdersList,
-            searchParam
-        );
+        const result = await deliverySearchApi<IOrdersListResponse>(delivery.searchOrdersList, {
+            ...searchKeyword,
+            currentPage: String(currentPage),
+            pageSize: "5",
+        });
 
         if (result) {
             const updatedItems = result.orderDirectionGroup.map((item, index) => ({
@@ -57,43 +56,49 @@ export const OrdersListMain = () => {
         if (!ordersListDetail) {
             setFlagIndex(index);
             OrdersDetail(supplyId, orderDirectionDate);
-            setSelectedInventory(0);
+            setSelectedInventory({});
         } else {
             if (flagIndex === index) {
                 setFlagIndex(-1);
                 setOrdersListDetail(null);
-                setSelectedInventory(0);
+                setSelectedInventory({});
             } else {
-                setSelectedInventory(0);
+                setSelectedInventory({});
                 setFlagIndex(index);
                 OrdersDetail(supplyId, orderDirectionDate);
             }
         }
     };
 
-    const OrdersDetail = (supplyId: number, orderDirectionDate: string) => {
-        axios
-            .get("/delivery/orderDirectionDetailListBody.do", {
-                params: { supplyId: supplyId, orderDirectionDate: orderDirectionDate },
-            })
-            .then((res: AxiosResponse<IOrdersListDetailResponse>) => {
-                setOrdersListDetail(res.data.orderDirectionDetail);
-            });
+    const OrdersDetail = async (supplyId: number, orderDirectionDate: string) => {
+        const data = { supplyId: supplyId, orderDirectionDate: orderDirectionDate };
+        const result = await deliveryPostApi<IOrdersListDetailResponse>(DeliveryOrders.ordersDetial, data);
+        setOrdersListDetail(result.orderDirectionDetail);
         axios.get("/delivery/inventoryList.do").then((res) => {
             setOrdersInventory(res.data);
         });
     };
 
-    const handleChange = (event) => {
-        setSelectedInventory(event.target.value);
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>, orderId: number) => {
+        const value = Number(e.target.value); // 선택된 창고 ID
+        setSelectedInventory((prev) => ({
+            ...prev,
+            [orderId]: value, // orderId 별로 창고 ID 저장
+        }));
     };
 
-    const updateInventory = () => {
-        if (!selectedInventory || selectedInventory === 0) {
-            // alert("창고를 선택해주세요!");
+    const updateConfirm = () => {
+        if (Object.keys(selectedInventory).length < ordersListDetail.length) {
             Swal.fire("창고를 선택해주세요!", "", "warning");
             return;
         }
+        const hasEmptyValue = Object.values(selectedInventory).some((value) => value === 0);
+        console.log(hasEmptyValue);
+        if (hasEmptyValue) {
+            Swal.fire("창고를 선택해주세요!", "", "warning");
+            return;
+        }
+
         Swal.fire({
             title: "발주 처리 하시겠습니까?",
             icon: "question",
@@ -105,26 +110,24 @@ export const OrdersListMain = () => {
             reverseButtons: false, // 버튼 순서 거꾸로
         }).then((result) => {
             if (result.isConfirmed) {
-                // 만약 모달창에서 confirm 버튼을 눌렀다면
                 Swal.fire("발주처리 되었습니다.", "", "success");
-                const data = [
-                    {
-                        productId: String(ordersListDetail[0].productId), // Integer를 String으로 변환
-                        supplyId: String(ordersListDetail[0].supplyId),
-                        orderId: String(ordersListDetail[0].orderId),
-                        warehouseId: String(selectedInventory),
-                        productCnt: String(ordersListDetail[0].count),
-                    },
-                ];
-                axios.post("/delivery/orderInventoryUpdate.do", data);
-                // setDetailFlag(false);
-                setOrdersListDetail(null);
-                setSelectedInventory(null);
-                setTimeout(() => {
-                    searchOrdersList(cPage);
-                }, 500);
+                updateInventory();
             }
         });
+    };
+
+    const updateInventory = async () => {
+        const data = ordersListDetail.map((item) => ({
+            productId: String(item.productId), // Integer를 String으로 변환
+            supplyId: String(item.supplyId),
+            orderId: String(item.orderId),
+            warehouseId: String(selectedInventory[item.orderId] || ""), // orderId에 해당하는 창고Id를 찾기
+            productCnt: String(item.count),
+        }));
+        axios.post("/delivery/orderInventoryUpdate.do", data);
+        setOrdersListDetail(null);
+        setSelectedInventory(null);
+        searchOrdersList(cPage);
     };
 
     const columns = [
@@ -150,8 +153,12 @@ export const OrdersListMain = () => {
             <StyledTable
                 data={ordersList}
                 columns={columns}
-                onRowClick={(row) => {
-                    openGrid(row.supplyId, row.orderDirectionDate, row.index);
+                onRowClick={(row) => openGrid(row.supplyId, row.orderDirectionDate, row.index)}
+                renderCell={(row, column) => {
+                    if (column.key === "totalAmount") {
+                        return `${row.totalAmount.toLocaleString("ko-KR")}원`;
+                    }
+                    return row[column.key as keyof IOrdersList];
                 }}
             />
             <PageNavigate
@@ -170,17 +177,26 @@ export const OrdersListMain = () => {
                             }))}
                             columns={columns2}
                             renderCell={(row, column) => {
+                                if (column.key === "sellPrice") {
+                                    return `${row.sellPrice.toLocaleString("ko-KR")}원`;
+                                }
                                 if (column.key === "supply") {
-                                    return (
-                                        <select className='select' value={selectedInventory} onChange={handleChange}>
-                                            <option>창고 선택</option>
-                                            {ordersInventory.map((value, index) => (
-                                                <option key={index} value={value.warehouseId}>
-                                                    {value.warehouseName}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    );
+                                    if (row.orderId) {
+                                        return (
+                                            <select
+                                                className='select'
+                                                value={selectedInventory[row.orderId] || 0} // 선택된 창고 값 유지
+                                                onChange={(e) => handleChange(e, row.orderId)}
+                                            >
+                                                <option value={0}>창고 선택</option>
+                                                {ordersInventory.map((value, index) => (
+                                                    <option key={index} value={value.warehouseId}>
+                                                        {value.warehouseName}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        );
+                                    }
                                 }
                                 return row[column.key as keyof IOrdersListDetail];
                             }}
@@ -194,10 +210,9 @@ export const OrdersListMain = () => {
                                 marginTop: "-40px",
                             }}
                         >
-                            <StyledButton variant='danger' onClick={updateInventory}>
+                            <StyledButton variant='danger' onClick={updateConfirm}>
                                 발주처리
                             </StyledButton>
-                            {/* <StyledButton onClick={() => setDetailFlag(false)}>닫기</StyledButton> */}
                         </div>
                     </div>
                 </div>

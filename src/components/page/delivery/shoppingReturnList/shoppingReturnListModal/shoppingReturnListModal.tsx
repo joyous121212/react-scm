@@ -1,10 +1,11 @@
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { FC, useEffect, useState } from "react";
-import axios, { AxiosResponse } from "axios";
 import { ShoppingReturnListModalStyled } from "./styled";
 import { IShoppingReturnListModal, IShoppingReturnListModalResponse } from "../../../../../models/interface/IDelivery";
 import Swal from "sweetalert2";
+import { deliveryPostApi } from "../../../../../api/DeliveryApi/postApi";
+import { DeliveryShopping } from "../../../../../api/api";
 
 interface IDeliveryModalProps {
     refundId: number;
@@ -19,16 +20,17 @@ export const ShoppingReturnListModalDe: FC<IDeliveryModalProps> = ({ refundId, c
         returnDetail();
     }, []);
 
-    const returnDetail = () => {
-        axios
-            .get("/delivery/deliveryReturnModalListBody.do", { params: { refundId: refundId } })
-            .then((res: AxiosResponse<IShoppingReturnListModalResponse>) => {
-                console.log(res.data.deliveryReturnModalList[0]);
-                setDetail(res.data.deliveryReturnModalList[0]);
-            });
+    const returnDetail = async () => {
+        const data = { refundId: refundId };
+        const result = await deliveryPostApi<IShoppingReturnListModalResponse>(
+            DeliveryShopping.shoppingReturnModal,
+            data
+        );
+        setDetail(result.deliveryReturnModalList[0]);
+        console.log(result.deliveryReturnModalList);
     };
 
-    const changeInventory = () => {
+    const changeConfirm = () => {
         Swal.fire({
             title: "재고처리 하시겠습니까?",
             icon: "question",
@@ -40,18 +42,34 @@ export const ShoppingReturnListModalDe: FC<IDeliveryModalProps> = ({ refundId, c
             reverseButtons: false, // 버튼 순서 거꾸로
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.get("/delivery/deliveryReturnInsertInventory.do", {
-                    params: {
-                        refundId: refundId,
-                        warehouseId: detail.warehouseId,
-                        supplyName: detail.supplyName,
-                        productNumber: detail.productNumber,
-                        quantity: detail.count,
-                    },
-                });
-                changeApproved();
+                changeInventory();
             }
         });
+    };
+
+    const changeInventory = async () => {
+        // axios
+        //     .get("/delivery/deliveryReturnInsertInventory.do", {
+        //         params: {
+        //             refundId: refundId,
+        //             warehouseId: detail.warehouseId,
+        //             supplyName: detail.supplyName,
+        //             productNumber: detail.productNumber,
+        //             quantity: detail.count,
+        //         },
+        //     })
+        //     .then((res) => {
+        //         changeApproved();
+        //     });
+        const data = {
+            refundId: refundId,
+            warehouseId: detail.warehouseId,
+            supplyName: detail.supplyName,
+            productNumber: detail.productNumber,
+            quantity: detail.count,
+        };
+        const result = await deliveryPostApi(DeliveryShopping.updateInventory, data);
+        changeApproved();
     };
 
     return (
@@ -87,7 +105,7 @@ export const ShoppingReturnListModalDe: FC<IDeliveryModalProps> = ({ refundId, c
                             </tr>
                         </table>
                         <div style={{ textAlign: "center", marginTop: "15px" }}>
-                            <button onClick={changeInventory}>재고 처리</button>
+                            <button onClick={changeConfirm}>재고 처리</button>
                             <button
                                 style={{ width: "80px" }}
                                 onClick={() => setModal(!modalState)}

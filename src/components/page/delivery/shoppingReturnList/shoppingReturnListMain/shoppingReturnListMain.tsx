@@ -1,7 +1,6 @@
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import { delivery } from "../../../../../api/api";
 import { deliverySearchApi } from "../../../../../api/DeliveryApi/searchApi";
 import { IShoppingReturnList, IShoppingReturnListResponse } from "../../../../../models/interface/IDelivery";
@@ -10,6 +9,7 @@ import { ShoppingReturnListModalDe } from "../shoppingReturnListModal/shoppingRe
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { ShoppingReturnListStyled } from "./styled";
+import { DeliveryContext } from "../../../../../api/Provider/DeliveryProvider";
 
 export const ShoppingReturnListMainDe = () => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
@@ -17,23 +17,19 @@ export const ShoppingReturnListMainDe = () => {
     const [shoppingRetunrList, setShoppingReturnList] = useState<IShoppingReturnList[]>([]);
     const [shoppingRetunrListCnt, setShoppingReturnListCnt] = useState<number>();
     const [refundId, setRefundId] = useState(0);
-    const { search } = useLocation();
+    const { searchKeyword } = useContext(DeliveryContext);
 
     useEffect(() => {
         searchShoppingReturnList();
-    }, [search]);
+    }, [searchKeyword]);
 
     const searchShoppingReturnList = async (currentPage?: number) => {
         currentPage = currentPage || 1;
-        const searchParam = new URLSearchParams(search);
-        searchParam.append("currentPage", currentPage.toString());
-        searchParam.append("pageSize", "5");
-
-        const result = await deliverySearchApi<IShoppingReturnListResponse, URLSearchParams>(
-            delivery.searchShoppingReturnList,
-            searchParam
-        );
-        console.log(result);
+        const result = await deliverySearchApi<IShoppingReturnListResponse>(delivery.searchShoppingReturnList, {
+            ...searchKeyword,
+            currentPage: String(currentPage),
+            pageSize: "5",
+        });
         if (result) {
             setShoppingReturnList(result.deliveryReturnList);
             setShoppingReturnListCnt(result.deliveryReturnListCnt);
@@ -62,7 +58,7 @@ export const ShoppingReturnListMainDe = () => {
     return (
         <ShoppingReturnListStyled>
             <StyledTable
-                data={shoppingRetunrList.map((item) => ({
+                data={shoppingRetunrList?.map((item) => ({
                     ...item,
                     state: "임원승인 완료",
                 }))}
