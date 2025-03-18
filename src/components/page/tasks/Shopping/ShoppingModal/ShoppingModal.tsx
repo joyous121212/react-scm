@@ -10,10 +10,9 @@ import { Shopping } from "../../../../../api/api";
 interface IShoppingModalProps {
     deliveryId: number;
     setDeliveryId: React.Dispatch<React.SetStateAction<number>>;
-    postSuccess: () => void;
 }
 
-export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDeliveryId, postSuccess }) => {
+export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDeliveryId }) => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [shoppingDetail, setShoppingDetail] = useState<IShoppingDetail>();
 

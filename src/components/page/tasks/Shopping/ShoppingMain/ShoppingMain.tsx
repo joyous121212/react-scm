@@ -31,8 +31,6 @@ export const ShoppingMain = () => {
             pageSize: 5,
         });
 
-        console.log("API 호출 결과:", result);
-
         if (result) {
             setDeliveryOrderList(result.deliveryOrderList);
             setDeliveryOrderCount(result.deliveryOrderCnt);
@@ -43,11 +41,6 @@ export const ShoppingMain = () => {
     const handlerModal = (deliveryId: number) => {
         setModal(!modal);
         setDeliveryId(deliveryId);
-    };
-
-    const postSuccess = () => {
-        setModal(!modal);
-        searchShoppingList(cPage);
     };
 
     const columns = [
@@ -72,7 +65,7 @@ export const ShoppingMain = () => {
             />
             {modal && (
                 <Portal>
-                    <ShoppingModal deliveryId={deliveryId} setDeliveryId={setDeliveryId} postSuccess={postSuccess} />
+                    <ShoppingModal deliveryId={deliveryId} setDeliveryId={setDeliveryId} />
                 </Portal>
             )}
         </ShoppingMainStyled>

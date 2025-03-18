@@ -12,7 +12,7 @@ import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 
 export const ShoppingReturnMain = () => {
-    const { searchKeyword } = useContext(ShoppingReturnContext);
+    const { searchValue } = useContext(ShoppingReturnContext);
     const [shoppingReturnList, setShoppingReturnList] = useState<IShoppingReturn[]>([]);
     const [shoppingReturnListCount, setShoppingReturnListCount] = useState<number>(0);
     const [cPage, setCPage] = useState<number>(0);
@@ -31,13 +31,13 @@ export const ShoppingReturnMain = () => {
 
     useEffect(() => {
         searchShoppingReturn();
-    }, [searchKeyword]);
+    }, [searchValue]);
 
     const searchShoppingReturn = async (currentPage?: number) => {
         currentPage = currentPage || 1;
 
         const result = await searchApi<IShoppingReturnBodyResponse>(ShoppingReturn.searchList, {
-            ...searchKeyword,
+            ...searchValue,
             currentPage,
             pageSize: 5,
         });
@@ -52,11 +52,6 @@ export const ShoppingReturnMain = () => {
     const handlerModal = (refundId: number) => {
         setModal(!modal);
         setRefundId(refundId);
-    };
-
-    const postSuccess = () => {
-        searchShoppingReturn();
-        searchShoppingReturn(cPage);
     };
 
     return (
@@ -96,7 +91,7 @@ export const ShoppingReturnMain = () => {
             />
             {modal && (
                 <Portal>
-                    <ShoppingReturnModal refundId={refundId} setRefundId={setRefundId} postSuccess={postSuccess} />
+                    <ShoppingReturnModal refundId={refundId} setRefundId={setRefundId} />
                 </Portal>
             )}
         </ShoppingReturnMainStyled>

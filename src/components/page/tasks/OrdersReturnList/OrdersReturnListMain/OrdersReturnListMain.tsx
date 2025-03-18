@@ -22,7 +22,6 @@ export const OrdersReturnListMain = () => {
     const [orderRequestsId, setOrderRequestsId] = useState<number>(0);
 
     useEffect(() => {
-        console.log(searchValue);
         searchOrdersReturnList();
     }, [searchValue]);
 
@@ -47,22 +46,14 @@ export const OrdersReturnListMain = () => {
         setOrderRequestsId(orderRequestsId);
     };
 
-    const postSuccess = () => {
-        setModal(!modal);
-        searchOrdersReturnList(cPage);
-    };
-
     const handlePaymentConfirm = async (e, orderRequestsId) => {
         e.preventDefault();
         e.stopPropagation();
-
-        console.log("전송할 orderId:", orderRequestsId);
 
         try {
             const result = await searchApi<IOrdersReturnListResponse>(OrdersReturnList.updateReturnIsPaid, {
                 orderRequestsId,
             });
-            console.log("입금 확인 API 응답:", result);
 
             if (result?.result === "success") {
                 await searchOrdersReturnList(cPage);
@@ -163,11 +154,7 @@ export const OrdersReturnListMain = () => {
             />
             {modal && (
                 <Portal>
-                    <OrdersReturnListModal
-                        orderRequestsId={orderRequestsId}
-                        setOrderRequestsId={setOrderRequestsId}
-                        postSuccess={postSuccess}
-                    />
+                    <OrdersReturnListModal orderRequestsId={orderRequestsId} setOrderRequestsId={setOrderRequestsId} />
                 </Portal>
             )}
         </OrdersReturnListMainStyled>
