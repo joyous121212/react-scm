@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Table, Td, Th, Thead, Tr } from "./styled";
 import noData from "../../../assets/noData.png";
+import { useRecoilState } from "recoil";
+import { selectRowState } from "../../../stores/modalState";
 
 export interface Column<T> {
     key: keyof T | "actions";
@@ -21,6 +23,7 @@ interface TableProps<T> {
     renderAction?: (row: T) => React.ReactNode;
     renderCell?: (row: T, column: Column<T>) => React.ReactNode;
     renderHead?: (column: Column<T>) => React.ReactNode;
+    renderNoData?: () => React.ReactNode;
 }
 
 export const StyledTable = <T extends { [key: string]: any }>({
@@ -35,8 +38,11 @@ export const StyledTable = <T extends { [key: string]: any }>({
     hoverable,
     fullWidth,
     renderHead,
-}: TableProps<T>) => {
+    getRowClass,
+    renderNoData,
+}: TableProps<T> & { getRowClass?: (row: T) => string }) => {
     const [selectedRow, setSelectedRow] = useState<number | null>(null);
+    const [selectRow, setSelectRow] = useRecoilState(selectRowState);
 
     const generatedColumns =
         columns ??
@@ -45,7 +51,11 @@ export const StyledTable = <T extends { [key: string]: any }>({
             : []);
 
     const handleRowClick = (row: T, index: number) => {
-        setSelectedRow((prevIndex) => (prevIndex === index ? null : index));
+        const isSameRow = selectedRow === index;
+        setSelectedRow(isSameRow ? null : index);
+
+        // ✅ 다음 프레임에서 `setSelectRow` 실행
+        setSelectRow(!isSameRow);
         onRowClick?.(row);
     };
 
@@ -68,7 +78,9 @@ export const StyledTable = <T extends { [key: string]: any }>({
                             striped={striped}
                             hoverable={hoverable}
                             onClick={() => handleRowClick(row, index)}
-                            className={selectedRow === index ? "selected" : ""}
+                            className={
+                                getRowClass ? getRowClass(row) : selectedRow === index && selectRow ? "selected" : ""
+                            }
                         >
                             {columns.map((col) => (
                                 <Td
@@ -89,7 +101,7 @@ export const StyledTable = <T extends { [key: string]: any }>({
                 ) : (
                     <Tr>
                         <Td colSpan={columns.length}>
-                            <img src={noData} alt='noData' />
+                            {renderNoData ? renderNoData() : <img src={noData} alt="noData" />}
                         </Td>
                     </Tr>
                 )}

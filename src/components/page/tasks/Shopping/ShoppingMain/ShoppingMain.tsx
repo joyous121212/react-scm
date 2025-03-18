@@ -1,10 +1,6 @@
-import axios, { AxiosResponse } from "axios";
-import { Modal } from "react-bootstrap";
 import { Portal } from "../../../../common/potal/Portal";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
-
 import { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { searchApi } from "../../../../../api/ShoppingApi/searchApi";
@@ -35,10 +31,8 @@ export const ShoppingMain = () => {
             pageSize: 5,
         });
 
-        console.log("API 호출 결과:", result);
-
         if (result) {
-            setDeliveryOrderList(result.deliveryOrderList); // 필터링된 리스트 설정
+            setDeliveryOrderList(result.deliveryOrderList);
             setDeliveryOrderCount(result.deliveryOrderCnt);
             setCPage(currentPage);
         }
@@ -47,11 +41,6 @@ export const ShoppingMain = () => {
     const handlerModal = (deliveryId: number) => {
         setModal(!modal);
         setDeliveryId(deliveryId);
-    };
-
-    const postSuccess = () => {
-        setModal(!modal);
-        searchShoppingList(cPage);
     };
 
     const columns = [
@@ -76,7 +65,7 @@ export const ShoppingMain = () => {
             />
             {modal && (
                 <Portal>
-                    <ShoppingModal deliveryId={deliveryId} setDeliveryId={setDeliveryId} postSuccess={postSuccess} />
+                    <ShoppingModal deliveryId={deliveryId} setDeliveryId={setDeliveryId} />
                 </Portal>
             )}
         </ShoppingMainStyled>

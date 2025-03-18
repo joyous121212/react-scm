@@ -1,9 +1,8 @@
 import { ShoppingModalStyled } from "./styled";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
-import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
-import { IShopping, IShoppingDetail, IShoppingDetailResponse } from "../../../../../models/interface/IShopping";
-import axios, { AxiosResponse } from "axios";
+import { FC, useEffect, useState } from "react";
+import { IShoppingDetail, IShoppingDetailResponse } from "../../../../../models/interface/IShopping";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { searchApi } from "../../../../../api/ShoppingApi/searchApi";
 import { Shopping } from "../../../../../api/api";
@@ -11,16 +10,11 @@ import { Shopping } from "../../../../../api/api";
 interface IShoppingModalProps {
     deliveryId: number;
     setDeliveryId: React.Dispatch<React.SetStateAction<number>>;
-    postSuccess: () => void;
 }
 
-export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDeliveryId, postSuccess }) => {
+export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDeliveryId }) => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
-    const [imageUrl, setImageUrl] = useState<string>("");
-    const [fileName, setFileName] = useState<string>("");
-    const formRef = useRef<HTMLFormElement>(null);
     const [shoppingDetail, setShoppingDetail] = useState<IShoppingDetail>();
-    // const [deliveryOrderList, setDeliveryOrderList] = useState<IShopping[]>([]);
 
     useEffect(() => {
         deliveryId && searchShoppingDetail();

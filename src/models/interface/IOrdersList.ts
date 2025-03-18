@@ -8,12 +8,15 @@ export interface IOrdersList {
     productName: string;
     productNumber: number;
     supplyName: string;
+    orderState: string;
 }
 
 export interface IOrdersListResponse {
     orderList: IOrdersList[];
     orderCnt: number;
     result: string;
+    isApproved: number;
+    orderState: string;
 }
 
 export interface IOrdersListDetail extends IOrdersList {
@@ -22,6 +25,7 @@ export interface IOrdersListDetail extends IOrdersList {
     productName: string;
     productNumber: number;
     count: number;
+    orderState: string;
 }
 
 export interface IOrdersListDetailResponse {

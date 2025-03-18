@@ -19,6 +19,16 @@ export const UserInfoModalStyle = styled.div`
         width: auto;
     }
 
+    dt {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        background-color: #3498db;
+        color: white;
+        padding: 10px; /* 텍스트와 배경 사이 간격 추가 */
+        border-radius: 6px; /* 둥근 모서리 효과 */
+    }
+
     table {
         width: 100%;
         border-collapse: collapse;
@@ -86,9 +96,5 @@ export const UserInfoModalStyle = styled.div`
 
     .font_red {
         color: #fe1414;
-    }
-
-    .btnArea {
-        display: flex;
     }
 `;

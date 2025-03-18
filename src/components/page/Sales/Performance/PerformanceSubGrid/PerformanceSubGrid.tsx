@@ -1,6 +1,6 @@
 import { useRecoilState } from "recoil";
 import { PerformanceModalStyled } from "./styled"
-import { modalState, performanceState } from "../../../../../stores/modalState";
+import { modalState, performanceState, selectRowState } from "../../../../../stores/modalState";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { searchApi } from "../../../../../api/SalesApi/searchApi";
 import { IPerformanceDetailResponse } from "../../../../../models/interface/IPerformance";
@@ -9,9 +9,10 @@ import { IPerformanceDetail } from '../../../../../models/interface/IPerformance
 import { useEffect, useState } from "react";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 
-export const PerformanceSubGrid = ({supplyId}) => {
+export const PerformanceSubGrid = ({supplyId, clearSelection}) => {
     const [modal, setModal] = useRecoilState(performanceState);
-    const [detail, setDetail] = useState<IPerformanceDetail[]>([]);
+    const [detail, setDetail] = useState<IPerformanceDetail[]>([]);    
+    const [selectRow, setSelectRow] = useRecoilState(selectRowState);
 
     const columns = [
         { key: "supplierName", title: "기업고객명"},
@@ -37,42 +38,32 @@ export const PerformanceSubGrid = ({supplyId}) => {
         } catch (error) {
             console.error("performanceDetail 오류:", error);
         }
-    }
+    };
+
+    const modalClose = () => {
+        setModal(!modal);
+        setSelectRow(false);
+        clearSelection();
+    };
 
     return (
         <PerformanceModalStyled>
-            <div className="container">
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>기업 고객명</th>
-                            <th>제품명</th>
-                            <th>매출액</th>
-                            <th>거래날짜</th>
-                        </tr>
-                        {detail.length > 0 ? (
-                            detail.map((item) => (
-                                <tr key={item.orderId}>
-                                    <td>{item.supplierName}</td>
-                                    <td>{item.productName}</td>
-                                    <td>{`${item.performance.toLocaleString("ko-KR")}원`}</td>
-                                    <td>{item.salesDate}</td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan={4} style={{ textAlign: "center", padding: "20px" }}>
-                                    거래 내역이 없습니다.
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>                
-                <div className="closeButton">
-                    <StyledButton onClick={() => setModal(!modal)}>취소</StyledButton>
-                </div>
-            </div>
-            
+            <StyledTable 
+                data={detail}
+                columns={columns}
+                renderCell={(row, column) => {
+                    if (column.key === "performance") {
+                        return `${row.performance.toLocaleString("ko-KR")}원`;
+                    }
+                    return row[column.key as keyof IPerformanceDetail];
+                }}
+                renderNoData={() => {
+                    return <span>거래내역이 없습니다.</span>
+                }}
+                />               
+            <div className="closeButton">
+                <StyledButton onClick={modalClose}>취소</StyledButton>
+            </div>            
         </PerformanceModalStyled>
     )
 };

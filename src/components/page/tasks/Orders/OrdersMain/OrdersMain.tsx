@@ -1,6 +1,4 @@
-import axios, { AxiosResponse } from "axios";
 import { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { OrdersContext } from "../../../../../api/Provider/OrdersProvider";
@@ -54,11 +52,6 @@ export const OrdersMain = () => {
         setOrderId(orderId);
     };
 
-    const postSuccess = () => {
-        searchOrders();
-        searchOrders(cPage);
-    };
-
     return (
         <OrdersMainStyled>
             <StyledTable data={orderList} columns={columns} onRowClick={(row) => handlerModal(row.orderId)} />
@@ -71,7 +64,7 @@ export const OrdersMain = () => {
 
             {modal && (
                 <Portal>
-                    <OrdersModal orderId={orderId} setOrderId={setOrderId} postSuccess={postSuccess} />
+                    <OrdersModal orderId={orderId} setOrderId={setOrderId} />
                 </Portal>
             )}
         </OrdersMainStyled>

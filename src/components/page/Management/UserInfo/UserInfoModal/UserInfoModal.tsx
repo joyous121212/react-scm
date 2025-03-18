@@ -1,4 +1,8 @@
 import { UserInfoModalStyle } from "./styled";
+
+import { ManageMentWrapperButtonStyle } from "../../ManageMentStyle/ManageMentWrapperButtonStyle/ManageMentWrapperButtonStyle";
+import { ManageMentStyledButton } from "../../ManageMentStyle/ManageMentStyledButton/ManageMentStyledButton";
+
 import { modalState } from "../../../../../stores/modalState";
 import { detailModalState } from "../../../../../stores/modalState";
 import { ContentBox } from "../../../../common/ContentBox/ContentBox";
@@ -7,7 +11,7 @@ import DaumPostcode from "react-daum-postcode";
 import { useEffect, useState } from "react";
 import { detailCodeListhApi } from "../../../../../api/UserInfoApi/detailCodeListApi";
 import { UserInfo } from "../../../../../api/api";
-import { useNavigate } from "react-router-dom";
+import { UserInfoSelectWrapperStyle } from "../UserInfoSelectWrapperStyle/UserInfoSelectWrapperStyle";
 import {
     IDetailCodeListResponse,
     IDuplicUserIdResponse,
@@ -28,7 +32,7 @@ import { IUserDetialInfo } from "../../../../../models/interface/IUserInfoS";
 // window.daum 타입 확장
 import { useRecoilState } from "recoil";
 import { userInfoDetailApi } from "../../../../../api/UserInfoApi/userInfoDetailApi";
-
+import { StyledSelectBox } from "../../../../common/StyledSelectBox/StyledSelectBox";
 export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId }) => {
     const [modal, setModal] = useRecoilState(modalState);
 
@@ -189,7 +193,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
             // setSelectedDetailCode(detailInfo?.detailCode);
         }
         // alert(box3.detailName);
-        console.log(detailInfo);
+        // console.log(detailInfo);
     }, [detailInfo]);
 
     // 유효성을 요하는 변수들 idRef, emailRef
@@ -214,7 +218,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
 
     useEffect(() => {
         if (!isdetail && LoginId === undefined) {
-            alert("다언디파이니팔");
+            // alert("다언디파이니팔");
             handlerdetailCodeList("E10001X1");
         }
     }, []);
@@ -412,6 +416,30 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
     const zipcodeRef = useRef<HTMLInputElement>(null);
     const addressRef = useRef<HTMLInputElement>(null);
     const dtAddressRef = useRef<HTMLInputElement>(null);
+
+    const handleAddressSearch = () => {
+        new window.daum.Postcode({
+            oncomplete: function (data: any) {
+                // 도로명 주소 및 참고 항목 처리
+                let address = data.roadAddress; // 도로명 주소
+                if (!address) address = data.jibunAddress; // 지번 주소
+                console.log("우편번호: " + data.zonecode);
+                console.log("주소: " + address);
+
+                // ref를 이용하여 우편번호와 주소 직접 입력
+                if (zipcodeRef.current) zipcodeRef.current.value = data.zonecode; // 우편번호
+                if (addressRef.current) addressRef.current.value = address; // 주소
+                if (dtAddressRef.current) dtAddressRef.current.value = "";
+
+                const box = { ...userData };
+                box.user_zipcode = data.zonecode;
+                box.user_address = address;
+                setUserData(box);
+                // 팝업 닫기
+                setIsPostcodeOpen(false);
+            },
+        }).open();
+    };
 
     const handleAddressSelect = (data: any) => {
         let address = data.roadAddress; // 도로명 주소
@@ -661,6 +689,9 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         <UserInfoModalStyle>
             {/* 1열 */}
             <div className='container'>
+                <dt>
+                    <strong>기업/고객 정보관리</strong>
+                </dt>
                 <table>
                     <colgroup>
                         <col width='14%' />
@@ -677,88 +708,95 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                             <th scope='row' id='group_codeTh'>
                                 직원 유형<span className='font_red'>*</span>
                             </th>
+
                             <td colSpan={3} id='group_code'>
-                                <select
-                                    name='group_code'
-                                    onChange={(e) => {
-                                        //  console.log(e.target.selectedOptions[0].text);
-                                        setSelectValue(e.target.value);
-                                        handleGroupChange(e);
-                                    }}
-                                    //  defaultValue={selectValue ? selectValue : "c"}
-                                    //value={detailInfo?.group_code}
-                                >
-                                    {isdetail ? (
-                                        <>
-                                            <option value={"E10001X1"}>SCM 담당자</option>
-                                            <option value={"E10001X1"}>구매 담당자</option>
-                                            <option value={"E10001X1"}>회사 임원</option>
-                                            <option value={"R20001P1"}>배송 담당자</option>
-                                            <option value={"G00001A1"}>기업 고객</option>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <option value={"c"}>선택</option>
-                                            <option value={"E10001X1"}>SCM 담당자</option>
-                                            <option value={"E10001X1"}>구매 담당자</option>
-                                            <option value={"E10001X1"}>회사 임원</option>
-                                            <option value={"R20001P1"}>배송 담당자</option>
-                                            <option value={"G00001A1"}>기업 고객</option>
-                                        </>
-                                    )}
-                                </select>
+                                <UserInfoSelectWrapperStyle variant='primary'>
+                                    <select
+                                        className='styledTag'
+                                        name='group_code'
+                                        onChange={(e) => {
+                                            //  console.log(e.target.selectedOptions[0].text);
+                                            setSelectValue(e.target.value);
+                                            handleGroupChange(e);
+                                        }}
+                                        //  defaultValue={selectValue ? selectValue : "c"}
+                                        //value={detailInfo?.group_code}
+                                    >
+                                        {isdetail ? (
+                                            <>
+                                                <option value={"E10001X1"}>SCM 담당자</option>
+                                                <option value={"E10001X1"}>구매 담당자</option>
+                                                <option value={"E10001X1"}>회사 임원</option>
+                                                <option value={"R20001P1"}>배송 담당자</option>
+                                                <option value={"G00001A1"}>기업 고객</option>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <option value={"c"}>선택</option>
+                                                <option value={"E10001X1"}>SCM 담당자</option>
+                                                <option value={"E10001X1"}>구매 담당자</option>
+                                                <option value={"E10001X1"}>회사 임원</option>
+                                                <option value={"R20001P1"}>배송 담당자</option>
+                                                <option value={"G00001A1"}>기업 고객</option>
+                                            </>
+                                        )}
+                                    </select>
+                                </UserInfoSelectWrapperStyle>
                             </td>
                             <th scope='row' id='detail_codeTh'>
                                 담당 업무<span className='font_red'>*</span>
                             </th>
                             {/* 두번째셀렉트 */}
                             <td colSpan={3} id='detail_code'>
-                                {isdetail ? (
-                                    <>
-                                        <select
-                                            name='detailCode'
-                                            value={detailInfo?.detailCode}
-                                            onChange={detaileHandleChange}
-                                        >
-                                            {/* {isdetail ? (
+                                <UserInfoSelectWrapperStyle variant='primary' className='selectWrapper'>
+                                    {isdetail ? (
+                                        <>
+                                            <select
+                                                className='styledTag'
+                                                name='detailCode'
+                                                value={detailInfo?.detailCode}
+                                                onChange={detaileHandleChange}
+                                            >
+                                                {/* {isdetail ? (
                                        <option value={detailInfo?.detailCode}>{detailInfo?.detailName}</option>
                                     ) : (
                                         <option value={"c"}>선택</option>
                                     )} */}
-                                            {/* <option value={"c"}>선택</option> */}
-                                            {detailCodeList ? (
-                                                detailCodeList.map((ele: any, idx: number) => {
-                                                    // console.log(ele);
-                                                    return (
-                                                        <option key={ele.detailCode + idx} value={ele.detailCode}>
-                                                            {ele.detailName}
-                                                        </option>
-                                                    );
-                                                })
-                                            ) : (
-                                                <></>
-                                            )}
-                                        </select>
-                                    </>
-                                ) : (
-                                    <>
-                                        <select name='detail_code' onChange={handleChange}>
-                                            <option value={"c"}>선택</option>
-                                            {detailCodeList ? (
-                                                detailCodeList.map((ele: any, idx: number) => {
-                                                    // console.log(ele);
-                                                    return (
-                                                        <option key={ele.detailCode + idx} value={ele.detailCode}>
-                                                            {ele.detailName}
-                                                        </option>
-                                                    );
-                                                })
-                                            ) : (
-                                                <></>
-                                            )}
-                                        </select>
-                                    </>
-                                )}
+                                                {/* <option value={"c"}>선택</option> */}
+                                                {detailCodeList ? (
+                                                    detailCodeList.map((ele: any, idx: number) => {
+                                                        // console.log(ele);
+                                                        return (
+                                                            <option key={ele.detailCode + idx} value={ele.detailCode}>
+                                                                {ele.detailName}
+                                                            </option>
+                                                        );
+                                                    })
+                                                ) : (
+                                                    <></>
+                                                )}
+                                            </select>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <select className='styledTag' name='detail_code' onChange={handleChange}>
+                                                <option value={"c"}>선택</option>
+                                                {detailCodeList ? (
+                                                    detailCodeList.map((ele: any, idx: number) => {
+                                                        // console.log(ele);
+                                                        return (
+                                                            <option key={ele.detailCode + idx} value={ele.detailCode}>
+                                                                {ele.detailName}
+                                                            </option>
+                                                        );
+                                                    })
+                                                ) : (
+                                                    <></>
+                                                )}
+                                            </select>
+                                        </>
+                                    )}
+                                </UserInfoSelectWrapperStyle>
                             </td>
                         </tr>
 
@@ -931,17 +969,21 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                             </th>
                             <td colSpan={3} id='rggender_td'>
                                 {isdetail ? (
-                                    <select name='sex' value={detailInfo?.sex} onChange={detaileHandleChange}>
-                                        <option value=''>선택</option>
-                                        <option value='1'>남자</option>
-                                        <option value='2'>여자</option>
-                                    </select>
+                                    <UserInfoSelectWrapperStyle variant='primary'>
+                                        <select name='sex' value={detailInfo?.sex} onChange={detaileHandleChange}>
+                                            <option value=''>선택</option>
+                                            <option value='1'>남자</option>
+                                            <option value='2'>여자</option>
+                                        </select>
+                                    </UserInfoSelectWrapperStyle>
                                 ) : (
-                                    <select name='sex' onChange={handleChange}>
-                                        <option value=''>선택</option>
-                                        <option value='1'>남자</option>
-                                        <option value='2'>여자</option>
-                                    </select>
+                                    <UserInfoSelectWrapperStyle variant='primary'>
+                                        <select name='sex' onChange={handleChange}>
+                                            <option value=''>선택</option>
+                                            <option value='1'>남자</option>
+                                            <option value='2'>여자</option>
+                                        </select>
+                                    </UserInfoSelectWrapperStyle>
                                 )}
                             </td>
                             <th scope='row' id='birthday1'>
@@ -997,7 +1039,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                             </td>
 
                             <td colSpan={1}>
-                                <StyledButton onClick={() => setIsPostcodeOpen(true)}>우편번호 찾기</StyledButton>
+                                <StyledButton onClick={handleAddressSearch}>우편번호 찾기</StyledButton>
                             </td>
                         </tr>
                         {/*8행 시작*/}
@@ -1027,55 +1069,56 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                         </tr>
                     </tbody>
                 </table>
-                <div className='btnArea'>
+
+                <ManageMentWrapperButtonStyle className='btnArea'>
                     {/* <StyledButton size={"small"} onClick={insertUserInfo}>
                         등록
                     </StyledButton> */}
                     {isdetail ? (
                         <>
-                            <StyledButton size={"small"} onClick={updateUserInfo}>
+                            <ManageMentStyledButton size={"small"} onClick={updateUserInfo}>
                                 수정
-                            </StyledButton>
+                            </ManageMentStyledButton>
 
                             {detailInfo?.statusYn === "1" ? (
                                 <>
-                                    <StyledButton size={"small"} onClick={openDeleteModal}>
+                                    <ManageMentStyledButton size={"small"} onClick={openDeleteModal}>
                                         삭제
-                                    </StyledButton>
+                                    </ManageMentStyledButton>
                                 </>
                             ) : (
                                 <>
-                                    <StyledButton size={"small"} onClick={openRestoreModal}>
+                                    <ManageMentStyledButton size={"small"} onClick={openRestoreModal}>
                                         복구
-                                    </StyledButton>
+                                    </ManageMentStyledButton>
                                 </>
                             )}
 
-                            <StyledButton
+                            <ManageMentStyledButton
                                 size={"small"}
                                 onClick={() => {
                                     setDetailModal(!detailModal);
                                 }}
                             >
                                 취소
-                            </StyledButton>
+                            </ManageMentStyledButton>
                         </>
                     ) : (
                         <>
-                            <StyledButton size={"small"} onClick={insertUserInfo}>
+                            <ManageMentStyledButton size={"small"} onClick={insertUserInfo}>
                                 등록
-                            </StyledButton>
-                            <StyledButton
+                            </ManageMentStyledButton>
+                            <ManageMentStyledButton
                                 size={"small"}
                                 onClick={() => {
                                     setModal(!modal);
                                 }}
                             >
                                 취소
-                            </StyledButton>
+                            </ManageMentStyledButton>
                         </>
                     )}
-                </div>
+                </ManageMentWrapperButtonStyle>
             </div>
             {isDeleteModalOpen && (
                 <div style={modalStyles}>

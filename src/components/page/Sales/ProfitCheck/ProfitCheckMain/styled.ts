@@ -50,4 +50,8 @@ export const ProfitCheckMainStyled = styled.div`
 	    75% { transform: scale(1.2); } 
 	    100% { transform: scale(1); }  
 	}
+
+    .selected {
+        background-color: #f1f1f1;
+    }
 `;

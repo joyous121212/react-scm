@@ -34,4 +34,29 @@ export const OrdersListMainStyled = styled.div`
         cursor: pointer;
         text-decoration: underline;
     }
+
+    button {
+        flex: 1;
+        background-color: #3bb2ea;
+        border: none;
+        color: white;
+        padding: 10px;
+        margin: 0 5px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 6px;
+        box-shadow: 0 2px #999;
+        transition: 0.3s;
+        white-space: nowrap;
+
+        &:hover {
+            background-color: #45a049;
+        }
+
+        &:active {
+            background-color: #3e8e41;
+            box-shadow: 0 2px #666;
+            transform: translateY(2px);
+        }
+    }
 `;

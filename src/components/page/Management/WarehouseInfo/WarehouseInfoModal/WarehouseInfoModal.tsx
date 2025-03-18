@@ -20,6 +20,8 @@ import { postwarehouseInfoSaveApi } from "../../../../../api/WarehouseInfoApi/po
 import { postWarehouseInfoDeleteApi } from "../../../../../api/WarehouseInfoApi/postWarehouseInfoDeleteApi";
 import { DefaultWareSearchKeyWord } from "../defaultSearchKeyWord/DefaultWareSearchKeyWord";
 import { PostRender } from "../../PostRender/PostRender";
+import { ManageMentWrapperButtonStyle } from "../../ManageMentStyle/ManageMentWrapperButtonStyle/ManageMentWrapperButtonStyle";
+import { ManageMentStyledButton } from "../../ManageMentStyle/ManageMentStyledButton/ManageMentStyledButton";
 interface IProductInfoModalProps {
     warehouseId: number | undefined;
 }
@@ -100,8 +102,47 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
         console.log(updateDetail);
     }, [updateDetail]);
 
+    const handleAddressSearch = () => {
+        new window.daum.Postcode({
+            oncomplete: function (data: any) {
+                if (warehouseId === undefined) {
+                    // alert("정보를삽입시에만");
+                    let address = data.roadAddress; // 도로명 주소
+                    if (!address) address = data.jibunAddress; // 지번 주소
+                    // console.log("우편번호: " + data.zonecode);
+                    // console.log("주소: " + address);
+                    setInsertDetail((prev) => {
+                        insertDetail.zipCode = data.zonecode; // 우편번호
+                        insertDetail.address = address; // 주소
+                        return {
+                            ...prev,
+                        };
+                    });
+                } else {
+                    // alert("업데이트시에만");
+                    let address = data.roadAddress; // 도로명 주소
+                    if (!address) address = data.jibunAddress; // 지번 주소
+                    // console.log("우편번호: " + data.zonecode);
+                    // console.log("주소: " + address);
+                    //분기점
+
+                    updateDetail.zipCode = data.zonecode; // 우편번호
+                    updateDetail.address = address; // 주소
+
+                    setUpdateDetail((prev) => {
+                        return {
+                            ...prev,
+                        };
+                    });
+                }
+
+                setIsPostcodeOpen(false);
+            },
+        }).open();
+    };
+
     const handleAddressSelect = (data: any) => {
-        alert("업데이트시에만");
+        // alert("업데이트시에만");
         let address = data.roadAddress; // 도로명 주소
         if (!address) address = data.jibunAddress; // 지번 주소
         // console.log("우편번호: " + data.zonecode);
@@ -122,7 +163,7 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
     };
 
     const insertHandleAddressSelect = (data: any) => {
-        alert("정보를삽입시에만");
+        // alert("정보를삽입시에만");
         let address = data.roadAddress; // 도로명 주소
         if (!address) address = data.jibunAddress; // 지번 주소
         // console.log("우편번호: " + data.zonecode);
@@ -158,8 +199,7 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
             alert("창고정보 저장에 성공하였습니다.");
 
             PostRender(DefaultWareSearchKeyWord, setSearchKeyword);
-
-            // setInsertModal(!insertModal);
+            setInsertModal(!insertModal);
             // setSearchKeyword({
             //     searchTarget: "warehouseName",
             //     searchKeyword: "",
@@ -187,12 +227,6 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
             alert("정보 수정에 성공하였습니다.");
             setDetailModal(!detailModal);
             PostRender(DefaultWareSearchKeyWord, setSearchKeyword);
-            // setSearchKeyword({
-            //     searchTarget: "warehouseName",
-            //     searchKeyword: "",
-            //     currentPage: 1,
-            //     pageSize: 5,
-            // });
         }
     };
 
@@ -396,6 +430,9 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
             <UserInfoModalStyle>
                 {/* 1열 */}
                 <div className='container'>
+                    <dt>
+                        <strong>창고 정보</strong>
+                    </dt>
                     <table>
                         <colgroup>
                             <col width='12%' />
@@ -594,7 +631,7 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
                                 </td>
                                 {/*  */}
                                 <td colSpan={2}>
-                                    <StyledButton onClick={() => setIsPostcodeOpen(true)}>우편번호 찾기</StyledButton>
+                                    <StyledButton onClick={handleAddressSearch}>우편번호 찾기</StyledButton>
                                     {isPostcodeOpen ? (
                                         <>
                                             {warehouseId != undefined ? (
@@ -641,25 +678,25 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
                         </tbody>
                     </table>
 
-                    <div className='btn_areaC mt30'>
+                    <ManageMentWrapperButtonStyle className='btn_areaC mt30'>
                         {warehouseId != undefined ? (
                             <>
-                                <StyledButton onClick={goUpdateFnc}>수정</StyledButton>
-                                <StyledButton onClick={goDeleteFnc}>삭제</StyledButton>
+                                <ManageMentStyledButton onClick={goUpdateFnc}>수정</ManageMentStyledButton>
+                                <ManageMentStyledButton onClick={goDeleteFnc}>삭제</ManageMentStyledButton>
                             </>
                         ) : (
                             <>
-                                <StyledButton onClick={goInsert}>저장</StyledButton>
+                                <ManageMentStyledButton onClick={goInsert}>저장</ManageMentStyledButton>
                             </>
                         )}
-                        <StyledButton
+                        <ManageMentStyledButton
                             onClick={() => {
                                 warehouseId != undefined ? setDetailModal(!detailModal) : setInsertModal(!insertModal);
                             }}
                         >
                             취소
-                        </StyledButton>
-                    </div>
+                        </ManageMentStyledButton>
+                    </ManageMentWrapperButtonStyle>
                 </div>
             </UserInfoModalStyle>
         </>

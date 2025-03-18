@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { inventoryModalState, modalState } from "../../../../../stores/modalState";
+import { inventoryModalState, modalState, selectRowState } from "../../../../../stores/modalState";
 import { searchApi } from "../../../../../api/CommonCodeApi/searchApi";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { Inventory } from "../../../../../api/api";
@@ -20,6 +20,7 @@ interface IInventorySubGridProps {
 export const InventorySubGrid: FC<IInventorySubGridProps> = ({ inventoryPropsOption }) => {
     const [inventoryDetail, setInventoryDetail] = useState<IInventory[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [selectRow, setSelectRow] = useRecoilState(selectRowState);
     const [inventoryModal, setInventoryModal] = useRecoilState(inventoryModalState);
 
     const columns = [
@@ -54,6 +55,7 @@ export const InventorySubGrid: FC<IInventorySubGridProps> = ({ inventoryPropsOpt
 
     const modalClose = () => {
         setInventoryModal(!inventoryModal);
+        setSelectRow(!selectRow);
     };
 
     return (
@@ -87,7 +89,7 @@ export const InventorySubGrid: FC<IInventorySubGridProps> = ({ inventoryPropsOpt
                 />
             )}
             <div className='closeButton'>
-                <StyledButton size='small' onClick={() => setInventoryModal(!inventoryModal)}>
+                <StyledButton size='small' onClick={modalClose}>
                     취소
                 </StyledButton>
             </div>

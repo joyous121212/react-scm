@@ -22,7 +22,8 @@ import { postSaveSupplyDetail } from "../../../../../api/SupplierInfoApi/postSav
 import { postUpdateSupplyDetail } from "../../../../../api/SupplierInfoApi/postUpdateSupplyDetail";
 import { SupplierInfo } from "../../../../../api/api";
 import { ISupplierSaveInfoDetail } from "../../../../../models/interface/SupplierInfoS";
-
+import { ManageMentWrapperButtonStyle } from "../../ManageMentStyle/ManageMentWrapperButtonStyle/ManageMentWrapperButtonStyle";
+import { ManageMentStyledButton } from "../../ManageMentStyle/ManageMentStyledButton/ManageMentStyledButton";
 export interface SupplierDetailInfoModalProps {
     supplyId?: string;
     detailModal?: boolean; // 프롭 타입 설정
@@ -464,9 +465,34 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
         return request.toRequestDto;
     };
 
-    const handleAddressSelect = (data: any) => {
-        alert("정보삽입모달: " + modal + "  업데이트 모달:  " + detailModal);
+    const handleAddressSearch = () => {
+        new window.daum.Postcode({
+            oncomplete: function (data: any) {
+                let address = data.roadAddress; // 도로명 주소
+                if (!address) address = data.jibunAddress; // 지번 주소
+                // console.log("우편번호: " + data.zonecode);
+                // console.log("주소: " + address);
+                let box;
+                if (detailModal) {
+                    box = { ...supDetail };
+                    box.zipCode = data.zonecode;
+                    box.address = address;
+                    alert(box.zipCode);
+                    setSupDetail(box);
+                    setIsPostcodeOpen(false);
+                } else {
+                    box = { ...saveDetail };
+                    box.zipCode = data.zonecode;
+                    box.address = address;
+                    alert(box.zipCode);
+                    setSaveDetail(box);
+                    setIsPostcodeOpen(false);
+                }
+            },
+        }).open();
+    };
 
+    const handleAddressSelect = (data: any) => {
         let address = data.roadAddress; // 도로명 주소
         if (!address) address = data.jibunAddress; // 지번 주소
         // console.log("우편번호: " + data.zonecode);
@@ -514,6 +540,9 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
             <UserInfoModalStyle>
                 {/* 1열 */}
                 <div className='container'>
+                    <dt>
+                        <strong>납품업체 정보</strong>
+                    </dt>
                     <table>
                         <colgroup>
                             <col width='30%' />
@@ -706,7 +735,7 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                                     )}
                                 </td>
                                 <td colSpan={1}>
-                                    <StyledButton onClick={() => setIsPostcodeOpen(true)}>우편번호 찾기</StyledButton>
+                                    <StyledButton onClick={handleAddressSearch}>우편번호 찾기</StyledButton>
                                 </td>
                             </tr>
                             <tr>
@@ -745,12 +774,7 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                                             readOnly
                                         ></StyledInput>
                                     ) : (
-                                        <StyledInput
-                                            type='text'
-                                            name='detailAddress'
-                                            id='supplyLoginID'
-                                            placeholder='숫자, 영문자 조합으로 6~20자리'
-                                        />
+                                        <StyledInput type='text' name='detailAddress' id='supplyLoginID' />
                                     )}
                                 </td>
                             </tr>
@@ -775,7 +799,6 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                                             id='supplyLoginID'
                                             value={saveDetail.password}
                                             onChange={handleSaveChange}
-                                            placeholder='숫자, 영문자 조합으로 6~20자리'
                                         />
                                     )}
                                 </td>
@@ -788,6 +811,7 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                                     {/* 서버로 보낼시는 TradeState  */}
                                     {supDetail ? (
                                         <>
+                                            찾기ㅅ
                                             <label>
                                                 <StyledInput
                                                     type='radio'
@@ -837,35 +861,37 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                         </tbody>
                     </table>
 
-                    <div className='btn_areaC mt30'>
+                    <ManageMentWrapperButtonStyle className='btn_areaC mt30'>
                         {supDetail ? (
                             <>
                                 {statusRef.current === "Y" ? (
                                     <>
-                                        <StyledButton onClick={goUpdateFnc}>수정</StyledButton>
-                                        <StyledButton onClick={goDeleteFnc}>삭제</StyledButton>
+                                        <ManageMentStyledButton onClick={goUpdateFnc}>수정</ManageMentStyledButton>
+                                        <ManageMentStyledButton onClick={goDeleteFnc}>삭제</ManageMentStyledButton>
                                     </>
                                 ) : (
                                     <>
-                                        <StyledButton onClick={goRecoverFnc}>거래 재개</StyledButton>
+                                        <ManageMentStyledButton onClick={goRecoverFnc}>
+                                            거래 재개
+                                        </ManageMentStyledButton>
                                     </>
                                 )}
                             </>
                         ) : (
                             <>
-                                <StyledButton onClick={goSaveFnc}>저장</StyledButton>
+                                <ManageMentStyledButton onClick={goSaveFnc}>저장</ManageMentStyledButton>
                             </>
                         )}
                         {supDetail ? (
-                            <StyledButton onClick={closeDetailModal}>취소</StyledButton>
+                            <ManageMentStyledButton onClick={closeDetailModal}>취소</ManageMentStyledButton>
                         ) : (
-                            <StyledButton onClick={closeSaveDetailModal}>취소</StyledButton>
+                            <ManageMentStyledButton onClick={closeSaveDetailModal}>취소</ManageMentStyledButton>
                         )}
-                    </div>
+                    </ManageMentWrapperButtonStyle>
                 </div>
                 {isPostcodeOpen && (
                     <DaumPostcode
-                        onComplete={handleAddressSelect} // 주소 선택 완료 시 호출되는 함수
+                        onComplete={handleAddressSearch} // 주소 선택 완료 시 호출되는 함수
                     />
                 )}
             </UserInfoModalStyle>

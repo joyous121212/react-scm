@@ -4,7 +4,7 @@ import { IShoppingReturn, IShoppingReturnBodyResponse } from "../../../../../mod
 import { searchApi } from "../../../../../api/ShoppingReturnApi/searchApi";
 import { ShoppingReturn } from "../../../../../api/api";
 import { ShoppingReturnMainStyled } from "./styled";
-import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
+import { Column } from "../../../../common/StyledTable/StyledTable";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { Portal } from "../../../../common/potal/Portal";
 import { ShoppingReturnModal } from "../ShoppingReturnModal/ShoppingReturnModal";
@@ -12,7 +12,7 @@ import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 
 export const ShoppingReturnMain = () => {
-    const { searchKeyword } = useContext(ShoppingReturnContext);
+    const { searchValue } = useContext(ShoppingReturnContext);
     const [shoppingReturnList, setShoppingReturnList] = useState<IShoppingReturn[]>([]);
     const [shoppingReturnListCount, setShoppingReturnListCount] = useState<number>(0);
     const [cPage, setCPage] = useState<number>(0);
@@ -31,13 +31,13 @@ export const ShoppingReturnMain = () => {
 
     useEffect(() => {
         searchShoppingReturn();
-    }, [searchKeyword]);
+    }, [searchValue]);
 
     const searchShoppingReturn = async (currentPage?: number) => {
         currentPage = currentPage || 1;
 
         const result = await searchApi<IShoppingReturnBodyResponse>(ShoppingReturn.searchList, {
-            ...searchKeyword,
+            ...searchValue,
             currentPage,
             pageSize: 5,
         });
@@ -50,17 +50,8 @@ export const ShoppingReturnMain = () => {
     };
 
     const handlerModal = (refundId: number) => {
-        console.log("Modal status before:", modal); // 로그 추가
-
         setModal(!modal);
         setRefundId(refundId);
-
-        console.log("Modal status after:", modal); // 로그 추가
-    };
-
-    const postSuccess = () => {
-        searchShoppingReturn();
-        searchShoppingReturn(cPage);
     };
 
     return (
@@ -78,7 +69,6 @@ export const ShoppingReturnMain = () => {
                         <tr onClick={() => handlerModal(row.refundId)} key={row.refundId}>
                             {columns.map((column) => {
                                 if (column.key === "isApproved") {
-                                    // isApproved 값 변환
                                     const approvalStatus = [
                                         "SCM 승인 대기중",
                                         "임원 승인 대기중",
@@ -93,7 +83,6 @@ export const ShoppingReturnMain = () => {
                     ))}
                 </tbody>
             </table>
-            {/* <StyledTable data={shoppingReturnList} columns={columns} /> */}
             <PageNavigate
                 totalItemsCount={shoppingReturnListCount}
                 onChange={searchShoppingReturn}
@@ -102,7 +91,7 @@ export const ShoppingReturnMain = () => {
             />
             {modal && (
                 <Portal>
-                    <ShoppingReturnModal refundId={refundId} setRefundId={setRefundId} postSuccess={postSuccess} />
+                    <ShoppingReturnModal refundId={refundId} setRefundId={setRefundId} />
                 </Portal>
             )}
         </ShoppingReturnMainStyled>

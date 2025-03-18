@@ -28,13 +28,10 @@ export const OrdersListSearch = () => {
         });
     };
 
-    // 승인/미승인 선택 시 자동 검색
     useEffect(() => {
         if (selectSupplyNameValue === "approved" || selectSupplyNameValue === "notApproved") {
-            // 승인/미승인일 경우 자동 검색
             setSearchKeyword({ searchTag: selectSupplyNameValue, searchTitle: "" });
         } else {
-            // 다른 옵션 선택 시 전체 리스트로 돌아가기
             setSearchKeyword({ searchTag: selectSupplyNameValue, searchTitle: "" });
         }
     }, [selectSupplyNameValue]);

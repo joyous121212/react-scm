@@ -25,6 +25,10 @@ import { postDeleteProductInfoApi } from "../../../../../api/ProductInfoApi/post
 import { ProductInfoContext } from "../../../../../api/Provider/ProductInfo/ProductInfoProvider";
 import { PostRender } from "../../PostRender/PostRender";
 import { ProductDefaultSearchKeyWord } from "../defaultSearchKeyWord/ProductDefaultKeyword";
+import { ManageMentWrapperButtonStyle } from "../../ManageMentStyle/ManageMentWrapperButtonStyle/ManageMentWrapperButtonStyle";
+import { ManageMentStyledButton } from "../../ManageMentStyle/ManageMentStyledButton/ManageMentStyledButton";
+import { UserInfoSelectWrapperStyle } from "../../UserInfo/UserInfoSelectWrapperStyle/UserInfoSelectWrapperStyle";
+
 export interface IProductInfoModalProps {
     productId?: string;
 }
@@ -86,7 +90,7 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
 
     useEffect(() => {
         if (crudSuccess) {
-            alert(crudSuccess);
+            // alert(crudSuccess);
         }
     }, [crudSuccess]);
 
@@ -199,7 +203,7 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
 
         const selectedOption = e.target.selectedOptions[0];
         const supplyId = selectedOption?.getAttribute("data-supplyid");
-        alert(supplyId);
+        // alert(supplyId);
 
         const box = { ...insertProductDetail };
         box.supplyId = parseInt(supplyId);
@@ -225,7 +229,7 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
         const selectedOption = e.target.selectedOptions[0];
         const categoryCode = selectedOption?.getAttribute("data-categoryCode");
 
-        alert(value);
+        // alert(value);
         setInsertProductDetail((prevData) => ({
             ...prevData,
             categoryCode: value,
@@ -276,7 +280,7 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
         const res: IPostResultMessageResponse = await postDeleteFileApi(ProductInfo.deleteFile, {
             productId: productId,
         });
-        alert(res);
+        // alert(res);
 
         if (res.result === "success") {
             alert("파일을 삭제 하였습니다.");
@@ -480,8 +484,10 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
     return (
         <UserInfoModalStyle>
             <div className='container'>
+                <dt>
+                    <strong>제품 정보</strong>
+                </dt>
                 <table className='row'>
-                    <caption>caption</caption>
                     <colgroup>
                         <col width='120px' />
                         <col width='*' />
@@ -632,18 +638,25 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                                     </>
                                 ) : (
                                     <>
-                                        <select name='supplyId' id='supplier' onChange={insertSupplierHandler}>
-                                            {supNameList.map((ele, index) => {
-                                                // supplyId가 0일 경우, 0에 랜덤 값을 추가하여 중복을 방지
-                                                const supplyId = ele.supplyId === 0 ? uuidv4() : ele.supplyId; // uuid를 사용하여 고유값 생성
-                                                const optionKey = `${supplyId}-${index}`; // supplyId와 index를 조합
-                                                return (
-                                                    <option key={optionKey} data-supplyid={ele.supplyId}>
-                                                        {ele.name}
-                                                    </option>
-                                                );
-                                            })}
-                                        </select>
+                                        <UserInfoSelectWrapperStyle variant='primary' className='selectWrapper'>
+                                            <select
+                                                className='styledTag'
+                                                name='supplyId'
+                                                id='supplier'
+                                                onChange={insertSupplierHandler}
+                                            >
+                                                {supNameList.map((ele, index) => {
+                                                    // supplyId가 0일 경우, 0에 랜덤 값을 추가하여 중복을 방지
+                                                    const supplyId = ele.supplyId === 0 ? uuidv4() : ele.supplyId; // uuid를 사용하여 고유값 생성
+                                                    const optionKey = `${supplyId}-${index}`; // supplyId와 index를 조합
+                                                    return (
+                                                        <option key={optionKey} data-supplyid={ele.supplyId}>
+                                                            {ele.name}
+                                                        </option>
+                                                    );
+                                                })}
+                                            </select>
+                                        </UserInfoSelectWrapperStyle>
                                     </>
                                 )}
                             </td>
@@ -653,48 +666,56 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                                 카테고리<span className='font_red'>*</span>
                             </th>
                             <td colSpan={3}>
-                                {productDetail !== undefined ? (
-                                    <>
-                                        <select
-                                            name='category'
-                                            id='category'
-                                            value={productDetail?.category}
-                                            onChange={updateCategoryHandler}
-                                        >
-                                            {categoryList.map((ele, index) => {
-                                                // supplyId가 0일 경우, 0에 랜덤 값을 추가하여 중복을 방지
-                                                const supplyId =
-                                                    ele.supplyId === 0
-                                                        ? Math.random().toString(36).substring(2, 15)
-                                                        : ele.supplyId;
-                                                const optionKey = `${supplyId}-${index}`; // supplyId와 index를 조합
-                                                return (
-                                                    <option key={optionKey} data-categorycode={ele.categoryCode}>
-                                                        {ele.category}
-                                                    </option>
-                                                );
-                                            })}
-                                        </select>
-                                    </>
-                                ) : (
-                                    <>
-                                        <select name='category' id='category' onChange={insertCateHandler}>
-                                            {categoryList.map((ele, index) => {
-                                                const supplyId = ele.supplyId === 0 ? uuidv4() : ele.supplyId; // uuid를 사용하여 고유값 생성
-                                                const optionKey = `${supplyId}-${index}`; // supplyId와 index를 조합
-                                                return (
-                                                    <option
-                                                        key={optionKey}
-                                                        value={ele.categoryCode}
-                                                        data-supplyid={ele.supplyId}
-                                                    >
-                                                        {ele.category}
-                                                    </option>
-                                                );
-                                            })}
-                                        </select>
-                                    </>
-                                )}
+                                <UserInfoSelectWrapperStyle variant='primary' className='selectWrapper'>
+                                    {productDetail !== undefined ? (
+                                        <>
+                                            <select
+                                                className='styledTag'
+                                                name='category'
+                                                id='category'
+                                                value={productDetail?.category}
+                                                onChange={updateCategoryHandler}
+                                            >
+                                                {categoryList.map((ele, index) => {
+                                                    // supplyId가 0일 경우, 0에 랜덤 값을 추가하여 중복을 방지
+                                                    const supplyId =
+                                                        ele.supplyId === 0
+                                                            ? Math.random().toString(36).substring(2, 15)
+                                                            : ele.supplyId;
+                                                    const optionKey = `${supplyId}-${index}`; // supplyId와 index를 조합
+                                                    return (
+                                                        <option key={optionKey} data-categorycode={ele.categoryCode}>
+                                                            {ele.category}
+                                                        </option>
+                                                    );
+                                                })}
+                                            </select>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <select
+                                                className='styledTag'
+                                                name='category'
+                                                id='category'
+                                                onChange={insertCateHandler}
+                                            >
+                                                {categoryList.map((ele, index) => {
+                                                    const supplyId = ele.supplyId === 0 ? uuidv4() : ele.supplyId; // uuid를 사용하여 고유값 생성
+                                                    const optionKey = `${supplyId}-${index}`; // supplyId와 index를 조합
+                                                    return (
+                                                        <option
+                                                            key={optionKey}
+                                                            value={ele.categoryCode}
+                                                            data-supplyid={ele.supplyId}
+                                                        >
+                                                            {ele.category}
+                                                        </option>
+                                                    );
+                                                })}
+                                            </select>
+                                        </>
+                                    )}
+                                </UserInfoSelectWrapperStyle>
                             </td>
                         </tr>
                         <tr id='fileNo'>
@@ -757,37 +778,36 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                                 <div>
                                     {imageUrl ? (
                                         <div>
-                                            <img src={imageUrl} />
-                                            {/* {fileName || detail.fileName} */}
+                                            <img src={imageUrl} style={{ maxWidth: "400px", maxHeight: "500px" }} />
                                         </div>
                                     ) : (
                                         <></>
-                                        // <div>{fileName}</div>
                                     )}
                                 </div>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <div className='btn_areaC mt30'>
+
+                <ManageMentWrapperButtonStyle className='btn_areaC mt30'>
                     {productDetail !== undefined ? (
                         <>
-                            <StyledButton onClick={goUpdate}>수정</StyledButton>
-                            <StyledButton onClick={goDetateProduct}>삭제</StyledButton>
+                            <ManageMentStyledButton onClick={goUpdate}>수정</ManageMentStyledButton>
+                            <ManageMentStyledButton onClick={goDetateProduct}>삭제</ManageMentStyledButton>
                         </>
                     ) : (
                         <>
-                            <StyledButton onClick={goInsert}>저장</StyledButton>
+                            <ManageMentStyledButton onClick={goInsert}>저장</ManageMentStyledButton>
                         </>
                     )}
-                    <StyledButton
+                    <ManageMentStyledButton
                         onClick={() => {
                             productDetail !== undefined ? setUpdateModal(!updateModal) : setModal(!modal);
                         }}
                     >
                         취소
-                    </StyledButton>
-                </div>
+                    </ManageMentStyledButton>
+                </ManageMentWrapperButtonStyle>
             </div>
         </UserInfoModalStyle>
     );

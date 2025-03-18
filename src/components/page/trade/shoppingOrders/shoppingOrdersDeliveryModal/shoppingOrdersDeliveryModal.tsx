@@ -34,6 +34,7 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
     const [selectWarehouseValueList, setSelectWarehouseValueList] = useState<IWarehouseValue[]>([]);
     const [warehouseName, setWarehouseName] = useState<string>("");
     const [warehouseId, setWarehouseId] = useState<number>(0);
+    const [totalOrderCount, setTotalOrderCount] = useState<number>(0);
     const [warehouseList, setWarehouseList] = useState<IWarehouseList[]>([]);
     const [selectManagerValue, setSelectManagerValue] = useState<string>("");
     const [totalProductStock, setTotalProductStock] = useState<number>(0);
@@ -164,13 +165,16 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
     const deleteAllWareHouseList = () => {
         const newLimitOrderCount = deliveryDetail[0].count;
         setLimitOrderCount(newLimitOrderCount);
+        setTotalOrderCount(0);
         setWarehouseList([]);
+        setSelectWarehouseValueList([]);
     };
 
     const deleteWarehouseList = (warehouseId: number, closeCount: number) => {
         setWarehouseList((prevList) => prevList.filter((item) => item.warehouseId !== warehouseId));
         setSelectWarehouseValueList((prevList) => prevList.filter((item) => item.warehouseId !== warehouseId));
         setLimitOrderCount(limitOrderCount + closeCount);
+        setTotalOrderCount((prev) => prev - closeCount);
     };
 
     const handlerOrderCount = () => {
@@ -208,7 +212,7 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
                 const updatedList = [...prevList];
                 const newOrderCount = updatedList[existingIndex].orderCount + orderCount;
                 if (newOrderCount > totalProductStock) {
-                    alert(`최대 주문 가능 수량은 ${totalProductStock}개입니다.`);
+                    alert(`최대 주문 가능 수량은 ${totalProductStock}개입니다.22222222`);
                     return prevList; // 🚨 기존 상태 그대로 유지 (변경 없음)
                 }
 
@@ -234,7 +238,7 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
                 const updatedList = [...prevList];
                 const newOrderCount = updatedList[existingIndex].orderCount + orderCount;
                 if (newOrderCount > totalProductStock) {
-                    alert(`최대 주문 가능 수량은 ${totalProductStock}개입니다.`);
+                    alert(`최대 주문 가능 수량은 ${totalProductStock}개입니다.3333333333`);
                     return prevList; // 🚨 기존 상태 그대로 유지 (변경 없음)
                 }
 
@@ -247,6 +251,8 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
                 return [...prevList, warehouseListData];
             }
         });
+        const totalOrder = warehouseList.reduce((sum, warehouse) => sum + warehouse.orderCount, 0);
+        setTotalOrderCount((prev) => prev + orderCount);
         setLimitOrderCount(limitOrderCount - orderCount);
         setOrderCount(0);
     };
@@ -278,17 +284,13 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
                                 return row[column.key as keyof IShoppingOrder];
                             }}
                         />
-                        <div className='button-container'>
-                            <StyledButton size='small' onClick={updateShoppingDelivery}>
-                                저장
-                            </StyledButton>
-                            <StyledButton variant='danger' size='small' onClick={deleteAllWareHouseList}>
-                                수정
-                            </StyledButton>
-                        </div>
                     </div>
-
+                    <div className="addWarehouseTitle">
                     <label>창고별 품목 추가</label>
+                    <StyledButton variant='danger' size='small' onClick={deleteAllWareHouseList}>
+                        초기화
+                    </StyledButton>
+                    </div>
                     <div className='warehouseSelect'>
                         <StyledSelectBox
                             options={warehouseOptions}
@@ -325,8 +327,15 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
                             <WarehouseList warehouseList={warehouseList} deleteWarehouseList={deleteWarehouseList} />
                         )}{" "}
                     </div>
-                    <div className="button-container">
-                    <StyledButton size="small" onClick={() => setShoppingOrdersModal(!shoppingOrdersModal)}>취소</StyledButton>
+                    <label > 총 주문 개수: {totalOrderCount}</label>
+
+                    <div className='button-container'>
+                        <StyledButton size='small' onClick={updateShoppingDelivery}>
+                            지시서 작성
+                        </StyledButton>
+                        <StyledButton size='small' onClick={() => setShoppingOrdersModal(!shoppingOrdersModal)}>
+                            나가기
+                        </StyledButton>
                     </div>
                 </div>
             )}

@@ -6,6 +6,8 @@ import {
     IInsertInquiryReqDTO,
     IInsertInquiryResponse,
 } from "../../../../../models/interface/IInquiry";
+import { ManageMentWrapperButtonStyle } from "../../ManageMentStyle/ManageMentWrapperButtonStyle/ManageMentWrapperButtonStyle";
+import { ManageMentStyledButton } from "../../ManageMentStyle/ManageMentStyledButton/ManageMentStyledButton";
 import { useState, useRef, useContext, ChangeEvent, useEffect } from "react";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
@@ -167,9 +169,11 @@ export const InquirySUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
         <>
             <UserInfoModalStyle>
                 <div className='container'>
+                    <dt>
+                        <strong>고객 문의 답변</strong>
+                    </dt>
                     <form ref={formRef}>
                         <table className='row'>
-                            <caption>고객 문의 답변</caption>
                             <colgroup>
                                 <col width='120px' />
                                 <col width='150px' />
@@ -302,42 +306,17 @@ export const InquirySUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
                                             </>
                                         ) : (
                                             <>
-                                                <StyledButton>질문자의 사진이 없습니다</StyledButton>
+                                                <span>질문자의 사진이 없습니다</span>
                                             </>
                                         )}
                                     </td>
                                 </tr>
-                                {/* {fileName && (
-          <tr id="fileYes">
-            <th scope="row">파일</th>
-            <td colSpan={3}>
-              <input
-                type="text"
-                className="inputTxt p100"
-                name="fileName"
-                id="fileName"
-                value={fileName}
-                disabled
-              />
-            </td>
-            <td colSpan={1}>
-              <a
-                href="#"
-                className="btnType blue"
-                id="btnRemoveFile"
-                onClick={handleRemoveFile}
-              >
-                <span>파일삭제</span>
-              </a>
-            </td>
-          </tr>
-        )} */}
                                 <tr>
                                     <th scope='row'>미리보기</th>
                                     <td colSpan={3}>
                                         {imageUrl ? (
                                             <div>
-                                                <img src={imageUrl} />
+                                                <img src={imageUrl} style={{ maxWidth: "600px", maxHeight: "700px" }} />
                                                 {fileName}
                                             </div>
                                         ) : (
@@ -348,17 +327,18 @@ export const InquirySUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
                             </tbody>
                         </table>
                     </form>
-                    <div className='btn_areaC mt30'>
-                        <StyledButton onClick={goInquiryInsert}>답변등록</StyledButton>
-                        <StyledButton onClick={goDelete}>질문 삭제</StyledButton>
-                        <StyledButton
+
+                    <ManageMentWrapperButtonStyle>
+                        <ManageMentStyledButton onClick={goInquiryInsert}>답변등록</ManageMentStyledButton>
+                        <ManageMentStyledButton onClick={goDelete}>질문 삭제</ManageMentStyledButton>
+                        <ManageMentStyledButton
                             onClick={() => {
                                 setDetailMoal(!detailModal);
                             }}
                         >
                             취소
-                        </StyledButton>
-                    </div>
+                        </ManageMentStyledButton>
+                    </ManageMentWrapperButtonStyle>
                 </div>
             </UserInfoModalStyle>
         </>

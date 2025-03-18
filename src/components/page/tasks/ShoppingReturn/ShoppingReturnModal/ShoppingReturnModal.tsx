@@ -11,7 +11,7 @@ import {
 import { searchApi } from "../../../../../api/ShoppingReturnApi/searchApi";
 import { ShoppingReturn } from "../../../../../api/api";
 
-export const ShoppingReturnModal = ({ refundId, setRefundId, postSuccess }) => {
+export const ShoppingReturnModal = ({ refundId, setRefundId }) => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [shoppingDetail, setShoppingDetail] = useState<shoppingReturnDetailList>();
 

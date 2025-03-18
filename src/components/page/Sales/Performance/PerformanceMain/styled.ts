@@ -32,4 +32,8 @@ export const PerformanceMainStyled = styled.div`
         cursor: pointer;
         text-decoration: underline;
     }
+
+    .selected {
+        background-color: #f1f1f1;
+    }
 `;
