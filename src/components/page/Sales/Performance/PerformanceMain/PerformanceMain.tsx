@@ -17,6 +17,7 @@ export const PerformanceMain = () => {
     const {searchKeyword} = useContext(PerformanceContext);
     const [modal, setModal] = useRecoilState<boolean>(performanceState);
     const [supplyId, setSupplyId] = useState<number>();
+    const [selectedSupplyId, setSelectedSupplyId] = useState<number | null>(null);
 
     const columns = [
         { key: "supplierName", title: "기업 고객명", clickable: true},
@@ -46,12 +47,30 @@ export const PerformanceMain = () => {
         }
     }
 
-    const handlerModal = (id: number) => {
-        setSupplyId(id);
-        if (!modal) {
-            setModal(!modal);
+    // const handlerModal = (id: number) => {
+    //     setSupplyId(id);
+    //     if (!modal) {
+    //         setModal(!modal);
+    //     }
+    // }
+
+    const handleRowClick = (id: number) => {
+        console.log(id);
+        console.log(selectedSupplyId);
+        if (selectedSupplyId === id) {
+            setSelectedSupplyId(null); // 같은 항목을 누르면 선택 해제
+            setSupplyId(undefined);
+            setModal(false);
+        } else {
+            setSelectedSupplyId(id);
+            setSupplyId(id);
+            setModal(true);
         }
-    }
+    };
+
+    const clearSelection = () => {
+        setSelectedSupplyId(null); // 선택 해제
+    };
 
     return (
         <PerformanceMainStyled>
@@ -69,18 +88,18 @@ export const PerformanceMain = () => {
                 }}
                 onCellClick={(row, column) => {
                     if(column === "supplierName") {
-                        handlerModal(row.supplyId);
-                        setSupplyId(row.supplyId);
+                        handleRowClick(row.supplyId);
                     }
                 }}
+                getRowClass={(row) => (selectedSupplyId === row.supplyId ? "selected" : "")}
             />
             <PageNavigate 
-                totalItemsCount={supplierCnt}
+                totalItemsCount={supplierCnt || 0}
                 onChange={searchPerformance}
                 itemsCountPerPage={10}
                 activePage={cPage}
             />
-            {modal && supplyId !== null && <PerformanceSubGrid supplyId={supplyId}/>}
+            {modal && supplyId !== null && <PerformanceSubGrid supplyId={supplyId} clearSelection={clearSelection}/>}
         </PerformanceMainStyled>
     )
 }

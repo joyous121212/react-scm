@@ -23,6 +23,7 @@ interface TableProps<T> {
     renderAction?: (row: T) => React.ReactNode;
     renderCell?: (row: T, column: Column<T>) => React.ReactNode;
     renderHead?: (column: Column<T>) => React.ReactNode;
+    renderNoData?: () => React.ReactNode;
 }
 
 export const StyledTable = <T extends { [key: string]: any }>({
@@ -37,7 +38,9 @@ export const StyledTable = <T extends { [key: string]: any }>({
     hoverable,
     fullWidth,
     renderHead,
-}: TableProps<T>) => {
+    getRowClass,
+    renderNoData,
+}: TableProps<T> & { getRowClass?: (row: T) => string }) => {
     const [selectedRow, setSelectedRow] = useState<number | null>(null);
     const [selectRow, setSelectRow] = useRecoilState(selectRowState);
 
@@ -75,7 +78,9 @@ export const StyledTable = <T extends { [key: string]: any }>({
                             striped={striped}
                             hoverable={hoverable}
                             onClick={() => handleRowClick(row, index)}
-                            className={selectedRow === index && selectRow ? "selected" : ""}
+                            className={
+                                getRowClass ? getRowClass(row) : selectedRow === index && selectRow ? "selected" : ""
+                            }
                         >
                             {columns.map((col) => (
                                 <Td
@@ -96,7 +101,7 @@ export const StyledTable = <T extends { [key: string]: any }>({
                 ) : (
                     <Tr>
                         <Td colSpan={columns.length}>
-                            <img src={noData} alt='noData' />
+                            {renderNoData ? renderNoData() : <img src={noData} alt="noData" />}
                         </Td>
                     </Tr>
                 )}
