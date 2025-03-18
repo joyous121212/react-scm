@@ -37,7 +37,8 @@ export const StyledTable = <T extends { [key: string]: any }>({
     hoverable,
     fullWidth,
     renderHead,
-}: TableProps<T>) => {
+    getRowClass,
+}: TableProps<T> & { getRowClass?: (row: T) => string }) => {
     const [selectedRow, setSelectedRow] = useState<number | null>(null);
     const [selectRow, setSelectRow] = useRecoilState(selectRowState);
 
@@ -72,7 +73,9 @@ export const StyledTable = <T extends { [key: string]: any }>({
                             striped={striped}
                             hoverable={hoverable}
                             onClick={() => handleRowClick(row, index)}
-                            className={selectedRow === index && selectRow ? "selected" : ""}
+                            className={
+                                getRowClass ? getRowClass(row) : selectedRow === index && selectRow ? "selected" : ""
+                            }
                         >
                             {columns.map((col) => (
                                 <Td

@@ -1,6 +1,6 @@
 import { useRecoilState } from "recoil";
 import { PerformanceModalStyled } from "./styled"
-import { modalState, performanceState } from "../../../../../stores/modalState";
+import { modalState, performanceState, selectRowState } from "../../../../../stores/modalState";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { searchApi } from "../../../../../api/SalesApi/searchApi";
 import { IPerformanceDetailResponse } from "../../../../../models/interface/IPerformance";
@@ -11,7 +11,8 @@ import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable"
 
 export const PerformanceSubGrid = ({supplyId}) => {
     const [modal, setModal] = useRecoilState(performanceState);
-    const [detail, setDetail] = useState<IPerformanceDetail[]>([]);
+    const [detail, setDetail] = useState<IPerformanceDetail[]>([]);    
+    const [selectRow, setSelectRow] = useRecoilState(selectRowState);
 
     const columns = [
         { key: "supplierName", title: "기업고객명"},
@@ -37,6 +38,11 @@ export const PerformanceSubGrid = ({supplyId}) => {
         } catch (error) {
             console.error("performanceDetail 오류:", error);
         }
+    }
+
+    const modalClose = () => {
+        setModal(!modal);
+        setSelectRow(!selectRow);
     }
 
     return (
@@ -69,7 +75,7 @@ export const PerformanceSubGrid = ({supplyId}) => {
                     </tbody>
                 </table>                
                 <div className="closeButton">
-                    <StyledButton onClick={() => setModal(!modal)}>취소</StyledButton>
+                    <StyledButton onClick={modalClose}>취소</StyledButton>
                 </div>
             </div>
             

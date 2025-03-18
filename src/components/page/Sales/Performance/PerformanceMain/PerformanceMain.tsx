@@ -17,6 +17,7 @@ export const PerformanceMain = () => {
     const {searchKeyword} = useContext(PerformanceContext);
     const [modal, setModal] = useRecoilState<boolean>(performanceState);
     const [supplyId, setSupplyId] = useState<number>();
+    const [selectedSupplyId, setSelectedSupplyId] = useState<number | null>(null);
 
     const columns = [
         { key: "supplierName", title: "기업 고객명", clickable: true},
@@ -53,6 +54,18 @@ export const PerformanceMain = () => {
         }
     }
 
+    const handleRowClick = (id: number) => {
+        if (selectedSupplyId === id) {
+            setSelectedSupplyId(null); // 같은 항목을 누르면 선택 해제
+            setSupplyId(undefined);
+            setModal(false);
+        } else {
+            setSelectedSupplyId(id);
+            setSupplyId(id);
+            setModal(true);
+        }
+    };
+
     return (
         <PerformanceMainStyled>
             <StyledTable 
@@ -69,10 +82,10 @@ export const PerformanceMain = () => {
                 }}
                 onCellClick={(row, column) => {
                     if(column === "supplierName") {
-                        handlerModal(row.supplyId);
-                        setSupplyId(row.supplyId);
+                        handleRowClick(row.supplyId);
                     }
                 }}
+                getRowClass={(row) => (selectedSupplyId === row.supplyId ? "selected" : "")}
             />
             <PageNavigate 
                 totalItemsCount={supplierCnt}
