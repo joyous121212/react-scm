@@ -9,7 +9,7 @@ import { IPerformanceDetail } from '../../../../../models/interface/IPerformance
 import { useEffect, useState } from "react";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 
-export const PerformanceSubGrid = ({supplyId}) => {
+export const PerformanceSubGrid = ({supplyId, clearSelection}) => {
     const [modal, setModal] = useRecoilState(performanceState);
     const [detail, setDetail] = useState<IPerformanceDetail[]>([]);    
     const [selectRow, setSelectRow] = useRecoilState(selectRowState);
@@ -38,12 +38,13 @@ export const PerformanceSubGrid = ({supplyId}) => {
         } catch (error) {
             console.error("performanceDetail 오류:", error);
         }
-    }
+    };
 
     const modalClose = () => {
         setModal(!modal);
-        setSelectRow(!selectRow);
-    }
+        setSelectRow(false);
+        clearSelection();
+    };
 
     return (
         <PerformanceModalStyled>
@@ -57,8 +58,8 @@ export const PerformanceSubGrid = ({supplyId}) => {
                             <th>거래날짜</th>
                         </tr>
                         {detail.length > 0 ? (
-                            detail.map((item) => (
-                                <tr key={item.orderId}>
+                            detail.map((item, index) => (
+                                <tr key={`${supplyId}-${item.orderId || index}`}>
                                     <td>{item.supplierName}</td>
                                     <td>{item.productName}</td>
                                     <td>{`${item.performance.toLocaleString("ko-KR")}원`}</td>

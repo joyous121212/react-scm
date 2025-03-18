@@ -6,11 +6,12 @@ import { OrdersReturnListContext } from "../../../../../api/Provider/OrdersRetur
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { OrdersReturnListMainStyled } from "./styled";
-import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
+import { Column } from "../../../../common/StyledTable/StyledTable";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { Portal } from "../../../../common/potal/Portal";
 import { OrdersReturnListModal } from "../OrdersReturnListModal/OrdersReturnListModal";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
+import Swal from "sweetalert2";
 
 export const OrdersReturnListMain = () => {
     const { searchValue } = useContext(OrdersReturnListContext);
@@ -51,9 +52,8 @@ export const OrdersReturnListMain = () => {
         searchOrdersReturnList(cPage);
     };
 
-    // 입금확인 버튼 클릭 시 상태 업데이트
     const handlePaymentConfirm = async (e, orderRequestsId) => {
-        e.preventDefault(); // 기본 이벤트 방지
+        e.preventDefault();
         e.stopPropagation();
 
         console.log("전송할 orderId:", orderRequestsId);
@@ -62,10 +62,9 @@ export const OrdersReturnListMain = () => {
             const result = await searchApi<IOrdersReturnListResponse>(OrdersReturnList.updateReturnIsPaid, {
                 orderRequestsId,
             });
-            console.log("입금 확인 API 응답:", result); // 응답 확인
+            console.log("입금 확인 API 응답:", result);
 
             if (result?.result === "success") {
-                // 업데이트 성공 시, 최신 주문 목록 다시 불러오기
                 await searchOrdersReturnList(cPage);
             } else {
                 console.error("입금 확인 업데이트 실패");
@@ -108,7 +107,6 @@ export const OrdersReturnListMain = () => {
                             key={row.orderRequestsId}
                             onClick={() => {
                                 if (row.returnIsPaid) {
-                                    // returnIsPaid가 입금인 경우에만 모달 열기
                                     handlerModal(row.orderRequestsId);
                                 }
                             }}
@@ -126,7 +124,18 @@ export const OrdersReturnListMain = () => {
                                                 "입금"
                                             ) : (
                                                 <StyledButton
-                                                    onClick={(e) => handlePaymentConfirm(e, row.orderRequestsId)}
+                                                    onClick={(e) => {
+                                                        Swal.fire({
+                                                            icon: "warning",
+                                                            title: "입금확인 하시겠습니까?",
+                                                            confirmButtonText: "확인",
+                                                            showCancelButton: true,
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed) {
+                                                                handlePaymentConfirm(e, row.orderRequestsId);
+                                                            }
+                                                        });
+                                                    }}
                                                 >
                                                     입금확인
                                                 </StyledButton>

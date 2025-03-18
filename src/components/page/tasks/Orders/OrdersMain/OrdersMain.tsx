@@ -1,6 +1,4 @@
-import axios, { AxiosResponse } from "axios";
 import { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { OrdersContext } from "../../../../../api/Provider/OrdersProvider";

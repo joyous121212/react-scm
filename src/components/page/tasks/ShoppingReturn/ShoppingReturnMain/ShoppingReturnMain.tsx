@@ -4,7 +4,7 @@ import { IShoppingReturn, IShoppingReturnBodyResponse } from "../../../../../mod
 import { searchApi } from "../../../../../api/ShoppingReturnApi/searchApi";
 import { ShoppingReturn } from "../../../../../api/api";
 import { ShoppingReturnMainStyled } from "./styled";
-import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
+import { Column } from "../../../../common/StyledTable/StyledTable";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { Portal } from "../../../../common/potal/Portal";
 import { ShoppingReturnModal } from "../ShoppingReturnModal/ShoppingReturnModal";
@@ -50,12 +50,8 @@ export const ShoppingReturnMain = () => {
     };
 
     const handlerModal = (refundId: number) => {
-        console.log("Modal status before:", modal); // 로그 추가
-
         setModal(!modal);
         setRefundId(refundId);
-
-        console.log("Modal status after:", modal); // 로그 추가
     };
 
     const postSuccess = () => {
@@ -78,7 +74,6 @@ export const ShoppingReturnMain = () => {
                         <tr onClick={() => handlerModal(row.refundId)} key={row.refundId}>
                             {columns.map((column) => {
                                 if (column.key === "isApproved") {
-                                    // isApproved 값 변환
                                     const approvalStatus = [
                                         "SCM 승인 대기중",
                                         "임원 승인 대기중",
@@ -93,7 +88,6 @@ export const ShoppingReturnMain = () => {
                     ))}
                 </tbody>
             </table>
-            {/* <StyledTable data={shoppingReturnList} columns={columns} /> */}
             <PageNavigate
                 totalItemsCount={shoppingReturnListCount}
                 onChange={searchShoppingReturn}

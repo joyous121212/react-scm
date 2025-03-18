@@ -47,14 +47,16 @@ export const PerformanceMain = () => {
         }
     }
 
-    const handlerModal = (id: number) => {
-        setSupplyId(id);
-        if (!modal) {
-            setModal(!modal);
-        }
-    }
+    // const handlerModal = (id: number) => {
+    //     setSupplyId(id);
+    //     if (!modal) {
+    //         setModal(!modal);
+    //     }
+    // }
 
     const handleRowClick = (id: number) => {
+        console.log(id);
+        console.log(selectedSupplyId);
         if (selectedSupplyId === id) {
             setSelectedSupplyId(null); // 같은 항목을 누르면 선택 해제
             setSupplyId(undefined);
@@ -64,6 +66,10 @@ export const PerformanceMain = () => {
             setSupplyId(id);
             setModal(true);
         }
+    };
+
+    const clearSelection = () => {
+        setSelectedSupplyId(null); // 선택 해제
     };
 
     return (
@@ -88,12 +94,12 @@ export const PerformanceMain = () => {
                 getRowClass={(row) => (selectedSupplyId === row.supplyId ? "selected" : "")}
             />
             <PageNavigate 
-                totalItemsCount={supplierCnt}
+                totalItemsCount={supplierCnt || 0}
                 onChange={searchPerformance}
                 itemsCountPerPage={10}
                 activePage={cPage}
             />
-            {modal && supplyId !== null && <PerformanceSubGrid supplyId={supplyId}/>}
+            {modal && supplyId !== null && <PerformanceSubGrid supplyId={supplyId} clearSelection={clearSelection}/>}
         </PerformanceMainStyled>
     )
 }

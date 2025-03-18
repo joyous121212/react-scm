@@ -778,12 +778,10 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                                 <div>
                                     {imageUrl ? (
                                         <div>
-                                            <img src={imageUrl} style={{ maxWidth: "600px", maxHeight: "700px" }} />
-                                            {/* {fileName || detail.fileName} */}
+                                            <img src={imageUrl} style={{ maxWidth: "400px", maxHeight: "500px" }} />
                                         </div>
                                     ) : (
                                         <></>
-                                        // <div>{fileName}</div>
                                     )}
                                 </div>
                             </td>

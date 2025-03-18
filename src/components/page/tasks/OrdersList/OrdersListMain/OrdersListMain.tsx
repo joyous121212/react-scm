@@ -11,6 +11,7 @@ import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { OrdersListModal } from "../OrdersListModal/OrdersListModal";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
+import Swal from "sweetalert2";
 
 export const OrdersListMain = () => {
     const { searchKeyword } = useContext(OrdersListContext);
@@ -19,6 +20,7 @@ export const OrdersListMain = () => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [orderId, setOrderId] = useState<number>(0);
     const [cPage, setCPage] = useState<number>(0);
+    const [orderState, setOrderState] = useState<string>(" ");
 
     const columns = [
         { key: "orderId", title: "발주번호" },
@@ -45,7 +47,7 @@ export const OrdersListMain = () => {
         });
 
         if (result) {
-            setOrdersList(result.orderList); // 전체 주문 개수 설정
+            setOrdersList(result.orderList);
             setOrderCount(result.orderCnt);
             setCPage(currentPage);
         }
@@ -61,19 +63,17 @@ export const OrdersListMain = () => {
         searchOrdersList(cPage);
     };
 
-    // 입금확인 버튼 클릭 시 상태 업데이트
     const handlePaymentConfirm = async (e, orderId) => {
-        e.preventDefault(); // 기본 이벤트 방지
+        e.preventDefault();
         e.stopPropagation();
 
         console.log("전송할 orderId:", orderId);
 
         try {
             const result = await searchApi<IOrdersListResponse>(OrdersList.updateIsPaid, { orderId });
-            console.log("입금 확인 API 응답:", result); // 응답 확인
+            console.log("입금 확인 API 응답:", result);
 
             if (result?.result === "success") {
-                // 업데이트 성공 시, 최신 주문 목록 다시 불러오기
                 await searchOrdersList(cPage);
             } else {
                 console.error("입금 확인 업데이트 실패");
@@ -99,24 +99,34 @@ export const OrdersListMain = () => {
                             key={row.orderId}
                             onClick={() => {
                                 if (row.isPaid) {
-                                    // isApproved가 승인이고 isPaid가 입금인 경우에만 모달 열기
                                     handlerModal(row.orderId);
                                 }
                             }}
                             className={row.isPaid ? "clickable-row" : ""}
                         >
                             {columns.map((column) => {
-                                // isApproved 컬럼 변환
                                 if (column.key === "isApproved") {
                                     return <td key={column.key}>{row.isApproved ? "승인" : "미승인"}</td>;
                                 }
 
-                                // isPaid 컬럼 변환
                                 if (column.key === "isPaid") {
                                     return (
                                         <td key={column.key}>
-                                            {row.isPaid === 0 ? ( // isPaid가 0이면 무조건 버튼 표시
-                                                <StyledButton onClick={(e) => handlePaymentConfirm(e, row.orderId)}>
+                                            {row.isPaid === 0 ? (
+                                                <StyledButton
+                                                    onClick={(e) => {
+                                                        Swal.fire({
+                                                            icon: "warning",
+                                                            title: "입금확인 하시겠습니까?",
+                                                            confirmButtonText: "확인",
+                                                            showCancelButton: true,
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed) {
+                                                                handlePaymentConfirm(e, row.orderId);
+                                                            }
+                                                        });
+                                                    }}
+                                                >
                                                     입금확인
                                                 </StyledButton>
                                             ) : (
@@ -146,7 +156,13 @@ export const OrdersListMain = () => {
 
             {modal && (
                 <Portal>
-                    <OrdersListModal orderId={orderId} setOrderId={setOrderId} postSuccess={postSuccess} />
+                    <OrdersListModal
+                        orderId={orderId}
+                        setOrderId={setOrderId}
+                        setOrderState={setOrderState}
+                        orderState={orderState}
+                        postSuccess={postSuccess}
+                    />
                 </Portal>
             )}
         </OrdersListMainStyled>

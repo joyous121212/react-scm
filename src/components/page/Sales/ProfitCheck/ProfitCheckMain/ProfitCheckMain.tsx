@@ -17,6 +17,7 @@ export const ProfitCheckMain = () => {
     const {searchKeyword} = useContext(ProfitCheckContext);
     const [supplyId, setSupplyId] = useState<number>();
     const [modal, setModal] = useRecoilState<boolean>(profitCheckState);
+    const [selectedSupplyId, setSelectedSupplyId] = useState<number | null>(null);
 
     const columns = [
         { key: "supplierName", title: "기업명" , clickable: true },
@@ -55,6 +56,24 @@ export const ProfitCheckMain = () => {
             setModal(!modal);
         }
     }
+
+    const handleRowClick = (id: number) => {
+        console.log(id);
+        console.log(selectedSupplyId);
+        if (selectedSupplyId === id) {
+            setSelectedSupplyId(null); // 같은 항목을 누르면 선택 해제
+            setSupplyId(undefined);
+            setModal(false);
+        } else {
+            setSelectedSupplyId(id);
+            setSupplyId(id);
+            setModal(true);
+        }
+    };
+
+    const clearSelection = () => {
+        setSelectedSupplyId(null); // 선택 해제
+    };
 
     const profitCheckWithIndex = profitCheck.map((row, index) => ({
         ...row,
@@ -97,18 +116,18 @@ export const ProfitCheckMain = () => {
                 }}
                 onCellClick={(row, column) => {
                     if(column === "supplierName") {
-                        handlerModal(row.supplyId);
-                        setSupplyId(row.supplyId);
+                        handleRowClick(row.supplyId);
                     }
                 }}
+                getRowClass={(row) => (selectedSupplyId === row.supplyId ? "selected" : "")}
             />
             <PageNavigate 
-                totalItemsCount={supplierCnt}
+                totalItemsCount={supplierCnt || 0}
                 onChange={searchProfitCheck}
                 itemsCountPerPage={10}
                 activePage={cPage}
             />
-            {modal && supplyId !== null && <ProfitCheckSubGrid supplyId={supplyId}/>}
+            {modal && supplyId !== null && <ProfitCheckSubGrid supplyId={supplyId} clearSelection={clearSelection}/>}
         </ProfitCheckMainStyled>
     )
 }

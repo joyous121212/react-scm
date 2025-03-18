@@ -41,4 +41,5 @@ export const ProfitCheckSubGridStyled = styled.div`
         cursor: pointer;
         text-decoration: underline;
     }
+
 `;

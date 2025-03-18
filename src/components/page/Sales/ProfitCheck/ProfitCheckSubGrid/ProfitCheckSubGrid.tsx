@@ -4,13 +4,14 @@ import { ProfitCheckSubGridStyled } from "./styled"
 import { searchApi } from "../../../../../api/SalesApi/searchApi";
 import { ProfitCheck } from "../../../../../api/api";
 import { useRecoilState } from "recoil";
-import { modalState, profitCheckState } from "../../../../../stores/modalState";
+import { modalState, profitCheckState, selectRowState } from "../../../../../stores/modalState";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 
-export const ProfitCheckSubGrid = ({supplyId}) => {
+export const ProfitCheckSubGrid = ({supplyId, clearSelection}) => {
     const [modal, setModal] = useRecoilState(profitCheckState);
     const [profitCheckDetail, setProfitCheckDetail] = useState<IProfitCheckDetail[]>([]);
+    const [selectRow, setSelectRow] = useRecoilState(selectRowState);
 
     const columns = [
         { key: "supplierName", title: "기업고객명" },
@@ -30,7 +31,13 @@ export const ProfitCheckSubGrid = ({supplyId}) => {
         if(result) {
             setProfitCheckDetail(result.detailValue);
         }
-    }
+    };
+
+    const modalClose = () => {
+        setModal(!modal);
+        setSelectRow(false);
+        clearSelection();
+    };
 
     return (
         <ProfitCheckSubGridStyled>
@@ -48,7 +55,7 @@ export const ProfitCheckSubGrid = ({supplyId}) => {
                 }}
             />
             <div className="closeButton">
-                <StyledButton onClick={() => setModal(!modal)}>취소</StyledButton>
+                <StyledButton onClick={modalClose}>취소</StyledButton>
             </div>
         </ProfitCheckSubGridStyled>
     )
