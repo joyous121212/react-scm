@@ -7,6 +7,7 @@ import { useRecoilState } from "recoil";
 import { modalState, profitCheckState, selectRowState } from "../../../../../stores/modalState";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
+import { Td, Tr } from "../../../../common/StyledTable/styled";
 
 export const ProfitCheckSubGrid = ({supplyId, clearSelection}) => {
     const [modal, setModal] = useRecoilState(profitCheckState);
@@ -52,6 +53,9 @@ export const ProfitCheckSubGrid = ({supplyId, clearSelection}) => {
                         return `${row.returnPrice.toLocaleString("ko-KR")}원`;
                     }
                     return row[column.key as keyof IProfitCheckDetail];
+                }}
+                renderNoData={() => {
+                    return <span>거래내역이 없습니다.</span>
                 }}
             />
             <div className="closeButton">
