@@ -1,4 +1,7 @@
 import { UserInfoModalStyle } from "../../UserInfo/UserInfoModal/styled";
+
+import { ManageMentWrapperButtonStyle } from "../../ManageMentStyle/ManageMentWrapperButtonStyle/ManageMentWrapperButtonStyle";
+import { ManageMentStyledButton } from "../../ManageMentStyle/ManageMentStyledButton/ManageMentStyledButton";
 import {
     IDdetailValue,
     IFileValue,
@@ -21,6 +24,7 @@ import { postInquiryFileDeleteApi } from "../../../../../api/InquiryApi/postInqu
 import { DefaultInquriySearch } from "../DefaultInquriySearch/DefaultInquriySearch";
 import { PostRender } from "../../PostRender/PostRender";
 import { postInquiryFileRemoveApi } from "../../../../../api/InquiryApi/postInquiryFileRemoveApi";
+import { UserInfoSelectWrapperStyle } from "../../UserInfo/UserInfoSelectWrapperStyle/UserInfoSelectWrapperStyle";
 const emptyCheck = {
     fileCategory: "카테고리 항목 선택은 필수 입니다.",
     fileTitle: "질문제목  입력은 필수 입니다.",
@@ -257,9 +261,11 @@ export const InquiryCUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
         <>
             <UserInfoModalStyle>
                 <div className='container'>
+                    <dt>
+                        <strong>1대1 문의</strong>
+                    </dt>
                     <form ref={formRef}>
                         <table className='row'>
-                            <caption>문의하기</caption>
                             <colgroup>
                                 <col width='120px' />
                                 <col width='150px' />
@@ -294,46 +300,48 @@ export const InquiryCUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
                                         카테고리 <span className='font_red'>*</span>
                                     </th>
                                     <td colSpan={3}>
-                                        {inquiryId !== undefined ? (
-                                            <>
-                                                <select
-                                                    className='inputTxt p100'
-                                                    name='fileCategory'
-                                                    id='fileCategory'
-                                                    value={detailValue?.fileCategory}
-                                                    onChange={handler}
-                                                >
-                                                    <option value='' disabled>
-                                                        카테고리 선택
-                                                    </option>
-                                                    <option value='이용문의'>이용문의</option>
-                                                    <option value='구매'>구매</option>
-                                                    <option value='환불/교환/반품'>환불/교환/반품</option>
-                                                    <option value='제품'>제품</option>
-                                                    <option value='개인정보'>개인정보</option>
-                                                    <option value='기타'>기타</option>
-                                                </select>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <select
-                                                    className='inputTxt p100'
-                                                    name='fileCategory'
-                                                    id='fileCategory'
-                                                    defaultValue={requestDTO?.fileCategory}
-                                                >
-                                                    <option value='' disabled>
-                                                        카테고리 선택
-                                                    </option>
-                                                    <option value='이용문의'>이용문의</option>
-                                                    <option value='구매'>구매</option>
-                                                    <option value='환불/교환/반품'>환불/교환/반품</option>
-                                                    <option value='제품'>제품</option>
-                                                    <option value='개인정보'>개인정보</option>
-                                                    <option value='기타'>기타</option>
-                                                </select>
-                                            </>
-                                        )}
+                                        <UserInfoSelectWrapperStyle variant='primary' className='selectWrapper'>
+                                            {inquiryId !== undefined ? (
+                                                <>
+                                                    <select
+                                                        className='styledTag'
+                                                        name='fileCategory'
+                                                        id='fileCategory'
+                                                        value={detailValue?.fileCategory}
+                                                        onChange={handler}
+                                                    >
+                                                        <option value='' disabled>
+                                                            카테고리 선택
+                                                        </option>
+                                                        <option value='이용문의'>이용문의</option>
+                                                        <option value='구매'>구매</option>
+                                                        <option value='환불/교환/반품'>환불/교환/반품</option>
+                                                        <option value='제품'>제품</option>
+                                                        <option value='개인정보'>개인정보</option>
+                                                        <option value='기타'>기타</option>
+                                                    </select>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <select
+                                                        className='styledTag'
+                                                        name='fileCategory'
+                                                        id='fileCategory'
+                                                        defaultValue={requestDTO?.fileCategory}
+                                                    >
+                                                        <option value='' disabled>
+                                                            카테고리 선택
+                                                        </option>
+                                                        <option value='이용문의'>이용문의</option>
+                                                        <option value='구매'>구매</option>
+                                                        <option value='환불/교환/반품'>환불/교환/반품</option>
+                                                        <option value='제품'>제품</option>
+                                                        <option value='개인정보'>개인정보</option>
+                                                        <option value='기타'>기타</option>
+                                                    </select>
+                                                </>
+                                            )}
+                                        </UserInfoSelectWrapperStyle>
                                     </td>
                                 </tr>
                                 <tr>
@@ -443,7 +451,7 @@ export const InquiryCUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
                                     <td colSpan={3}>
                                         {imageUrl ? (
                                             <div>
-                                                <img src={imageUrl} />
+                                                <img src={imageUrl} style={{ maxWidth: "600px", maxHeight: "700px" }} />
                                                 {fileName}
                                             </div>
                                         ) : (
@@ -454,26 +462,26 @@ export const InquiryCUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
                             </tbody>
                         </table>
                     </form>
-                    <div className='btn_areaC mt30'>
+                    <ManageMentWrapperButtonStyle>
                         {inquiryId != undefined && userType === "C" ? (
                             <>
                                 {ansState === "Y" ? (
                                     <>
                                         {" "}
-                                        <StyledButton onClick={goDelete}>삭제</StyledButton>
+                                        <ManageMentStyledButton onClick={goDelete}>삭제</ManageMentStyledButton>
                                     </>
                                 ) : (
                                     <>
                                         {" "}
-                                        <StyledButton onClick={goUpdate}>수정</StyledButton>
+                                        <ManageMentStyledButton onClick={goUpdate}>수정</ManageMentStyledButton>
                                     </>
                                 )}
                             </>
                         ) : (
-                            <StyledButton onClick={goInsert}>저장</StyledButton>
+                            <ManageMentStyledButton onClick={goInsert}>저장</ManageMentStyledButton>
                         )}
 
-                        <StyledButton
+                        <ManageMentStyledButton
                             onClick={
                                 inquiryId != undefined && userType === "C"
                                     ? () => {
@@ -485,8 +493,8 @@ export const InquiryCUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
                             }
                         >
                             취소
-                        </StyledButton>
-                    </div>
+                        </ManageMentStyledButton>
+                    </ManageMentWrapperButtonStyle>
                 </div>
                 {/* <button onClick={handleSubmit}>데이터테스트</button> */}
             </UserInfoModalStyle>

@@ -19,6 +19,13 @@ export const ShoppingOrdersDeliveryModalStyled = styled.div`
         width: auto;
     }
 
+    .addWarehouseTitle {
+        display: flex;
+        align-items: center; /* ✅ 세로 중앙 정렬 */
+        gap: 5px; /* ✅ 라벨과 버튼 사이 간격 */
+        margin-top: 50px; /* ✅ 위쪽 마진 추가 */
+    }
+
     .warehouseSelect {
         margin-top: 10px;
         margin-left: 30px;

@@ -16,6 +16,7 @@ export const CartMain= () => {
     const [totalAmount, setTotalAmount] = useState<number>(0);
     const [selectedPrice, setSelectedPrice] = useState<number>(0);
     const [cartdetailIdList, setCartdetailIdList] = useState<any[]>([]);
+    const [image, setImage] = useState<string>();
     
     const columns = [
         { key: "select", title: "선택" },
@@ -71,11 +72,21 @@ export const CartMain= () => {
     };
 
     const deleteCartDetail = async (cartdetailId) => {
-        const result = await postApi(Cart.deleteCartDetail, { cartdetailId });
+        const confirm = await Swal.fire({
+            icon: "question",
+            title: "알람",
+            text: "입금하시겠습니까?",
+            showCancelButton: true, // cancel 버튼 보이기
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "예",
+            cancelButtonText: "아니오",
+        });        
         
-        if(!confirm("삭제하시겠습니까?")) {
+        if(!confirm.isConfirmed) {
             return;
         } else {
+            const result = await postApi(Cart.deleteCartDetail, { cartdetailId });
             if (result.result === "success") {
                 alert("삭제되었습니다.");
                 postSuccess();
@@ -91,14 +102,29 @@ export const CartMain= () => {
 
     const order = async () => {
 
-    const cartdetailIdListString = cartdetailIdList.map(String);
+        const cartdetailIdListString = cartdetailIdList.map(String);
         
         if(selectedRows.length < 1) {
-            alert('선택한 상품이 없습니다.');
+            Swal.fire({
+                icon: "warning",
+                title: '선택한 상품이 없습니다.',
+                confirmButtonText: "확인",
+            });
             return;
         }
 
-        if(!confirm('입금하시겠습니까?')) {
+        const confirm = await Swal.fire({
+            icon: "question",
+            title: "알람",
+            text: "입금하시겠습니까?",
+            showCancelButton: true, // cancel 버튼 보이기
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "예",
+            cancelButtonText: "아니오",
+        });
+
+        if(!confirm.isConfirmed) {
             return;
         } else {
             const result = await postApi(Cart.historysSave, cartdetailIdListString);
@@ -120,7 +146,7 @@ export const CartMain= () => {
             <StyledTable
                 data={cartList.map(item => ({
                     ...item.cartDetail,
-                    image: <img src = {item.image?.logicalPath || noData} />,
+                    image: item?.image?.logicalPath || null,
                     select: <input type="checkbox"></input>
                 }))}
                 columns={columns}
@@ -131,6 +157,17 @@ export const CartMain= () => {
                                 type="checkbox"
                                 checked={selectedRows.includes(row.cartdetailId)}
                                 onChange={() => handlerCheckboxChange(row.cartdetailId)}
+                            />
+                        );
+                    }
+                    if (column.key === "image") {
+                        return (
+                            <img 
+                                src={row.image || noData} 
+                                onError={(e) => {
+                                    e.currentTarget.src = noData;
+                                }}
+                                style={{ maxWidth: '100px', maxHeight: '100px' }}
                             />
                         );
                     }

@@ -5,6 +5,7 @@ import { ILoginInfo } from "../../models/interface/store/userInfo";
 import { loginInfoState } from "../../stores/userInfo";
 import { SCMMain } from "./SCMMain/scmMain";
 import { CustomerMain } from "./customerMain/customerMain";
+import { ExecutiveMain } from "./executiveMain/executiveMain";
 
 export const Main = () => {
     const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
@@ -14,6 +15,8 @@ export const Main = () => {
                 return <SCMMain />;
             case "C":
                 return <CustomerMain />;
+            case "E":
+                return <ExecutiveMain/>
         }
     };
     return (

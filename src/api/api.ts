@@ -128,6 +128,7 @@ export const delivery = {
     searchShoppingList: "/delivery/shoppingDeliveryListJson.do",
     searchShoppingReturnList: "/delivery/deliveryReturnListBody.do",
     searchOrdersList: "/delivery/orderDirectionGroupListBody.do",
+    searchOrdersReturnList: "/delivery/orderReturnGroupListBody.do",
 };
 
 export const Performance = {

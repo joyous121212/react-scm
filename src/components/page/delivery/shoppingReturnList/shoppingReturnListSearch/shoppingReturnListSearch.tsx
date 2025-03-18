@@ -24,11 +24,13 @@ export const ShoppingReturnListSearchDe = () => {
         const queryString = query.length > 0 ? `?${query.join("&")}` : "";
         navigate(`/react/delivery/shopping-return-list${queryString}`);
     };
-
+    const handleKeyPress = (e) => {
+        return e.key === "Enter" ? handlerSearch() : null;
+    };
     return (
         <ShoppingReturnListSearchStyled>
             업체명
-            <StyledInput size='small' ref={title}></StyledInput>
+            <StyledInput size='small' ref={title} onKeyDown={handleKeyPress}></StyledInput>
             <StyledInput size='small' type='date' onChange={(e) => setStartDate(e.target.value)}></StyledInput>
             <StyledInput size='small' type='date' onChange={(e) => setEndDate(e.target.value)}></StyledInput>
             <StyledButton variant='secondary' onClick={handlerSearch}>

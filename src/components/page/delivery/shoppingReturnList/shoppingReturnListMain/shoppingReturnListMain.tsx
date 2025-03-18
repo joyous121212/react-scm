@@ -3,13 +3,13 @@ import { modalState } from "../../../../../stores/modalState";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { delivery } from "../../../../../api/api";
-import axios from "axios";
 import { deliverySearchApi } from "../../../../../api/DeliveryApi/searchApi";
 import { IShoppingReturnList, IShoppingReturnListResponse } from "../../../../../models/interface/IDelivery";
-import { StyledTable, StyledTd, StyledTh } from "../../../../common/styled/StyledTable";
 import { Portal } from "../../../../common/potal/Portal";
 import { ShoppingReturnListModalDe } from "../shoppingReturnListModal/shoppingReturnListModal";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
+import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
+import { ShoppingReturnListStyled } from "./styled";
 
 export const ShoppingReturnListMainDe = () => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
@@ -51,38 +51,24 @@ export const ShoppingReturnListMainDe = () => {
         searchShoppingReturnList(cPage);
     };
 
+    const columns = [
+        { key: "refundId", title: "번호" },
+        { key: "name", title: "업체명" },
+        { key: "totalPrice", title: "총 금액" },
+        { key: "returnsRequestDate", title: "반품처리일" },
+        { key: "state", title: "처리상태" },
+    ] as Column<IShoppingReturnList>[];
+
     return (
-        <>
-            <StyledTable>
-                <thead>
-                    <tr>
-                        <StyledTh size={10}>번호</StyledTh>
-                        <StyledTh size={20}>업체명</StyledTh>
-                        <StyledTh size={15}>총금액</StyledTh>
-                        <StyledTh size={40}>반품처리일</StyledTh>
-                        <StyledTh size={20}>처리상태</StyledTh>
-                    </tr>
-                </thead>
-                <tbody>
-                    {shoppingRetunrList?.length > 0 ? (
-                        shoppingRetunrList.map((list) => {
-                            return (
-                                <tr key={list.refundId} onClick={() => handlerModal(list.refundId)}>
-                                    <StyledTd>{list.refundId}</StyledTd>
-                                    <StyledTd>{list.name}</StyledTd>
-                                    <StyledTd>{list.totalPrice}</StyledTd>
-                                    <StyledTd>{list.returnsRequestDate}</StyledTd>
-                                    <StyledTd>임원 승인 완료</StyledTd>
-                                </tr>
-                            );
-                        })
-                    ) : (
-                        <tr>
-                            <StyledTd colSpan={5}>데이터가 없습니다.</StyledTd>
-                        </tr>
-                    )}
-                </tbody>
-            </StyledTable>
+        <ShoppingReturnListStyled>
+            <StyledTable
+                data={shoppingRetunrList.map((item) => ({
+                    ...item,
+                    state: "임원승인 완료",
+                }))}
+                columns={columns}
+                onRowClick={(row) => handlerModal(row.refundId)}
+            />
             <PageNavigate
                 totalItemsCount={shoppingRetunrListCnt}
                 onChange={searchShoppingReturnList}
@@ -94,6 +80,6 @@ export const ShoppingReturnListMainDe = () => {
                     <ShoppingReturnListModalDe refundId={refundId} changeApproved={changeApproved} />
                 </Portal>
             )}
-        </>
+        </ShoppingReturnListStyled>
     );
 };

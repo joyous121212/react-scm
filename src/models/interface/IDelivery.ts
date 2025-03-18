@@ -87,6 +87,7 @@ export interface IShoppingReturnListModalResponse {
 }
 
 export interface IOrdersList {
+    index?: number;
     orderDirectionDate: string;
     supplyId: number;
     supplyName: string;
@@ -99,6 +100,7 @@ export interface IOrdersListResponse {
 }
 
 export interface IOrdersListDetail {
+    index?: number;
     categoryName: string;
     categoryNumber: string;
     count: number;
@@ -110,11 +112,62 @@ export interface IOrdersListDetail {
     supplyId: number;
 }
 export interface IOrdersListDetailResponse {
-    orderDirectionDetail: IOrdersListDetail;
+    orderDirectionDetail: IOrdersListDetail[];
     rderDirectionDetailCnt: number;
 }
 
 export interface IOrdersInventory {
     warehouseId: string;
     warehouseName: string;
+}
+
+export interface IOrdersReturnList {
+    index?: number;
+    orderReturnDate: string;
+    supplyId: string;
+    supplyName: string;
+    totalAmount: number;
+}
+
+export interface IOrdersReturnListResponse {
+    orderReturnGroup: IOrdersReturnList[];
+    orderReturnGroupCnt: number;
+}
+
+export interface IOrdersReturnDetail {
+    index?: number;
+    categoryCode: string;
+    categoryName: string;
+    count: number;
+    productName: string;
+    productNumber: string;
+    returnId: number;
+    sellPrice: number;
+}
+export interface IOrdersReturnDetailResponse {
+    orderReturnDetail: IOrdersReturnDetail[];
+    orderReturnDetailCnt: number;
+}
+
+export interface IJoinFormData {
+    action: string;
+    user_type: string;
+    group_code: string;
+    detail_code: string;
+    classType: string;
+    loginID: string;
+    password: string;
+    password1: string;
+    name: string;
+    manager: string;
+    userTel1: string;
+    userTel2: string;
+    userTel3: string;
+    gender_cd: string;
+    birthday: string;
+    user_email: string;
+    user_zipcode: string;
+    user_address: string;
+    user_dt_address: string;
+    hp: string;
 }

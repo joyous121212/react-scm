@@ -41,12 +41,15 @@ export const OrderListSearch = () => {
         const queryString = query.length > 0 ? `?${query.join("&")}` : "";
         navigate(`/react/delivery/orders-list${queryString}`);
     };
+    const handleKeyPress = (e) => {
+        return e.key === "Enter" ? handlerSearch() : null;
+    };
 
     return (
         <ShoppingListSearchStyled>
             <StyledSelectBox options={options} value={selectValue} onChange={setSelectValue} />
             {selectValue === "searchUser" ? (
-                <StyledInput size='medium' ref={title}></StyledInput>
+                <StyledInput size='medium' ref={title} onKeyDown={handleKeyPress}></StyledInput>
             ) : (
                 <StyledInput size='medium' type='date' onChange={(e) => setStartDate(e.target.value)}></StyledInput>
             )}
