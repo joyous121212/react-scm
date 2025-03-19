@@ -68,6 +68,11 @@ export const HistoryDetailModal = ( {orderId, returnCount, postSuccess} ) => {
 
         return true;
     }
+
+    const getNumberOnly = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        const input = event.target as HTMLInputElement;
+        input.value = input.value.replace(/[^0-9]/g, '');
+    }
     
     return (
         <HistoryDetailModalStyle>
@@ -80,7 +85,7 @@ export const HistoryDetailModal = ( {orderId, returnCount, postSuccess} ) => {
                         onChange={setBank}
                     />
                     계좌번호
-                    <StyledInput type='text' onChange={(e) => setAccountNumber(e.target.value)} placeholder="계좌번호 입력"/>
+                    <StyledInput type='text' onChange={(e) => setAccountNumber(e.target.value)} placeholder="숫자만 입력" onKeyUp={getNumberOnly}/>
                     예금주
                     <StyledInput type='text' onChange={(e) => setAccountHolder(e.target.value)} placeholder="예금주 입력"/>
                 </label>
