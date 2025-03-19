@@ -32,7 +32,7 @@ import { IGetUserDetailInfo } from "../../../../../models/interface/IUserInfoS";
 import { useRecoilState } from "recoil";
 import { userInfoDetailApi } from "../../../../../api/UserInfoApi/userInfoDetailApi";
 import { IInsertUserInfoRequest } from "../../../../../models/interface/IUserInfoS";
-import { createImportSpecifier } from "typescript";
+
 export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId }) => {
     const [modal, setModal] = useRecoilState(modalState);
 
