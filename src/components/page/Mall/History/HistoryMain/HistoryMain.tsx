@@ -64,20 +64,23 @@ export const HistoryMain = () => {
                         return `${totalPrice.toLocaleString("ko-KR")}원`;
                     }
                     if (column.key === "deliveryState") {
-                        return row.deliveryState === null ? "배송 준비중" : row.deliveryState;
+                        return row.deliveryState === null ? 
+                            <span style={{color: "blue", fontWeight: "bold"}}>배송 준비중</span> : 
+                            <span style={{color: "green", fontWeight: "bold"}}>{row.deliveryState}</span>;
                     }
                     if (column.key === "salesState") {
-                        const salesStateMap: { [key: string]: string } = {
-                            salesRequest: "주문 완료",
-                            delivery: "배송 중",
-                            deliveryComplete: "배송 완료",
-                            ordering: "배송 중",
-                            salesComplete: "구매 확인",
-                            mallReturnsRequest: "반품 신청",
-                            mallReturnsComplete: "반품 완료",
+                        const salesStateMap: { [key: string]: {text: string; color: string } } = {
+                            salesRequest: {text: "주문 완료", color: "purple"},
+                            delivery: {text: "배송 중", color: "orange"},
+                            deliveryComplete: {text: "배송 완료", color: "green"},
+                            ordering: {text: "배송 중", color: "orange"},
+                            salesComplete: {text: "구매 확인", color: "black"},
+                            mallReturnsRequest: {text: "반품 신청", color: "red"},
+                            mallReturnsComplete: {text: "반품 완료", color: "gray"},
                         };
-                    
-                        return salesStateMap[row.salesState] || row.salesState;
+
+                        const salesState = salesStateMap[row.salesState] || { text: row.salesState, color: "black" };                    
+                        return <span style={{color: salesState.color, fontWeight: "bold"}}>{salesState.text}</span>
                         
                     }
                     return row[column.key as keyof IHistoryList];
