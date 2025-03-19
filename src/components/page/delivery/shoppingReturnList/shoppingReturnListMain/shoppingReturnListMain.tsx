@@ -71,6 +71,12 @@ export const ShoppingReturnListMainDe = () => {
                     state: "임원승인 완료",
                 }))}
                 columns={columns}
+                renderCell={(row, column) => {
+                    if (column.key === "totalPrice") {
+                        return `${row.totalPrice.toLocaleString("ko-KR")}원`;
+                    }
+                    return row[column.key as keyof IShoppingReturnList];
+                }}
                 onRowClick={(row) => handlerModal(row.refundId)}
             />
             <PageNavigate

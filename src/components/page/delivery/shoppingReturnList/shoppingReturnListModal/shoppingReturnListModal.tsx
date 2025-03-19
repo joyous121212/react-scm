@@ -88,7 +88,7 @@ export const ShoppingReturnListModalDe: FC<IDeliveryModalProps> = ({ refundId, c
                                 <td>{detail?.detailName}</td>
                                 <td>{detail?.productName}</td>
                                 <td>{detail?.supplyName}</td>
-                                <td>{detail?.price}</td>
+                                <td>{detail.price.toLocaleString("ko-KR")}원</td>
                                 <td>{detail?.count}</td>
                                 <td>{detail?.totalPrice}</td>
                                 <td>{detail?.warehouseName}</td>
