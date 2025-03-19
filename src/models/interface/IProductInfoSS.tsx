@@ -20,8 +20,8 @@ export interface IProductDetail {
     sellPrice: number;
     description: "";
     createdDate: "";
-    category: "";
-    categoryCode: "";
+    category: string;
+    categoryCode: string;
     fileName: "";
     filePath: "";
     logicalPath: "";
