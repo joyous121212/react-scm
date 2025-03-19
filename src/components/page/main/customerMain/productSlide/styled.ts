@@ -48,4 +48,10 @@ export const CardWrapper = styled.div`
         object-fit: cover;
         border-radius: 8px 0 0 8px;
     }
+
+    .text-area {
+        margin-top: 10px;
+        font-size: 16px;
+        width: 100%;
+    }
 `;

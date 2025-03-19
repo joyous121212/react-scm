@@ -73,7 +73,8 @@ export const ProductSlideshow: React.FC = () => {
         slidesToScroll: 2,
         nextArrow: <CustomNextArrow />,
         prevArrow: <CustomPrevArrow />,
-        autoplaySpeed: 3000,
+        autoplay: true,
+        autoplaySpeed: 4000,
     };
 
     return (
@@ -96,12 +97,19 @@ export const ProductSlideshow: React.FC = () => {
                                         </div>
                                         <div className='col-md-8'>
                                             <div className='card-body'>
-                                                <h5 className='card-title'> 제품명 : {product.name}</h5>
-                                                <h5 className='card-text'>가격 : {product.sellPrice}</h5>
+                                                <h4 className='card-title'> 제품명 : {product.name}</h4>
+                                                <h4 className='card-text'>
+                                                    가격 : {`${product.sellPrice.toLocaleString("ko-KR")}원`}
+                                                </h4>
                                                 <p className='card-text'>
-                                                    <small className='text-body-secondary'>
-                                                        상품설명: {product.description}
-                                                    </small>
+                                                    <h5 className='text-body-secondary'>
+                                                        <div>상품설명</div>
+                                                        <textarea
+                                                            className='text-area'
+                                                            defaultValue={product.description}
+                                                            readOnly
+                                                        ></textarea>
+                                                    </h5>
                                                 </p>
                                             </div>
                                         </div>

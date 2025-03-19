@@ -94,6 +94,9 @@ export const ShoppingOrdersMain = () => {
                     data={shoppingOrders}
                     columns={columns}
                     renderCell={(row, column) => {
+                        if (["totalPrice", "sellPrice"].includes(column.key)) {
+                            return `${row[column.key].toLocaleString("ko-KR")}원`;
+                        }
                         if (column.key === "requestsReturnDate") {
                             return row.requestsReturnDate ? "Y" : "N";
                         }
