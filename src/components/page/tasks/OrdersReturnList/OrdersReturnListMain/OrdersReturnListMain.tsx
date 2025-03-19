@@ -21,6 +21,15 @@ export const OrdersReturnListMain = () => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [orderRequestsId, setOrderRequestsId] = useState<number>(0);
 
+    const columns = [
+        { key: "orderRequestsId", title: "반품번호" },
+        { key: "supplyName", title: "반품회사" },
+        { key: "productName", title: "반품제품" },
+        { key: "count", title: "반품수량" },
+        { key: "requestsOrderDate", title: "날짜" },
+        { key: "returnIsPaid", title: "입금확인" },
+    ] as Column<IOrdersReturnList>[];
+
     useEffect(() => {
         searchOrdersReturnList();
     }, [searchValue]);
@@ -57,8 +66,6 @@ export const OrdersReturnListMain = () => {
 
             if (result?.result === "success") {
                 await searchOrdersReturnList(cPage);
-            } else {
-                console.error("입금 확인 업데이트 실패");
             }
         } catch (error) {
             console.error("입금 확인 처리 중 오류 발생:", error);
@@ -72,15 +79,6 @@ export const OrdersReturnListMain = () => {
         const day = d.getDate().toString().padStart(2, "0");
         return `${year}-${month}-${day}`;
     };
-
-    const columns = [
-        { key: "orderRequestsId", title: "반품번호" },
-        { key: "supplyName", title: "반품회사" },
-        { key: "productName", title: "반품제품" },
-        { key: "count", title: "반품수량" },
-        { key: "requestsOrderDate", title: "날짜" },
-        { key: "returnIsPaid", title: "입금확인" },
-    ] as Column<IOrdersReturnList>[];
 
     return (
         <OrdersReturnListMainStyled>

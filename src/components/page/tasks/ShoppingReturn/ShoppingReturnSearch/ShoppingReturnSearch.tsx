@@ -20,22 +20,6 @@ export const ShoppingReturnSearch = () => {
     const [startDate, setStartDate] = useState<string>();
     const [endDate, setEndDate] = useState<string>();
 
-    const handlerSearch = () => {
-        console.log("검색 조건:", {
-            searchTag: selectProductName,
-            searchKeyword: searchKeyword.current.value,
-            searchStDate: startDate,
-            searchEdDate: endDate,
-        });
-
-        setSearchValue({
-            searchTag: selectProductName,
-            searchKeyword: searchKeyword.current.value,
-            searchStDate: startDate,
-            searchEdDate: endDate,
-        });
-    };
-
     useEffect(() => {
         if (
             selectProductName === "approved0" ||
@@ -48,6 +32,15 @@ export const ShoppingReturnSearch = () => {
             setSearchValue({ searchTag: selectProductName, searchTitle: "" });
         }
     }, [selectProductName]);
+
+    const handlerSearch = () => {
+        setSearchValue({
+            searchTag: selectProductName,
+            searchKeyword: searchKeyword.current.value,
+            searchStDate: startDate,
+            searchEdDate: endDate,
+        });
+    };
 
     return (
         <ShoppingReturnSearchStyled>
