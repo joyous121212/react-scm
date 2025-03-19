@@ -11,6 +11,7 @@ import {
     IOrdersListResponse,
 } from "../../../../../models/interface/IOrdersList";
 import Swal from "sweetalert2";
+import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 
 interface IOrdersModalProps {
     orderId: number;
@@ -108,7 +109,7 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, or
                     </tbody>
                 </table>
                 <div className='button-container'>
-                    <button
+                    <StyledButton
                         onClick={handleButtonClick}
                         disabled={!(ordersListDetail?.orderState === "purchase" && ordersListDetail?.isApproved === 0)}
                         className={
@@ -124,8 +125,8 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, or
                         }}
                     >
                         발주서 전송
-                    </button>
-                    <button onClick={() => setModal(!modal)}>나가기</button>
+                    </StyledButton>
+                    <StyledButton onClick={() => setModal(!modal)}>나가기</StyledButton>
                 </div>
             </div>
         </OrdersListModalStyled>

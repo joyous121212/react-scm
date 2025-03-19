@@ -12,6 +12,7 @@ import { OrdersReturnList } from "../../../../../api/api";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import Swal from "sweetalert2";
 import React from "react";
+import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 
 interface IOrdersReturnListModalProps {
     orderRequestsId: number;
@@ -115,7 +116,7 @@ export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({ orderRe
                     </tbody>
                 </table>
                 <div className='button-container'>
-                    <button
+                    <StyledButton
                         onClick={() => {
                             Swal.fire({
                                 icon: "warning",
@@ -133,8 +134,8 @@ export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({ orderRe
                         }}
                     >
                         발주반품 지시서 전송
-                    </button>
-                    <button onClick={() => setModal(!modal)}>나가기</button>
+                    </StyledButton>
+                    <StyledButton onClick={() => setModal(!modal)}>나가기</StyledButton>
                 </div>
             </div>
         </OrdersReturnListModalStyled>

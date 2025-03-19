@@ -6,6 +6,7 @@ import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { IOrdersDetail, IOrdersDetailResponse } from "../../../../../models/interface/IOrders";
 import { searchApi } from "../../../../../api/OrdersApi/searchApi";
 import { Orders } from "../../../../../api/api";
+import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 
 interface IOrdersModalProps {
     orderId: number;
@@ -71,7 +72,7 @@ export const OrdersModal: FC<IOrdersModalProps> = ({ orderId, setOrderId }) => {
                     </tbody>
                 </table>
                 <div className='button-container'>
-                    <button onClick={() => setModal(!modal)}>나가기</button>
+                    <StyledButton onClick={() => setModal(!modal)}>나가기</StyledButton>
                 </div>
             </div>
         </OrdersModalStyled>
