@@ -19,6 +19,13 @@ export const ShoppingMain = () => {
     const [deliveryOrderCount, setDeliveryOrderCount] = useState<number>(0);
     const [deliveryId, setDeliveryId] = useState<number>(0);
 
+    const columns = [
+        { key: "deliveryId", title: "주문번호" },
+        { key: "salesDate", title: "주문일자" },
+        { key: "customerName", title: "고객기업명" },
+        { key: "count", title: "주문개수" },
+    ] as Column<IShopping>[];
+
     useEffect(() => {
         searchShoppingList();
     }, [searchKeyword]);
@@ -42,13 +49,6 @@ export const ShoppingMain = () => {
         setModal(!modal);
         setDeliveryId(deliveryId);
     };
-
-    const columns = [
-        { key: "deliveryId", title: "주문번호" },
-        { key: "salesDate", title: "주문일자" },
-        { key: "customerName", title: "고객기업명" },
-        { key: "count", title: "주문개수" },
-    ] as Column<IShopping>[];
 
     return (
         <ShoppingMainStyled>

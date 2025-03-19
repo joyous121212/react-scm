@@ -61,15 +61,11 @@ export const OrdersListMain = () => {
         e.preventDefault();
         e.stopPropagation();
 
-        console.log("전송할 orderId:", orderId);
-
         try {
             const result = await searchApi<IOrdersListResponse>(OrdersList.updateIsPaid, { orderId });
 
             if (result?.result === "success") {
                 await searchOrdersList(cPage);
-            } else {
-                console.error("입금 확인 업데이트 실패");
             }
         } catch (error) {
             console.error("입금 확인 처리 중 오류 발생:", error);
