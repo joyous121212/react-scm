@@ -6,13 +6,14 @@ import {
     IShoppingList,
     IShoppingListModal,
     IShoppingListModalresponse,
+    IShoppingState,
 } from "../../../../../models/interface/IDelivery";
 import Swal from "sweetalert2";
 import { deliveryPostApi } from "../../../../../api/DeliveryApi/postApi";
 import { DeliveryShopping } from "../../../../../api/api";
 
 interface IDeliveryModalProps {
-    changeDeliveryState: () => void;
+    changeDeliveryState: (data: IShoppingState) => void;
     listDetail: IShoppingList;
 }
 
@@ -22,19 +23,12 @@ export const ShoppingListModal: FC<IDeliveryModalProps> = ({ changeDeliveryState
 
     useEffect(() => {
         deliveryDetail();
-        console.log(listDetail);
-        console.log(listDetail.count);
     }, []);
 
     const deliveryDetail = async () => {
         const data = { deliveryId: listDetail.deliveryId };
         const result = await deliveryPostApi<IShoppingListModalresponse>(DeliveryShopping.shoppingModal, data);
         setDetail(result.shoppingDeliveryModal);
-        // axios
-        //     .get("/delivery/shoppingDeliveryModal.do", { params: { deliveryId: listDetail.deliveryId } })
-        //     .then((res: AxiosResponse<IShoppingListModalresponse>) => {
-        //         setDetail(res.data.shoppingDeliveryModal);
-        //     });
     };
 
     const updateConfirm = async () => {
@@ -54,24 +48,21 @@ export const ShoppingListModal: FC<IDeliveryModalProps> = ({ changeDeliveryState
         });
     };
 
-    const updateDeliveryState = async () => {
+    const updateDeliveryState = () => {
         const data = {
             ...listDetail,
             output: detail.count,
             deliveryState: "배송완료",
             salesState: "deliveryComplete",
         };
-        const result = await deliveryPostApi(DeliveryShopping.updateDelivery, data);
-        if (result) {
-            changeDeliveryState();
-        }
+        changeDeliveryState(data);
     };
 
     return (
         <ShoppingListModalStyled>
             <div className='container'>
-                <dt className='signtitle' style={{ textAlign: "center", marginBottom: "25px" }}>
-                    <strong style={{ fontSize: "140%" }}>주문 배송 목록 상세</strong>
+                <dt className='signtitle'>
+                    <strong>주문 배송 목록 상세</strong>
                 </dt>
                 {detail ? (
                     <>
@@ -85,7 +76,7 @@ export const ShoppingListModal: FC<IDeliveryModalProps> = ({ changeDeliveryState
                                 <td>{detail?.count}</td>
                             </tr>
                         </table>
-                        <div style={{ textAlign: "center", marginTop: "15px" }}>
+                        <div className='bottomButtonArea'>
                             {listDetail.deliveryState !== "배송완료" ? (
                                 <button onClick={updateConfirm}>배송완료</button>
                             ) : (
@@ -101,7 +92,12 @@ export const ShoppingListModal: FC<IDeliveryModalProps> = ({ changeDeliveryState
                         </div>
                     </>
                 ) : (
-                    <div style={{ width: "100%", textAlign: "center" }}>목록 불러오는중...</div>
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                        <div className='refresh-button'>
+                            <span className='refresh-icon'></span>
+                            목록 불러오는중...
+                        </div>
+                    </div>
                 )}
             </div>
         </ShoppingListModalStyled>

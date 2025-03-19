@@ -6,6 +6,7 @@ import { IShoppingDetail, IShoppingDetailResponse } from "../../../../../models/
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { searchApi } from "../../../../../api/ShoppingApi/searchApi";
 import { Shopping } from "../../../../../api/api";
+import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 
 interface IShoppingModalProps {
     deliveryId: number;
@@ -78,7 +79,7 @@ export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDelivery
                 </table>
 
                 <div className='button-container'>
-                    <button onClick={() => setModal(!modal)}>나가기</button>
+                    <StyledButton onClick={() => setModal(!modal)}>나가기</StyledButton>
                 </div>
             </div>
         </ShoppingModalStyled>

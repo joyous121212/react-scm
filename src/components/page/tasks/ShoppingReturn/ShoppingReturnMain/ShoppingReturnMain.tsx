@@ -4,7 +4,7 @@ import { IShoppingReturn, IShoppingReturnBodyResponse } from "../../../../../mod
 import { searchApi } from "../../../../../api/ShoppingReturnApi/searchApi";
 import { ShoppingReturn } from "../../../../../api/api";
 import { ShoppingReturnMainStyled } from "./styled";
-import { Column } from "../../../../common/StyledTable/StyledTable";
+import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { Portal } from "../../../../common/potal/Portal";
 import { ShoppingReturnModal } from "../ShoppingReturnModal/ShoppingReturnModal";
@@ -56,38 +56,28 @@ export const ShoppingReturnMain = () => {
 
     return (
         <ShoppingReturnMainStyled>
-            <table>
-                <thead>
-                    <tr>
-                        {columns.map((column) => (
-                            <th key={column.key}>{column.title}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {shoppingReturnList.map((row) => (
-                        <tr onClick={() => handlerModal(row.refundId)} key={row.refundId}>
-                            {columns.map((column) => {
-                                if (column.key === "isApproved") {
-                                    const approvalStatus = [
-                                        "SCM 승인 대기중",
-                                        "임원 승인 대기중",
-                                        "임원 승인 완료",
-                                        "창고 이동 완료",
-                                    ];
-                                    return <td key={column.key}>{approvalStatus[row.isApproved] || "알 수 없음"}</td>;
-                                }
+            <StyledTable
+                data={shoppingReturnList}
+                columns={columns}
+                renderCell={(row, column) => {
+                    if (column.key === "isApproved") {
+                        const approvalStatus = [
+                            "SCM 승인 대기중",
+                            "임원 승인 대기중",
+                            "임원 승인 완료",
+                            "창고 이동 완료",
+                        ];
+                        return approvalStatus[row.isApproved] || "알 수 없음";
+                    }
 
-                                if (column.key === "price" || column.key === "totalPrice") {
-                                    return <td key={column.key}>{`${row[column.key].toLocaleString("ko-KR")}원`}</td>;
-                                }
+                    if (column.key === "price" || column.key === "totalPrice") {
+                        return `${row[column.key].toLocaleString("ko-KR")}원`;
+                    }
 
-                                return <td key={column.key}>{row[column.key]}</td>;
-                            })}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                    return row[column.key as keyof IShoppingReturn];
+                }}
+                onRowClick={(row) => handlerModal(row.refundId)}
+            />
             <PageNavigate
                 totalItemsCount={shoppingReturnListCount}
                 onChange={searchShoppingReturn}

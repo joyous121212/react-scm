@@ -74,67 +74,45 @@ export const OrdersListMain = () => {
 
     return (
         <OrdersListMainStyled>
-            <table>
-                <thead>
-                    <tr>
-                        {columns.map((column) => (
-                            <th key={column.key}>{column.title}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {orderList.map((row) => (
-                        <tr
-                            key={row.orderId}
-                            onClick={() => {
-                                if (row.isPaid) {
-                                    handlerModal(row.orderId);
-                                }
-                            }}
-                            className={row.isPaid ? "clickable-row" : ""}
-                        >
-                            {columns.map((column) => {
-                                if (column.key === "isApproved") {
-                                    return <td key={column.key}>{row.isApproved ? "승인" : "미승인"}</td>;
-                                }
+            <StyledTable
+                data={orderList}
+                columns={columns}
+                renderCell={(row, column) => {
+                    if (column.key === "isApproved") {
+                        return row.isApproved ? "승인" : "미승인";
+                    }
 
-                                if (column.key === "isPaid") {
-                                    return (
-                                        <td key={column.key}>
-                                            {row.isPaid === 0 ? (
-                                                <StyledButton
-                                                    onClick={(e) => {
-                                                        Swal.fire({
-                                                            icon: "warning",
-                                                            title: "입금확인 하시겠습니까?",
-                                                            confirmButtonText: "확인",
-                                                            showCancelButton: true,
-                                                        }).then((result) => {
-                                                            if (result.isConfirmed) {
-                                                                handlePaymentConfirm(e, row.orderId);
-                                                            }
-                                                        });
-                                                    }}
-                                                >
-                                                    입금확인
-                                                </StyledButton>
-                                            ) : (
-                                                "입금"
-                                            )}
-                                        </td>
-                                    );
-                                }
-
-                                return (
-                                    <td key={column.key} className={row.isApproved && row.isPaid ? "td-pointer" : ""}>
-                                        {row[column.key]}
-                                    </td>
-                                );
-                            })}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                    if (column.key === "isPaid") {
+                        return row.isPaid === 0 ? (
+                            <StyledButton
+                                style={{ whiteSpace: "nowrap" }}
+                                onClick={(e) => {
+                                    Swal.fire({
+                                        icon: "warning",
+                                        title: "입금확인 하시겠습니까?",
+                                        confirmButtonText: "확인",
+                                        showCancelButton: true,
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            handlePaymentConfirm(e, row.orderId);
+                                        }
+                                    });
+                                }}
+                            >
+                                입금확인
+                            </StyledButton>
+                        ) : (
+                            "입금"
+                        );
+                    }
+                    return row[column.key as keyof IOrdersList];
+                }}
+                onRowClick={(row) => {
+                    if (row.isPaid === 1) {
+                        handlerModal(row.orderId);
+                    }
+                }}
+            />
 
             <PageNavigate
                 totalItemsCount={orderCount}

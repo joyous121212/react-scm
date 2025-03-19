@@ -26,6 +26,7 @@ interface IShoppingOrderModalProps {
 }
 
 export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ postSuccess, shoppingOrderId }) => {
+    const options = [{ label: "배송담당자선택", value: "" }];
     const [shoppingOrdersModal, setShoppingOrdersModal] = useRecoilState(shoppingOrdersModalState);
     const [warehouseOptions, setWarehouseOptions] = useState<ISelectOption[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -68,12 +69,6 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
         }
     }, [warehouseOptions]);
 
-    useEffect(() => {
-        if (managerOptions.length > 0) {
-            setSelectManagerValue(managerOptions[0]?.value as string);
-        }
-    }, [managerOptions]);
-
     const deliverOrderList = (data: IShoppingOrder): IShoppingOrder[] => {
         const deliverOrderList: IShoppingOrder[] = []; // ✅ 배열 타입 명시
         deliverOrderList.push(data); // ✅ put() → push() 변경
@@ -105,7 +100,7 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
                     value: manager.name,
                 }));
 
-                setManagerOptions(managerOptions);
+                setManagerOptions([...options, ...managerOptions]);
             }
         } catch (error) {
             console.error("Error fetching shopping orders:", error);
@@ -115,6 +110,15 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
     };
 
     const updateShoppingDelivery = async () => {
+        if (!selectManagerValue) {
+            console.log(limitOrderCount);
+            Swal.fire({
+                icon: "warning",
+                title: "배송담당자를 선택해주세요",
+                confirmButtonText: "확인",
+            });
+            return;
+        }
         if (limitOrderCount > 0) {
             console.log(limitOrderCount);
             Swal.fire({
@@ -285,11 +289,11 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
                             }}
                         />
                     </div>
-                    <div className="addWarehouseTitle">
-                    <label>창고별 품목 추가</label>
-                    <StyledButton variant='danger' size='small' onClick={deleteAllWareHouseList}>
-                        초기화
-                    </StyledButton>
+                    <div className='addWarehouseTitle'>
+                        <label>창고별 품목 추가</label>
+                        <StyledButton variant='danger' size='small' onClick={deleteAllWareHouseList}>
+                            초기화
+                        </StyledButton>
                     </div>
                     <div className='warehouseSelect'>
                         <StyledSelectBox
@@ -327,7 +331,7 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
                             <WarehouseList warehouseList={warehouseList} deleteWarehouseList={deleteWarehouseList} />
                         )}{" "}
                     </div>
-                    <label > 총 주문 개수: {totalOrderCount}</label>
+                    <label> 총 주문 개수: {totalOrderCount}</label>
 
                     <div className='button-container'>
                         <StyledButton size='small' onClick={updateShoppingDelivery}>

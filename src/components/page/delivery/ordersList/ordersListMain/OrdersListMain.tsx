@@ -201,15 +201,7 @@ export const OrdersListMain = () => {
                                 return row[column.key as keyof IOrdersListDetail];
                             }}
                         />
-                        <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                width: "100%",
-                                marginTop: "-40px",
-                            }}
-                        >
+                        <div className='gridButtonArea'>
                             <StyledButton variant='danger' onClick={updateConfirm}>
                                 발주처리
                             </StyledButton>

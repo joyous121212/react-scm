@@ -59,4 +59,12 @@ select {
             transform: translateY(2px);
         }
     }
+
+    .gridButtonArea{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-top: -40px;
+    }
 `;

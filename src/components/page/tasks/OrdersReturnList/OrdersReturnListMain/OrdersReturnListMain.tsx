@@ -6,7 +6,7 @@ import { OrdersReturnListContext } from "../../../../../api/Provider/OrdersRetur
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { OrdersReturnListMainStyled } from "./styled";
-import { Column } from "../../../../common/StyledTable/StyledTable";
+import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { Portal } from "../../../../common/potal/Portal";
 import { OrdersReturnListModal } from "../OrdersReturnListModal/OrdersReturnListModal";
@@ -82,67 +82,49 @@ export const OrdersReturnListMain = () => {
 
     return (
         <OrdersReturnListMainStyled>
-            <table>
-                <thead>
-                    <tr>
-                        {columns.map((column) => (
-                            <th key={column.key}>{column.title}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {ordersReturnList.map((row) => (
-                        <tr
-                            key={row.orderRequestsId}
-                            onClick={() => {
-                                if (row.returnIsPaid) {
-                                    handlerModal(row.orderRequestsId);
-                                }
-                            }}
-                            className={row.returnIsPaid ? "clickable-row" : ""}
-                        >
-                            {columns.map((column) => {
-                                if (column.key === "requestsOrderDate") {
-                                    return <td key={column.key}>{formatDate(row.requestsOrderDate)}</td>;
-                                }
+            <StyledTable
+                data={ordersReturnList}
+                columns={columns}
+                renderCell={(row, column) => {
+                    if (column.key === "requestsOrderDate") {
+                        return <>{formatDate(row.requestsOrderDate)}</>;
+                    }
 
-                                if (column.key === "returnIsPaid") {
-                                    return (
-                                        <td key={column.key}>
-                                            {row.returnIsPaid ? (
-                                                "입금"
-                                            ) : (
-                                                <StyledButton
-                                                    onClick={(e) => {
-                                                        Swal.fire({
-                                                            icon: "warning",
-                                                            title: "입금확인 하시겠습니까?",
-                                                            confirmButtonText: "확인",
-                                                            showCancelButton: true,
-                                                        }).then((result) => {
-                                                            if (result.isConfirmed) {
-                                                                handlePaymentConfirm(e, row.orderRequestsId);
-                                                            }
-                                                        });
-                                                    }}
-                                                >
-                                                    입금확인
-                                                </StyledButton>
-                                            )}
-                                        </td>
-                                    );
-                                }
+                    if (column.key === "returnIsPaid") {
+                        return (
+                            <>
+                                {row.returnIsPaid ? (
+                                    "입금"
+                                ) : (
+                                    <StyledButton
+                                        onClick={(e) => {
+                                            Swal.fire({
+                                                icon: "warning",
+                                                title: "입금확인 하시겠습니까?",
+                                                confirmButtonText: "확인",
+                                                showCancelButton: true,
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    handlePaymentConfirm(e, row.orderRequestsId);
+                                                }
+                                            });
+                                        }}
+                                    >
+                                        입금확인
+                                    </StyledButton>
+                                )}
+                            </>
+                        );
+                    }
 
-                                return (
-                                    <td key={column.key} className={row.returnIsPaid ? "td-pointer" : ""}>
-                                        {row[column.key]}
-                                    </td>
-                                );
-                            })}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                    return <>{row[column.key]}</>;
+                }}
+                onRowClick={(row) => {
+                    if (row.returnIsPaid) {
+                        handlerModal(row.orderRequestsId);
+                    }
+                }}
+            />
 
             <PageNavigate
                 totalItemsCount={ordersRetrunCount}
