@@ -114,11 +114,11 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
         const res1: IProductDetailResponse = await searchProductDetailApi(ProductInfo.productDetail, {
             productId: productId,
         });
+
         setProductDetail(res1.detailValue);
         //납품업체 리스트
         const res2: any = await searchSupplierNameListApi(ProductInfo.supplierNameList);
         setSupNameList(res2);
-        console.log(res2);
 
         //카테고리 리스트
         const res3: any = await searchCategoryListApi(ProductInfo.categoryList);
@@ -299,7 +299,7 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
             return;
         }
 
-        // //productId: 23
+        //productId: 23
         const res: IPostResultMessageResponse = await postUpdateProductInfoApi(ProductInfo.updateProductInfo, formData);
 
         if (res.result === "success") {
@@ -332,7 +332,7 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
         // updateRef.current.category = productDetail.categoryCode;
         updateRef.current.fileInput = imageFile;
         updateRef.current.supplyId = productDetail.supplyId;
-        // updateRef.current.categoryCode = productDetail.categoryCode;
+        updateRef.current.categoryCode = productDetail.categoryCode;
         updateRef.current.empty = "empty";
         // updateRef에서 필요한 값들을 하나씩 추가합니다.
         formData.append("productId", String(updateRef.current.productId));

@@ -62,6 +62,7 @@ export interface IInsertUserInfoRequest {
     password: string;
     password1: string;
     name: string;
+    sex: string;
     manager: string;
     hp: string;
     userTel1: string;
@@ -88,6 +89,7 @@ export interface IGetUserDetailInfo {
     manager: string;
     name: string;
     password: string;
+    classType: string;
     password1: string;
     sex: string;
     statusYn: string;
@@ -97,6 +99,9 @@ export interface IGetUserDetailInfo {
     userTel1: string;
     userTel2: string;
     userTel3: string;
+    group_code: string;
+    detail_code: string;
+    user_type: String;
 }
 
 export interface IUpdateUserDetailInfo {

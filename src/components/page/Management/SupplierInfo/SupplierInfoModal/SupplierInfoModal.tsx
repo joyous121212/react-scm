@@ -428,9 +428,6 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
         //console.log("전화번호:  "+formattedPhoneNumber)
 
         phRef.current = formattedPhoneNumber;
-        alert(
-            "phRef.current: " + phoneRegex.test(formattedPhoneNumber) + " formattedPhoneNumber: " + formattedPhoneNumber
-        );
 
         return phoneRegex.test(formattedPhoneNumber);
     };
@@ -771,7 +768,7 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                                         <StyledInput
                                             name='detailAddress'
                                             value={supDetail.detailAddress}
-                                            readOnly
+                                            onChange={handleUpdateChange}
                                         ></StyledInput>
                                     ) : (
                                         <StyledInput type='text' name='detailAddress' id='supplyLoginID' />
@@ -811,7 +808,6 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                                     {/* 서버로 보낼시는 TradeState  */}
                                     {supDetail ? (
                                         <>
-                                            찾기ㅅ
                                             <label>
                                                 <StyledInput
                                                     type='radio'

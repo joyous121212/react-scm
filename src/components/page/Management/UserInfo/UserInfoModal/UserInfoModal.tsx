@@ -47,6 +47,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         password: "",
         password1: "",
         name: "",
+        sex: "",
         manager: "",
         hp: "",
         userTel1: "",
@@ -59,38 +60,6 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         user_dt_address: "",
         detailName: "",
     });
-    //디테일=> 에러 터치면 IUserDetialInfo 으로 수정
-    // const [detailInfo, setDetailInfo] = useState<IUserDetialInfo>({
-    //     groupCode: "",
-    //     user_type: "",
-    //     classType: "",
-    //     statusYn: "",
-    //     group_code: "",
-    //     detail_code: "",
-    //     loginID: "",
-    //     password: "",
-    //     password1: "",
-    //     name: "",
-    //     manager: "",
-    //     hp: "",
-    //     userTel1: "",
-    //     userTel2: "",
-    //     userTel3: "",
-    //     birthday: "",
-    //     user_email: "",
-    //     user_zipcode: "",
-    //     user_address: "",
-    //     user_dt_address: "",
-    //     detailCode: "",
-    //     userClass: "",
-    //     sex: "",
-    //     email: "",
-    //     zipCode: "",
-    //     address: "",
-    //     ph: "",
-    //     detailName: "",
-    //     userType: "",
-    // });
 
     const [detailInfo, setDetailInfo] = useState<IGetUserDetailInfo>({
         address: "",
@@ -105,7 +74,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         manager: "",
         name: "",
         password: "",
-
+        classType: "",
         sex: "",
         statusYn: "",
         userClass: "",
@@ -116,7 +85,14 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         userTel2: "",
         userTel3: "",
         password1: "",
+        group_code: "",
+        detail_code: "",
+        user_type: "",
     });
+
+    // 유효성을 요하는 변수들 idRef, emailRef
+    const idRef = useRef<HTMLInputElement>(null);
+    const emailRef = useRef<HTMLInputElement>(null);
 
     const valiPwdMessage = {
         password: "비밀번호 형식에 맞지 않습니다.",
@@ -161,88 +137,38 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
             const res2: any = await userInfoDetailApi(UserInfo.detailsearch, { groupCode: res1.detailValue.groupCode });
 
             const [t1, t2, t3] = res1.detailValue.hp.split("-");
-            alert(JSON.stringify(res1.detailValue));
             setDetailInfo((prevDetailInfo) => ({
                 ...res1.detailValue,
                 password1: res1.detailValue.password,
                 userTel1: t1,
                 userTel2: t2,
                 userTel3: t3,
+                classType: res1.detailValue.userClass,
+                groupCode: res1.detailValue.groupCode,
+                detailCode: res1.detailValue.detailCode,
+                zipCode: res1.detailValue.zipCode,
+                detailAddress: res1.detailValue.detailAddress,
             }));
             addressRef.current.value = res1.detailValue.address;
-            // setDetailInfo(res1.detailValue);
+            dtAddressRef.current.value = res1.detailValue.detailAddress;
+
             setDetailCode(res2.detailCode);
 
             setDetailCodeList(res2.detailCode);
         }
-        // setUserDetail(null);
     }, []);
 
     const [selectedDetailCode, setSelectedDetailCode] = useState(detailInfo?.detailCode);
     const [detailCodeList, setDetailCodeList] = useState<any>();
-
-    useEffect(() => {
-        if (isdetail) {
-            console.log(detailInfo);
-        }
-    }, [detailInfo]);
-
-    //박스 =>  정보수정시 설정을 잠시 주석처리
-    // useEffect(() => {
-    //     if (isdetail) {
-    //         const box: any = { ...detailInfo };
-    //         const box2: any = { ...detailCode };
-    //         var box3 = { ...userData };
-
-    //         for (var key in box2) {
-    //             if (box2[key].detailCode === box.detailCode) {
-    //                 box.group_code = box2[key].detailCode;
-    //                 box3.detailName = box2[key].detailName;
-    //                 box.detailName = box2[key].detailCode;
-    //             }
-    //         }
-
-    //         box.group_code = detailInfo?.groupCode;
-    //         box.gender_cd = detailInfo?.sex;
-    //         box.detail_code = detailInfo?.detailCode;
-    //         box.classType = detailInfo?.userClass;
-    //         box.user_type = detailInfo?.userType;
-    //         box.user_address = detailInfo?.address;
-    //         // password 필드와 password1 필드 모두 동일한 값으로 할당
-    //         box.password = detailInfo?.password;
-    //         box.password1 = detailInfo?.password; // 동일한 값 할당
-    //         console.log("box after update:", box);
-
-    //         box.group_code = detailInfo?.groupCode;
-    //         box.user_zipcode = detailInfo?.zipCode;
-    //         box.user_email = detailInfo?.email;
-    //         // zipcodeRef.current.value = detailInfo?.zipCode;
-    //         addressRef.current.value = detailInfo?.address;
-    //         if (detailInfo?.hp) {
-    //             const [t1, t2, t3] = detailInfo.hp.split("-");
-    //             box3.userTel1 = t1;
-    //             box3.userTel2 = t2;
-    //             box3.userTel3 = t3;
-    //             setUserData({
-    //                 ...box3,
-    //                 ...box,
-    //             });
-    //         }
-    //         // setSelectedDetailCode(detailInfo?.detailCode);
-    //     }
-    //     // alert(box3.detailName);
-    // }, [detailInfo]);
-
-    // 유효성을 요하는 변수들 idRef, emailRef
-    const idRef = useRef<HTMLInputElement>(null);
-    const emailRef = useRef<HTMLInputElement>(null);
 
     const [selectValue, setSelectValue] = useState<string>("선택");
 
     const [isValid, setIsValid] = useState(true); // 유효성 상태
     const [errorMessage, setErrorMessage] = useState(""); // 오류 메시지
     const birthRef = useRef<HTMLInputElement>(null);
-    //다음 우편번호찾기
+
+    const [emailCheck, setEmailCheck] = useState<boolean>(false);
+
     const [isDaumLoaded, setIsDaumLoaded] = useState(false);
 
     // effect1.
@@ -254,7 +180,6 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
     // effect2.
     useEffect(() => {
         if (selectValue != "선택") {
-            console.log("바뀐다.!:   " + selectValue);
             handlerdetailCodeList();
         }
     }, [selectValue]);
@@ -286,17 +211,17 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         var box;
         if (isdetail) {
             box = { ...detailInfo };
+            box.groupCode = value;
         } else {
             box = { ...userData };
+            box.group_code = value;
         }
-        box.group_code = value;
 
         if (name === "group_code") {
             let label = value;
             if (e.target instanceof HTMLSelectElement) {
                 label = e.target.selectedOptions[0]?.text;
             }
-            alert(label);
 
             if (label === "SCM 담당자") {
                 box.user_type = "S";
@@ -325,11 +250,12 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
 
     const detaileHandleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        console.log(`name : ${name} value ${value}`)
+        console.log(`name : ${name} value ${value}`);
         setDetailInfo((prevData) => ({
             ...prevData,
             [name]: value,
         }));
+        setEmailCheck(false);
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -370,14 +296,36 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         }
     };
 
+    const handleDetailAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
+        var box;
+
+        if (isdetail) {
+            box = { ...detailInfo };
+
+            box.detailAddress = dtAddressRef.current.value;
+
+            setDetailInfo(box);
+        } else {
+            box = { ...userData };
+            box.detailAddress = dtAddressRef.current.value;
+            setUserData(box);
+        }
+    };
+
     const handleChange2 = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        console.log(`네임: ${name}     밸류: ${value}`);
 
-        setDetailInfo((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+        if (isdetail) {
+            setDetailInfo((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
+        } else {
+            setUserData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
+        }
     };
 
     const checkDuplicFnc = async () => {
@@ -392,7 +340,6 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
             loginID: idRef.current.value,
         });
 
-        alert(res.duplicCnt);
         if (res.duplicCnt === 0) {
             const box = { ...userData };
             box.loginID = idRef.current.value;
@@ -423,25 +370,49 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         }
     };
 
+    //확인이메일
     const checkDuplicEmailFnc = async () => {
-        const emailVailCheck = EmailValidateInput(emailRef.current.value);
-        const box = { ...userData };
+        var targetEmail;
+        if (isdetail) {
+            targetEmail = detailInfo.email;
+        } else {
+            targetEmail = emailRef.current.value;
+        }
 
-        if (!emailVailCheck) {
-            box.user_email = "";
-            setUserData(box);
+        const emailVailCheck = EmailValidateInput(targetEmail);
+
+        if (emailVailCheck) {
+            setEmailCheck(true);
+        } else {
+            setEmailCheck(false);
             return;
         }
 
-        await axios.post("/check_emailBody.do", { user_email: emailRef.current.value }).then((res) => {
+        var box;
+
+        if (isdetail) {
+            box = { ...detailInfo };
+            box.user_email = targetEmail;
+            setDetailInfo(box);
+        } else {
+            box = { ...userData };
+            box.user_email = "";
+        }
+
+        await axios.post("/check_emailBody.do", { user_email: targetEmail }).then((res) => {
             if (res.data.duplicCnt === 1) {
-                alert("이미 존재하는 아이디 입니다.");
+                alert("이미 존재하는 이메일 입니다.");
                 box.user_email = "";
                 setUserData(box);
                 return;
+            } else {
+                alert("사용 가능한 이메일 입니다.");
             }
-            box.user_email = emailRef.current.value;
-            setUserData(box);
+
+            if (!isdetail) {
+                box.user_email = targetEmail;
+                setUserData(box);
+            }
         });
     };
 
@@ -478,11 +449,13 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                 var box;
                 if (isdetail) {
                     box = { ...detailInfo };
+                    box.zipCode = data.zonecode;
+                    box.address = address;
                 } else {
                     box = { ...userData };
+                    box.user_zipcode = data.zonecode;
+                    box.user_address = address;
                 }
-                box.user_zipcode = data.zonecode;
-                box.user_address = address;
 
                 if (isdetail) {
                     setDetailInfo(box);
@@ -518,25 +491,41 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         // 비밀번호 형식: 숫자, 영문자, 특수문자 조합으로 8~15자리
         const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,15}$/;
 
-        console.log(`1차비번 ${userData.password} 2차비번 ${userData.password1}`);
+        var targetPwd;
+        var targetPwd1;
 
-        if (!passwordRegex.test(userData.password)) {
+        if (isdetail) {
+            targetPwd = detailInfo.password;
+            targetPwd1 = detailInfo.password1;
+        } else {
+            targetPwd = userData.password;
+            targetPwd1 = userData.password1;
+        }
+
+        if (!passwordRegex.test(targetPwd)) {
             return false;
         }
 
-        if (!passwordRegex.test(userData.password1)) {
+        if (!passwordRegex.test(targetPwd1)) {
             return false;
         }
 
         return true;
     };
 
-    const valiLastPassword = () => {
-        // console.log("첫 비번  " + userData.password);
-        // console.log("둘 비번  " + userData.password1);
+    const valiLastPassword = (): boolean => {
+        var targetPwd;
+        var targetPwd1;
 
-        if (userData.password !== userData.password1) {
-            alert("비밀번호가 일치하지 않습니다.");
+        if (isdetail) {
+            targetPwd = detailInfo.password;
+            targetPwd1 = detailInfo.password1;
+        } else {
+            targetPwd = userData.password;
+            targetPwd1 = userData.password1;
+        }
+
+        if (targetPwd !== targetPwd1) {
             return false;
         }
         return true;
@@ -562,9 +551,19 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
 
     const validatePhone = (name: string): boolean => {
         // 각 필드의 값 가져오기
-        const tell1 = userData.userTel1;
-        const tell2 = userData.userTel2;
-        const tell3 = userData.userTel3;
+        var tell1;
+        var tell2;
+        var tell3;
+
+        if (isdetail) {
+            tell1 = detailInfo.userTel1;
+            tell2 = detailInfo.userTel2;
+            tell3 = detailInfo.userTel3;
+        } else {
+            tell1 = userData.userTel1;
+            tell2 = userData.userTel2;
+            tell3 = userData.userTel3;
+        }
 
         var isValid = false;
         if (name === "userTel1") {
@@ -583,40 +582,46 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         }
     };
 
+    //수정업데이트모달
     const updateUserInfo = async () => {
-        //먼저 빈값을 검사.
-        // for (let key in emptyValiMessage) {
-        //     console.log(key + ": " + detailInfo[key]);
-        // }
+        for (let key in emptyValiMessage) {
+            console.log(key + ": " + detailInfo[key]);
+        }
 
-        // for (let key in emptyValiMessage) {
-        //     console.log(key + ": " + detailInfo[key]);
-        //     if (detailInfo[key] === "" && key != "manager" && key != "user_dt_address") {
-        //         alert(emptyValiMessage[key]);
-        //         return;
-        //     }
-        // }
+        for (let key in emptyValiMessage) {
+            if (detailInfo[key] === "" && key != "manager" && key != "user_dt_address") {
+                alert(emptyValiMessage[key]);
+                return;
+            }
+        }
 
-        // for (let key in valiPwdMessage) {
-        //     console.log("받은 네임값:  " + key);
-        //     if (!validatePassword()) {
-        //         alert(valiPwdMessage[key]);
-        //         return;
-        //     }
-        // }
+        for (let key in valiPwdMessage) {
+            if (!validatePassword()) {
+                alert(valiPwdMessage[key]);
+                return;
+            }
+        }
 
-        // // 특별히 필한 유효성을 검사.
-        // for (let key in valiMessage) {
-        //     console.log("받은 네임값:  " + key);
-        //     if (!valiSwitch(key)) {
-        //         alert(valiMessage[key]);
-        //         return;
-        //     }
-        // }
+        for (let key in valiMessage) {
+            if (!valiSwitch(key)) {
+                alert(valiMessage[key]);
+                return;
+            }
+        }
+
+        if (!emailCheck) {
+            var msg;
+            if (isdetail) {
+                msg = "변경하실 이메일을 작성후 \n  오른쪽 이메일 변경하기 버튼을 클릭해주세요";
+            } else {
+                msg = "등록하실 이메일을 작성후 \n  오른쪽 이메일 중복확인 버튼을 클릭해주세요";
+            }
+            alert("먼저" + `${msg}`);
+            return;
+        }
 
         console.log("---마지막 제출전 데이터 확인-----");
         console.log(detailInfo);
-
         const res: any = await postUserInfoInsertApi(UserInfo.updateUserInfo, detailInfo);
         if (res.result === "SUCCESS") {
             alert("정보수정에 성공하였습니다.");
@@ -628,11 +633,6 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
 
     //등록인설트
     const insertUserInfo = async () => {
-        //먼저 빈값을 검사.
-        for (let key in emptyValiMessage) {
-            console.log(key + ": " + userData[key]);
-        }
-
         for (let key in emptyValiMessage) {
             if (userData[key] === "" && key != "manager" && key != "user_dt_address") {
                 alert(emptyValiMessage[key]);
@@ -659,7 +659,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         console.log(userData);
 
         const res: IInsertUserInfoResponse = await postUserInfoInsertApi(UserInfo.insertUserInfo, userData);
-        console.log(res);
+
         if (res.resultMsg === "가입 요청 완료") {
             alert("정보 삽입에 성공하였습니다.");
         } else {
@@ -766,33 +766,44 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
 
                             <td colSpan={3} id='group_code'>
                                 <UserInfoSelectWrapperStyle variant='primary'>
-                                    <select
-                                        className='styledTag'
-                                        name='group_code'
-                                        onChange={(e) => {
-                                            setSelectValue(e.target.value);
-                                            handleGroupChange(e);
-                                        }}
-                                    >
-                                        {isdetail ? (
-                                            <>
+                                    {isdetail ? (
+                                        <>
+                                            <select
+                                                className='styledTag'
+                                                name='group_code'
+                                                value={detailInfo.groupCode}
+                                                onChange={(e) => {
+                                                    setSelectValue(e.target.value);
+                                                    handleGroupChange(e);
+                                                }}
+                                            >
                                                 <option value={"E10001X1"}>SCM 담당자</option>
                                                 <option value={"E10001X1"}>구매 담당자</option>
                                                 <option value={"E10001X1"}>회사 임원</option>
                                                 <option value={"R20001P1"}>배송 담당자</option>
                                                 <option value={"G00001A1"}>기업 고객</option>
-                                            </>
-                                        ) : (
-                                            <>
+                                            </select>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {/* 인설트시 아우 */}
+                                            <select
+                                                className='styledTag'
+                                                name='group_code'
+                                                onChange={(e) => {
+                                                    setSelectValue(e.target.value);
+                                                    handleGroupChange(e);
+                                                }}
+                                            >
                                                 <option value={"c"}>선택</option>
                                                 <option value={"E10001X1"}>SCM 담당자</option>
                                                 <option value={"E10001X1"}>구매 담당자</option>
                                                 <option value={"E10001X1"}>회사 임원</option>
                                                 <option value={"R20001P1"}>배송 담당자</option>
                                                 <option value={"G00001A1"}>기업 고객</option>
-                                            </>
-                                        )}
-                                    </select>
+                                            </select>
+                                        </>
+                                    )}
                                 </UserInfoSelectWrapperStyle>
                             </td>
                             <th scope='row' id='detail_codeTh'>
@@ -877,6 +888,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                                 {isdetail ? (
                                     <StyledInput
                                         name='password'
+                                        type='password'
                                         defaultValue={detailInfo?.password}
                                         onChange={handleChange2}
                                         placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
@@ -884,6 +896,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                                 ) : (
                                     <StyledInput
                                         name='password'
+                                        type='password'
                                         onChange={handleChange}
                                         placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
                                     />
@@ -909,6 +922,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                                 {isdetail ? (
                                     <StyledInput
                                         name='password1'
+                                        type='password'
                                         value={detailInfo?.password1}
                                         onChange={handleChange2}
                                         placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
@@ -916,6 +930,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                                 ) : (
                                     <StyledInput
                                         name='password1'
+                                        type='password'
                                         onChange={handleChange}
                                         placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
                                     />
@@ -1019,7 +1034,12 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                             <td colSpan={3} id='rggender_td'>
                                 {isdetail ? (
                                     <UserInfoSelectWrapperStyle variant='primary'>
-                                        <select name='sex' value={detailInfo?.sex} onChange={detaileHandleChange}>
+                                        <select
+                                            className='styledTag'
+                                            name='sex'
+                                            value={detailInfo?.sex}
+                                            onChange={detaileHandleChange}
+                                        >
                                             <option value=''>선택</option>
                                             <option value='1'>남자</option>
                                             <option value='2'>여자</option>
@@ -1027,7 +1047,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                                     </UserInfoSelectWrapperStyle>
                                 ) : (
                                     <UserInfoSelectWrapperStyle variant='primary'>
-                                        <select name='sex' onChange={handleChange}>
+                                        <select className='styledTag' name='sex' onChange={handleChange}>
                                             <option value=''>선택</option>
                                             <option value='1'>남자</option>
                                             <option value='2'>여자</option>
@@ -1070,7 +1090,9 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                                 )}
                             </td>
                             <td colSpan={1}>
-                                <StyledButton onClick={checkDuplicEmailFnc}>중복확인</StyledButton>
+                                <StyledButton onClick={checkDuplicEmailFnc}>
+                                    {isdetail ? "이메일변경하기" : "중복확인"}
+                                </StyledButton>
                             </td>
                         </tr>
 
@@ -1108,7 +1130,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                         <tr>
                             <th scope='row'>상세주소</th>
                             <td colSpan={8}>
-                                <StyledInput name='user_dt_address' ref={dtAddressRef} onChange={handleChange} />
+                                <StyledInput name='user_dt_address' ref={dtAddressRef} onChange={handleDetailAdd} />
 
                                 {isPostcodeOpen && (
                                     <DaumPostcode
@@ -1121,9 +1143,6 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                 </table>
 
                 <ManageMentWrapperButtonStyle className='btnArea'>
-                    {/* <StyledButton size={"small"} onClick={insertUserInfo}>
-                        등록
-                    </StyledButton> */}
                     {isdetail ? (
                         <>
                             <ManageMentStyledButton size={"small"} onClick={updateUserInfo}>

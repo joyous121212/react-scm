@@ -114,11 +114,21 @@ export const InquirySUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
     const goInquiryInsert = async () => {
         const formData = new FormData(formRef.current);
         formData.append("inquiryId", inquiryId.toString());
-        // if (formRef.current) {
-        //     formData.forEach((value, key) => {
-        //         console.log(`${key}: ${value}`);
-        //     });
-        // }
+
+        var check = true;
+        if (formRef.current) {
+            formData.forEach((value, key) => {
+                if (key === "fileAnsContent" && value === "") {
+                    check = false;
+                }
+            });
+        }
+
+        if (!check) {
+            alert("답글 작성을 부탁드립니다.");
+            return;
+        }
+
         const res: IInsertInquiryResponse = await postInquiryAnsSaveApi(InquiryInfo.inquiryAnsSaveBody, formData);
         if (res.result === "success") {
             alert("답변 작성을 하였습니다.");
@@ -210,23 +220,14 @@ export const InquirySUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
                                     <td colSpan={3}>
                                         {inquiryId !== undefined ? (
                                             <>
-                                                <select
+                                                <StyledInput
+                                                    type='text'
                                                     className='inputTxt p100'
-                                                    name='fileCategory'
-                                                    id='fileCategory'
+                                                    name='fileTitle'
+                                                    id='fileTitle'
                                                     value={detailValue?.fileCategory}
-                                                    disabled
-                                                >
-                                                    <option value='' disabled>
-                                                        카테고리 선택
-                                                    </option>
-                                                    <option value='이용문의'>이용문의</option>
-                                                    <option value='구매'>구매</option>
-                                                    <option value='환불/교환/반품'>환불/교환/반품</option>
-                                                    <option value='제품'>제품</option>
-                                                    <option value='개인정보'>개인정보</option>
-                                                    <option value='기타'>기타</option>
-                                                </select>
+                                                    readOnly
+                                                />
                                             </>
                                         ) : (
                                             <></>
