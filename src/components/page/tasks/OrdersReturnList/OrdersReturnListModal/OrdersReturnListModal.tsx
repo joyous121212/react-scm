@@ -11,6 +11,8 @@ import { searchApi } from "../../../../../api/OrdersReturnListApi/searchApi";
 import { OrdersReturnList } from "../../../../../api/api";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import Swal from "sweetalert2";
+import React from "react";
+import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 
 interface IOrdersReturnListModalProps {
     orderRequestsId: number;
@@ -21,6 +23,22 @@ export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({ orderRe
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
     const [ordersReturnListDetail, setOrdersReturnListDetail] = useState<IOrdersReturnModal[]>([]);
+
+    const formatDate = (date: string) => {
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = (d.getMonth() + 1).toString().padStart(2, "0");
+        const day = d.getDate().toString().padStart(2, "0");
+        return `${year}-${month}-${day}`;
+    };
+
+    const columns = [
+        { label: "반품번호", key: "orderRequestsId" },
+        { label: "반품회사", key: "supplyName" },
+        { label: "반품제품", key: "productName" },
+        { label: "반품수량", key: "count" },
+        { label: "날짜", key: "requestsOrderDate", format: formatDate },
+    ];
 
     useEffect(() => {
         if (orderRequestsId) {
@@ -61,100 +79,44 @@ export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({ orderRe
 
             if (result?.result === "success") {
                 setIsSubmitted(true);
-            } else {
-                console.error("반품지시서 전송 실패");
             }
         } catch (error) {
             console.error("반품지시서 전송 중 오류 발생:", error);
         }
     };
 
-    const formatDate = (date: string) => {
-        const d = new Date(date);
-        const year = d.getFullYear();
-        const month = (d.getMonth() + 1).toString().padStart(2, "0");
-        const day = d.getDate().toString().padStart(2, "0");
-        return `${year}-${month}-${day}`;
-    };
-
     return (
         <OrdersReturnListModalStyled>
             <div className='container'>
-                <>
-                    <dt>
-                        <strong>발주반품 지시서</strong>
-                    </dt>
-                    <table>
-                        <tbody>
-                            {ordersReturnListDetail.map((order, index) => (
-                                <>
-                                    <tr>
-                                        <th>반품번호</th>
+                <dt>
+                    <strong>발주반품 지시서</strong>
+                </dt>
+                <table>
+                    <tbody>
+                        {ordersReturnListDetail.map((order, index) => (
+                            <React.Fragment key={index}>
+                                {columns.map((column) => (
+                                    <tr key={column.key}>
+                                        <th>{column.label}</th>
                                         <td>
                                             <StyledInput
                                                 size='modal'
-                                                name='orderRequestsId'
+                                                name={column.key}
                                                 type='text'
-                                                value={order.orderRequestsId}
+                                                value={
+                                                    column.format ? column.format(order[column.key]) : order[column.key]
+                                                }
                                                 readOnly
                                             />
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <th>반품회사</th>
-                                        <td>
-                                            <StyledInput
-                                                size='modal'
-                                                name='supplyName'
-                                                type='text'
-                                                value={order.supplyName}
-                                                readOnly
-                                            />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>반품제품</th>
-                                        <td>
-                                            <StyledInput
-                                                size='modal'
-                                                name='productName'
-                                                type='text'
-                                                value={order.productName}
-                                                readOnly
-                                            />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>반품수량</th>
-                                        <td>
-                                            <StyledInput
-                                                size='modal'
-                                                name='count'
-                                                type='text'
-                                                value={order.count}
-                                                readOnly
-                                            />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>날짜</th>
-                                        <td>
-                                            <StyledInput
-                                                size='modal'
-                                                name='requestsOrderDate'
-                                                type='text'
-                                                value={formatDate(order.requestsOrderDate)}
-                                                readOnly
-                                            />
-                                        </td>
-                                    </tr>
-                                </>
-                            ))}
-                        </tbody>
-                    </table>
-                </>
+                                ))}
+                            </React.Fragment>
+                        ))}
+                    </tbody>
+                </table>
                 <div className='button-container'>
-                    <button
+                    <StyledButton
                         onClick={() => {
                             Swal.fire({
                                 icon: "warning",
@@ -172,8 +134,8 @@ export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({ orderRe
                         }}
                     >
                         발주반품 지시서 전송
-                    </button>
-                    <button onClick={() => setModal(!modal)}>나가기</button>
+                    </StyledButton>
+                    <StyledButton onClick={() => setModal(!modal)}>나가기</StyledButton>
                 </div>
             </div>
         </OrdersReturnListModalStyled>

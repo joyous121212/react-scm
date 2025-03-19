@@ -6,6 +6,7 @@ import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { IOrdersDetail, IOrdersDetailResponse } from "../../../../../models/interface/IOrders";
 import { searchApi } from "../../../../../api/OrdersApi/searchApi";
 import { Orders } from "../../../../../api/api";
+import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 
 interface IOrdersModalProps {
     orderId: number;
@@ -15,6 +16,14 @@ interface IOrdersModalProps {
 export const OrdersModal: FC<IOrdersModalProps> = ({ orderId, setOrderId }) => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [ordersDetail, setOrdersDetail] = useState<IOrdersDetail>();
+
+    const columns = [
+        { key: "orderId", title: "제품 번호" },
+        { key: "productName", title: "제품명" },
+        { key: "supplyName", title: "발주업체명" },
+        { key: "orderDate", title: "날짜", format: (value: string) => value?.split(" ")[0] },
+        { key: "count", title: "개수" },
+    ];
 
     useEffect(() => {
         orderId && searchOrdersDetail();
@@ -42,73 +51,28 @@ export const OrdersModal: FC<IOrdersModalProps> = ({ orderId, setOrderId }) => {
                 </dt>
                 <table>
                     <tbody>
-                        <tr>
-                            <th>제품 번호</th>
-                            <td>
-                                <StyledInput
-                                    size='modal'
-                                    name='productId'
-                                    type='text'
-                                    defaultValue={ordersDetail?.orderId}
-                                    readOnly
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                제품명<span className='font_red'>*</span>
-                            </th>
-                            <td>
-                                <StyledInput
-                                    size='modal'
-                                    name='count'
-                                    type='text'
-                                    defaultValue={ordersDetail?.productName}
-                                    readOnly
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>발주업체명</th>
-                            <td colSpan={5}>
-                                <StyledInput
-                                    size='modal'
-                                    name='customerName'
-                                    type='text'
-                                    defaultValue={ordersDetail?.supplyName}
-                                    readOnly
-                                    style={{ width: "100%" }}
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>날짜</th>
-                            <td>
-                                <StyledInput
-                                    size='modal'
-                                    name='deliveryManager'
-                                    type='text'
-                                    defaultValue={ordersDetail?.orderDate?.split(" ")[0]}
-                                    readOnly
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>개수</th>
-                            <td>
-                                <StyledInput
-                                    size='modal'
-                                    name='paymentStatus'
-                                    type='text'
-                                    defaultValue={ordersDetail?.count}
-                                    readOnly
-                                />
-                            </td>
-                        </tr>
+                        {columns.map((column) => (
+                            <tr key={column.key}>
+                                <th>{column.title}</th>
+                                <td>
+                                    <StyledInput
+                                        size='modal'
+                                        name={column.key}
+                                        type='text'
+                                        value={
+                                            column.format
+                                                ? column.format(ordersDetail?.[column.key])
+                                                : (ordersDetail?.[column.key] ?? "")
+                                        }
+                                        readOnly
+                                    />
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
                 <div className='button-container'>
-                    <button onClick={() => setModal(!modal)}>나가기</button>
+                    <StyledButton onClick={() => setModal(!modal)}>나가기</StyledButton>
                 </div>
             </div>
         </OrdersModalStyled>

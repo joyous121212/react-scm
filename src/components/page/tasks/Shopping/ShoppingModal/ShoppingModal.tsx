@@ -6,6 +6,7 @@ import { IShoppingDetail, IShoppingDetailResponse } from "../../../../../models/
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { searchApi } from "../../../../../api/ShoppingApi/searchApi";
 import { Shopping } from "../../../../../api/api";
+import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 
 interface IShoppingModalProps {
     deliveryId: number;
@@ -16,13 +17,26 @@ export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDelivery
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [shoppingDetail, setShoppingDetail] = useState<IShoppingDetail>();
 
+    const columns = [
+        { label: "주문 번호", key: "productId", value: deliveryId },
+        { label: "주문 수량", key: "count", value: shoppingDetail?.count },
+        { label: "고객기업", key: "customerName", value: shoppingDetail?.customerName },
+        { label: "제품명", key: "productName", value: shoppingDetail?.productName },
+        { label: "배송 담당자", key: "deliveryManager", value: shoppingDetail?.deliveryManager },
+        {
+            label: "입금여부",
+            key: "paymentStatus",
+            value: shoppingDetail?.paymentStatus === 0 ? "입금" : "미입금",
+        },
+    ];
+
     useEffect(() => {
         deliveryId && searchShoppingDetail();
 
         return () => {
             setDeliveryId(0);
         };
-    }, []);
+    }, [deliveryId]);
 
     const searchShoppingDetail = async () => {
         const result = await searchApi<IShoppingDetailResponse>(Shopping.deliveryDetail, {
@@ -42,87 +56,30 @@ export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDelivery
                 </dt>
                 <table>
                     <tbody>
-                        <tr>
-                            <th>주문 번호</th>
-                            <td>
-                                <StyledInput
-                                    size='modal'
-                                    name='productId'
-                                    type='text'
-                                    defaultValue={deliveryId}
-                                    readOnly
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                주문 수량<span className='font_red'>*</span>
-                            </th>
-                            <td>
-                                <StyledInput
-                                    size='modal'
-                                    name='count'
-                                    type='text'
-                                    defaultValue={shoppingDetail?.count}
-                                    readOnly
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>고객기업</th>
-                            <td>
-                                <StyledInput
-                                    size='modal'
-                                    name='customerName'
-                                    type='text'
-                                    defaultValue={shoppingDetail?.customerName}
-                                    readOnly
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                제품명<span className='font_red'>*</span>
-                            </th>
-                            <td>
-                                <StyledInput
-                                    size='modal'
-                                    name='productName'
-                                    type='text'
-                                    defaultValue={shoppingDetail?.productName}
-                                    readOnly
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>배송 담당자</th>
-                            <td>
-                                <StyledInput
-                                    size='modal'
-                                    name='deliveryManager'
-                                    type='text'
-                                    defaultValue={shoppingDetail?.deliveryManager}
-                                    readOnly
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>입금여부</th>
-                            <td>
-                                <StyledInput
-                                    size='modal'
-                                    name='paymentStatus'
-                                    type='text'
-                                    value={shoppingDetail?.paymentStatus === 0 ? "입금" : "미입금"}
-                                    readOnly
-                                />
-                            </td>
-                        </tr>
+                        {columns.map((column, index) => (
+                            <tr key={index}>
+                                <th>
+                                    {column.label}
+                                    {column.label === "주문 수량" || column.label === "제품명" ? (
+                                        <span className='font_red'>*</span>
+                                    ) : null}
+                                </th>
+                                <td>
+                                    <StyledInput
+                                        size='modal'
+                                        name={column.key}
+                                        type='text'
+                                        defaultValue={column.value}
+                                        readOnly
+                                    />
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
 
                 <div className='button-container'>
-                    <button onClick={() => setModal(!modal)}>나가기</button>
+                    <StyledButton onClick={() => setModal(!modal)}>나가기</StyledButton>
                 </div>
             </div>
         </ShoppingModalStyled>

@@ -16,7 +16,6 @@ export const CartMain= () => {
     const [totalAmount, setTotalAmount] = useState<number>(0);
     const [selectedPrice, setSelectedPrice] = useState<number>(0);
     const [cartdetailIdList, setCartdetailIdList] = useState<any[]>([]);
-    const [image, setImage] = useState<string>();
     
     const columns = [
         { key: "select", title: "선택" },
@@ -31,7 +30,6 @@ export const CartMain= () => {
 
     useEffect(() => {
         searchCart();
-        console.log(cartList);
     }, []);
 
     const searchCart = async (currentPage?: number) => {   
@@ -91,9 +89,7 @@ export const CartMain= () => {
                 alert("삭제되었습니다.");
                 postSuccess();
             }
-        }
-
-        
+        }        
     };
 
     const postSuccess = () => {
@@ -209,4 +205,4 @@ export const CartMain= () => {
             </div>
         </CartMainStyled>
     )
-}
+};
