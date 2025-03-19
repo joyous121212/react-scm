@@ -230,17 +230,30 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
                             </th>
                             <th>제품 번호</th>
                             <td><StyledInput size="modal" name='productId' type="text" defaultValue={productId} readOnly/></td>
-                            <th>주문 수량<span className="font_red">*</span></th>
-                            <td><StyledInput size="modal" name='count' type="text" placeholder='수량 입력 필수'
-                                onChange={(e) => setCount(Number(e.target.value))}/></td>
+                            {userInfo.userType !== 'S' && 
+                                (
+                                    <>
+                                        <th>주문 수량<span className="font_red">*</span></th>
+                                        <td>
+                                            <StyledInput size="modal" name='count' type="text" placeholder='수량 입력 필수'
+                                                onChange={(e) => setCount(Number(e.target.value))}/>                                
+                                        </td>
+                                    </>
+                                )
+                            }
                         </tr>
                         <tr>    
                             <th>제조사</th>
-                            <td><StyledInput size="modal" type="text" defaultValue={detail.supplyName} readOnly/></td>
-                            
-                            <th>납품 희망일자<span className="font_red">*</span></th>
-                            <td><StyledInput size="modal" name='requestedDeliveryDate' type="date"
-                                onChange={(e) => setRequestedDeliveryDate(e.target.value)}/></td>
+                            <td><StyledInput size="modal" type="text" defaultValue={detail.supplyName} readOnly/></td>                                    
+                            {userInfo.userType !== 'S' && 
+                                (
+                                    <>
+                                        <th>납품 희망일자<span className="font_red">*</span></th>
+                                        <td><StyledInput size="modal" name='requestedDeliveryDate' type="date"
+                                            onChange={(e) => setRequestedDeliveryDate(e.target.value)}/></td>
+                                    </>
+                                )
+                            }
                         </tr>
                         <tr>
                             <th>판매 가격</th>
