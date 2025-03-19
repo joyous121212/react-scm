@@ -124,6 +124,16 @@ export const Inventory = {
     searchDetail: "/trade/inventoryDetailBody.do",
 };
 
+export const login = {
+    checkLoginId: "/check_loginIDJson.do",
+    checkEmail: "/check_emailJson.do",
+    checkRegisterId: "/registerIdCheckJson.do",
+    findInfoPw: "/selectFindInfoPwJson.do",
+    sendMail: "/sendmailJson.do",
+    changePwd: "/changePwd.do",
+    findInfoId: "/selectFindInfoIdJson.do",
+};
+
 export const delivery = {
     searchShoppingList: "/delivery/shoppingDeliveryListJson.do",
     searchShoppingReturnList: "/delivery/deliveryReturnListBody.do",

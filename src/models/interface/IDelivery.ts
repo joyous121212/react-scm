@@ -19,6 +19,12 @@ export interface IShoppingListBodyResponse {
     shoppingDeliveryListCnt: number;
 }
 
+export interface IShoppingState extends IShoppingList {
+    output: number;
+    deliveryState: string;
+    salesState: string;
+}
+
 export interface IShoppingListModal {
     count: number;
     customerName: string;
@@ -60,6 +66,14 @@ export interface IShoppingReturnList {
 export interface IShoppingReturnListResponse {
     deliveryReturnList: IShoppingReturnList[];
     deliveryReturnListCnt: number;
+}
+
+export interface IShoppingReturnInventory {
+    refundId: number;
+    warehouseId: number;
+    supplyName: string;
+    productNumber: string;
+    quantity: number;
 }
 
 export interface IShoppingReturnListModal {
@@ -170,4 +184,20 @@ export interface IJoinFormData {
     user_address: string;
     user_dt_address: string;
     hp: string;
+}
+
+export interface IPostResponse {
+    result: string;
+    resultModel?: {
+        loginID: string;
+    };
+    authNumId?: string;
+}
+export interface IFindFormData {
+    emailID: string;
+    emailPwd: string;
+    id: string;
+    code: string;
+    password: string;
+    password1: string;
 }

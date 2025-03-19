@@ -1,17 +1,20 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../stores/modalState";
 import axios, { AxiosResponse } from "axios";
-import { JoinStyled2 } from "./styled2";
+import { JoinStyled } from "./styled";
 import { StyledInput } from "../../../common/StyledInput/StyledInput";
 import DaumPostcodeEmbed from "react-daum-postcode";
 import { IJoinFormData } from "../../../../models/interface/IDelivery";
 import Swal from "sweetalert2";
+import { deliveryPostApi } from "../../../../api/DeliveryApi/postApi";
+import { login } from "../../../../api/api";
 
 type IJoinPostResponse = number;
 
 export const JoinModal = () => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
+    const [modalflag, setModalflag] = useState(true);
 
     const [formData, setFormData] = useState<IJoinFormData>({
         action: "I",
@@ -45,6 +48,28 @@ export const JoinModal = () => {
             [name]: value,
         }));
     };
+    const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+    // input을 refs 배열에 추가하는 함수
+    const addInputRef = (el: HTMLInputElement | null) => {
+        if (el && !inputRefs.current.includes(el)) {
+            inputRefs.current.push(el);
+        }
+    };
+
+    const focusInput = (index: number) => {
+        if (inputRefs.current[index]) {
+            setTimeout(() => {
+                inputRefs.current[index].focus();
+            }, 330);
+        }
+    };
+
+    useEffect(() => {
+        if (inputRefs.current[0]) {
+            focusInput(0);
+        }
+    }, []);
 
     const checkNotEmpty = (): boolean => {
         const fields = [
@@ -61,63 +86,76 @@ export const JoinModal = () => {
             { id: "user_email", message: "이메일을 입력해 주세요." },
             { id: "user_zipcode", message: "주소를 입력해 주세요." },
             { id: "user_address", message: "주소를 입력해 주세요." },
-            // { id: "user_dt_address", message: "Detailed Address is required" },
         ];
 
         // 필드를 순차적으로 검사
         for (let i = 0; i < fields.length; i++) {
             const { id, message } = fields[i];
             if (!formData[id as keyof typeof formData] || formData[id as keyof typeof formData].trim() === "") {
-                Swal.fire(message, "", "warning");
+                Swal.fire(message, "", "warning").then((result) => {
+                    if (i < 8) {
+                        focusInput(i);
+                    } else if (i > 8) {
+                        focusInput(i - 1);
+                    }
+                });
                 return false; // 첫 번째로 발견된 공백에서 종료
             }
         }
-
         return true; // 모든 필드가 채워져 있으면 true 반환
     };
 
-    const loginIdCheck = () => {
+    const loginIdCheck = async (e) => {
+        e.preventDefault();
         const idRules = /^[a-z0-9]{6,20}$/g;
         const id = formData.loginID;
         const data = { loginID: id };
 
         if (id === "") {
-            Swal.fire("ID를 입력해 주세요", "", "warning");
-
+            Swal.fire("ID를 입력해 주세요", "", "warning").then((result) => {
+                focusInput(0);
+            });
             return;
         } else if (!idRules.test(formData.loginID)) {
-            Swal.fire("ID는 숫자, 영문자 조합으로 6~20자리를 사용해야 합니다.", "", "warning");
+            Swal.fire("ID는 숫자, 영문자 조합으로 6~20자리를 사용해야 합니다.", "", "warning").then((result) => {
+                focusInput(0);
+            });
             return;
         }
 
-        axios.post("/check_loginIDJson.do", data).then((res: AxiosResponse<IJoinPostResponse>) => {
-            if (res.data === 1) {
-                Swal.fire("중복된 아이디가 존재합니다!", "", "warning");
-            } else {
-                Swal.fire("사용할 수 있는 아이디입니다.", "", "success");
-                setCkIdcheckreg(1);
-            }
-        });
+        const result = await deliveryPostApi(login.checkLoginId, data);
+        if (result === 1) {
+            Swal.fire("중복된 아이디가 존재합니다!", "", "warning").then((result) => {
+                focusInput(0);
+            });
+        } else {
+            Swal.fire("사용할 수 있는 아이디입니다.", "", "success").then((result) => {
+                focusInput(1);
+            });
+            setCkIdcheckreg(1);
+        }
     };
 
-    const emailCheck = () => {
+    const emailCheck = async () => {
         const emailRules = /^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
         if (!emailRules.test(formData.user_email)) {
-            Swal.fire("이메일 형식을 확인해 주세요!", "", "warning");
+            Swal.fire("이메일 형식을 확인해 주세요!", "", "warning").then((result) => {
+                focusInput(9);
+            });
             return;
         }
         const data = { email: formData.user_email };
-
-        axios.post("/check_emailJson.do", data).then((res: AxiosResponse<IJoinPostResponse>) => {
-            if (res.data === 1) {
-                Swal.fire("중복된 이메일이 존재합니다!", "", "warning");
-                return;
-            } else {
-                Swal.fire("사용 가능한 이메일입니다.", "", "success");
-                setCkEmailcheckreg(1);
-            }
-        });
+        const result = await deliveryPostApi(login.checkEmail, data);
+        if (result === 1) {
+            Swal.fire("중복된 이메일이 존재합니다!", "", "warning").then((result) => {
+                focusInput(9);
+            });
+            return;
+        } else {
+            Swal.fire("사용 가능한 이메일입니다.", "", "success");
+            setCkEmailcheckreg(1);
+        }
     };
 
     const execDaumPostcode = () => {
@@ -167,10 +205,16 @@ export const JoinModal = () => {
             Swal.fire("아이디 중복체크를 진행해 주세요!", "", "warning");
             return;
         } else if (!passwordRules.test(formData.password)) {
-            Swal.fire("비밀 번호는 숫자,영문자,특수문자 조합으로 8~15자리를 사용해야 합니다.", "", "warning");
+            Swal.fire("비밀 번호는 숫자,영문자,특수문자 조합으로 8~15자리를 사용해야 합니다.", "", "warning").then(
+                (result) => {
+                    focusInput(1);
+                }
+            );
             return;
         } else if (formData.password !== formData.password1) {
-            Swal.fire("비밀번호와 비밀번호확인이 일치하지 않습니다.", "", "warning");
+            Swal.fire("비밀번호와 비밀번호확인이 일치하지 않습니다.", "", "warning").then((result) => {
+                focusInput(2);
+            });
             return;
         } else if (!tel1Rules.test(formData.userTel1)) {
             Swal.fire("첫번째 전화번호를 확인해주세요.(숫자만가능)", "", "warning");
@@ -192,9 +236,7 @@ export const JoinModal = () => {
                 hp: hp, // 새로운 hp 값을 추가
             };
 
-            // 새로운 객체로 상태 업데이트 후 param을 생성
             const params = new URLSearchParams();
-
             // formData 객체의 모든 키-값을 URLSearchParams에 추가
             Object.keys(newFormData).forEach((key) => {
                 if (newFormData[key]) {
@@ -206,264 +248,282 @@ export const JoinModal = () => {
 
             alert("회원가입 완료");
             Swal.fire("회원가입 완료", "", "success");
-            setModal(!modal);
+            // setModal(!modal);
+            closeModalWithDelay();
 
-            return newFormData; // 새로운 객체로 상태를 반환
+            return newFormData;
         });
     };
 
+    const closeModalWithDelay = () => {
+        setModalflag(false);
+        setTimeout(() => {
+            setModal(!modal);
+        }, 200);
+    };
+
     return (
-        <JoinStyled2>
-            <div id='layer1' className='layerPosition layerPop layerType2 container'>
-                <dl>
-                    <dt className='signtitle' style={{ textAlign: "center", marginBottom: "25px" }}>
-                        <strong style={{ fontSize: "200%" }}>기업 회원가입</strong>
-                    </dt>
-                    <dd className='content' style={{ width: "89%" }}>
-                        <div className='btn_areaC'></div>
+        <JoinStyled>
+            <div className={`modal-overlay ${modalflag ? "fade-in" : "fade-out"}`}>
+                <div className='container'>
+                    <dl>
+                        <dt className='signtitle'>
+                            <strong>기업 회원가입</strong>
+                        </dt>
+                        <dd className='content' style={{ width: "89%" }}>
+                            <table className='row'>
+                                <tbody>
+                                    <tr>
+                                        <th scope='row'>
+                                            아이디<span className='font_red'>*</span>
+                                        </th>
+                                        <td colSpan={3}>
+                                            <StyledInput
+                                                type='text'
+                                                name='loginID'
+                                                placeholder='숫자, 영문자 조합으로 6~20자리'
+                                                value={formData.loginID}
+                                                onChange={handleChange}
+                                                size='password'
+                                                autoComplete='off'
+                                                ref={addInputRef}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type='button'
+                                                value='중복확인'
+                                                onClick={loginIdCheck}
+                                                className='checkButton'
+                                            />
+                                        </td>
+                                    </tr>
 
-                        <table className='row'>
-                            <tbody>
-                                <tr>
-                                    <th scope='row'>
-                                        아이디<span className='font_red'>*</span>
-                                    </th>
-                                    <td colSpan={3}>
-                                        <StyledInput
-                                            type='text'
-                                            name='loginID'
-                                            placeholder='숫자, 영문자 조합으로 6~20자리'
-                                            value={formData.loginID}
-                                            onChange={handleChange}
-                                            size='password'
-                                            autoComplete='off'
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            type='button'
-                                            value='중복확인'
-                                            onClick={loginIdCheck}
-                                            style={{ width: "142px", height: "25px", marginRight: "0px" }}
-                                        />
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <th scope='row'>
+                                            비밀번호 <span className='font_red'>*</span>
+                                        </th>
+                                        <td colSpan={4}>
+                                            <StyledInput
+                                                type='password'
+                                                name='password'
+                                                placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리'
+                                                value={formData.password}
+                                                onChange={handleChange}
+                                                size='password'
+                                                ref={addInputRef}
+                                            />
+                                        </td>
+                                    </tr>
 
-                                <tr>
-                                    <th scope='row'>
-                                        비밀번호 <span className='font_red'>*</span>
-                                    </th>
-                                    <td colSpan={4}>
-                                        <StyledInput
-                                            type='password'
-                                            name='password'
-                                            placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리'
-                                            value={formData.password}
-                                            onChange={handleChange}
-                                            size='password'
-                                        />
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <th scope='row'>
+                                            비밀번호 확인<span className='font_red'>*</span>
+                                        </th>
+                                        <td colSpan={4}>
+                                            <StyledInput
+                                                type='password'
+                                                name='password1'
+                                                placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리'
+                                                value={formData.password1}
+                                                onChange={handleChange}
+                                                size='password'
+                                                ref={addInputRef}
+                                            />
+                                        </td>
+                                    </tr>
 
-                                <tr>
-                                    <th scope='row' style={{ padding: "0 0" }}>
-                                        비밀번호 확인<span className='font_red'>*</span>
-                                    </th>
-                                    <td colSpan={4}>
-                                        <StyledInput
-                                            type='password'
-                                            name='password1'
-                                            placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리'
-                                            value={formData.password1}
-                                            onChange={handleChange}
-                                            size='password'
-                                        />
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <th scope='row'>
+                                            회사명 <span className='font_red'>*</span>
+                                        </th>
+                                        <td colSpan={4}>
+                                            <StyledInput
+                                                type='text'
+                                                name='name'
+                                                value={formData.name}
+                                                onChange={handleChange}
+                                                size='password'
+                                                ref={addInputRef}
+                                            />
+                                        </td>
+                                    </tr>
 
-                                <tr>
-                                    <th scope='row'>
-                                        회사명 <span className='font_red'>*</span>
-                                    </th>
-                                    <td colSpan={4}>
-                                        <StyledInput
-                                            type='text'
-                                            name='name'
-                                            value={formData.name}
-                                            onChange={handleChange}
-                                            size='password'
-                                        />
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <th scope='row'>
+                                            담당자명 <span className='font_red'>*</span>
+                                        </th>
+                                        <td colSpan={4}>
+                                            <StyledInput
+                                                type='text'
+                                                name='manager'
+                                                value={formData.manager}
+                                                onChange={handleChange}
+                                                size='password'
+                                                ref={addInputRef}
+                                            />
+                                        </td>
+                                    </tr>
 
-                                <tr>
-                                    <th scope='row'>
-                                        담당자명 <span className='font_red'>*</span>
-                                    </th>
-                                    <td colSpan={4}>
-                                        <StyledInput
-                                            type='text'
-                                            name='manager'
-                                            value={formData.manager}
-                                            onChange={handleChange}
-                                            size='password'
-                                        />
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <th scope='row'>
+                                            전화번호<span className='font_red'>*</span>
+                                        </th>
+                                        <td colSpan={4}>
+                                            <StyledInput
+                                                type='text'
+                                                name='userTel1'
+                                                value={formData.userTel1}
+                                                onChange={handleChange}
+                                                size='tiny'
+                                                maxLength={3}
+                                                ref={addInputRef}
+                                            />{" "}
+                                            -{" "}
+                                            <StyledInput
+                                                type='text'
+                                                name='userTel2'
+                                                value={formData.userTel2}
+                                                onChange={handleChange}
+                                                size='tiny'
+                                                maxLength={4}
+                                                ref={addInputRef}
+                                            />{" "}
+                                            -{" "}
+                                            <StyledInput
+                                                type='text'
+                                                name='userTel3'
+                                                value={formData.userTel3}
+                                                onChange={handleChange}
+                                                size='tiny'
+                                                maxLength={4}
+                                                ref={addInputRef}
+                                            />
+                                        </td>
+                                    </tr>
 
-                                <tr>
-                                    <th scope='row'>
-                                        전화번호<span className='font_red'>*</span>
-                                    </th>
-                                    <td colSpan={4}>
-                                        <StyledInput
-                                            type='text'
-                                            name='userTel1'
-                                            value={formData.userTel1}
-                                            onChange={handleChange}
-                                            size='tiny'
-                                            maxLength={3}
-                                        />{" "}
-                                        -{" "}
-                                        <StyledInput
-                                            type='text'
-                                            name='userTel2'
-                                            value={formData.userTel2}
-                                            onChange={handleChange}
-                                            size='tiny'
-                                            maxLength={4}
-                                        />{" "}
-                                        -{" "}
-                                        <StyledInput
-                                            type='text'
-                                            name='userTel3'
-                                            value={formData.userTel3}
-                                            onChange={handleChange}
-                                            size='tiny'
-                                            maxLength={4}
-                                        />
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <th scope='row'>
+                                            성별<span className='font_red'>*</span>
+                                        </th>
+                                        <td colSpan={4}>
+                                            <select name='gender_cd' value={formData.gender_cd} onChange={handleChange}>
+                                                <option value=''>선택</option>
+                                                <option value='1'>남자</option>
+                                                <option value='2'>여자</option>
+                                            </select>
+                                        </td>
+                                    </tr>
 
-                                <tr>
-                                    <th scope='row'>
-                                        성별<span className='font_red'>*</span>
-                                    </th>
-                                    <td colSpan={4}>
-                                        <select name='gender_cd' value={formData.gender_cd} onChange={handleChange}>
-                                            <option value=''>선택</option>
-                                            <option value='1'>남자</option>
-                                            <option value='2'>여자</option>
-                                        </select>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <th scope='row'>
+                                            생년월일 <span className='font_red'>*</span>
+                                        </th>
+                                        <td colSpan={4}>
+                                            <input
+                                                type='date'
+                                                className='joinDate'
+                                                name='birthday'
+                                                value={formData.birthday}
+                                                onChange={handleChange}
+                                                ref={addInputRef}
+                                            />
+                                        </td>
+                                    </tr>
 
-                                <tr>
-                                    <th scope='row'>
-                                        생년월일 <span className='font_red'>*</span>
-                                    </th>
-                                    <td colSpan={4}>
-                                        <input
-                                            type='date'
-                                            className='joinDate'
-                                            name='birthday'
-                                            value={formData.birthday}
-                                            onChange={handleChange}
-                                        />
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <th scope='row'>
+                                            이메일<span className='font_red'>*</span>
+                                        </th>
+                                        <td colSpan={3}>
+                                            <StyledInput
+                                                type='text'
+                                                name='user_email'
+                                                value={formData.user_email}
+                                                placeholder='happyjob@happyjop.com'
+                                                onChange={handleChange}
+                                                size='small'
+                                                fullWidth
+                                                autoComplete='off'
+                                                ref={addInputRef}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type='button'
+                                                value='중복확인'
+                                                onClick={emailCheck}
+                                                className='checkButton'
+                                            />
+                                        </td>
+                                    </tr>
 
-                                <tr>
-                                    <th scope='row'>
-                                        이메일<span className='font_red'>*</span>
-                                    </th>
-                                    <td colSpan={3}>
-                                        <StyledInput
-                                            type='text'
-                                            name='user_email'
-                                            value={formData.user_email}
-                                            placeholder='happyjob@happyjop.com'
-                                            onChange={handleChange}
-                                            size='small'
-                                            fullWidth
-                                            autoComplete='off'
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            type='button'
-                                            value='중복확인'
-                                            onClick={emailCheck}
-                                            style={{ width: "142px", height: "25px", marginRight: "-100px" }}
-                                        />
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <th scope='row'>
+                                            우편번호<span className='font_red'>*</span>
+                                        </th>
+                                        <td colSpan={3}>
+                                            <StyledInput
+                                                type='text'
+                                                name='user_zipcode'
+                                                value={formData.user_zipcode}
+                                                onChange={handleChange}
+                                                size='small'
+                                                fullWidth
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type='button'
+                                                value='우편번호 찾기'
+                                                onClick={execDaumPostcode}
+                                                className='checkButton'
+                                            />
+                                        </td>
+                                    </tr>
 
-                                <tr>
-                                    <th scope='row'>
-                                        우편번호<span className='font_red'>*</span>
-                                    </th>
-                                    <td colSpan={3}>
-                                        <StyledInput
-                                            type='text'
-                                            name='user_zipcode'
-                                            value={formData.user_zipcode}
-                                            onChange={handleChange}
-                                            size='small'
-                                            fullWidth
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            type='button'
-                                            value='우편번호 찾기'
-                                            onClick={execDaumPostcode}
-                                            style={{ width: "142px", height: "25px", marginRight: "-100px" }}
-                                        />
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <th scope='row'>
+                                            주소<span className='font_red'>*</span>
+                                        </th>
+                                        <td colSpan={4}>
+                                            <StyledInput
+                                                type='text'
+                                                name='user_address'
+                                                value={formData.user_address}
+                                                onChange={handleChange}
+                                                size='password'
+                                            />
+                                        </td>
+                                    </tr>
 
-                                <tr>
-                                    <th scope='row'>
-                                        주소<span className='font_red'>*</span>
-                                    </th>
-                                    <td colSpan={4}>
-                                        <StyledInput
-                                            type='text'
-                                            name='user_address'
-                                            value={formData.user_address}
-                                            onChange={handleChange}
-                                            size='password'
-                                        />
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <th scope='row'>상세주소</th>
+                                        <td colSpan={4}>
+                                            <StyledInput
+                                                type='text'
+                                                name='user_dt_address'
+                                                value={formData.user_dt_address}
+                                                onChange={handleChange}
+                                                size='password'
+                                            />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
-                                <tr>
-                                    <th scope='row'>상세주소</th>
-                                    <td colSpan={4}>
-                                        <StyledInput
-                                            type='text'
-                                            name='user_dt_address'
-                                            value={formData.user_dt_address}
-                                            onChange={handleChange}
-                                            size='password'
-                                        />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <div className='btn_areaC mt30 button-container'>
-                            <button className='btnType blue' onClick={CompleteRegister}>
-                                <span>회원가입 완료</span>
-                            </button>
-                            <button className='cancelButton' onClick={() => setModal(!modal)}>
-                                <span>취소</span>
-                            </button>
-                        </div>
-                    </dd>
-                </dl>
+                            <div className='btn_areaC mt30 button-container'>
+                                <button className='btnType blue' onClick={CompleteRegister}>
+                                    <span>회원가입 완료</span>
+                                </button>
+                                <button className='cancelButton' onClick={closeModalWithDelay}>
+                                    <span>취소</span>
+                                </button>
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
             </div>
-        </JoinStyled2>
+        </JoinStyled>
     );
 };

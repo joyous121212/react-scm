@@ -10,7 +10,7 @@ import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import Swal from "sweetalert2";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
-import { OrderReturnMainStyled } from "./OrderReturnListMainStyled";
+import { OrderReturnMainStyled } from "./styled";
 import { DeliveryContext } from "../../../../../api/Provider/DeliveryProvider";
 import { deliverySearchApi } from "../../../../../api/DeliveryApi/searchApi";
 import { deliveryPostApi } from "../../../../../api/DeliveryApi/postApi";
@@ -164,15 +164,7 @@ export const OrdersReturnListMain = () => {
                             return row[column.key as keyof IOrdersReturnDetail];
                         }}
                     />
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            width: "100%",
-                            marginTop: "-40px",
-                        }}
-                    >
+                    <div className='gridButtonArea'>
                         <StyledButton variant='danger' onClick={returnConfirm}>
                             재고처리
                         </StyledButton>

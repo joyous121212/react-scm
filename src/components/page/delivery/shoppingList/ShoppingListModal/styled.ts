@@ -86,6 +86,16 @@ export const ShoppingListModalStyled = styled.div`
         }
     }
 
+    .signtitle {
+        text-align: center;
+        margin-bottom: 25px;
+        font-size: 150%;
+    }
+    .bottomButtonArea {
+        text-align: center;
+        margin-top: 15px;
+    }
+
     .cancelButton {
         background-color: rgb(234, 59, 59);
         &:hover {
@@ -103,5 +113,62 @@ export const ShoppingListModalStyled = styled.div`
 
     .findTitle {
         cursor: pointer;
+    }
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.fade-in {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-overlay.fade-out {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .refresh-button {
+        background: none;
+        border: none;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .refresh-icon {
+        width: 16px;
+        height: 16px;
+        border: 2px solid #000;
+        border-radius: 50%;
+        border-top: 2px solid transparent;
+        animation: spin 1s linear infinite;
+        margin-right: 8px;
+    }
+
+    .reset {
+        &:hover {
+            animation: spin 1s linear infinite;
+        }
     }
 `;

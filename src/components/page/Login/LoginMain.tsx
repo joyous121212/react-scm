@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LoginStyled } from "./styled";
 import axios from "axios";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -10,6 +10,9 @@ import { JoinModal } from "./Join/JoinModal";
 import { findModalState, modalState } from "../../../stores/modalState";
 import { Portal } from "../../common/potal/Portal";
 import { FindModal } from "./Find/FindModal";
+import Swal from "sweetalert2";
+import { deliveryPostApi } from "../../../api/DeliveryApi/postApi";
+import { login } from "../../../api/api";
 
 export interface IAccount {
     lgn_Id: string;
@@ -25,8 +28,37 @@ export const LoginMain = () => {
     const navigate = useNavigate();
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [findModal, setFindModal] = useRecoilState<boolean>(findModalState);
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const inputRef2 = useRef<HTMLInputElement | null>(null);
 
-    const loginHandler = () => {
+    const focusInput = (flag: number) => {
+        if (inputRef.current) {
+            if (flag === 1) {
+                setTimeout(() => {
+                    inputRef.current.focus();
+                }, 330);
+            } else {
+                setTimeout(() => {
+                    inputRef2.current.focus();
+                }, 330);
+            }
+        }
+    };
+    useEffect(() => {
+        if (inputRef.current) {
+            focusInput(1);
+        }
+    }, []);
+
+    const loginHandler = async () => {
+        const data = { loginID: account.lgn_Id };
+        const result = await deliveryPostApi(login.checkLoginId, data);
+        if (result === 0) {
+            Swal.fire("아이디가 잘못되었습니다!", "", "warning").then((result) => {
+                focusInput(1);
+            });
+            return;
+        }
         const param = new URLSearchParams();
         param.append("lgn_Id", account.lgn_Id);
         param.append("pwd", account.pwd);
@@ -39,7 +71,9 @@ export const LoginMain = () => {
                 sessionStorage.setItem("userInfo", JSON.stringify(data));
                 navigate("/react");
             } else {
-                alert("ID 혹은 비밀번호가 틀립니다");
+                Swal.fire("비밀번호가 일치하지 않습니다.", "", "warning").then((result) => {
+                    focusInput(2);
+                });
                 return;
             }
         });
@@ -81,6 +115,7 @@ export const LoginMain = () => {
                                             return { ...prev, lgn_Id: e.target.value };
                                         });
                                     }}
+                                    ref={inputRef}
                                 />
                             </div>
                             <div>
@@ -94,6 +129,7 @@ export const LoginMain = () => {
                                             return { ...prev, pwd: e.target.value };
                                         });
                                     }}
+                                    ref={inputRef2}
                                 />
                             </div>
                             <div>
