@@ -74,6 +74,7 @@ export interface IInsertUserInfoRequest {
     user_address: string;
     user_dt_address: string;
     detailName: string;
+    detailCode: string;
 }
 
 export interface IGetUserDetailInfo {

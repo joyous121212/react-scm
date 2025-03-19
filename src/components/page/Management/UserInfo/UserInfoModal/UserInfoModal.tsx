@@ -32,6 +32,7 @@ import { IGetUserDetailInfo } from "../../../../../models/interface/IUserInfoS";
 import { useRecoilState } from "recoil";
 import { userInfoDetailApi } from "../../../../../api/UserInfoApi/userInfoDetailApi";
 import { IInsertUserInfoRequest } from "../../../../../models/interface/IUserInfoS";
+import { createImportSpecifier } from "typescript";
 export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId }) => {
     const [modal, setModal] = useRecoilState(modalState);
 
@@ -41,6 +42,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         user_type: "",
         classType: "",
         statusYn: "",
+        detailCode: "",
         group_code: "",
         detail_code: "",
         loginID: "",
@@ -110,19 +112,20 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
     const emptyValiMessage = {
         group_code: "직원 유형을 선택해주세요",
         detailCode: "담당 업무를 선택해주세요",
-        detail_code: "담당 업무를 선택해주세요",
         loginID: "아이디를 입력해주세요",
         password: "비번 을 입력해주세요",
-        password1: "비번 을 입력해주세요",
         name: "이름/회사명을 입력해주세요",
+        password1: "2차검증비번 을 입력해주세요",
         manager: "담당자 명을 입력해주세요",
         userTel1: "전화번호 앞자리를 입력해주세요",
         userTel2: "전화번호 중간자리를 입력해주세요",
         userTel3: "전화번호 마지막 자리를 입력해주세요",
-        birthday: "생년 월일을 입력해주세요",
+        sex: "성별을 선택해주세요",
         user_email: "이메일을 입력해주세요",
+        // detail_code: "담당 업무를 선택해주세요",
         user_zipcode: "우편번호 찾기를 입력해주세요",
         user_address: "우편번호 찾기를 입력해주세요",
+        birthday: "생년 월일을 입력해주세요",
         user_dt_address: "상세주로를 입력해주세요",
     };
 
@@ -251,10 +254,17 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
     const detaileHandleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         console.log(`name : ${name} value ${value}`);
-        setDetailInfo((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+        var box;
+        if (isdetail) {
+            box = { ...detailInfo };
+            box.email = value;
+            setDetailInfo(box);
+        } else {
+            box = { ...userData };
+            box.user_email = value;
+            setUserData(box);
+        }
+
         setEmailCheck(false);
     };
 
@@ -376,7 +386,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         if (isdetail) {
             targetEmail = detailInfo.email;
         } else {
-            targetEmail = emailRef.current.value;
+            targetEmail = userData.user_email;
         }
 
         const emailVailCheck = EmailValidateInput(targetEmail);
@@ -633,9 +643,15 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
 
     //등록인설트
     const insertUserInfo = async () => {
-        for (let key in emptyValiMessage) {
-            if (userData[key] === "" && key != "manager" && key != "user_dt_address") {
-                alert(emptyValiMessage[key]);
+        const keyArray = Object.keys(emptyValiMessage);
+
+        for (let key = 0; key < keyArray.length; key++) {
+            // if (keyArray[key] === "password" || keyArray[key] === "password") {
+            // }
+
+            if (userData[keyArray[key]] === "" && keyArray[key] != "user_dt_address") {
+                alert(keyArray[key]);
+                alert(emptyValiMessage[keyArray[key]]);
                 return;
             }
         }
@@ -665,7 +681,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         } else {
             alert("잠시후 다시 시도해주세요");
         }
-        window.location.href = "/react/management/user-info";
+        // window.location.href = "/react/management/user-info";
     };
 
     //특별히 필요한 유효성의 스위치 문이다.
@@ -818,7 +834,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                                                 className='styledTag'
                                                 name='detailCode'
                                                 value={detailInfo?.detailCode}
-                                                onChange={detaileHandleChange}
+                                                onChange={handleChange2}
                                             >
                                                 {detailCodeList ? (
                                                     detailCodeList.map((ele: any, idx: number) => {
@@ -836,7 +852,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                                         </>
                                     ) : (
                                         <>
-                                            <select className='styledTag' name='detail_code' onChange={handleChange}>
+                                            <select className='styledTag' name='detailCode' onChange={handleChange}>
                                                 <option value={"c"}>선택</option>
                                                 {detailCodeList ? (
                                                     detailCodeList.map((ele: any, idx: number) => {
@@ -910,7 +926,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                             </th>
                             <td colSpan={3}>
                                 {isdetail ? (
-                                    <StyledInput name='name' value={detailInfo?.name} onChange={detaileHandleChange} />
+                                    <StyledInput name='name' value={detailInfo?.name} onChange={handleChange2} />
                                 ) : (
                                     <StyledInput name='name' onChange={handleChange} />
                                 )}
@@ -1038,7 +1054,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                                             className='styledTag'
                                             name='sex'
                                             value={detailInfo?.sex}
-                                            onChange={detaileHandleChange}
+                                            onChange={handleChange2}
                                         >
                                             <option value=''>선택</option>
                                             <option value='1'>남자</option>
@@ -1064,7 +1080,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                                         name='birthday'
                                         type='date'
                                         value={detailInfo?.birthday}
-                                        onChange={detaileHandleChange}
+                                        onChange={handleChange2}
                                     />
                                 ) : (
                                     <StyledInput name='birthday' type='date' onChange={handleChange2} />
@@ -1086,7 +1102,11 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                                         onChange={detaileHandleChange}
                                     ></StyledInput>
                                 ) : (
-                                    <StyledInput ref={emailRef}></StyledInput>
+                                    <StyledInput
+                                        name='user_email'
+                                        value={userData?.user_email}
+                                        onChange={detaileHandleChange}
+                                    ></StyledInput>
                                 )}
                             </td>
                             <td colSpan={1}>

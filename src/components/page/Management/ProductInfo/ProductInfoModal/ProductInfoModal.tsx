@@ -154,6 +154,7 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
             //  console.log(` productId==="" ${productId === ""}  productId==="" ${productId === undefined}`);
             initFnc();
             updateRef.current.productId = parseInt(productId);
+            //여기
         } else {
             insertProductinitFnc();
         }
@@ -174,6 +175,17 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
 
     const updateInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
+        const rawValue = value.replace(/[^0-9]/g, "");
+        console.log(`name ${name}  value ${value}`);
+
+        if (name === "sellPrice") {
+            setProductDetail((prevData) => ({
+                ...prevData,
+                [name]: rawValue ? parseInt(rawValue, 10) : 0,
+            }));
+            return;
+        }
+
         setProductDetail((prevData) => ({
             ...prevData,
             [name]: value,
@@ -215,13 +227,14 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
         const selectedOption = e.target.selectedOptions[0];
         const categoryId = selectedOption?.getAttribute("data-categorycode");
 
-        // console.log(`네임: ${name}     밸류: ${value}     공급ID: ${categoryId}`);
+        console.log(`네임: ${name}     밸류: ${value}     공급ID: ${categoryId}`);
         updateRef.current.category = categoryId;
         updateRef.current.categoryCode = categoryId;
-        setProductDetail((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+
+        const box = { ...productDetail };
+        box.categoryCode = categoryId;
+        box.category = value;
+        setProductDetail(box);
     };
 
     const insertCateHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -307,12 +320,6 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
             setUpdateModal(!updateModal);
             navi("/react/management/product-info");
             PostRender(ProductDefaultSearchKeyWord, setSearchKeyword);
-            // setSearchKeyword({
-            //     currentPage: 1,
-            //     pageSize: 5,
-            //     searchKeyword: "",
-            //     searchOption: "searchAll",
-            // });
         } else {
             alert("잠시후다시 시도해주세요");
             setUpdateModal(!updateModal);
@@ -329,7 +336,7 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
         updateRef.current.sellPrice = productDetail.sellPrice;
         updateRef.current.description = productDetail.description;
         // updateRef.current.supplierName = productDetail.supplyId;
-        // updateRef.current.category = productDetail.categoryCode;
+        updateRef.current.category = productDetail.categoryCode;
         updateRef.current.fileInput = imageFile;
         updateRef.current.supplyId = productDetail.supplyId;
         updateRef.current.categoryCode = productDetail.categoryCode;
@@ -570,10 +577,13 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                                             type='text'
                                             className='inputTxt p100'
                                             name='sellPrice'
-                                            value={productDetail?.sellPrice}
+                                            value={
+                                                productDetail?.sellPrice
+                                                    ? new Intl.NumberFormat().format(productDetail.sellPrice) + " 원"
+                                                    : productDetail?.sellPrice
+                                            }
                                             onChange={updateInputHandler}
                                             id='sellPrice'
-                                            readOnly
                                         />
                                     </>
                                 ) : (
