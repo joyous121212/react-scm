@@ -2,14 +2,18 @@ import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { FC, useEffect, useState } from "react";
 import { ShoppingReturnListModalStyled } from "./styled";
-import { IShoppingReturnListModal, IShoppingReturnListModalResponse } from "../../../../../models/interface/IDelivery";
+import {
+    IShoppingReturnInventory,
+    IShoppingReturnListModal,
+    IShoppingReturnListModalResponse,
+} from "../../../../../models/interface/IDelivery";
 import Swal from "sweetalert2";
 import { deliveryPostApi } from "../../../../../api/DeliveryApi/postApi";
 import { DeliveryShopping } from "../../../../../api/api";
 
 interface IDeliveryModalProps {
     refundId: number;
-    changeApproved: () => void;
+    changeApproved: (data: IShoppingReturnInventory) => void;
 }
 
 export const ShoppingReturnListModalDe: FC<IDeliveryModalProps> = ({ refundId, changeApproved }) => {
@@ -47,20 +51,7 @@ export const ShoppingReturnListModalDe: FC<IDeliveryModalProps> = ({ refundId, c
         });
     };
 
-    const changeInventory = async () => {
-        // axios
-        //     .get("/delivery/deliveryReturnInsertInventory.do", {
-        //         params: {
-        //             refundId: refundId,
-        //             warehouseId: detail.warehouseId,
-        //             supplyName: detail.supplyName,
-        //             productNumber: detail.productNumber,
-        //             quantity: detail.count,
-        //         },
-        //     })
-        //     .then((res) => {
-        //         changeApproved();
-        //     });
+    const changeInventory = () => {
         const data = {
             refundId: refundId,
             warehouseId: detail.warehouseId,
@@ -68,15 +59,14 @@ export const ShoppingReturnListModalDe: FC<IDeliveryModalProps> = ({ refundId, c
             productNumber: detail.productNumber,
             quantity: detail.count,
         };
-        const result = await deliveryPostApi(DeliveryShopping.updateInventory, data);
-        changeApproved();
+        changeApproved(data);
     };
 
     return (
         <ShoppingReturnListModalStyled>
             <div className='container'>
-                <dt className='signtitle' style={{ textAlign: "center", marginBottom: "25px" }}>
-                    <strong style={{ fontSize: "140%" }}>주문 반품 목록 상세</strong>
+                <dt className='signtitle'>
+                    <strong>주문 반품 목록 상세</strong>
                 </dt>
                 {detail ? (
                     <>
@@ -104,7 +94,7 @@ export const ShoppingReturnListModalDe: FC<IDeliveryModalProps> = ({ refundId, c
                                 <td>{detail?.warehouseName}</td>
                             </tr>
                         </table>
-                        <div style={{ textAlign: "center", marginTop: "15px" }}>
+                        <div className='bottomButtonArea'>
                             <button onClick={changeConfirm}>재고 처리</button>
                             <button
                                 style={{ width: "80px" }}
@@ -116,7 +106,12 @@ export const ShoppingReturnListModalDe: FC<IDeliveryModalProps> = ({ refundId, c
                         </div>
                     </>
                 ) : (
-                    <div style={{ width: "100%", textAlign: "center" }}>목록 불러오는중...</div>
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                        <div className='refresh-button'>
+                            <span className='refresh-icon'></span>
+                            목록 불러오는중...
+                        </div>
+                    </div>
                 )}
             </div>
         </ShoppingReturnListModalStyled>

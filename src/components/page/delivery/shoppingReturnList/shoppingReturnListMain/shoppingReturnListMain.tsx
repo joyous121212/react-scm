@@ -1,15 +1,21 @@
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
 import { useContext, useEffect, useState } from "react";
-import { delivery } from "../../../../../api/api";
+import { delivery, DeliveryShopping } from "../../../../../api/api";
 import { deliverySearchApi } from "../../../../../api/DeliveryApi/searchApi";
-import { IShoppingReturnList, IShoppingReturnListResponse } from "../../../../../models/interface/IDelivery";
+import {
+    IShoppingReturnInventory,
+    IShoppingReturnList,
+    IShoppingReturnListResponse,
+} from "../../../../../models/interface/IDelivery";
 import { Portal } from "../../../../common/potal/Portal";
 import { ShoppingReturnListModalDe } from "../shoppingReturnListModal/shoppingReturnListModal";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { ShoppingReturnListStyled } from "./styled";
 import { DeliveryContext } from "../../../../../api/Provider/DeliveryProvider";
+import { deliveryPostApi } from "../../../../../api/DeliveryApi/postApi";
+import Swal from "sweetalert2";
 
 export const ShoppingReturnListMainDe = () => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
@@ -42,8 +48,10 @@ export const ShoppingReturnListMainDe = () => {
         setRefundId(id);
     };
 
-    const changeApproved = () => {
+    const changeApproved = async (data: IShoppingReturnInventory) => {
         setModal(!modal);
+        const result = await deliveryPostApi(DeliveryShopping.updateInventory, data);
+        result ? Swal.fire("재고처리 완료!", "", "success") : Swal.fire("재고처리 실패.", "", "warning");
         searchShoppingReturnList(cPage);
     };
 

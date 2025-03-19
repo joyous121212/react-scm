@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { delivery } from "../../../../../api/api";
+import { delivery, DeliveryShopping } from "../../../../../api/api";
 import { deliverySearchApi } from "../../../../../api/DeliveryApi/searchApi";
-import { IShoppingList, IShoppingListBodyResponse } from "../../../../../models/interface/IDelivery";
+import { IShoppingList, IShoppingListBodyResponse, IShoppingState } from "../../../../../models/interface/IDelivery";
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../../stores/modalState";
@@ -10,6 +10,8 @@ import { ShoppingListModal } from "../ShoppingListModal/ShoppingListModal";
 import { ShoppingListStyled } from "./styled";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { DeliveryContext } from "../../../../../api/Provider/DeliveryProvider";
+import { deliveryPostApi } from "../../../../../api/DeliveryApi/postApi";
+import Swal from "sweetalert2";
 
 export const ShoppingListMain = () => {
     const [shoppingList, setShoppingList] = useState<IShoppingList[]>([]);
@@ -37,8 +39,10 @@ export const ShoppingListMain = () => {
         }
     };
 
-    const changeDeliveryState = () => {
+    const changeDeliveryState = async (data: IShoppingState) => {
         setModal(!modal);
+        const result = await deliveryPostApi(DeliveryShopping.updateDelivery, data);
+        result ? Swal.fire("배송상태 변경 완료!", "", "success") : Swal.fire("배송상태 변경 실패.", "", "warning");
         searchShoppingList(cPage);
     };
 
