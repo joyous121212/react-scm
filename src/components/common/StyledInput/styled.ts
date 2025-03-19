@@ -21,7 +21,7 @@ export const StyledInputStyled = styled.input<InputProps & { as?: string }>`
             case "large":
                 return `padding: 12px 16px; font-size: 18px;`;
             case "modal":
-                return `padding: 6px 10px; font-size: 12px;`;
+                return `padding: 6px 10px; font-size: 12px; width: 100%; `;
             case "search":
                 return `padding: 6px 10px; font-size: 18px; width:210px;`;
             case "password":

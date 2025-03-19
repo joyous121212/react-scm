@@ -77,6 +77,11 @@ export const ShoppingReturnMain = () => {
                                     ];
                                     return <td key={column.key}>{approvalStatus[row.isApproved] || "알 수 없음"}</td>;
                                 }
+
+                                if (column.key === "price" || column.key === "totalPrice") {
+                                    return <td key={column.key}>{`${row[column.key].toLocaleString("ko-KR")}원`}</td>;
+                                }
+
                                 return <td key={column.key}>{row[column.key]}</td>;
                             })}
                         </tr>

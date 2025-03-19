@@ -193,23 +193,6 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
         return true;
     }
 
-    const handlerFile = (e: ChangeEvent<HTMLInputElement>) => {
-        const fileInfo = e.target.files;
-        if (fileInfo?.length > 0) {
-            const fileSplit = fileInfo[0].name.split(".");
-            const fileType = fileSplit[fileSplit.length - 1]?.toLowerCase();
-
-            if (fileType === "jpg" || fileType === "gif" || fileType === "png") {
-                setImageUrl(URL.createObjectURL(fileInfo[0]));
-            } else {
-                setImageUrl(noData);
-            }
-            setFileName(fileInfo[0].name)
-        } else {
-            setImageUrl(noData);
-        }
-    }
-
     return (
         <ProductsModalStyled>
             <div className="container">
@@ -220,27 +203,33 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
                                 <label htmlFor="file-upload">
                                     <img className="product-image" src={imageUrl || noData} alt="상품 이미지" onError={() => setImageUrl(noData)}/>
                                 </label>
-                                <input
-                                    id="file-upload"
-                                    type="file"
-                                    accept="image/jpg, image/jpeg, image/png, image/gif"
-                                    style={{ display: "none" }} 
-                                    onChange={handlerFile}
-                                />
                             </th>
                             <th>제품 번호</th>
                             <td><StyledInput size="modal" name='productId' type="text" defaultValue={productId} readOnly/></td>
-                            <th>주문 수량<span className="font_red">*</span></th>
-                            <td><StyledInput size="modal" name='count' type="text" placeholder='수량 입력 필수'
-                                onChange={(e) => setCount(Number(e.target.value))}/></td>
+                            {userInfo.userType !== 'S' && 
+                                (
+                                    <>
+                                        <th>주문 수량<span className="font_red">*</span></th>
+                                        <td>
+                                            <StyledInput size="modal" name='count' type="text" placeholder='수량 입력 필수'
+                                                onChange={(e) => setCount(Number(e.target.value))}/>                                
+                                        </td>
+                                    </>
+                                )
+                            }
                         </tr>
                         <tr>    
                             <th>제조사</th>
-                            <td><StyledInput size="modal" type="text" defaultValue={detail.supplyName} readOnly/></td>
-                            
-                            <th>납품 희망일자<span className="font_red">*</span></th>
-                            <td><StyledInput size="modal" name='requestedDeliveryDate' type="date"
-                                onChange={(e) => setRequestedDeliveryDate(e.target.value)}/></td>
+                            <td><StyledInput size="modal" type="text" defaultValue={detail.supplyName} readOnly/></td>                                    
+                            {userInfo.userType !== 'S' && 
+                                (
+                                    <>
+                                        <th>납품 희망일자<span className="font_red">*</span></th>
+                                        <td><StyledInput size="modal" name='requestedDeliveryDate' type="date"
+                                            onChange={(e) => setRequestedDeliveryDate(e.target.value)}/></td>
+                                    </>
+                                )
+                            }
                         </tr>
                         <tr>
                             <th>판매 가격</th>

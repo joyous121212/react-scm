@@ -23,19 +23,27 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, or
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [ordersListDetail, setOrdersListDetail] = useState<IOrdersListDetail>();
 
+    const columns = [
+        { key: "orderId", title: "발주번호" },
+        { key: "productName", title: "제품명" },
+        { key: "supplyName", title: "발주회사" },
+        { key: "productNumber", title: "제품번호" },
+        { key: "count", title: "제품수량" },
+    ];
+
     useEffect(() => {
-        orderId && searchOrdersDetail();
+        if (orderId) {
+            searchOrdersDetail();
+        }
+
+        if (ordersListDetail) {
+            setOrderState(ordersListDetail.orderState);
+        }
 
         return () => {
             setOrderId(0);
         };
-    }, []);
-
-    useEffect(() => {
-        if (ordersListDetail) {
-            setOrderState(ordersListDetail.orderState);
-        }
-    }, [ordersListDetail, setOrderState]);
+    }, [orderId, ordersListDetail, setOrderState]);
 
     const searchOrdersDetail = async () => {
         const result = await searchApi<IOrdersListDetailResponse>(OrdersList.searchModal, {
@@ -69,15 +77,12 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, or
                     prev ? { ...prev, isApproved: result.isApproved, orderState: result.orderState } : prev
                 );
                 setModal(!modal);
-            } else {
-                console.error("발주서 전송 실패");
             }
         } catch (error) {
             console.error("발주서 전송 중 오류 발생:", error);
         }
     };
 
-    console.log("ordersListDetail :", ordersListDetail);
     return (
         <OrdersListModalStyled>
             <div className='container'>
@@ -86,69 +91,20 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, or
                 </dt>
                 <table>
                     <tbody>
-                        <tr>
-                            <th>발주번호</th>
-                            <td>
-                                <StyledInput
-                                    size='modal'
-                                    name='orderId'
-                                    type='text'
-                                    defaultValue={ordersListDetail?.orderId}
-                                    readOnly
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                제품명<span className='font_red'>*</span>
-                            </th>
-                            <td colSpan={5}>
-                                <StyledInput
-                                    size='modal'
-                                    name='productName'
-                                    type='text'
-                                    defaultValue={ordersListDetail?.productName}
-                                    readOnly
-                                    style={{ width: "100%" }}
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>발주회사</th>
-                            <td>
-                                <StyledInput
-                                    size='modal'
-                                    name='supplyName'
-                                    type='text'
-                                    defaultValue={ordersListDetail?.supplyName}
-                                    readOnly
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>제품번호</th>
-                            <td>
-                                <StyledInput
-                                    size='modal'
-                                    name='productNumber'
-                                    type='text'
-                                    defaultValue={ordersListDetail?.productNumber}
-                                    readOnly
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>제품수량</th>
-                            <td>
-                                <StyledInput
-                                    size='modal'
-                                    name='count'
-                                    type='text'
-                                    defaultValue={ordersListDetail?.count}
-                                    readOnly
-                                />
-                            </td>
-                        </tr>
+                        {columns.map((column) => (
+                            <tr key={column.key}>
+                                <th>{column.title}</th>
+                                <td>
+                                    <StyledInput
+                                        size='modal'
+                                        name={column.key}
+                                        type='text'
+                                        value={ordersListDetail?.[column.key] ?? ""}
+                                        readOnly
+                                    />
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
                 <div className='button-container'>

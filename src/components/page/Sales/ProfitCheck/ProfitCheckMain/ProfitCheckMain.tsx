@@ -50,16 +50,7 @@ export const ProfitCheckMain = () => {
         
     };
 
-    const handlerModal = (id: number) => {
-        setSupplyId(id);
-        if (!modal) {
-            setModal(!modal);
-        }
-    }
-
     const handleRowClick = (id: number) => {
-        console.log(id);
-        console.log(selectedSupplyId);
         if (selectedSupplyId === id) {
             setSelectedSupplyId(null); // 같은 항목을 누르면 선택 해제
             setSupplyId(undefined);
