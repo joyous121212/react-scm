@@ -96,8 +96,9 @@ export const ShoppingReturnModal: FC<IShoppingReturnModalProps> = ({ refundId, s
                         })}
                     </tbody>
                 </table>
-                <div className='button-container'></div>
-                <StyledButton onClick={() => setModal(!modal)}>나가기</StyledButton>
+                <div className='button-container'>
+                    <StyledButton onClick={() => setModal(!modal)}>나가기</StyledButton>
+                </div>
             </div>
         </ShoppingReturnModalStyled>
     );
