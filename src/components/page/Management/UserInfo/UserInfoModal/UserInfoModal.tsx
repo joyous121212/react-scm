@@ -615,7 +615,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         }
 
         for (let key in valiPwdMessage) {
-            if (!validatePassword()) {
+            if (!validatePassword() || detailInfo.password === null) {
                 alert(valiPwdMessage[key]);
                 return;
             }

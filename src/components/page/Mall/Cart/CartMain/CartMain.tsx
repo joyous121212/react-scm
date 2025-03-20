@@ -18,7 +18,9 @@ export const CartMain= () => {
     const [cartdetailIdList, setCartdetailIdList] = useState<any[]>([]);
     
     const columns = [
-        { key: "select", title: "선택" },
+        { key: "select", title: (<><input type="checkbox" 
+                                        onClick={(e) => {selectAll((e.target as HTMLInputElement).checked)}}
+                                        checked={selectedRows.length === cartList.length && cartList.length > 0}></input> 선택 </>) },
         { key: "image", title: "제품사진"},
         { key: "name", title: "제품명"},
         { key: "price", title: "가격"},
@@ -135,6 +137,15 @@ export const CartMain= () => {
             }
         }
         
+    }
+
+    const selectAll = (checked: boolean) => {
+        if (checked) {
+            const allIds = cartList.map(item => item.cartDetail.cartdetailId);
+            setSelectedRows(allIds);
+        } else {
+            setSelectedRows([]);
+        }
     }
 
     return (

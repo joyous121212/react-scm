@@ -64,9 +64,15 @@ export const HistoryMain = () => {
                         return `${totalPrice.toLocaleString("ko-KR")}원`;
                     }
                     if (column.key === "deliveryState") {
-                        return row.deliveryState === null ? 
-                            <span style={{color: "blue", fontWeight: "bold"}}>배송 준비중</span> : 
-                            <span style={{color: "green", fontWeight: "bold"}}>{row.deliveryState}</span>;
+                        if(row.deliveryState === "반품완료") {
+                            return <span style={{color: "gray", fontWeight: "bold"}}>{row.deliveryState}</span>
+                        } else if (row.deliveryState === "배송중") {
+                            return <span style={{color: "orange", fontWeight: "bold"}}>배송 중</span>
+                        } else if (row.deliveryState === "배송완료") {
+                            return <span style={{color: "green", fontWeight: "bold"}}>{row.deliveryState}</span>
+                        } else {
+                            return <span style={{color: "blue", fontWeight: "bold"}}>배송 준비중</span>
+                        }
                     }
                     if (column.key === "salesState") {
                         const salesStateMap: { [key: string]: {text: string; color: string } } = {
