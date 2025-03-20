@@ -20,7 +20,13 @@ export const ShoppingReturnSearch = () => {
     const [startDate, setStartDate] = useState<string>();
     const [endDate, setEndDate] = useState<string>();
 
+    const isFirstRender = useRef(true);
+
     useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
         if (["approved0", "approved1", "approved2", "approved3"].includes(selectProductName)) {
             handlerSearch();
         } else {

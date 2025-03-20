@@ -28,7 +28,14 @@ export const OrdersListSearch = () => {
         });
     };
 
+    const isFirstRender = useRef(true);
+
     useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+
         if (selectSupplyNameValue === "approved" || selectSupplyNameValue === "notApproved") {
             setSearchKeyword({ searchTag: selectSupplyNameValue, searchTitle: "" });
         } else {
