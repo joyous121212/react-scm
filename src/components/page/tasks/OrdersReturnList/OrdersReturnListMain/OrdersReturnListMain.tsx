@@ -53,6 +53,7 @@ export const OrdersReturnListMain = () => {
     const handlerModal = (orderRequestsId: number) => {
         setModal(!modal);
         setOrderRequestsId(orderRequestsId);
+        searchOrdersReturnList(cPage);
     };
 
     const handlePaymentConfirm = async (e, orderRequestsId) => {
@@ -134,7 +135,11 @@ export const OrdersReturnListMain = () => {
             />
             {modal && (
                 <Portal>
-                    <OrdersReturnListModal orderRequestsId={orderRequestsId} setOrderRequestsId={setOrderRequestsId} />
+                    <OrdersReturnListModal
+                        orderRequestsId={orderRequestsId}
+                        setOrderRequestsId={setOrderRequestsId}
+                        onUpdate={() => searchOrdersReturnList(cPage)}
+                    />
                 </Portal>
             )}
         </OrdersReturnListMainStyled>

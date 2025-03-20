@@ -32,7 +32,7 @@ export const OrdersListSearch = () => {
         if (selectSupplyNameValue === "approved" || selectSupplyNameValue === "notApproved") {
             setSearchKeyword({ searchTag: selectSupplyNameValue, searchTitle: "" });
         } else {
-            setSearchKeyword({ searchTag: selectSupplyNameValue, searchTitle: "" });
+            handlerSearch();
         }
     }, [selectSupplyNameValue]);
 

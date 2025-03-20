@@ -329,7 +329,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
 
     const handleChange2 = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-
+        console.log(`name : ${name}     value : ${value}`);
         if (isdetail) {
             setDetailInfo((prevData) => ({
                 ...prevData,
@@ -613,17 +613,16 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                 return;
             }
         }
-
-        for (let key in valiPwdMessage) {
-            if (!validatePassword() || detailInfo.password === null) {
-                alert(valiPwdMessage[key]);
+        for (let key in valiMessage) {
+            if (!valiSwitch(key)) {
+                alert(valiMessage[key]);
                 return;
             }
         }
 
-        for (let key in valiMessage) {
-            if (!valiSwitch(key)) {
-                alert(valiMessage[key]);
+        for (let key in valiPwdMessage) {
+            if (!validatePassword()) {
+                alert(valiPwdMessage[key]);
                 return;
             }
         }
@@ -945,7 +944,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                                     <StyledInput
                                         name='password'
                                         type='password'
-                                        defaultValue={detailInfo?.password}
+                                        value={detailInfo?.password}
                                         onChange={handleChange2}
                                         placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리 '
                                     />
@@ -1003,8 +1002,13 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                                     <StyledInput
                                         name='manager'
                                         value={detailInfo?.manager}
-                                        onChange={handleChange}
-                                        readOnly
+                                        onChange={(e) => {
+                                            const { name, value } = e.target;
+                                            setDetailInfo((prevData) => ({
+                                                ...prevData,
+                                                [name]: value,
+                                            }));
+                                        }}
                                     />
                                 ) : (
                                     <StyledInput name='manager' onChange={handleChange} />
