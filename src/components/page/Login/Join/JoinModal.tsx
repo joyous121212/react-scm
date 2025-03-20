@@ -105,6 +105,12 @@ export const JoinModal = () => {
         return true; // 모든 필드가 채워져 있으면 true 반환
     };
 
+    const alertAndFocus = (msg: string, flag: number, index: number) => {
+        Swal.fire(msg, "", flag === 0 ? "warning" : "success").then((result) => {
+            focusInput(index);
+        });
+    };
+
     const loginIdCheck = async (e) => {
         e.preventDefault();
         const idRules = /^[a-z0-9]{6,20}$/g;
@@ -112,26 +118,18 @@ export const JoinModal = () => {
         const data = { loginID: id };
 
         if (id === "") {
-            Swal.fire("ID를 입력해 주세요", "", "warning").then((result) => {
-                focusInput(0);
-            });
+            alertAndFocus("ID를 입력해 주세요", 0, 0);
             return;
         } else if (!idRules.test(formData.loginID)) {
-            Swal.fire("ID는 숫자, 영문자 조합으로 6~20자리를 사용해야 합니다.", "", "warning").then((result) => {
-                focusInput(0);
-            });
+            alertAndFocus("ID는 숫자, 영문자 조합으로 6~20자리를 사용해야 합니다.", 0, 0);
             return;
         }
 
         const result = await deliveryPostApi(login.checkLoginId, data);
         if (result === 1) {
-            Swal.fire("중복된 아이디가 존재합니다!", "", "warning").then((result) => {
-                focusInput(0);
-            });
+            alertAndFocus("ID는 숫자, 영문자 조합으로 6~20자리를 사용해야 합니다.", 0, 0);
         } else {
-            Swal.fire("사용할 수 있는 아이디입니다.", "", "success").then((result) => {
-                focusInput(1);
-            });
+            alertAndFocus("사용할 수 있는 아이디입니다.", 1, 1);
             setCkIdcheckreg(1);
         }
     };
@@ -140,17 +138,13 @@ export const JoinModal = () => {
         const emailRules = /^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
         if (!emailRules.test(formData.user_email)) {
-            Swal.fire("이메일 형식을 확인해 주세요!", "", "warning").then((result) => {
-                focusInput(9);
-            });
+            alertAndFocus("이메일 형식을 확인해 주세요!", 0, 9);
             return;
         }
         const data = { email: formData.user_email };
         const result = await deliveryPostApi(login.checkEmail, data);
         if (result === 1) {
-            Swal.fire("중복된 이메일이 존재합니다!", "", "warning").then((result) => {
-                focusInput(9);
-            });
+            alertAndFocus("중복된 이메일이 존재합니다!", 0, 9);
             return;
         } else {
             Swal.fire("사용 가능한 이메일입니다.", "", "success");
@@ -205,25 +199,19 @@ export const JoinModal = () => {
             Swal.fire("아이디 중복체크를 진행해 주세요!", "", "warning");
             return;
         } else if (!passwordRules.test(formData.password)) {
-            Swal.fire("비밀 번호는 숫자,영문자,특수문자 조합으로 8~15자리를 사용해야 합니다.", "", "warning").then(
-                (result) => {
-                    focusInput(1);
-                }
-            );
+            alertAndFocus("비밀 번호는 숫자,영문자,특수문자 조합으로 8~15자리를 사용해야 합니다.", 0, 1);
             return;
         } else if (formData.password !== formData.password1) {
-            Swal.fire("비밀번호와 비밀번호확인이 일치하지 않습니다.", "", "warning").then((result) => {
-                focusInput(2);
-            });
+            alertAndFocus("비밀번호와 비밀번호확인이 일치하지 않습니다.", 0, 2);
             return;
         } else if (!tel1Rules.test(formData.userTel1)) {
-            Swal.fire("첫번째 전화번호를 확인해주세요.(숫자만가능)", "", "warning");
+            alertAndFocus("첫번째 전화번호를 확인해주세요.(숫자만가능)", 0, 5);
             return;
         } else if (!tel2Rules.test(formData.userTel2)) {
-            Swal.fire("두번째 전화번호를 확인해주세요.(숫자만가능)", "", "warning");
+            alertAndFocus("두번째 전화번호를 확인해주세요.(숫자만가능)", 0, 6);
             return;
         } else if (!tel3Rules.test(formData.userTel3)) {
-            Swal.fire("세번째 전화번호를 확인해주세요.(숫자만가능)", "", "warning");
+            alertAndFocus("세번째 전화번호를 확인해주세요.(숫자만가능)", 0, 7);
             return;
         } else if (ckEmailcheckreg === 0) {
             Swal.fire("이메일 중복체크를 진행해 주세요!", "", "warning");
@@ -248,7 +236,6 @@ export const JoinModal = () => {
 
             alert("회원가입 완료");
             Swal.fire("회원가입 완료", "", "success");
-            // setModal(!modal);
             closeModalWithDelay();
 
             return newFormData;
