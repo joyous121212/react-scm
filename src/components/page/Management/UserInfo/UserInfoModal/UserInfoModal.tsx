@@ -1003,8 +1003,13 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                                     <StyledInput
                                         name='manager'
                                         value={detailInfo?.manager}
-                                        onChange={handleChange}
-                                        readOnly
+                                        onChange={(e) => {
+                                            const { name, value } = e.target;
+                                            setDetailInfo((prevData) => ({
+                                                ...prevData,
+                                                [name]: value,
+                                            }));
+                                        }}
                                     />
                                 ) : (
                                     <StyledInput name='manager' onChange={handleChange} />
