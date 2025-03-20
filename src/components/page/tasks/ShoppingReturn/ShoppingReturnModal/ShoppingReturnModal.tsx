@@ -31,7 +31,7 @@ export const ShoppingReturnModal: FC<IShoppingReturnModalProps> = ({ refundId, s
     ];
 
     useEffect(() => {
-        refundId && searchShoppingReturnDetail();
+        if (refundId) searchShoppingReturnDetail();
 
         return () => {
             setRefundId(0);
@@ -48,6 +48,8 @@ export const ShoppingReturnModal: FC<IShoppingReturnModalProps> = ({ refundId, s
         }
     };
 
+    if (!shoppingDetail) return null;
+
     return (
         <ShoppingReturnModalStyled>
             <div className='container'>
@@ -57,14 +59,14 @@ export const ShoppingReturnModal: FC<IShoppingReturnModalProps> = ({ refundId, s
                 <table>
                     <tbody>
                         {columns.map((column) => {
-                            let value = "";
+                            let value = shoppingDetail[column.key];
 
                             if (column.key === "price" || column.key === "totalPrice") {
-                                value = shoppingDetail?.[column.key]?.toLocaleString("ko-KR") + "원";
+                                value = Number(value).toLocaleString("ko-KR") + "원";
                             }
 
                             if (column.key === "returnsRequestDate") {
-                                value = shoppingDetail?.[column.key]?.split(" ")[0];
+                                value = String(value).split(" ")[0];
                             }
 
                             if (column.key === "isApproved") {
@@ -74,9 +76,9 @@ export const ShoppingReturnModal: FC<IShoppingReturnModalProps> = ({ refundId, s
                                     "임원 승인 완료",
                                     "창고 이동 완료",
                                 ];
-                                value = approvalStatus[shoppingDetail?.[column.key]] || "알 수 없음";
+                                value = approvalStatus[value] || "알 수 없음";
                             } else {
-                                value = shoppingDetail?.[column.key] ?? "";
+                                value = value ?? "";
                             }
 
                             return (
