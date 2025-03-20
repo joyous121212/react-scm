@@ -6,8 +6,6 @@ export const postWarehouseInfoDeleteApi = async <T, D>(api: string, param: D) =>
     try {
         const result: AxiosResponse<IPostWareHouseResponse> = await axios.post(api, param);
 
-        console.log(result);
-
         if (result.status === 200) {
             return result.data;
         } else {

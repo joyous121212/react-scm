@@ -23,15 +23,15 @@ export interface IUserInfoResponse {
 }
 
 export interface IDetailCodeList {
+    detailIdx: string;
+    groupCode: string;
+    detailCode: string;
+    detailName: string;
+    useYn: any;
     author: any;
     createdDate: any;
-    detailCode: string;
-    detailIdx: string;
-    detailName: string;
-    groupCode: string;
-    note: string;
     updatedDate: any;
-    useYn: any;
+    note: string;
 }
 
 export interface IDetailCodeListResponse {
@@ -49,6 +49,84 @@ export interface IDuplicUserIdResponse {
 export interface IInsertUserInfoResponse {
     result: string;
     resultMsg: string;
+}
+
+export interface IInsertUserInfoRequest {
+    action: string;
+    user_type: string;
+    classType: string;
+    statusYn: string;
+    group_code: string;
+    detail_code: string;
+    loginID: string;
+    password: string;
+    password1: string;
+    name: string;
+    sex: string;
+    manager: string;
+    hp: string;
+    userTel1: string;
+    userTel2: string;
+    userTel3: string;
+    birthday: string;
+    user_email: string;
+    user_zipcode: string;
+    user_address: string;
+    user_dt_address: string;
+    detailName: string;
+    detailCode: string;
+}
+
+export interface IGetUserDetailInfo {
+    address: string;
+    birthday: string;
+    createdDate: string;
+    detailAddress: string;
+    detailCode: string;
+    email: string;
+    groupCode: string;
+    hp: string;
+    loginID: string;
+    manager: string;
+    name: string;
+    password: string;
+    classType: string;
+    password1: string;
+    sex: string;
+    statusYn: string;
+    userClass: string;
+    userType: string;
+    zipCode: string;
+    userTel1: string;
+    userTel2: string;
+    userTel3: string;
+    group_code: string;
+    detail_code: string;
+    user_type: String;
+}
+
+export interface IUpdateUserDetailInfo {
+    action: string;
+    user_type: string;
+    classType: string;
+    statusYn: string;
+    group_code: string;
+    detail_code: string;
+    loginID: string;
+    password: string;
+    password1: string;
+    name: string;
+    manager: string;
+    hp: string;
+    userTel1: string;
+    userTel2: string;
+    userTel3: string;
+    birthday: string;
+    user_email: string;
+    user_zipcode: string;
+    user_address: string;
+    user_dt_address: string;
+    detailName: string;
 }
 
 export interface IUserDetialInfo {

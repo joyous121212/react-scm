@@ -5,8 +5,6 @@ export const duplicUserIdCheckApi = async <T, D>(api: string, param: D) => {
     try {
         const result: AxiosResponse<IDuplicUserIdResponse> = await axios.post(api, param);
 
-        console.log(result.data);
-
         if (result.status === 200) {
             return result.data;
         } else {

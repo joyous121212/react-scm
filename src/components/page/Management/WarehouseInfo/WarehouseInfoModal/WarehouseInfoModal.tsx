@@ -389,21 +389,14 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
     };
 
     const goDeleteFnc = async () => {
-        alert(warehouseId);
         const res: IPostWareHouseResponse = await postWarehouseInfoDeleteApi(WarehouseInfo.warehouseInfoDelete, {
             warehouseId: warehouseId,
         });
 
         if (res.result === "success") {
             alert("창고 정보를 삭제 하였습니다.");
-            setInsertModal(!insertModal);
+            setDetailModal(!detailModal);
             PostRender(DefaultWareSearchKeyWord, setSearchKeyword);
-            // setSearchKeyword({
-            //     searchTarget: "warehouseName",
-            //     searchKeyword: "",
-            //     currentPage: 1,
-            //     pageSize: 5,
-            // });
         } else if (res.result === "fail") {
             alert("잠시후 다시 시도해주세요");
         } else {
