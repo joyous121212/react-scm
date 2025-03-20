@@ -73,7 +73,7 @@ export const CartMain= () => {
         const confirm = await Swal.fire({
             icon: "question",
             title: "알람",
-            text: "입금하시겠습니까?",
+            text: "삭제하시겠습니까?",
             showCancelButton: true, // cancel 버튼 보이기
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
