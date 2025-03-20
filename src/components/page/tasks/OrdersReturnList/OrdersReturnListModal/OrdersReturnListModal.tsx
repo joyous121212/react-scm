@@ -17,9 +17,14 @@ import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 interface IOrdersReturnListModalProps {
     orderRequestsId: number;
     setOrderRequestsId: React.Dispatch<React.SetStateAction<number>>;
+    onUpdate: () => void;
 }
 
-export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({ orderRequestsId, setOrderRequestsId }) => {
+export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({
+    orderRequestsId,
+    setOrderRequestsId,
+    onUpdate,
+}) => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
     const [ordersReturnListDetail, setOrdersReturnListDetail] = useState<IOrdersReturnModal[]>([]);
@@ -51,6 +56,7 @@ export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({ orderRe
 
         if (isSubmitted) {
             setModal(false);
+            onUpdate();
         }
 
         return () => {
@@ -79,6 +85,7 @@ export const OrdersReturnListModal: FC<IOrdersReturnListModalProps> = ({ orderRe
 
             if (result?.result === "success") {
                 setIsSubmitted(true);
+                onUpdate();
             }
         } catch (error) {
             console.error("반품지시서 전송 중 오류 발생:", error);
