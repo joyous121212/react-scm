@@ -772,7 +772,6 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
 
     return (
         <UserInfoModalStyle>
-            {/* 1열 */}
             <div className='container'>
                 <dt>
                     <strong>기업/고객 정보관리</strong>
@@ -798,9 +797,6 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                                 <UserInfoSelectWrapperStyle variant='primary'>
                                     {isdetail ? (
                                         <>
-                                            {detailInfo.groupCode}
-
-                                            {detailInfo.classType}
                                             {/* <select
                                                 className='styledTag'
                                                 name='group_code'
