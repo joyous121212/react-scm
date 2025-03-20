@@ -55,7 +55,7 @@ export const ShoppingListMain = () => {
         { key: "deliveryManager", title: "배송 담당자" },
         { key: "startLocation", title: "출발 창고지" },
         { key: "endLocation", title: "목적지" },
-        { key: "deliveryState", title: "배송 결과" },
+        { key: "deliveryState", title: "배송 상태" },
     ] as Column<IShoppingList>[];
 
     return (
