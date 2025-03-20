@@ -21,17 +21,15 @@ export const ShoppingReturnSearch = () => {
     const [endDate, setEndDate] = useState<string>();
 
     useEffect(() => {
-        const approvedStatuses = ["approved0", "approved1", "approved2", "approved3"];
-        setSearchValue({
-            searchTag: approvedStatuses.includes(selectProductName) ? selectProductName : "productName",
-            searchTitle: "",
-        });
+        if (["approved0", "approved1", "approved2", "approved3"].includes(selectProductName)) {
+            handlerSearch();
+        }
     }, [selectProductName]);
 
     const handlerSearch = () => {
         setSearchValue({
             searchTag: selectProductName,
-            searchKeyword: searchKeyword.current.value,
+            searchKeyword: searchKeyword.current?.value || "",
             searchStDate: startDate,
             searchEdDate: endDate,
         });
