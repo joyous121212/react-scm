@@ -85,6 +85,17 @@ export const ShoppingReturnListModalStyled = styled.div`
             transform: translateY(2px);
         }
     }
+
+    .signtitle {
+        text-align: center;
+        margin-bottom: 25px;
+        font-size: 150%;
+    }
+
+    .bottomButtonArea {
+        text-align: center;
+        margin-top: 15px;
+    }
     .cancelButton {
         background-color: rgb(234, 59, 59);
         &:hover {
@@ -102,5 +113,30 @@ export const ShoppingReturnListModalStyled = styled.div`
 
     .findTitle {
         cursor: pointer;
+    }
+    .refresh-button {
+        background: none;
+        border: none;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .refresh-icon {
+        width: 16px;
+        height: 16px;
+        border: 2px solid #000;
+        border-radius: 50%;
+        border-top: 2px solid transparent;
+        animation: spin 1s linear infinite;
+        margin-right: 8px;
+    }
+    .reset {
+        width: 30px;
+        &:hover {
+            cursor: pointer;
+            animation: spin 1s linear infinite;
+        }
     }
 `;

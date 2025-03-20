@@ -4,6 +4,7 @@ import { StyledInput } from "../../../../common/StyledInput/StyledInput";
 import { ShoppingListSearchStyled } from "./styled";
 import { useNavigate } from "react-router-dom";
 import { DeliveryContext } from "../../../../../api/Provider/DeliveryProvider";
+import { FaSync } from "react-icons/fa";
 
 export const ShoppingListSearch = () => {
     const title = useRef<HTMLInputElement>();
@@ -23,6 +24,13 @@ export const ShoppingListSearch = () => {
             searchEdDate: endDate,
         });
     };
+    const reset = () => {
+        title.current.value = "";
+        setStartDate("");
+        setEndDate("");
+        setSearchKeyword({});
+    };
+
     const handleKeyPress = (e) => {
         return e.key === "Enter" ? handlerSearch() : null;
     };
@@ -30,8 +38,19 @@ export const ShoppingListSearch = () => {
         <ShoppingListSearchStyled>
             배송담당자:
             <StyledInput size='small' ref={title} onKeyDown={handleKeyPress}></StyledInput>
-            <StyledInput size='small' type='date' onChange={(e) => setStartDate(e.target.value)}></StyledInput>
-            <StyledInput size='small' type='date' onChange={(e) => setEndDate(e.target.value)}></StyledInput>
+            <StyledInput
+                size='small'
+                type='date'
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+            ></StyledInput>
+            <StyledInput
+                size='small'
+                type='date'
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+            ></StyledInput>
+            <FaSync onClick={reset} className='reset' />
             <StyledButton variant='secondary' onClick={handlerSearch}>
                 검색
             </StyledButton>

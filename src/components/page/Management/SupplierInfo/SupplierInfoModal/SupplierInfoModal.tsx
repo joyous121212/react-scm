@@ -43,7 +43,7 @@ const emptyMessage = {
     phone: "연락쳐는 필수입력 사항입니다.",
     ZipCode: "우편번호는 필수입력 사항입니다.",
     address: "우편번번호 버튼 클릭후 선택해주세요",
-    password: "비밀번호는 필수입력 사항 입니다.",
+    // password: "비밀번호는 필수입력 사항 입니다.",
 };
 //업데이트 시는 또 아이디는 수정 불가라 살짝 다르다. 즉 전화번호만
 const upDateValiMessage = {
@@ -51,19 +51,19 @@ const upDateValiMessage = {
 };
 
 const saveValiMessage = {
-    supplyLoginID: "중복확인을 먼저 해주셔야합니데이",
-    password: "비밀번호 형식에 맞이 않습니다. \n ex)숫자 영문자 조합으로 6자리 입니다.",
+    // supplyLoginID: "중복확인을 먼저 해주셔야합니데이",
+    // password: "비밀번호 형식에 맞이 않습니다. \n ex)숫자 영문자 조합으로 6자리 입니다.",
     phone: "전화번호 형식에 맞지 않습니다.\n ex)하이픈 있던없던[3자리]-[3~4자리]-[3~4자리] (o) ",
 };
 
 const saveEmptyMessage = {
-    supplyLoginID: "아이디는 필수 입력 사항입니다.",
+    // supplyLoginID: "아이디는 필수 입력 사항입니다.",
     name: "납품업체명은 필수입력 사항입니다.",
     manager: "담당자는 필수입력 사항입니다.",
     phone: "연락쳐는 필수입력 사항입니다.",
     ZipCode: "우편번호는 필수입력 사항입니다.",
     address: "우편번번호 버튼 클릭후 선택해주세요",
-    password: "비밀번호는 필수입력 사항 입니다.",
+    // password: "비밀번호는 필수입력 사항 입니다.",
 };
 
 export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }) => {
@@ -428,9 +428,6 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
         //console.log("전화번호:  "+formattedPhoneNumber)
 
         phRef.current = formattedPhoneNumber;
-        alert(
-            "phRef.current: " + phoneRegex.test(formattedPhoneNumber) + " formattedPhoneNumber: " + formattedPhoneNumber
-        );
 
         return phoneRegex.test(formattedPhoneNumber);
     };
@@ -595,8 +592,8 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                             ) : (
                                 <></>
                             )}
-
-                            <tr>
+                            {/* 아이디 관련 tr 태그는 DB수정중으로 주석처리하고 최종 회의후 삭제결정할것이다. */}
+                            {/* <tr>
                                 <th scope='row'>
                                     아이디<span className='font_red'>*</span>
                                 </th>
@@ -630,24 +627,22 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                                         </td>
                                     </>
                                 )}
-                            </tr>
+                            </tr> */}
                             <tr id=''>
                                 <th scope='row'>
                                     납품업체명<span className='font_red'>*</span>
                                 </th>
                                 <td colSpan={3}>
-                                    {/* 주의 사항 프론트에선 supplyName 네임으로 보내야한다. 허나 코드가 꼬이니
-									axio 요청전 supplyName 으로 보내면 된다 이런게 몇개들이 있으니 주의
-								*/}
-
                                     {supDetail ? (
                                         <StyledInput
+                                            size='modal'
                                             name='name'
                                             value={supDetail.name}
                                             onChange={handleUpdateChange}
                                         ></StyledInput>
                                     ) : (
                                         <StyledInput
+                                            size='modal'
                                             type='text'
                                             name='name'
                                             id='supplyLoginID'
@@ -663,19 +658,16 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                                     담당자명<span className='font_red'>*</span>
                                 </th>
                                 <td colSpan={3}>
-                                    {/* 주의 사항 프론트에선 supplyManager 네임으로 보내야한다. 허나 코드가 꼬이니
-									axio 요청전 supplyName 으로 보내면 된다 이런게 몇개들이 있으니 주의
-									<input type="text" className="inputTxt p100" name="supplyManager" id="supplyManager" />
-								*/}
-
                                     {supDetail ? (
                                         <StyledInput
+                                            size='modal'
                                             name='manager'
                                             value={supDetail.manager}
                                             onChange={handleUpdateChange}
                                         ></StyledInput>
                                     ) : (
                                         <StyledInput
+                                            size='modal'
                                             type='text'
                                             name='manager'
                                             value={saveDetail.manager}
@@ -697,12 +689,14 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 
                                     {supDetail ? (
                                         <StyledInput
+                                            size='modal'
                                             name='phone'
                                             value={supDetail.phone}
                                             onChange={handleUpdateChange}
                                         ></StyledInput>
                                     ) : (
                                         <StyledInput
+                                            size='modal'
                                             type='text'
                                             name='phone'
                                             id='supplyLoginID'
@@ -748,9 +742,15 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 								*/}
 
                                     {supDetail ? (
-                                        <StyledInput name='address' value={supDetail.address} readOnly></StyledInput>
+                                        <StyledInput
+                                            size='modal'
+                                            name='address'
+                                            value={supDetail.address}
+                                            readOnly
+                                        ></StyledInput>
                                     ) : (
                                         <StyledInput
+                                            size='modal'
                                             type='text'
                                             name='address'
                                             id='supplyLoginID'
@@ -769,24 +769,26 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 
                                     {supDetail ? (
                                         <StyledInput
+                                            size='modal'
                                             name='detailAddress'
                                             value={supDetail.detailAddress}
-                                            readOnly
+                                            onChange={handleUpdateChange}
                                         ></StyledInput>
                                     ) : (
-                                        <StyledInput type='text' name='detailAddress' id='supplyLoginID' />
+                                        <StyledInput size='modal' type='text' name='detailAddress' id='supplyLoginID' />
                                     )}
                                 </td>
                             </tr>
 
-                            <tr>
+                            {/* 패스워드 tr 태그 부분은 역시 최종 회의후 삭제를 결정할 것으로 잠시 주석처리한다. */}
+                            {/* <tr>
                                 <th scope='row'>
                                     패스워드<span className='font_red'>*</span>
                                 </th>
                                 <td colSpan={3}>
-                                    {/* <input type="password" className="inputTxt p100" name="password" id="password" /> */}
                                     {supDetail ? (
                                         <StyledInput
+                                            size='modal'
                                             name='password'
                                             type='password'
                                             value={supDetail.password}
@@ -794,6 +796,7 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                                         ></StyledInput>
                                     ) : (
                                         <StyledInput
+                                            size='modal'
                                             type='text'
                                             name='password'
                                             id='supplyLoginID'
@@ -802,7 +805,7 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                                         />
                                     )}
                                 </td>
-                            </tr>
+                            </tr> */}
                             <tr>
                                 <th scope='row'>
                                     거래상태 <span className='font_red'>*</span>
@@ -811,7 +814,6 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                                     {/* 서버로 보낼시는 TradeState  */}
                                     {supDetail ? (
                                         <>
-                                            찾기ㅅ
                                             <label>
                                                 <StyledInput
                                                     type='radio'
