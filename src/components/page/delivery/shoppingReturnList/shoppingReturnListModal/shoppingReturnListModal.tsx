@@ -31,7 +31,6 @@ export const ShoppingReturnListModalDe: FC<IDeliveryModalProps> = ({ refundId, c
             data
         );
         setDetail(result.deliveryReturnModalList[0]);
-        console.log(result.deliveryReturnModalList);
     };
 
     const changeConfirm = () => {
