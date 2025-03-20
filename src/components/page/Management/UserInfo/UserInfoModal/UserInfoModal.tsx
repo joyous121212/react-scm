@@ -227,7 +227,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
             let label = value;
             if (e.target instanceof HTMLSelectElement) {
                 label = e.target.selectedOptions[0]?.text;
-                alert(label);
+              
             }
 
             if (label === "SCM 담당자") {
