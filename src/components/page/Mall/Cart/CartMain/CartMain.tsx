@@ -143,8 +143,10 @@ export const CartMain= () => {
         if (checked) {
             const allIds = cartList.map(item => item.cartDetail.cartdetailId);
             setSelectedRows(allIds);
+            calculateSelectedPrice(allIds, cartList);
         } else {
             setSelectedRows([]);
+            calculateSelectedPrice([], cartList);
         }
     }
 
