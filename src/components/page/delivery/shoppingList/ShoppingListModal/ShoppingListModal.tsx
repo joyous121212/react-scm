@@ -77,7 +77,7 @@ export const ShoppingListModal: FC<IDeliveryModalProps> = ({ changeDeliveryState
                             </tr>
                         </table>
                         <div className='bottomButtonArea'>
-                            {listDetail.deliveryState !== "배송완료" ? (
+                            {listDetail.deliveryState === "배송중" ? (
                                 <button onClick={updateConfirm}>배송완료</button>
                             ) : (
                                 <></>

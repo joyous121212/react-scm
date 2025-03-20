@@ -38,7 +38,6 @@
         "slick-carousel": "^1.8.1",
         "styled-components": "^6.1.11",
         "sweetalert2": "^11.17.2",
-        "typescript": "^5.8.2",
         "web-vitals": "^2.1.4"
     },
     "scripts": {
@@ -67,6 +66,7 @@
         ]
     },
     "devDependencies": {
-        "eslint-import-resolver-alias": "^1.1.2"
+        "eslint-import-resolver-alias": "^1.1.2",
+        "typescript": "^5.8.2"
     }
 }

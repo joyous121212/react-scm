@@ -117,7 +117,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         password: "비번 을 입력해주세요",
         name: "이름/회사명을 입력해주세요",
         password1: "2차검증비번 을 입력해주세요",
-        manager: "담당자 명을 입력해주세요",
+        // manager: "담당자 명을 입력해주세요",
         userTel1: "전화번호 앞자리를 입력해주세요",
         userTel2: "전화번호 중간자리를 입력해주세요",
         userTel3: "전화번호 마지막 자리를 입력해주세요",
@@ -210,14 +210,16 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         setDetailCodeList(res.detailCode);
     };
 
-    const handleGroupChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = e.target;
+        const selectedOption = e.target.selectedOptions[0]; // 선택된 option
+        const dataVal = selectedOption.getAttribute("data-val"); // data-val 속성 값 가져오기
 
         var box;
         if (isdetail) {
             box = { ...detailInfo };
-            box.groupCode = value;
-            box.group_code = value;
+            box.groupCode = dataVal;
+            box.group_code = dataVal;
         } else {
             box = { ...userData };
             box.group_code = value;
@@ -227,7 +229,6 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
             let label = value;
             if (e.target instanceof HTMLSelectElement) {
                 label = e.target.selectedOptions[0]?.text;
-                alert(label);
             }
 
             if (label === "SCM 담당자") {
@@ -414,7 +415,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         }
 
         await axios.post("/check_emailBody.do", { user_email: targetEmail }).then((res) => {
-            if (res.data.duplicCnt === 1) {
+            if (res.data === 1) {
                 alert("이미 존재하는 이메일 입니다.");
                 box.user_email = "";
                 setUserData(box);
@@ -771,7 +772,6 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
 
     return (
         <UserInfoModalStyle>
-            {/* 1열 */}
             <div className='container'>
                 <dt>
                     <strong>기업/고객 정보관리</strong>
@@ -797,20 +797,47 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                                 <UserInfoSelectWrapperStyle variant='primary'>
                                     {isdetail ? (
                                         <>
-                                            <select
+                                            {/* <select
                                                 className='styledTag'
                                                 name='group_code'
-                                                // value={detailInfo.groupCode}
+                                                value={detailInfo.groupCode}
                                                 onChange={(e) => {
                                                     setSelectValue(e.target.value);
                                                     handleGroupChange(e);
                                                 }}
                                             >
-                                                <option value={"E10001X1"}>SCM 담당자</option>
-                                                <option value={"E10001X1"}>구매 담당자</option>
-                                                <option value={"E10001X1"}>회사 임원</option>
-                                                <option value={"R20001P1"}>배송 담당자</option>
-                                                <option value={"G00001A1"}>기업 고객</option>
+                                                <option  value={"E10001X1"}>SCM 담당자</option>
+                                                <option  value={"E10001X1"}>구매 담당자</option>
+                                                <option  value={"E10001X1"}>회사 임원</option>
+                                                <option  value={"R20001P1"}>배송 담당자</option>
+                                                <option  value={"G00001A1"}>기업 고객</option>
+                                            </select> */}
+                                            <select
+                                                className='styledTag'
+                                                name='group_code'
+                                                onChange={(e) => {
+                                                    const selectedOption = e.target.selectedOptions[0]; // 선택된 option
+                                                    const dataVal = selectedOption.getAttribute("data-val"); // data-val 속성 값 가져오기
+                                                    setSelectValue(dataVal);
+                                                    handleGroupChange(e);
+                                                }}
+                                                value={detailInfo.classType}
+                                            >
+                                                <option data-val={"E10001X1"} value={"SCM담당자"}>
+                                                    SCM 담당자
+                                                </option>
+                                                <option data-val={"E10001X1"} value={"구매담당자"}>
+                                                    구매 담당자
+                                                </option>
+                                                <option data-val={"E10001X1"} value={"회사임원"}>
+                                                    회사 임원
+                                                </option>
+                                                <option data-val={"R20001P1"} value={"배송담당자"}>
+                                                    배송 담당자
+                                                </option>
+                                                <option data-val={"G00001A1"} value={"기업고객"}>
+                                                    기업 고객
+                                                </option>
                                             </select>
                                         </>
                                     ) : (
