@@ -65,6 +65,9 @@ export const ProductsMain = () => {
                 data={productsList}
                 columns={columns}
                 renderCell={(row, column) => {
+                    if (column.key === "productNumber") {
+                        return <span style={{ fontWeight: "bold" }}>{row.productNumber}</span>
+                    }
                     if (column.key === "sellPrice") {
                         return `${row.sellPrice.toLocaleString("ko-KR")}원`;
                     }
