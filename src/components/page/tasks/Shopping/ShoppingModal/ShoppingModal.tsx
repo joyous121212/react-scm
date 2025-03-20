@@ -26,7 +26,7 @@ export const ShoppingModal: FC<IShoppingModalProps> = ({ deliveryId, setDelivery
         {
             label: "입금여부",
             key: "paymentStatus",
-            value: shoppingDetail?.paymentStatus === 0 ? "입금" : "미입금",
+            value: shoppingDetail?.paymentStatus === 0 ? "미입금" : "입금",
         },
     ];
 

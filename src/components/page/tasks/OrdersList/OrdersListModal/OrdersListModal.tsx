@@ -33,30 +33,24 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, or
     ];
 
     useEffect(() => {
-        if (ordersListDetail?.orderId) {
-            setOrderId(ordersListDetail.orderId);
-        }
-
         if (orderId) {
             searchOrdersDetail();
-        }
-
-        if (ordersListDetail) {
-            setOrderState(ordersListDetail.orderState);
         }
 
         return () => {
             setOrderId(0);
         };
-    }, [orderId, ordersListDetail, setOrderState]);
+    }, [orderId]);
 
     const searchOrdersDetail = async () => {
-        const result = await searchApi<IOrdersListDetailResponse>(OrdersList.searchModal, {
-            orderId: orderId,
-        });
+        if (!ordersListDetail) {
+            const result = await searchApi<IOrdersListDetailResponse>(OrdersList.searchModal, {
+                orderId: orderId,
+            });
 
-        if (result) {
-            setOrdersListDetail(result.detailValue);
+            if (result) {
+                setOrdersListDetail(result.detailValue);
+            }
         }
     };
 

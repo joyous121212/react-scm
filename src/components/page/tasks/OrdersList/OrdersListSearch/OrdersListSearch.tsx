@@ -13,7 +13,7 @@ export const OrdersListSearch = () => {
         { label: "미승인", value: "notApproved" },
     ];
 
-    const inputValue = useRef<HTMLInputElement>(null);
+    const inputValue = useRef<HTMLInputElement>();
     const [selectSupplyNameValue, setSelectSupplyNameValue] = useState<string>("supplyName");
     const { setSearchKeyword } = useContext(OrdersListContext);
     const [startDate, setStartDate] = useState<string>();
@@ -30,6 +30,8 @@ export const OrdersListSearch = () => {
 
     useEffect(() => {
         if (selectSupplyNameValue === "approved" || selectSupplyNameValue === "notApproved") {
+            setSearchKeyword({ searchTag: selectSupplyNameValue, searchTitle: "" });
+        } else {
             handlerSearch();
         }
     }, [selectSupplyNameValue]);

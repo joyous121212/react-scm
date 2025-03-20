@@ -23,6 +23,8 @@ export const ShoppingReturnSearch = () => {
     useEffect(() => {
         if (["approved0", "approved1", "approved2", "approved3"].includes(selectProductName)) {
             handlerSearch();
+        } else {
+            handlerSearch();
         }
     }, [selectProductName]);
 
