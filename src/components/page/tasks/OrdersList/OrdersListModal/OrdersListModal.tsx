@@ -33,6 +33,10 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, or
     ];
 
     useEffect(() => {
+        if (ordersListDetail?.orderId) {
+            setOrderId(ordersListDetail.orderId);
+        }
+
         if (orderId) {
             searchOrdersDetail();
         }
@@ -56,7 +60,8 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, or
         }
     };
 
-    const handleButtonClick = () => {
+    const handleButtonClick = (orderId: number) => {
+        console.log("orderId:", orderId);
         Swal.fire({
             icon: "warning",
             title: "발주서를 전송 하시겠습니까?",
@@ -110,7 +115,7 @@ export const OrdersListModal: FC<IOrdersModalProps> = ({ orderId, setOrderId, or
                 </table>
                 <div className='button-container'>
                     <StyledButton
-                        onClick={handleButtonClick}
+                        onClick={() => handleButtonClick(orderId)}
                         disabled={!(ordersListDetail?.orderState === "purchase" && ordersListDetail?.isApproved === 0)}
                         className={
                             ordersListDetail?.orderState === "purchase" && ordersListDetail?.isApproved === 0

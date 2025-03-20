@@ -21,16 +21,11 @@ export const ShoppingReturnSearch = () => {
     const [endDate, setEndDate] = useState<string>();
 
     useEffect(() => {
-        if (
-            selectProductName === "approved0" ||
-            selectProductName === "approved1" ||
-            selectProductName === "approved2" ||
-            selectProductName === "approved3"
-        ) {
-            setSearchValue({ searchTag: selectProductName, searchTitle: "" });
-        } else {
-            setSearchValue({ searchTag: selectProductName, searchTitle: "" });
-        }
+        const approvedStatuses = ["approved0", "approved1", "approved2", "approved3"];
+        setSearchValue({
+            searchTag: approvedStatuses.includes(selectProductName) ? selectProductName : "productName",
+            searchTitle: "",
+        });
     }, [selectProductName]);
 
     const handlerSearch = () => {

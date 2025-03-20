@@ -43,6 +43,12 @@ export const FindModal = () => {
         }
     };
 
+    const alertAndFocus = (msg: string, flag: number, index: number) => {
+        Swal.fire(msg, "", flag === 0 ? "warning" : "success").then((result) => {
+            focusInput(index);
+        });
+    };
+
     useEffect(() => {
         if (inputRefs.current[0]) {
             focusInput(0);
@@ -59,43 +65,31 @@ export const FindModal = () => {
 
     const registerIdCheck = async () => {
         if (formData.id === "") {
-            Swal.fire("아이디를 입력해 주세요", "", "warning").then((result) => {
-                focusInput(0);
-            });
+            alertAndFocus("아이디를 입력해 주세요", 0, 0);
             return;
         }
         const data = { loginID: formData.id };
         const result: IPostResponse = await deliveryPostApi(login.checkRegisterId, data);
         if (result.result === "SUCCESS") {
-            Swal.fire("아이디가 존재합니다", "", "success").then((result) => {
-                focusInput(1);
-            });
+            alertAndFocus("아이디가 존재합니다", 1, 1);
             setPwIdCheck(true);
         } else {
-            Swal.fire("아이디가 존재하지 않습니다!", "", "warning").then((result) => {
-                focusInput(0);
-            });
+            alertAndFocus("아이디가 존재하지 않습니다!", 0, 0);
         }
     };
 
     const sendPwdEmail = async () => {
         if (formData.emailPwd === "") {
-            Swal.fire("이메일을 입력해주세요!", "", "warning").then((result) => {
-                focusInput(1);
-            });
+            alertAndFocus("이메일을 입력해주세요!", 0, 1);
             return true;
         }
 
         const data = { email: formData.emailPwd, loginID: formData.id };
         const result: IPostResponse = await deliveryPostApi(login.findInfoPw, data);
         if (result.result === "FALSE") {
-            Swal.fire("이메일이 틀렸습니다!", "", "warning").then((result) => {
-                focusInput(1);
-            });
+            alertAndFocus("이메일이 틀렸습니다!", 0, 1);
         } else {
-            Swal.fire("해당 이메일로 인증번호를 전송하였습니다.", "", "success").then((result) => {
-                focusInput(2);
-            });
+            alertAndFocus("해당 이메일로 인증번호를 전송하였습니다.", 1, 2);
             setEmailSendPwd(true);
             findMailSendPwd();
         }
@@ -114,48 +108,32 @@ export const FindModal = () => {
 
     const sendCompletePwd = () => {
         if (formData.code === "") {
-            Swal.fire("인증번호를 입력해주세요!", "", "warning").then((result) => {
-                focusInput(2);
-            });
+            alertAndFocus("인증번호를 입력해주세요!", 0, 2);
             return;
         } else if (formData.code !== authEmailCode) {
-            Swal.fire("인증번호가 틀렸습니다.", "", "warning").then((result) => {
-                focusInput(2);
-            });
+            alertAndFocus("인증번호가 틀렸습니다.", 0, 2);
             return;
         } else if (formData.code === authEmailCode) {
-            Swal.fire("인증번호가 맞습니다. 비밀번호를 변경합니다.", "", "success").then((result) => {
-                focusInput(3);
-            });
+            alertAndFocus("인증번호가 맞습니다. 비밀번호를 변경합니다.", 1, 3);
             setChangePw(true);
         }
     };
 
     const changePwd = async () => {
         if (formData.password === "") {
-            Swal.fire("변경할 비밀번호를 입력하세요.", "", "warning").then((result) => {
-                focusInput(3);
-            });
+            alertAndFocus("변경할 비밀번호를 입력하세요.", 0, 3);
             return;
         } else if (formData.password1 === "") {
-            Swal.fire("비밀번호 확인을 입력하세요.", "", "warning").then((result) => {
-                focusInput(4);
-            });
+            alertAndFocus("비밀번호 확인을 입력하세요.", 0, 4);
             return;
         }
         const passwordRules = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
 
         if (!passwordRules.test(formData.password)) {
-            Swal.fire("비밀번호는 숫자, 영문자, 특수문자 조합으로 8~15자리를 사용해야 합니다.", "", "warning").then(
-                (result) => {
-                    focusInput(3);
-                }
-            );
+            alertAndFocus("비밀번호는 숫자, 영문자, 특수문자 조합으로 8~15자리를 사용해야 합니다.", 0, 3);
             return;
         } else if (formData.password !== formData.password1) {
-            Swal.fire("비밀번호와 비밀번호확인이 맞지 않습니다.", "", "warning").then((result) => {
-                focusInput(4);
-            });
+            alertAndFocus("비밀번호와 비밀번호확인이 맞지 않습니다.", 0, 4);
             return;
         }
 
@@ -171,38 +149,29 @@ export const FindModal = () => {
 
     const selectFindId = async () => {
         if (formData.emailID === "") {
-            Swal.fire("이메일을 입력해주세요!", "", "warning").then((result) => {
-                focusInput(0);
-            });
+            alertAndFocus("이메일을 입력해주세요!", 0, 0);
             return;
         }
 
         const data = { email: formData.emailID };
         const result: IPostResponse = await deliveryPostApi(login.findInfoId, data);
+        console.log(result);
         if (result.result === "SUCCESS") {
             setUserID(result.resultModel.loginID);
             findMailSendID();
-            Swal.fire("해당 이메일로 인증번호를 전송하였습니다.", "", "success").then((result) => {
-                focusInput(1);
-            });
+            alertAndFocus("해당 이메일로 인증번호를 전송하였습니다.", 0, 1);
             setEmailSendID(true);
         } else {
-            Swal.fire("잘못된 이메일을 입력하셨습니다!", "", "warning").then((result) => {
-                focusInput(0);
-            });
+            alertAndFocus("잘못된 이메일을 입력하셨습니다!", 0, 0);
         }
     };
 
     const findId = () => {
         if (formData.code === "") {
-            Swal.fire("인증번호를 입력해주세요!", "", "warning").then((result) => {
-                focusInput(1);
-            });
+            alertAndFocus("인증번호를 입력해주세요!", 0, 1);
             return;
         } else if (formData.code !== authEmailCode) {
-            Swal.fire("인증번호가 틀렸습니다.", "", "warning").then((result) => {
-                focusInput(1);
-            });
+            alertAndFocus("인증번호가 틀렸습니다.", 0, 1);
             return;
         } else if (formData.code === authEmailCode) {
             setFindModal(!findModal);
