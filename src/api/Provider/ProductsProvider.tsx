@@ -3,7 +3,6 @@ import { createContext, FC, useState } from "react";
 interface ISearchKeyword {
     searchKeyword?: object;
     setSearchKeyword?: React.Dispatch<React.SetStateAction<object>>;
-    setUserType?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const ProductsContext = createContext<ISearchKeyword>({});

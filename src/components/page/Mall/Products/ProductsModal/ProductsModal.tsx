@@ -40,7 +40,6 @@ const initProducts = {
 export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, setProductId}) => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [imageUrl, setImageUrl] = useState<string>(noData);
-    const [fileName, setFileName] = useState<string>("");
     const [detail, setDetail] = useState<IProducts>(initProducts);
     const [attachment, setAttachment] = useState<IProducts>();
     const [sellPrice, setSellPrice] = useState<string>("");
@@ -200,12 +199,12 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
                     <tbody>
                         <tr>
                             <th rowSpan={3}>
-                                <label htmlFor="file-upload">
+                                <label>
                                     <img className="product-image" src={imageUrl || noData} alt="상품 이미지" onError={() => setImageUrl(noData)}/>
                                 </label>
                             </th>
                             <th>제품 번호</th>
-                            <td><StyledInput size="modal" name='productId' type="text" defaultValue={productId} readOnly/></td>
+                            <td><StyledInput size="modal" name='productNumber' type="text" defaultValue={detail.productNumber} readOnly/></td>
                             {userInfo.userType !== 'S' && 
                                 (
                                     <>
