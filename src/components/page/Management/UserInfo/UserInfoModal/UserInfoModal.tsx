@@ -82,6 +82,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         userClass: "",
         userType: "",
         zipCode: "",
+
         //보낼때는 또 가공해서 보낸다 에즈이즈가. 이하는 보낼때 가공해야하는 key들
         userTel1: "",
         userTel2: "",
@@ -158,6 +159,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
             setDetailCode(res2.detailCode);
 
             setDetailCodeList(res2.detailCode);
+            setEmailCheck(true);
         }
     }, []);
 
@@ -215,6 +217,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         if (isdetail) {
             box = { ...detailInfo };
             box.groupCode = value;
+            box.group_code = value;
         } else {
             box = { ...userData };
             box.group_code = value;
@@ -224,6 +227,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
             let label = value;
             if (e.target instanceof HTMLSelectElement) {
                 label = e.target.selectedOptions[0]?.text;
+                alert(label);
             }
 
             if (label === "SCM 담당자") {
@@ -559,6 +563,10 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         }
     };
 
+    useEffect(() => {
+        console.log(`이메일 상태:  ${emailCheck}`);
+    }, [emailCheck]);
+
     const validatePhone = (name: string): boolean => {
         // 각 필드의 값 가져오기
         var tell1;
@@ -630,8 +638,6 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
             return;
         }
 
-        console.log("---마지막 제출전 데이터 확인-----");
-        console.log(detailInfo);
         const res: any = await postUserInfoInsertApi(UserInfo.updateUserInfo, detailInfo);
         if (res.result === "SUCCESS") {
             alert("정보수정에 성공하였습니다.");
@@ -650,7 +656,6 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
             // }
 
             if (userData[keyArray[key]] === "" && keyArray[key] != "user_dt_address") {
-                alert(keyArray[key]);
                 alert(emptyValiMessage[keyArray[key]]);
                 return;
             }
@@ -671,8 +676,16 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
             }
         }
 
-        //  console.log("---마지막 제출전 데이터 확인-----");
-        console.log(userData);
+        if (!emailCheck) {
+            var msg;
+            if (isdetail) {
+                msg = "변경하실 이메일을 작성후 \n  오른쪽 이메일 변경하기 버튼을 클릭해주세요";
+            } else {
+                msg = "등록하실 이메일을 작성후 \n  오른쪽 이메일 중복확인 버튼을 클릭해주세요";
+            }
+            alert("먼저" + `${msg}`);
+            return;
+        }
 
         const res: IInsertUserInfoResponse = await postUserInfoInsertApi(UserInfo.insertUserInfo, userData);
 
@@ -681,7 +694,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         } else {
             alert("잠시후 다시 시도해주세요");
         }
-        // window.location.href = "/react/management/user-info";
+        window.location.href = "/react/management/user-info";
     };
 
     //특별히 필요한 유효성의 스위치 문이다.
@@ -787,7 +800,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                                             <select
                                                 className='styledTag'
                                                 name='group_code'
-                                                value={detailInfo.groupCode}
+                                                // value={detailInfo.groupCode}
                                                 onChange={(e) => {
                                                     setSelectValue(e.target.value);
                                                     handleGroupChange(e);
