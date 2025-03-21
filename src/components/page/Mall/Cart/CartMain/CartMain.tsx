@@ -158,7 +158,14 @@ export const CartMain= () => {
     }
 
     const selectDelete = async(cartdetailIdList) => {
-        console.log(cartdetailIdList);
+        if(selectedRows.length === 0) {
+            await Swal.fire({
+                icon: "warning",
+                title: "선택한 상품이 없습니다.",
+                confirmButtonText: "확인",
+            })
+            return;
+        }
         const confirm = await Swal.fire({
             icon: "question",
             title: "알람",
