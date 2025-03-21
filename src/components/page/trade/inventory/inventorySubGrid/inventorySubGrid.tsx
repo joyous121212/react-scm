@@ -67,17 +67,15 @@ export const InventorySubGrid: FC<IInventorySubGridProps> = ({ inventoryPropsOpt
                     data={inventoryDetail}
                     columns={columns}
                     renderCell={(row, col) => {
-                        // 입고량, 출고량 컬럼의 색상 변경
                         if (col.key === "input" && row.input > 0) {
-                            return <span style={{ color: "blue" }}>{row.input}</span>; // ✅ 입고량은 파란색
+                            return <span style={{ color: "blue" }}>{row.input}</span>;
                         }
                         if (col.key === "output" && row.output > 0) {
-                            return <span style={{ color: "red" }}>{row.output}</span>; // ✅ 출고량은 빨간색
+                            return <span style={{ color: "red" }}>{row.output}</span>;
                         }
-                        return row[col.key as keyof IInventory]; // 기본값
+                        return row[col.key as keyof IInventory];
                     }}
                     renderHead={(col) => {
-                        // ✅ th 색상 변경 (입고량: 파란색, 출고량: 빨간색)
                         if (col.key === "input") {
                             return <span style={{ color: "blue" }}>{col.title}</span>;
                         }

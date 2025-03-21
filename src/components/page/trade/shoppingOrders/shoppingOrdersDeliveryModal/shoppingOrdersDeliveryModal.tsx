@@ -43,15 +43,14 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
     const [orderCount, setOrderCount] = useState<number>(0);
 
     const orderColumns = [
-        { key: "orderId", title: "주문번호" }, // 6.15%
-        { key: "salesDate", title: "주문일자" }, // 9.23%
-        { key: "customerName", title: "고객명" }, // 9.23%
-        { key: "productName", title: "상품명" }, // 10%
-        { key: "count", title: "주문수량" }, // 8.46%
-        { key: "deliveryManager", title: "배송담당자" }, // 9.23
+        { key: "orderId", title: "주문번호" },
+        { key: "salesDate", title: "주문일자" },
+        { key: "customerName", title: "고객명" },
+        { key: "productName", title: "상품명" },
+        { key: "count", title: "주문수량" },
+        { key: "deliveryManager", title: "배송담당자" },
     ] as Column<IShoppingOrder>[];
 
-    //모달 초기 정보를 가져오는 useEffect
     useEffect(() => {
         setIsLoading(true);
         shoppingDeliveryModal();
@@ -70,8 +69,8 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
     }, [warehouseOptions]);
 
     const deliverOrderList = (data: IShoppingOrder): IShoppingOrder[] => {
-        const deliverOrderList: IShoppingOrder[] = []; // ✅ 배열 타입 명시
-        deliverOrderList.push(data); // ✅ put() → push() 변경
+        const deliverOrderList: IShoppingOrder[] = [];
+        deliverOrderList.push(data);
         return deliverOrderList;
     };
 
@@ -91,7 +90,7 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
                         warehouseName: `${warehouse.name}(${result.deliveryOrder.productName}) `,
                         warehouseId: warehouse.warehouseId,
                         totalProductStock: warehouse.totalProductStock,
-                    }), // ✅ 객체를 문자열로 변환하여 저장
+                    }),
                 }));
                 setWarehouseOptions(warehouseOptions);
 
@@ -111,7 +110,6 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
 
     const updateShoppingDelivery = async () => {
         if (!selectManagerValue) {
-            console.log(limitOrderCount);
             Swal.fire({
                 icon: "warning",
                 title: "배송담당자를 선택해주세요",
@@ -120,7 +118,6 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
             return;
         }
         if (limitOrderCount > 0) {
-            console.log(limitOrderCount);
             Swal.fire({
                 icon: "warning",
                 title: "주문 수량이 맞지 않습니다.",
@@ -132,14 +129,13 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
             icon: "question",
             title: "알람",
             text: "배송 요청하시겠습니까?",
-            showCancelButton: true, // cancel 버튼 보이기
+            showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "예",
             cancelButtonText: "아니오",
         });
 
-        // 사용자가 "예"를 눌렀을 경우 API 호출
         if (result.isConfirmed) {
             const response = await postApi(ShoppingOrders.saveDelivers, {
                 deliveryManager: selectManagerValue,
@@ -216,8 +212,8 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
                 const updatedList = [...prevList];
                 const newOrderCount = updatedList[existingIndex].orderCount + orderCount;
                 if (newOrderCount > totalProductStock) {
-                    alert(`최대 주문 가능 수량은 ${totalProductStock}개입니다.22222222`);
-                    return prevList; // 🚨 기존 상태 그대로 유지 (변경 없음)
+                    alert(`최대 주문 가능 수량은 ${totalProductStock}개입니다.`);
+                    return prevList;
                 }
 
                 updatedList[existingIndex] = {
@@ -242,8 +238,8 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
                 const updatedList = [...prevList];
                 const newOrderCount = updatedList[existingIndex].orderCount + orderCount;
                 if (newOrderCount > totalProductStock) {
-                    alert(`최대 주문 가능 수량은 ${totalProductStock}개입니다.3333333333`);
-                    return prevList; // 🚨 기존 상태 그대로 유지 (변경 없음)
+                    alert(`최대 주문 가능 수량은 ${totalProductStock}개입니다.`);
+                    return prevList;
                 }
 
                 updatedList[existingIndex] = {
@@ -299,7 +295,7 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
                         <StyledSelectBox
                             options={warehouseOptions}
                             onChange={(e: string | undefined) => {
-                                if (!e) return; // ✅ 값이 없으면 실행하지 않음
+                                if (!e) return;
                                 try {
                                     const parsedValue = JSON.parse(e);
                                     handlerWarehouseOptions(parsedValue);
@@ -316,10 +312,10 @@ export const ShoppingOrdersDeliveryModal: FC<IShoppingOrderModalProps> = ({ post
                             type='number'
                             max={limitOrderCount}
                             min={0}
-                            value={orderCount ?? 0} // ✅ undefined 방지
+                            value={orderCount ?? 0}
                             onChange={(e) => {
                                 const newValue = Number(e.target.value);
-                                setOrderCount(isNaN(newValue) ? 0 : newValue); // ✅ NaN 방지
+                                setOrderCount(isNaN(newValue) ? 0 : newValue);
                             }}
                         />
                         <StyledButton size='small' variant='secondary' onClick={handlerOrderCount}>
