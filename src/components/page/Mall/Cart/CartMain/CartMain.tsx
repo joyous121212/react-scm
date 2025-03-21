@@ -234,9 +234,9 @@ export const CartMain= () => {
                     </StyledButton>
                 )}
             />
-            <div className="divAllCancel">
+            {cartList.length !== 0 && <div className="divAllCancel">
                 <StyledButton variant="danger" onClick={() => selectDelete(cartdetailIdList)}>선택삭제</StyledButton>
-            </div>
+            </div>}
             
 
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end"}}>
