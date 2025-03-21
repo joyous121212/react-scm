@@ -429,14 +429,12 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                     box = { ...supDetail };
                     box.zipCode = data.zonecode;
                     box.address = address;
-
                     setSupDetail(box);
                     setIsPostcodeOpen(false);
                 } else {
                     box = { ...saveDetail };
                     box.zipCode = data.zonecode;
                     box.address = address;
-
                     setSaveDetail(box);
                     setIsPostcodeOpen(false);
                 }

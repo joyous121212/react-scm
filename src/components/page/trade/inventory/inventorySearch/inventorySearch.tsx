@@ -19,35 +19,34 @@ export const InventorySearch = () => {
     const [supplyOptions, setSupplyOptions] = useState<ISelectOption[]>([]);
     const [warehouseOptions, setWarehouseOptions] = useState<ISelectOption[]>([]);
     const { searchTitle, setSearchTitle } = useContext(InventoryContext);
-    const [ tempSearchTitle, setTempSearchTitle ] = useState<ITempSearchTitle>({
+    const [tempSearchTitle, setTempSearchTitle] = useState<ITempSearchTitle>({
         searchProduct: "",
         searchSupply: "",
         searchWarehouse: "",
     });
 
-    // 🚀 선택된 검색 조건이 변경될 때 검색어 업데이트
     useEffect(() => {
         setTempSearchTitle({
             searchProduct: selectProduct ? selectProduct : "",
             searchSupply: selectSupply ? selectSupply : "",
             searchWarehouse: selectWarehouse ? selectWarehouse : "",
         });
-    }, [selectProduct, selectSupply, selectWarehouse]); // ✅ 검색 조건 변경 시 실행
+    }, [selectProduct, selectSupply, selectWarehouse]);
 
-    // 🚀 검색어가 변경된 후 select box 데이터 가져오기
     useEffect(() => {
         getSelectBox();
-    }, [tempSearchTitle]); // ✅ 검색어 변경 후 실행
+    }, [tempSearchTitle]);
 
-    // 🔍 검색 핸들러
     const handlerSearch = () => {
         setSearchTitle({ ...tempSearchTitle, searchKeyword: inputValue.current.value });
     };
 
-    // 📦 Select Box 데이터 가져오기
     const getSelectBox = async () => {
         try {
-            const response = await searchApi<IInventorySelectBoxResponse>(Inventory.searchSelectBoxList, tempSearchTitle);
+            const response = await searchApi<IInventorySelectBoxResponse>(
+                Inventory.searchSelectBoxList,
+                tempSearchTitle
+            );
             if (!response || !response.detailValue) return;
 
             const data = response.detailValue;
@@ -80,7 +79,6 @@ export const InventorySearch = () => {
         }
     };
 
-    // 🔄 Select 변경 핸들러
     const handleSelectChange = (newValue: number, tag: string) => {
         switch (tag) {
             case "product":
@@ -99,7 +97,6 @@ export const InventorySearch = () => {
 
     return (
         <InventorySearchStyled>
-            {/* Select Box */}
             <label>
                 제품명 :{" "}
                 <StyledSelectBox
@@ -128,7 +125,7 @@ export const InventorySearch = () => {
                 />
             </label>
             <StyledInput size='search' ref={inputValue} />
-            {/* 검색 버튼 */}
+
             <StyledButton variant='secondary' onClick={handlerSearch}>
                 검색
             </StyledButton>
