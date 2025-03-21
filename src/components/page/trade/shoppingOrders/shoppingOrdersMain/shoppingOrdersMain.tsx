@@ -145,7 +145,7 @@ export const ShoppingOrdersMain = () => {
                             switch (row.salesState) {
                                 case "ordering":
                                 case "salesRequest":
-                                    if (row.totalQuantity >= row.count) {
+                                    if (row.totalQuantity >= row.count && row.orderingState !== "return") {
                                         return (
                                             <StyledButton
                                                 size='small'
