@@ -158,7 +158,6 @@ export const CartMain= () => {
     }
 
     const selectDelete = async(cartdetailIdList) => {
-        console.log(cartdetailIdList);
         if(selectedRows.length === 0) {
             await Swal.fire({
                 icon: "warning",
