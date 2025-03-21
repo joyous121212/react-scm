@@ -127,7 +127,7 @@ export const JoinModal = () => {
 
         const result = await deliveryPostApi(login.checkLoginId, data);
         if (result === 1) {
-            alertAndFocus("ID는 숫자, 영문자 조합으로 6~20자리를 사용해야 합니다.", 0, 0);
+            alertAndFocus("중복된 아이디 입니다!", 0, 0);
         } else {
             alertAndFocus("사용할 수 있는 아이디입니다.", 1, 1);
             setCkIdcheckreg(1);
