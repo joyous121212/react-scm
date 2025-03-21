@@ -67,8 +67,8 @@ export const OrdersReturnListMain = () => {
         const data = { supplyId: supplyId, orderReturnDate: orderReturnDate, page: 1, isFirstLoat: true };
         const result = await deliveryPostApi<IOrdersReturnDetailResponse>(DeliveryOrders.ordersReturnDetail, data);
         const updatedItems = result.orderReturnDetail.map((item, index) => ({
-            ...item, // 기존 객체의 내용을 유지
-            index: index + 1, // 순서에 맞게 index 값을 추가
+            ...item,
+            index: index + 1,
         }));
         setOrderReturnDetail(updatedItems);
     };
@@ -101,7 +101,7 @@ export const OrdersReturnListMain = () => {
 
     const returnProduct = async () => {
         const data = orderReturnDetail.reduce((acc, list) => {
-            acc[list.returnId] = String(list.returnId); // 원하는 키로 값 할당 (예: product를 키로, price를 값으로)
+            acc[list.returnId] = String(list.returnId);
             return acc;
         }, {});
 

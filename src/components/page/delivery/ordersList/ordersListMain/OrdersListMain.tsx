@@ -93,7 +93,6 @@ export const OrdersListMain = () => {
             return;
         }
         const hasEmptyValue = Object.values(selectedInventory).some((value) => value === 0);
-        console.log(hasEmptyValue);
         if (hasEmptyValue) {
             Swal.fire("창고를 선택해주세요!", "", "warning");
             return;
@@ -118,7 +117,7 @@ export const OrdersListMain = () => {
 
     const updateInventory = async () => {
         const data = ordersListDetail.map((item) => ({
-            productId: String(item.productId), // Integer를 String으로 변환
+            productId: String(item.productId),
             supplyId: String(item.supplyId),
             orderId: String(item.orderId),
             warehouseId: String(selectedInventory[item.orderId] || ""), // orderId에 해당하는 창고Id를 찾기

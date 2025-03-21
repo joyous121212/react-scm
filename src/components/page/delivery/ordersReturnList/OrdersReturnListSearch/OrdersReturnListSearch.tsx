@@ -40,7 +40,6 @@ export const OrderReturnListSearch = () => {
     };
 
     const reset = () => {
-        console.log(title.current);
         if (title.current !== null) {
             title.current.value = "";
         }

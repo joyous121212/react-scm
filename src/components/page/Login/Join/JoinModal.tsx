@@ -155,21 +155,17 @@ export const JoinModal = () => {
     const execDaumPostcode = () => {
         new window.daum.Postcode({
             oncomplete: function (data: any) {
-                // 도로명 주소 및 참고 항목 처리
                 const roadAddr = data.roadAddress;
                 let extraRoadAddr = "";
 
-                // 법정동명이 있을 경우 추가
                 if (data.bname && /[동|로|가]$/g.test(data.bname)) {
                     extraRoadAddr += data.bname;
                 }
 
-                // 건물명이 있고, 공동주택일 경우 추가
                 if (data.buildingName && data.apartment === "Y") {
                     extraRoadAddr += extraRoadAddr !== "" ? `, ${data.buildingName}` : data.buildingName;
                 }
 
-                // 최종적으로 참고 항목 처리
                 if (extraRoadAddr) {
                     extraRoadAddr = ` (${extraRoadAddr})`;
                 }
