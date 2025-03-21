@@ -64,7 +64,6 @@ export const UserInfoMain = () => {
         searchUserInfo();
     }, [searchKeyword]);
 
-    // 페이지 네이션 사용으로 잠시 주석처리 삭제는 나중
     const searchUserInfoSearchApi = async (currentPage?: number) => {
         currentPage = currentPage || 1;
         const box = { ...searchKeyword };

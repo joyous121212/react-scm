@@ -26,14 +26,6 @@ export const SupplierInfoMain = () => {
     const [cPage, setCPage] = useState<number>(0);
     const [supCount, setSupCoun] = useState<number>(0);
 
-    // 페이지 네이션 돌아가서 주석처리함. 잠시 삭제는 대기
-    // const suppDetailInfoSearchApi = async (currentPage?: number) => {
-    //     currentPage = currentPage || 1;
-    //     const box = { ...searchKeyword };
-    //     box.currentPage = currentPage;
-    //     setSearchKeyword(box);
-    //     // setCPage(currentPage);
-    // };
     const navigate = useNavigate();
     const columns = [
         { key: "name", title: "납품업체명" },

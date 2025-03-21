@@ -64,15 +64,15 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
     const [fileName, setFileName] = useState<string>("");
     const [modal, setModal] = useRecoilState(detailModalState);
     const [insertProductDetail, setInsertProductDetail] = useState<IInsertProductDetail>({
-        name: "", // default empty string
-        productNumber: "", // default empty string
-        sellPrice: -1, // default negative number
-        description: "", // default empty string
-        supplierName: "", // default empty string
-        category: "", // default empty string
-        fileInput: null, // default null (no file)
-        supplyId: -1, // default negative number
-        categoryCode: "", // default empty string
+        name: "",
+        productNumber: "",
+        sellPrice: -1,
+        description: "",
+        supplierName: "",
+        category: "",
+        fileInput: null,
+        supplyId: -1,
+        categoryCode: "",
         empty: "empty",
     });
 
@@ -87,12 +87,6 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
     const [crudSuccess, setCrudSuccess] = useState(false);
 
     const { searchKeyword, setSearchKeyword } = useContext(ProductInfoContext);
-
-    useEffect(() => {
-        if (crudSuccess) {
-            // alert(crudSuccess);
-        }
-    }, [crudSuccess]);
 
     const updateRef = useRef<IUpdateRequestDto>({
         productId: -100,
@@ -146,15 +140,9 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
         setInsertProductDetail(box);
     }
     useEffect(() => {
-        //productId 로 들어올시 초기 펑션
-
-        //새롭게 만들시 필요한 초기 펑션
-
         if (productId != undefined) {
-            //  console.log(` productId==="" ${productId === ""}  productId==="" ${productId === undefined}`);
             initFnc();
             updateRef.current.productId = parseInt(productId);
-            //여기
         } else {
             insertProductinitFnc();
         }
@@ -191,21 +179,6 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
             [name]: value,
         }));
     };
-    const updateHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        const selectedOption = e.target.selectedOptions[0];
-        const supplyId = selectedOption?.getAttribute("data-supplyid");
-        //  console.log(`네임: ${name}     밸류: ${value}     공급ID: ${supplyId}`);
-
-        updateRef.current.supplyId = parseInt(supplyId);
-        updateRef.current.supplierName = parseInt(supplyId);
-        //updateRef.current.categoryCode=categoryId;
-        console.log(updateRef.current);
-        setProductDetail((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
 
     const insertSupplierHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
         console.log(insertProductDetail);
@@ -227,7 +200,6 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
         const selectedOption = e.target.selectedOptions[0];
         const categoryId = selectedOption?.getAttribute("data-categorycode");
 
-        console.log(`네임: ${name}     밸류: ${value}     공급ID: ${categoryId}`);
         updateRef.current.category = categoryId;
         updateRef.current.categoryCode = categoryId;
 
@@ -248,7 +220,7 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
             categoryCode: value,
         }));
     };
-    //주석
+
     const inserthandlerFile = (e: ChangeEvent<HTMLInputElement>) => {
         const fileInfo = e.target.files;
         updateRef.current.fileInput = fileInfo[0];
@@ -257,7 +229,6 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
             const fileSplit = fileInfo[0].name.split(".");
             const fileExt = fileSplit[1].toLowerCase();
 
-            console.log("파일명: " + fileInfo[0].name + " 파일확장자." + fileExt);
             if (fileExt === "jpg" || fileExt === "gif" || fileExt === "png") {
                 setImageUrl(URL.createObjectURL(fileInfo[0]));
             }
@@ -276,7 +247,6 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
             const fileSplit = fileInfo[0].name.split(".");
             const fileExt = fileSplit[1].toLowerCase();
 
-            console.log("파일명: " + fileInfo[0].name + " 파일확장자." + fileExt);
             if (fileExt === "jpg" || fileExt === "gif" || fileExt === "png") {
                 setImageUrl(URL.createObjectURL(fileInfo[0]));
             }
@@ -288,12 +258,10 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
     };
 
     const deleteFileFnc = async () => {
-        console.log("productId:  " + productId);
         //productId: 23
         const res: IPostResultMessageResponse = await postDeleteFileApi(ProductInfo.deleteFile, {
             productId: productId,
         });
-        // alert(res);
 
         if (res.result === "success") {
             alert("파일을 삭제 하였습니다.");
@@ -312,7 +280,6 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
             return;
         }
 
-        //productId: 23
         const res: IPostResultMessageResponse = await postUpdateProductInfoApi(ProductInfo.updateProductInfo, formData);
 
         if (res.result === "success") {
@@ -372,14 +339,11 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
             }
         }
         return true;
-        // formData.forEach((value, key) => {
-        //     console.log(`${key}: ${value}`);
-        // });
     };
 
     const updateValiCheckFnc = (formData: FormData): boolean => {
         for (var key in updateValiCheck) {
-            const formValue: any = formData.get(key); // formData에서 값을 가져오기
+            const formValue: any = formData.get(key);
             const isPositiveInteger = /^[1-9]\d*$/.test(formValue);
             if (!isPositiveInteger) {
                 alert(updateValiCheck[key]);
@@ -391,7 +355,7 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
     };
 
     const goInsert = async () => {
-        console.log(insertProductDetail);
+        console.log("두번호출");
 
         if (!emptyCheckFnc()) {
             return;
@@ -401,7 +365,7 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
         }
 
         const formData = toInsertRequestDTO();
-        // logFormData(formData);
+
         const res: IPostResultMessageResponse = await postSaveProductInfoApi(ProductInfo.saveProductInfo, formData);
 
         if (res.result === "success") {
@@ -472,12 +436,6 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
             alert("제품정보를 삭제 하였습니다.");
             setUpdateModal(!updateModal);
             PostRender(ProductDefaultSearchKeyWord, setSearchKeyword);
-            // setSearchKeyword({
-            //     currentPage: 1,
-            //     pageSize: 5,
-            //     searchKeyword: "",
-            //     searchOption: "searchAll",
-            // });
         } else if (res.result === "fail") {
             alert("잠시후 다시 시도해주세요");
         } else {
@@ -507,7 +465,6 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                                 제품명 <span className='font_red'>*</span>
                             </th>
                             <td colSpan={3}>
-                                {/* setInsertProductDetail */}
                                 {productDetail !== undefined ? <></> : <></>}
 
                                 {productDetail !== undefined ? (
