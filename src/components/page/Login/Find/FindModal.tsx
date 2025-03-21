@@ -155,7 +155,6 @@ export const FindModal = () => {
 
         const data = { email: formData.emailID };
         const result: IPostResponse = await deliveryPostApi(login.findInfoId, data);
-        console.log(result);
         if (result.result === "SUCCESS") {
             setUserID(result.resultModel.loginID);
             findMailSendID();

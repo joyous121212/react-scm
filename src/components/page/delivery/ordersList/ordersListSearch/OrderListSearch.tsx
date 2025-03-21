@@ -38,7 +38,6 @@ export const OrderListSearch = () => {
         return e.key === "Enter" ? handlerSearch() : null;
     };
     const reset = () => {
-        console.log(title.current);
         if (title.current !== null) {
             title.current.value = "";
         }
