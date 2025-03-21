@@ -55,7 +55,6 @@ export const InquiryMain = () => {
     }
 
     useEffect(() => {
-        // alert("post레더 에서 두번이상 계속 떠야함");
         searchFnc();
     }, [searchKeyword]);
 
@@ -100,7 +99,7 @@ export const InquiryMain = () => {
                     <InquiryCUserTypeModal inquiryId={inquiryId} />
                 </Portal>
             )}
-             {detailModal && userType === "S" && (
+            {detailModal && userType === "S" && (
                 <Portal>
                     <InquirySUserTypeModal inquiryId={inquiryId} />
                 </Portal>

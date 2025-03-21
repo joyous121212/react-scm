@@ -43,8 +43,6 @@ export const UserInfoSearch = () => {
             ...searchKeyword,
             inforAll: newInforAll,
         });
-
-        console.log({ ...searchKeyword, inforAll: newInforAll }); // 변경된 값 로그 찍기
     };
 
     const handlerModal = () => {
@@ -64,11 +62,11 @@ export const UserInfoSearch = () => {
                 <StyledButton onClick={handlerSearch}>검색</StyledButton>
                 <StyledButton onClick={handlerModal}>등록</StyledButton>
             </CommonCodeSearchStyled>
-              { modal  && (
-                            <Portal>
-                                <UserInfoModal  />
-                            </Portal>
-                        )}
+            {modal && (
+                <Portal>
+                    <UserInfoModal />
+                </Portal>
+            )}
         </>
     );
 };

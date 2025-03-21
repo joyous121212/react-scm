@@ -12,14 +12,7 @@ import { useContext } from "react";
 export const SupplierInfoListMain = () => {
     const navigate = useNavigate();
     const { search } = useLocation();
-    // const { state } = useLocation();
 
-    // 또 서버에선 as 보내내
-    // p.product_number AS productNumber
-    // ,	p.name AS Name
-    // ,	p.sell_price AS sellPrice
-    // ,	d.detail_name AS detailName
-    // ,	s.name AS supplyName
     const [cPage, setCPage] = useState<number>(0);
     const { detailSearchKeyword, setDetailSearchKeyword } = useContext(SupplierInfoContext);
 

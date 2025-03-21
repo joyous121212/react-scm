@@ -30,7 +30,7 @@ export const InquirySearch = () => {
 
     const handleSearchTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        //console.log(`name: ${name} value: ${value}`);
+
         searchTitleRef.current.value = value;
     };
 

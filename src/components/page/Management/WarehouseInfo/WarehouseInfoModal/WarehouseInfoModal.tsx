@@ -58,7 +58,6 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
     const phonRef = useRef<string>("");
     const { searchKeyword, setSearchKeyword } = useContext(WarehouseInfoContext);
     useEffect(() => {
-        console.log(warehouseId === undefined);
         if (warehouseId != undefined) {
             initUpdateFnc();
         }
@@ -109,8 +108,7 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
                     // alert("정보를삽입시에만");
                     let address = data.roadAddress; // 도로명 주소
                     if (!address) address = data.jibunAddress; // 지번 주소
-                    // console.log("우편번호: " + data.zonecode);
-                    // console.log("주소: " + address);
+
                     setInsertDetail((prev) => {
                         insertDetail.zipCode = data.zonecode; // 우편번호
                         insertDetail.address = address; // 주소
@@ -122,9 +120,6 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
                     // alert("업데이트시에만");
                     let address = data.roadAddress; // 도로명 주소
                     if (!address) address = data.jibunAddress; // 지번 주소
-                    // console.log("우편번호: " + data.zonecode);
-                    // console.log("주소: " + address);
-                    //분기점
 
                     updateDetail.zipCode = data.zonecode; // 우편번호
                     updateDetail.address = address; // 주소
@@ -145,9 +140,6 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
         // alert("업데이트시에만");
         let address = data.roadAddress; // 도로명 주소
         if (!address) address = data.jibunAddress; // 지번 주소
-        // console.log("우편번호: " + data.zonecode);
-        // console.log("주소: " + address);
-        //분기점
 
         updateDetail.zipCode = data.zonecode; // 우편번호
         updateDetail.address = address; // 주소
@@ -163,11 +155,9 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
     };
 
     const insertHandleAddressSelect = (data: any) => {
-        // alert("정보를삽입시에만");
         let address = data.roadAddress; // 도로명 주소
         if (!address) address = data.jibunAddress; // 지번 주소
-        // console.log("우편번호: " + data.zonecode);
-        // console.log("주소: " + address);
+
         setInsertDetail((prev) => {
             insertDetail.zipCode = data.zonecode; // 우편번호
             insertDetail.address = address; // 주소
@@ -189,8 +179,6 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
         }
         const insertRequestDto = toInsertRequestDto();
 
-        console.log(insertRequestDto);
-
         const res: IPostWareHouseResponse = await postwarehouseInfoSaveApi(
             WarehouseInfo.warehouseInfoSave,
             insertRequestDto
@@ -200,12 +188,6 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
 
             PostRender(DefaultWareSearchKeyWord, setSearchKeyword);
             setInsertModal(!insertModal);
-            // setSearchKeyword({
-            //     searchTarget: "warehouseName",
-            //     searchKeyword: "",
-            //     currentPage: 1,
-            //     pageSize: 5,
-            // });
         }
     };
 
@@ -218,7 +200,7 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
         }
 
         const updateRequestDto = toUpdateRequestDto();
-        console.log(updateRequestDto);
+
         const res: IPostWareHouseResponse = await postWarehouseInfoUpdateApi(
             WarehouseInfo.warehouseInfoUpdate,
             updateRequestDto
@@ -232,7 +214,7 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
 
     const emptyCheckFnc = (): boolean => {
         var box;
-        console.log(warehouseId === undefined);
+
         if (warehouseId === undefined) {
             box = insertDetail;
         } else {
@@ -301,7 +283,7 @@ export const WarehouseInfoModal: FC<IProductInfoModalProps> = ({ warehouseId }) 
                 // 하이픈 추가: (XXX)-(XXXX)-(XXXX) 형태로 포맷팅
                 const formattedPhone = cleanedPhone.replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, "$1-$2-$3");
                 phonRef.current = formattedPhone;
-                console.log("Formatted Phone:", formattedPhone); // 확인용
+
                 return true; // 하이픈이 자동으로 추가된 전화번호 반환
             }
             phonRef.current = cleanedPhone;

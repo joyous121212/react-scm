@@ -107,7 +107,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         password1: "비밀번호가 일치하지 않습니다.",
         userTel1: "전화번호 앞자리 형식이 옳바르지 안습니다. \n ex:010, 031, 019",
         userTel2: "전화번호 중간자리 형식이 옳바르지 안습니다. \n ex:3자리에서 4자리",
-        userTel3: "전화번호 마지막자리 형식이 옳바르지 안습니다. \n ex:3자리에서 4자리",
+        userTel3: "전화번호 마지막자리 형식이 옳바르지 안습니다. \n ex:4자리",
     };
 
     const emptyValiMessage = {
@@ -256,9 +256,22 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         }
     };
 
+    const handlerId = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+
+        const box = { ...userData };
+        box.loginID = value;
+        setUserData(box);
+        setIsValid(false);
+    };
+
+    useEffect(() => {
+        console.log(`isValid:  ${isValid}`);
+    }, [isValid]);
+
     const detaileHandleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        console.log(`name : ${name} value ${value}`);
+
         var box;
         if (isdetail) {
             box = { ...detailInfo };
@@ -344,33 +357,37 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
     };
 
     const checkDuplicFnc = async () => {
-        const idValiCheck = IdValidateInput(idRef.current.value);
+        const idValiCheck = IdValidateInput(userData.loginID);
 
         if (!idValiCheck) {
+            const box = { ...userData };
+            box.loginID = "";
+            setUserData(box);
             setIsValid(false);
             return;
         }
         //loginID:idRef.current.value
         const res: IDuplicUserIdResponse = await duplicUserIdCheckApi(UserInfo.checkDuplicUserId, {
-            loginID: idRef.current.value,
+            loginID: userData.loginID,
         });
 
         if (res.duplicCnt === 0) {
-            const box = { ...userData };
-            box.loginID = idRef.current.value;
-            setUserData(box);
             alert("사용 가능한 아이디 입니다.");
+            setIsValid(true);
+            return;
         } else {
             const box = { ...userData };
             box.loginID = "";
             setUserData(box);
             alert("이미 사용중인 아이디 입니다.");
+            setErrorMessage("이미 사용중인 아이디 입니다.");
         }
 
         //false로 해야 아디 또 적을시 이함수가 실행됨
         setIsValid(false);
     };
 
+    //아이디체크
     const IdValidateInput = (value: string): boolean => {
         // 숫자와 영문자 조합, 5~20자리 또는 영문자만 5~20자리 허용
         const regex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{5,20}$|^[a-zA-Z]{5,20}$/;
@@ -380,7 +397,6 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
             return false;
         } else {
             setIsValid(true);
-            setErrorMessage("사용가능한 아이디 입니다.");
             return true;
         }
     };
@@ -592,7 +608,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
             isValid = tell2?.length >= 3 && tell2?.length <= 4 && /^[0-9]{3,4}$/.test(tell2);
         }
         if (name === "userTel3") {
-            isValid = tell3?.length >= 3 && tell3?.length <= 4 && /^[0-9]{3,4}$/.test(tell3);
+            isValid = tell3?.length === 4 && /^[0-9]{4}$/.test(tell3);
         }
         if (isValid) {
             return true;
@@ -603,10 +619,6 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
 
     //수정업데이트모달
     const updateUserInfo = async () => {
-        for (let key in emptyValiMessage) {
-            console.log(key + ": " + detailInfo[key]);
-        }
-
         for (let key in emptyValiMessage) {
             if (detailInfo[key] === "" && key != "manager" && key != "user_dt_address") {
                 alert(emptyValiMessage[key]);
@@ -684,6 +696,11 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                 msg = "등록하실 이메일을 작성후 \n  오른쪽 이메일 중복확인 버튼을 클릭해주세요";
             }
             alert("먼저" + `${msg}`);
+            return;
+        }
+
+        if (!isValid) {
+            alert("아이디 중복 확인을 먼저 해주세요");
             return;
         }
 
@@ -796,21 +813,6 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                                 <UserInfoSelectWrapperStyle variant='primary'>
                                     {isdetail ? (
                                         <>
-                                            {/* <select
-                                                className='styledTag'
-                                                name='group_code'
-                                                value={detailInfo.groupCode}
-                                                onChange={(e) => {
-                                                    setSelectValue(e.target.value);
-                                                    handleGroupChange(e);
-                                                }}
-                                            >
-                                                <option  value={"E10001X1"}>SCM 담당자</option>
-                                                <option  value={"E10001X1"}>구매 담당자</option>
-                                                <option  value={"E10001X1"}>회사 임원</option>
-                                                <option  value={"R20001P1"}>배송 담당자</option>
-                                                <option  value={"G00001A1"}>기업 고객</option>
-                                            </select> */}
                                             <select
                                                 className='styledTag'
                                                 name='group_code'
@@ -927,7 +929,13 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                                     </>
                                 ) : (
                                     <>
-                                        <StyledInput placeholder='숫자, 영문자 조합으로 6~20자리' ref={idRef} />
+                                        <StyledInput
+                                            name='loginID'
+                                            placeholder='숫자, 영문자 조합으로 6~20자리'
+                                            onChange={handlerId}
+                                            value={userData?.loginID}
+                                            // ref={idRef}
+                                        />
                                     </>
                                 )}
 
@@ -999,21 +1007,36 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
                             </th>
                             <td colSpan={3}>
                                 {isdetail ? (
-                                    <StyledInput
-                                        name='manager'
-                                        value={detailInfo?.manager}
-                                        onChange={(e) => {
-                                            const { name, value } = e.target;
-                                            setDetailInfo((prevData) => ({
-                                                ...prevData,
-                                                [name]: value,
-                                            }));
-                                        }}
-                                    />
+                                    detailInfo?.classType === "기업고객" ? (
+                                        <>
+                                            <StyledInput
+                                                name='manager'
+                                                value={detailInfo?.manager}
+                                                onChange={(e) => {
+                                                    const { name, value } = e.target;
+                                                    setDetailInfo((prevData) => ({
+                                                        ...prevData,
+                                                        [name]: value,
+                                                    }));
+                                                }}
+                                            />
+                                        </>
+                                    ) : (
+                                        <>
+                                            <StyledInput readOnly />
+                                        </>
+                                    )
+                                ) : userData?.classType === "기업고객" ? (
+                                    <>
+                                        <StyledInput name='manager' onChange={handleChange} />
+                                    </>
                                 ) : (
-                                    <StyledInput name='manager' onChange={handleChange} />
+                                    <>
+                                        <StyledInput name='manager' readOnly />
+                                    </>
                                 )}
                             </td>
+
                             <th scope='row'>
                                 전화번호<span className='font_red'>*</span>
                             </th>

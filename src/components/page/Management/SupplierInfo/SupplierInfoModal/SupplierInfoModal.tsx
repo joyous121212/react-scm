@@ -37,33 +37,27 @@ import { postDeleteSupplyDetail } from "../../../../../api/SupplierInfoApi/postD
 import { idDuplicCheck } from "../../../../../api/SupplierInfoApi/idDuplicCheck";
 
 const emptyMessage = {
-    //supplyId:string;
     name: "납품업체명은 필수입력 사항입니다.",
     manager: "담당자는 필수입력 사항입니다.",
     phone: "연락쳐는 필수입력 사항입니다.",
     ZipCode: "우편번호는 필수입력 사항입니다.",
     address: "우편번번호 버튼 클릭후 선택해주세요",
-    // password: "비밀번호는 필수입력 사항 입니다.",
 };
-//업데이트 시는 또 아이디는 수정 불가라 살짝 다르다. 즉 전화번호만
+
 const upDateValiMessage = {
     phone: "전화번호 형식에 맞지 않습니다.\n ex)하이픈 있던없던[3자리]-[3~4자리]-[3~4자리] (o) ",
 };
 
 const saveValiMessage = {
-    // supplyLoginID: "중복확인을 먼저 해주셔야합니데이",
-    // password: "비밀번호 형식에 맞이 않습니다. \n ex)숫자 영문자 조합으로 6자리 입니다.",
     phone: "전화번호 형식에 맞지 않습니다.\n ex)하이픈 있던없던[3자리]-[3~4자리]-[3~4자리] (o) ",
 };
 
 const saveEmptyMessage = {
-    // supplyLoginID: "아이디는 필수 입력 사항입니다.",
     name: "납품업체명은 필수입력 사항입니다.",
     manager: "담당자는 필수입력 사항입니다.",
     phone: "연락쳐는 필수입력 사항입니다.",
     ZipCode: "우편번호는 필수입력 사항입니다.",
     address: "우편번번호 버튼 클릭후 선택해주세요",
-    // password: "비밀번호는 필수입력 사항 입니다.",
 };
 
 export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }) => {
@@ -76,48 +70,30 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
     const phRef = useRef<string>("");
 
     const [saveDetail, setSaveDetail] = useState<ISupplierSaveInfoDetail>({
-        // supply_id AS supplyId
         supplyLoginID: "",
         name: "",
         manager: "",
         phone: "",
-        // zip_code AS zipCode
+
         zipCode: "",
         address: "",
 
-        // detail_address AS detailAddress
         detailAddress: "",
         loginID: "",
         password: "",
-        // group_code AS groupCode
+
         groupCode: "S10000T1",
-        // create_by AS author
+
         author: "",
-        // created_date AS createdDate
+
         createdDate: "",
-        // trade_state AS tradeState
+
         tradeState: "Y",
     });
 
     const idRef = useRef<boolean>(false);
 
     const [supDetail, setSupDetail] = useState<ISupplierInfoDetail>();
-
-    // 이하는 새로운 정보를삽입 하는 로직
-    // 또한  아래처럼 보냄을 상기하자.
-
-    // var param = {
-    // 		name: $("#supplyName").val()
-    // 	, 	manager: $("#supplyManager").val()
-    // 	,	phone: $("#supplyPhone").val()
-    // 	,	ZipCode: $("#supplyZipCode").val()
-    // 	,	address: $("#supplyAddress").val()
-    // 	,	detailAddress: $("#supplyDetailAddress").val()
-    // 	,	supplyLoginID: $("#supplyLoginID").val()
-    // 	,	password: $("#password").val()
-    // 	,	groupCode: $("#groupCode").val()
-    // 	,	tradeState	: $("input[name='TradeState']:checked").val()
-    // }
 
     const saveRequest: ISupplierSaveDetailRequestDto = {
         toSaveRequestDto: {
@@ -156,14 +132,10 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 
         const request = toSaveRequestDto(saveDetail);
 
-        console.log("---보내기 직전");
-        console.log(request);
-        console.log("---보내기 직전");
-
         const res: ISaveSupplyDetailRespose = await postSaveSupplyDetail(SupplierInfo.saveSupplyDetail, request);
 
         if (res.result === "success") {
-            alert("정보 삽입에 성공하였습니다.");
+            alert("등록이 완료되었습니다.");
             window.location.href = "/react/management/supplier-info";
         } else {
             alert("잠시후 다시 시도해주세요");
@@ -173,14 +145,10 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 
     const toSaveRequestDto = (saveDetail): ISupplierInfoSaveDetailDto => {
         for (var key in saveDetail) {
-            //	console.log(`key:  ${key} `)
             if (key === "phone") {
                 saveRequest.toSaveRequestDto[key] = phRef.current;
-                //alert("ref"+request.toRequestDto[key])
             } else {
-                // let changeKey = keyChange(key);
                 saveRequest.toSaveRequestDto[key] = saveDetail[key];
-                //console.log(`key:${key}   변형된 key: ${changeKey} \n  toRequestDto 의 value: ${request.toSaveRequestDto[key]} supDetail 의 valye: ${saveDetail[key]}`)
             }
         }
 
@@ -244,9 +212,6 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 
     //아이디 중복체크
     const goIdDuplicCheckFnc = async () => {
-        //var param = {"loginID" : $("#supplyLoginID").val()};
-        //saveDetail.supplyLoginID
-
         const res: number = await idDuplicCheck(SupplierInfo.idDuplicCheck, { loginID: saveDetail.supplyLoginID });
 
         console.log(res);
@@ -261,7 +226,6 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
     };
 
     const phoneValidateInput = (value: string): boolean => {
-        //alert(value)
         // 하이픈을 제외한 숫자만 추출
         const cleanPhoneNumber = value.replace(/\D/g, "");
 
@@ -275,8 +239,6 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 
         // 하이픈 포함 전화번호 형식이 맞는지 체크
         const phoneRegex = /^(01[0-9])-(\d{3,4})-(\d{4})$/;
-
-        //console.log("전화번호:  "+formattedPhoneNumber)
 
         const box = { ...saveDetail };
         box.phone = formattedPhoneNumber;
@@ -438,7 +400,6 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
             const keyWithoutDash = key.replace(/_/g, ""); // 모든 "-"를 제거
             //console.log(keyWithoutDash)
             if (keyWithoutDash.slice(0, 3).includes(str.slice(0, 3))) {
-                //console.log(`리퀘스트 키 ${keyWithoutDash.slice(0, 3)}   대상key ${str.slice(0, 3)}   시작여부 ${keyWithoutDash.slice(0, 3).includes(str.slice(0, 3))}`)
                 return key;
             }
         }
@@ -446,16 +407,11 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
 
     const toRequestDto = (supDetail): ISupplierInfoDetailDto => {
         for (var key in supDetail) {
-            //	console.log(`key:  ${key} `)
             if (key === "phone") {
                 request.toRequestDto[key] = phRef.current;
-                //alert("ref"+request.toRequestDto[key])
             } else {
                 let changeKey = keyChange(key);
                 request.toRequestDto[changeKey] = supDetail[key];
-                console.log(
-                    `key:${key}   변형된 key: ${changeKey} \n  toRequestDto 의 value: ${request.toRequestDto[key]} supDetail 의 valye: ${supDetail[key]}`
-                );
             }
         }
 
@@ -467,21 +423,18 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
             oncomplete: function (data: any) {
                 let address = data.roadAddress; // 도로명 주소
                 if (!address) address = data.jibunAddress; // 지번 주소
-                // console.log("우편번호: " + data.zonecode);
-                // console.log("주소: " + address);
+
                 let box;
                 if (detailModal) {
                     box = { ...supDetail };
                     box.zipCode = data.zonecode;
                     box.address = address;
-                    alert(box.zipCode);
                     setSupDetail(box);
                     setIsPostcodeOpen(false);
                 } else {
                     box = { ...saveDetail };
                     box.zipCode = data.zonecode;
                     box.address = address;
-                    alert(box.zipCode);
                     setSaveDetail(box);
                     setIsPostcodeOpen(false);
                 }
@@ -492,8 +445,7 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
     const handleAddressSelect = (data: any) => {
         let address = data.roadAddress; // 도로명 주소
         if (!address) address = data.jibunAddress; // 지번 주소
-        // console.log("우편번호: " + data.zonecode);
-        // console.log("주소: " + address);
+
         let box;
         if (detailModal) {
             box = { ...supDetail };
@@ -592,42 +544,7 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                             ) : (
                                 <></>
                             )}
-                            {/* 아이디 관련 tr 태그는 DB수정중으로 주석처리하고 최종 회의후 삭제결정할것이다. */}
-                            {/* <tr>
-                                <th scope='row'>
-                                    아이디<span className='font_red'>*</span>
-                                </th>
-                                <td colSpan={2}>
-                                    {supDetail ? (
-                                        <StyledInput name='loginID' value={supDetail.loginID} readOnly></StyledInput>
-                                    ) : (
-                                        <StyledInput
-                                            type='text'
-                                            className='inputTxt p100'
-                                            name='supplyLoginID'
-                                            id='supplyLoginID'
-                                            value={saveDetail.supplyLoginID}
-                                            onChange={handleSaveChange}
-                                            placeholder='숫자, 영문자 조합으로 6~20자리'
-                                        />
-                                    )}
-                                </td>
 
-                                {supDetail ? (
-                                    <></>
-                                ) : (
-                                    <>
-                                        <td colSpan={1}>
-                                            <StyledInput
-                                                type='button'
-                                                value='중복확인'
-                                                id='IdCheckBtn'
-                                                onClick={goIdDuplicCheckFnc}
-                                            />
-                                        </td>
-                                    </>
-                                )}
-                            </tr> */}
                             <tr id=''>
                                 <th scope='row'>
                                     납품업체명<span className='font_red'>*</span>
@@ -681,12 +598,6 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                                     담당자 연락처<span className='font_red'>*</span>
                                 </th>
                                 <td colSpan={3}>
-                                    {/* 주의 사항 프론트에선 supplyPhone 네임으로 보내야한다. 허나 코드가 꼬이니
-									axio 요청전 supplyName 으로 보내면 된다 이런게 몇개들이 있으니 주의
-								<input type="text" className="inputTxt p100" name="supplyPhone" id="supplyPhone" placeholder="숫자만 입력 가능합니다."
-								/>
-								*/}
-
                                     {supDetail ? (
                                         <StyledInput
                                             size='modal'
@@ -712,10 +623,6 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                                     우편번호<span className='font_red'>*</span>
                                 </th>
                                 <td colSpan={2}>
-                                    {/* 서버로 보낼시 name=zipCode 
-								<input type="text" className="inputTxt p100"name="supplyZipCode" id="supplyZipCode" readOnly />
-								*/}
-
                                     {supDetail ? (
                                         <StyledInput name='ZipCode' value={supDetail.zipCode} readOnly></StyledInput>
                                     ) : (
@@ -737,10 +644,6 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                                     주소<span className='font_red'>*</span>
                                 </th>
                                 <td colSpan={3}>
-                                    {/* 서버로 보낼시 name=supplyAddress 
-									<input type="text" className="inputTxt p100" name="supplyAddress" id="supplyAddress" readOnly />
-								*/}
-
                                     {supDetail ? (
                                         <StyledInput
                                             size='modal'
@@ -763,10 +666,6 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                             <tr>
                                 <th scope='row'>상세주소</th>
                                 <td colSpan={3}>
-                                    {/* 서버로 보낼시 name=supplyDetailAddress 
-										<input type="text" className="inputTxt p100" name="supplyDetailAddress" id="supplyDetailAddress" />
-								*/}
-
                                     {supDetail ? (
                                         <StyledInput
                                             size='modal'
@@ -780,38 +679,11 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                                 </td>
                             </tr>
 
-                            {/* 패스워드 tr 태그 부분은 역시 최종 회의후 삭제를 결정할 것으로 잠시 주석처리한다. */}
-                            {/* <tr>
-                                <th scope='row'>
-                                    패스워드<span className='font_red'>*</span>
-                                </th>
-                                <td colSpan={3}>
-                                    {supDetail ? (
-                                        <StyledInput
-                                            size='modal'
-                                            name='password'
-                                            type='password'
-                                            value={supDetail.password}
-                                            readOnly
-                                        ></StyledInput>
-                                    ) : (
-                                        <StyledInput
-                                            size='modal'
-                                            type='text'
-                                            name='password'
-                                            id='supplyLoginID'
-                                            value={saveDetail.password}
-                                            onChange={handleSaveChange}
-                                        />
-                                    )}
-                                </td>
-                            </tr> */}
                             <tr>
                                 <th scope='row'>
                                     거래상태 <span className='font_red'>*</span>
                                 </th>
                                 <td colSpan={3}>
-                                    {/* 서버로 보낼시는 TradeState  */}
                                     {supDetail ? (
                                         <>
                                             <label>

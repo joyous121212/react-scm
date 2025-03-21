@@ -15,6 +15,7 @@ type IJoinPostResponse = number;
 export const JoinModal = () => {
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [modalflag, setModalflag] = useState(true);
+    const [isValid, setIsValid] = useState(true);
 
     const [formData, setFormData] = useState<IJoinFormData>({
         action: "I",
@@ -64,6 +65,11 @@ export const JoinModal = () => {
             }, 330);
         }
     };
+    const alertAndFocus = (msg: string, flag: number, index: number) => {
+        Swal.fire(msg, "", flag === 0 ? "warning" : "success").then((result) => {
+            focusInput(index);
+        });
+    };
 
     useEffect(() => {
         if (inputRefs.current[0]) {
@@ -105,12 +111,6 @@ export const JoinModal = () => {
         return true; // 모든 필드가 채워져 있으면 true 반환
     };
 
-    const alertAndFocus = (msg: string, flag: number, index: number) => {
-        Swal.fire(msg, "", flag === 0 ? "warning" : "success").then((result) => {
-            focusInput(index);
-        });
-    };
-
     const loginIdCheck = async (e) => {
         e.preventDefault();
         const idRules = /^[a-z0-9]{6,20}$/g;
@@ -127,7 +127,7 @@ export const JoinModal = () => {
 
         const result = await deliveryPostApi(login.checkLoginId, data);
         if (result === 1) {
-            alertAndFocus("ID는 숫자, 영문자 조합으로 6~20자리를 사용해야 합니다.", 0, 0);
+            alertAndFocus("중복된 아이디 입니다!", 0, 0);
         } else {
             alertAndFocus("사용할 수 있는 아이디입니다.", 1, 1);
             setCkIdcheckreg(1);
@@ -230,7 +230,6 @@ export const JoinModal = () => {
             const param = params.toString();
             axios.post("registerScm.do", param);
 
-            alert("회원가입 완료");
             Swal.fire("회원가입 완료", "", "success");
             closeModalWithDelay();
 
@@ -296,6 +295,9 @@ export const JoinModal = () => {
                                                 size='password'
                                                 ref={addInputRef}
                                             />
+                                            <span style={{ fontSize: "70%", color: "red", marginLeft: "10px" }}>
+                                                {isValid ? <></> : "형식을 확인해 주세요!"}
+                                            </span>
                                         </td>
                                     </tr>
 
@@ -305,6 +307,7 @@ export const JoinModal = () => {
                                         </th>
                                         <td colSpan={4}>
                                             <StyledInput
+                                                id='pwd1'
                                                 type='password'
                                                 name='password1'
                                                 placeholder='숫자, 영문자, 특수문자 조합으로 8~15자리'

@@ -43,7 +43,6 @@ export const SupplierInfoSearch = () => {
                 >
                     등록
                 </StyledButton>
-                {/* <StyledButton onClick={handlerModal}>등록</StyledButton> */}
             </CommonCodeSearchStyled>
 
             {modal && (
