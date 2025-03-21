@@ -19,7 +19,7 @@ export const CartMain= () => {
     
     const columns = [
         { key: "select", title: (<><input type="checkbox" 
-                                        onClick={(e) => {selectAll((e.target as HTMLInputElement).checked)}}
+                                        onChange={(e) => {selectAll((e.target as HTMLInputElement).checked)}}
                                         checked={selectedRows.length === cartList.length && cartList.length > 0}></input> 선택 </>) },
         { key: "image", title: "제품사진"},
         { key: "name", title: "제품명"},
@@ -143,9 +143,11 @@ export const CartMain= () => {
         if (checked) {
             const allIds = cartList.map(item => item.cartDetail.cartdetailId);
             setSelectedRows(allIds);
+            setCartdetailIdList(allIds);
             calculateSelectedPrice(allIds, cartList);
         } else {
             setSelectedRows([]);
+            setCartdetailIdList([]);
             calculateSelectedPrice([], cartList);
         }
     }
