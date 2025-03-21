@@ -31,7 +31,7 @@ export const CartMain= () => {
     ] as Column<ICart>[];
 
     useEffect(() => {
-        searchCart();
+        searchCart();        
     }, []);
 
     const searchCart = async (currentPage?: number) => {   
@@ -88,8 +88,13 @@ export const CartMain= () => {
         } else {
             const result = await postApi(Cart.deleteCartDetail, { cartdetailId });
             if (result.result === "success") {
-                alert("삭제되었습니다.");
-                postSuccess();
+                Swal.fire({
+                    icon: "success",
+                    title: "삭제 완료",
+                    confirmButtonText: "확인",
+                }).then(() => {
+                    postSuccess(); // 승인 후 실행할 함수
+                });
             }
         }        
     };
@@ -152,6 +157,35 @@ export const CartMain= () => {
         }
     }
 
+    const selectDelete = async(cartdetailIdList) => {
+        console.log(cartdetailIdList);
+        const confirm = await Swal.fire({
+            icon: "question",
+            title: "알람",
+            text: "삭제하시겠습니까?",
+            showCancelButton: true, // cancel 버튼 보이기
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "예",
+            cancelButtonText: "아니오",
+        });        
+        
+        if(!confirm.isConfirmed) {
+            return;
+        } else {
+            const result = await postApi(Cart.deleteCartDetail, { cartdetailIdList });
+            if (result.result === "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "삭제 완료",
+                    confirmButtonText: "확인",
+                }).then(() => {
+                    postSuccess(); // 승인 후 실행할 함수
+                });
+            }
+        }  
+    }
+
     return (
         <CartMainStyled>
             <StyledTable
@@ -200,6 +234,10 @@ export const CartMain= () => {
                     </StyledButton>
                 )}
             />
+            <div className="divAllCancel">
+                <StyledButton variant="danger" onClick={() => selectDelete(cartdetailIdList)}>선택삭제</StyledButton>
+            </div>
+            
 
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end"}}>
                 <h3>장바구니 총액</h3>  
