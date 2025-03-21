@@ -104,7 +104,18 @@ export const ShoppingOrdersMain = () => {
                             switch (row.salesState) {
                                 case "ordering":
                                     return row.totalQuantity < row.count ? (
-                                        <span style={{ color: "green", fontWeight: "bold" }}>발주 처리</span>
+                                        <div className="orderButton">
+                                           
+                                            <StyledButton
+                                                size='small'
+                                                variant='danger'
+                                                onClick={() =>
+                                                    handlerOrderModal(row.orderId, row.count - row.totalQuantity)
+                                                }
+                                            >
+                                                재발주
+                                            </StyledButton>
+                                        </div>
                                     ) : null;
 
                                 case "salesRequest":

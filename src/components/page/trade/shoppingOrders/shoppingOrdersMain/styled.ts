@@ -7,6 +7,12 @@ export const ShoppingOrdersMainStyled = styled.div`
         margin: 25px 0;
     }
 
+    .orderButton {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
     table,
     th,
     td {
@@ -17,7 +23,7 @@ export const ShoppingOrdersMainStyled = styled.div`
     td {
         padding: 13px;
         text-align: center;
-        font-size:12px;
+        font-size: 12px;
     }
 
     th {
