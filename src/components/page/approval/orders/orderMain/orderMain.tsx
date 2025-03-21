@@ -39,7 +39,7 @@ export const ApprovalOrderMain = () => {
                 title: "승인 완료",
                 confirmButtonText: "확인",
             }).then(() => {
-                searchApprovalOrder(); // 승인 후 실행할 함수
+                searchApprovalOrder();
             });
         }
     };
@@ -81,9 +81,8 @@ export const ApprovalOrderMain = () => {
                     )}
                     renderCell={(row, column) => {
                         if (column.key === "price") {
-                            // count * price 계산 후, 원단위로 포맷 (₩)
                             const totalPrice = row.count * row.price;
-                            return `${totalPrice.toLocaleString("ko-KR")}원`; // 한국 원화(KRW) 단위
+                            return `${totalPrice.toLocaleString("ko-KR")}원`;
                         }
                         return row[column.key as keyof IApprovalOrder];
                     }}

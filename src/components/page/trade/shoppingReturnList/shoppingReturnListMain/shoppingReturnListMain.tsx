@@ -46,8 +46,6 @@ export const ShoppingReturnListMain = () => {
         searchShoppingReturn();
     }, [searchKeyword]);
 
-    
-
     const searchShoppingReturn = async (currentPage?: number) => {
         currentPage = currentPage || 1;
         setIsLoading(true);
@@ -92,16 +90,14 @@ export const ShoppingReturnListMain = () => {
                     columns={columns}
                     onRowClick={(row) => {
                         handlerModal(row.refundId);
-                    }} // ✅ 특정 테이블에서만 실행!
+                    }}
                     renderCell={(row, column) => {
                         if (column.key === "totalPrice") {
-                            return `${row.totalPrice.toLocaleString("ko-KR")}원`; // 숫자를 통화 형식으로 변환
+                            return `${row.totalPrice.toLocaleString("ko-KR")}원`;
                         } else if (column.key === "isApproved") {
                             let approvalStatusText = "";
 
-                            switch (
-                                row.isApproved // isApproved 값에 따라 변환
-                            ) {
+                            switch (row.isApproved) {
                                 case 0:
                                     approvalStatusText = "SCM 승인 대기중";
                                     break;
@@ -115,13 +111,13 @@ export const ShoppingReturnListMain = () => {
                                     approvalStatusText = "창고 이동 완료";
                                     break;
                                 default:
-                                    approvalStatusText = "알 수 없는 상태"; // 예외 처리
+                                    approvalStatusText = "알 수 없는 상태";
                             }
 
                             return approvalStatusText;
                         }
 
-                        return row[column.key as keyof IShoppingReturn]; // 기본 값 반환
+                        return row[column.key as keyof IShoppingReturn];
                     }}
                 />
             )}

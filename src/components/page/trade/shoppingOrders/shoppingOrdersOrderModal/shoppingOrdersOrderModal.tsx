@@ -44,14 +44,13 @@ export const ShoppingOrdersOrderModal: FC<IShoppingOrderModalProps> = ({
             icon: "question",
             title: "알람",
             text: "발주 요청하시겠습니까?",
-            showCancelButton: true, // cancel 버튼 보이기
+            showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "예",
             cancelButtonText: "아니오",
         });
 
-        // 사용자가 "예"를 눌렀을 경우 API 호출
         if (result.isConfirmed) {
             const response = await postApi(ShoppingOrders.saveOrders, {
                 orderId: shoppingOrderId,
@@ -97,7 +96,7 @@ export const ShoppingOrdersOrderModal: FC<IShoppingOrderModalProps> = ({
                                     size='modal'
                                     type='number'
                                     value={orderCount}
-                                    min={minimumOrderCount} // ✅ 브라우저에서 최소값 제한
+                                    min={minimumOrderCount}
                                     onChange={(e) => {
                                         const newValue = Math.max(minimumOrderCount, Number(e.target.value)); // ✅ 최소값 이하로 입력되지 않도록 제한
                                         setOrderCount(newValue);
