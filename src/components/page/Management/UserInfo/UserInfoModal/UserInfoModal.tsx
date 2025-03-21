@@ -107,7 +107,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
         password1: "비밀번호가 일치하지 않습니다.",
         userTel1: "전화번호 앞자리 형식이 옳바르지 안습니다. \n ex:010, 031, 019",
         userTel2: "전화번호 중간자리 형식이 옳바르지 안습니다. \n ex:3자리에서 4자리",
-        userTel3: "전화번호 마지막자리 형식이 옳바르지 안습니다. \n ex:3자리에서 4자리",
+        userTel3: "전화번호 마지막자리 형식이 옳바르지 안습니다. \n ex:4자리",
     };
 
     const emptyValiMessage = {
@@ -592,7 +592,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
             isValid = tell2?.length >= 3 && tell2?.length <= 4 && /^[0-9]{3,4}$/.test(tell2);
         }
         if (name === "userTel3") {
-            isValid = tell3?.length >= 3 && tell3?.length <= 4 && /^[0-9]{3,4}$/.test(tell3);
+            isValid = tell3?.length === 4 && /^[0-9]{4}$/.test(tell3);
         }
         if (isValid) {
             return true;

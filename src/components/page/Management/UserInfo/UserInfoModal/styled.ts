@@ -11,6 +11,11 @@ export const UserInfoModalStyle = styled.div`
     z-index: 10;
     font-weight: bold;
 
+    img {
+        width: 180px;
+        height: 180px;
+    }
+
     .container {
         background: white;
         padding: 20px;

@@ -163,7 +163,7 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
         const res: ISaveSupplyDetailRespose = await postSaveSupplyDetail(SupplierInfo.saveSupplyDetail, request);
 
         if (res.result === "success") {
-            alert("정보 삽입에 성공하였습니다.");
+            alert("등록이 완료되었습니다.");
             window.location.href = "/react/management/supplier-info";
         } else {
             alert("잠시후 다시 시도해주세요");
@@ -474,14 +474,12 @@ export const SupplierInfoModal: FC<SupplierDetailInfoModalProps> = ({ supplyId }
                     box = { ...supDetail };
                     box.zipCode = data.zonecode;
                     box.address = address;
-                    alert(box.zipCode);
                     setSupDetail(box);
                     setIsPostcodeOpen(false);
                 } else {
                     box = { ...saveDetail };
                     box.zipCode = data.zonecode;
                     box.address = address;
-                    alert(box.zipCode);
                     setSaveDetail(box);
                     setIsPostcodeOpen(false);
                 }
