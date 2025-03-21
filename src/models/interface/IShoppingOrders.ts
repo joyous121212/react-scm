@@ -14,6 +14,7 @@ export interface IShoppingOrder {
     returnsDate: string;
     salesDate: string;
     salesState: string;
+    orderingState: string;
     sellPrice: number;
     totalPrice: number;
     totalQuantity: number;
@@ -81,7 +82,7 @@ export interface IWarehouseValue {
 }
 
 export interface IWarehouseList {
-    warehouseId:number;
+    warehouseId: number;
     warehouseName: string;
     totalProductStock: number;
     orderCount: number;

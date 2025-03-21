@@ -85,6 +85,8 @@ export const ShoppingOrdersMain = () => {
         searchShoppingOrders();
     };
 
+    const renderOrderButton = () => {};
+
     return (
         <ShoppingOrdersMainStyled>
             {isLoading ? (
@@ -103,20 +105,25 @@ export const ShoppingOrdersMain = () => {
                         if (column.key === "orderActions") {
                             switch (row.salesState) {
                                 case "ordering":
-                                    return row.totalQuantity < row.count ? (
-                                        <div className="orderButton">
-                                           
+                                    if (!row.requestsReturnDate && row.orderingState !== "return") {
+                                        return row.totalQuantity < row.count ? (
+                                            <div className='orderButton'>
+                                                <span style={{ color: "green", fontWeight: "bold" }}>발주 처리</span>
+                                            </div>
+                                        ) : null;
+                                    } else {
+                                        return (
                                             <StyledButton
                                                 size='small'
-                                                variant='danger'
+                                                variant='secondary'
                                                 onClick={() =>
                                                     handlerOrderModal(row.orderId, row.count - row.totalQuantity)
                                                 }
                                             >
-                                                재발주
+                                                발주
                                             </StyledButton>
-                                        </div>
-                                    ) : null;
+                                        );
+                                    }
 
                                 case "salesRequest":
                                     return row.totalQuantity < row.count ? (
