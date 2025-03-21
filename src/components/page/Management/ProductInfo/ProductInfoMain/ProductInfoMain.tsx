@@ -29,7 +29,6 @@ export const ProductInfoMain = () => {
         { key: "name", title: "제품명" },
         { key: "supplier", title: "납품업체" },
         { key: "sellPrice", title: "판매가" },
-        //new Intl.NumberFormat().format(productDetail.sellPrice) + " 원"
     ] as Column<any>[];
     async function initFnc(currentPage?: number) {
         currentPage = currentPage || 1;
@@ -70,7 +69,6 @@ export const ProductInfoMain = () => {
                         setUpdateModal(!updateModal);
                     }}
                     renderCell={(row, column) => {
-                        // 여기서 renderCell이 존재하면 우선적으로 실행됨.
                         if (column.key === "sellPrice") {
                             console.log(`키명: ${column.key}  값  ${row.statusYn}`);
                             // statusYn은 renderStatusYn을 사용하여 변환

@@ -87,7 +87,7 @@ export const InquiryCUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
             fileCategory: "",
             fileTitle: "",
             fileContent: "",
-            // fileAnsContent  주석처리 => 가짜로 넘어오는 데이터인듯 myBtais 리턴이 모델이엿다, List<Map> 이였다하니 죽것네 fileAnsContent:
+
             fileInput: null,
             empty: "empty",
         };
@@ -106,7 +106,6 @@ export const InquiryCUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
         let box = { ...detailValue };
         box = requestUpdateDTO;
         setDetailValue(box);
-        // setFileValue();
     }
 
     const handlerFile = (e: ChangeEvent<HTMLInputElement>) => {
@@ -139,12 +138,7 @@ export const InquiryCUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
         event.preventDefault(); // 폼 제출 시 페이지 새로고침 방지
 
         if (formRef.current) {
-            const formData = new FormData(formRef.current); // FormData 객체를 생성
-
-            // key-value 값을 로그로 찍기
-            formData.forEach((value, key) => {
-                console.log(`${key}: ${value}`);
-            });
+            const formData = new FormData(formRef.current);
         }
     };
 
@@ -451,7 +445,7 @@ export const InquiryCUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
                                     <td colSpan={3}>
                                         {imageUrl ? (
                                             <div>
-                                                <img src={imageUrl} style={{ maxWidth: "600px", maxHeight: "700px" }} />
+                                                <img src={imageUrl} style={{ maxWidth: "500px", maxHeight: "300px" }} />
                                                 {fileName}
                                             </div>
                                         ) : (
@@ -496,7 +490,6 @@ export const InquiryCUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
                         </ManageMentStyledButton>
                     </ManageMentWrapperButtonStyle>
                 </div>
-                {/* <button onClick={handleSubmit}>데이터테스트</button> */}
             </UserInfoModalStyle>
         </>
     );

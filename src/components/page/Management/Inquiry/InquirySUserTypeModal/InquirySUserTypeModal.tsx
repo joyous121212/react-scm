@@ -48,14 +48,13 @@ export const InquirySUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
     const [ansContent, setAnsContent] = useState(null);
     const authoRef = useRef<String>();
     const createdDateRef = useRef<String>();
-    //이12","author":"biz01","createdDate":"2
 
     const [detailValue, setDetailValue] = useState<IInsertInquiryReqDTO>({
         inquiryId: null,
         fileCategory: "",
         fileTitle: "",
         fileContent: "",
-        // fileAnsContent  주석처리 => 가짜로 넘어오는 데이터인듯 myBtais 리턴이 모델이엿다, List<Map> 이였다하니 죽것네 fileAnsContent:
+
         fileInput: null,
         empty: "empty",
     });
@@ -67,7 +66,7 @@ export const InquirySUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
         fileCategory: "",
         fileTitle: "",
         fileContent: "",
-        // fileAnsContent  주석처리 => 가짜로 넘어오는 데이터인듯 myBtais 리턴이 모델이엿다, List<Map> 이였다하니 죽것네 fileAnsContent:
+
         fileInput: null,
         empty: "empty",
     };
@@ -86,7 +85,7 @@ export const InquirySUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
             fileCategory: "",
             fileTitle: "",
             fileContent: "",
-            // fileAnsContent  주석처리 => 가짜로 넘어오는 데이터인듯 myBtais 리턴이 모델이엿다, List<Map> 이였다하니 죽것네 fileAnsContent:
+
             fileInput: null,
             empty: "empty",
         };
@@ -108,7 +107,6 @@ export const InquirySUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
         let box = { ...detailValue };
         box = requestUpdateDTO;
         setDetailValue(box);
-        // setFileValue();
     }
 
     const goInquiryInsert = async () => {
@@ -299,7 +297,6 @@ export const InquirySUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
                                             style={{ display: "none" }}
                                             name='file'
                                             readOnly
-                                            // onChange={inquiryId != undefined ? handlerUpdateFile : handlerFile}
                                         ></StyledInput>
                                         {imageUrl != null ? (
                                             <>
@@ -317,7 +314,7 @@ export const InquirySUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
                                     <td colSpan={3}>
                                         {imageUrl ? (
                                             <div>
-                                                <img src={imageUrl} style={{ maxWidth: "600px", maxHeight: "700px" }} />
+                                                <img src={imageUrl} style={{ maxWidth: "500px", maxHeight: "300px" }} />
                                                 {fileName}
                                             </div>
                                         ) : (
