@@ -54,7 +54,6 @@ export const StyledTable = <T extends { [key: string]: any }>({
         const isSameRow = selectedRow === index;
         setSelectedRow(isSameRow ? null : index);
 
-        // ✅ 다음 프레임에서 `setSelectRow` 실행
         setSelectRow(!isSameRow);
         onRowClick?.(row);
     };
@@ -101,7 +100,7 @@ export const StyledTable = <T extends { [key: string]: any }>({
                 ) : (
                     <Tr>
                         <Td colSpan={columns.length}>
-                            {renderNoData ? renderNoData() : <img src={noData} alt="noData" />}
+                            {renderNoData ? renderNoData() : <img src={noData} alt='noData' />}
                         </Td>
                     </Tr>
                 )}

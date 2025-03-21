@@ -21,18 +21,16 @@ export const ShoppingReturnListSearch = () => {
             searchKeyword: inputValue,
         });
     };
-    // selectValue가 변경될 때 input 값 초기화
+
     const handleSelectChange = (newValue: string) => {
         setSelectValue(newValue);
-        setInputValue(""); // 기존 입력값 초기화
+        setInputValue("");
     };
 
     return (
         <ShoppingReturnListSearchStyled>
-            {/* Select Box */}
             <StyledSelectBox options={options} value={selectValue} onChange={handleSelectChange} />
 
-            {/* Input 필드 변경 */}
             {selectValue === "searchReturnDate" ? (
                 <StyledInput
                     size='search'
@@ -49,7 +47,6 @@ export const ShoppingReturnListSearch = () => {
                 />
             )}
 
-            {/* 검색 버튼 */}
             <StyledButton variant='secondary' onClick={handlerSearch}>
                 검색
             </StyledButton>

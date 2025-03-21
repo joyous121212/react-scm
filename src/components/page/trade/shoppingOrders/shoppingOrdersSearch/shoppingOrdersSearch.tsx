@@ -25,11 +25,10 @@ export const ShoppingOrdersSearch = () => {
 
     return (
         <ShoppingOrdersStyled>
-            {/* Select Box */}
             <StyledSelectBox options={options} value={selectValue} onChange={setSelectValue} />
-            {/* Input 필드 변경 */}
-            <StyledInput size='search' ref={inputValue} type='date'/>
-            {/* 검색 버튼 */}
+
+            <StyledInput size='search' ref={inputValue} type='date' />
+
             <StyledButton variant='secondary' onClick={handlerSearch}>
                 검색
             </StyledButton>

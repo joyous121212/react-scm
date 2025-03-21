@@ -26,18 +26,18 @@ export const ShoppingOrdersMain = () => {
     const [shoppingOrdersId, setShoppingOrdersId] = useState<number>(0);
 
     const columns = [
-        { key: "orderId", title: "주문번호" }, // 6.15%
-        { key: "salesDate", title: "주문일자" }, // 9.23%
-        { key: "customerName", title: "고객기업명" }, // 9.23%
-        { key: "productName", title: "주문제품명" }, // 10%
-        { key: "totalQuantity", title: "총재고개수" }, // 8.46%
-        { key: "sellPrice", title: "단가" }, // 8.46%
-        { key: "count", title: "주문개수" }, // 8.46%
-        { key: "totalPrice", title: "금액 합계" }, // 9.23%
-        { key: "requestsReturnDate", title: "반품 요청 여부" }, // 8.46%
-        { key: "returnsDate", title: "반품 처리 일자" }, // 8.46%
-        { key: "deliveryActions", title: "배송 지시서" }, // 8.46%
-        { key: "orderActions", title: "발주 지시서" }, // 8.46%
+        { key: "orderId", title: "주문번호" },
+        { key: "salesDate", title: "주문일자" },
+        { key: "customerName", title: "고객기업명" },
+        { key: "productName", title: "주문제품명" },
+        { key: "totalQuantity", title: "총재고개수" },
+        { key: "sellPrice", title: "단가" },
+        { key: "count", title: "주문개수" },
+        { key: "totalPrice", title: "금액 합계" },
+        { key: "requestsReturnDate", title: "반품 요청 여부" },
+        { key: "returnsDate", title: "반품 처리 일자" },
+        { key: "deliveryActions", title: "배송 지시서" },
+        { key: "orderActions", title: "발주 지시서" },
     ] as Column<IShoppingOrder>[];
 
     useEffect(() => {
@@ -63,7 +63,7 @@ export const ShoppingOrdersMain = () => {
         } catch (error) {
             console.error("Error fetching shopping orders:", error);
         } finally {
-            setIsLoading(false); // ✅ 로딩 완료
+            setIsLoading(false);
         }
     };
 
@@ -84,8 +84,6 @@ export const ShoppingOrdersMain = () => {
         setShoppingOrdersModal(!shoppingOrdersModal);
         searchShoppingOrders();
     };
-
-    const renderOrderButton = () => {};
 
     return (
         <ShoppingOrdersMainStyled>
@@ -139,7 +137,7 @@ export const ShoppingOrdersMain = () => {
                                     ) : null;
 
                                 default:
-                                    return null; // ✅ 모든 경우에서 null 반환하여 ESLint 오류 방지
+                                    return null;
                             }
                         }
 
@@ -166,7 +164,7 @@ export const ShoppingOrdersMain = () => {
                                     return <span style={{ color: "green", fontWeight: "bold" }}>배송완료</span>;
 
                                 default:
-                                    return null; // ✅ 모든 경우에서 null 반환하여 ESLint 오류 방지
+                                    return null;
                             }
                         }
 
@@ -181,22 +179,20 @@ export const ShoppingOrdersMain = () => {
                 itemsCountPerPage={5}
                 activePage={cPage}
             />
-            {
-                shoppingOrdersModal &&
-                    (modalStatus === "order" ? (
-                        <Portal>
-                            <ShoppingOrdersOrderModal
-                                shoppingOrderId={shoppingOrdersId}
-                                postSuccess={postSuccess}
-                                minimumOrderCount={minimumOrderCount}
-                            />
-                        </Portal>
-                    ) : modalStatus === "delivery" ? (
-                        <Portal>
-                            <ShoppingOrdersDeliveryModal shoppingOrderId={shoppingOrdersId} postSuccess={postSuccess} />
-                        </Portal>
-                    ) : null) // ✅ "order" 또는 "delivery"가 아니면 아무것도 렌더링하지 않음
-            }
+            {shoppingOrdersModal &&
+                (modalStatus === "order" ? (
+                    <Portal>
+                        <ShoppingOrdersOrderModal
+                            shoppingOrderId={shoppingOrdersId}
+                            postSuccess={postSuccess}
+                            minimumOrderCount={minimumOrderCount}
+                        />
+                    </Portal>
+                ) : modalStatus === "delivery" ? (
+                    <Portal>
+                        <ShoppingOrdersDeliveryModal shoppingOrderId={shoppingOrdersId} postSuccess={postSuccess} />
+                    </Portal>
+                ) : null)}
         </ShoppingOrdersMainStyled>
     );
 };
