@@ -64,6 +64,10 @@ export const CartMainStyled = styled.div`
 		float: right;
 	}
 
+    .divAllCancel {
+        
+    }
+
 `;
 
 const HorizonLine = styled.div`
