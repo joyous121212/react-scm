@@ -25,6 +25,7 @@ export const HistoryDetailMain = () => {
     const [count, setCount] = useState<number>(0);
     const [modal, setModal] = useRecoilState(modalState);
     const [selectedOrders, setSelectedOrders] = useState<number[]>([]);
+    const [orderedCount, setOrderedCount] = useState<number>(0);
     
 
     useEffect(() => {
@@ -134,6 +135,15 @@ export const HistoryDetailMain = () => {
             });
             return;
         }
+
+        if (count > orderedCount) {
+            Swal.fire({
+                icon: "warning",
+                title: "반품 수량은 주문 수량을 초과할 수 없습니다.",
+                confirmButtonText: "확인",
+            });
+            return;
+        }
         setModal(!modal);
     } 
 
@@ -214,6 +224,10 @@ export const HistoryDetailMain = () => {
 
                     if (column.key === "price") {
                         return `${row.price.toLocaleString("ko-KR")}원`;
+                    }
+
+                    if (column.key === "count") {                        
+                        setOrderedCount(row.count);
                     }
                     return row[column.key as keyof IHistoryDetailList];
                 }}
