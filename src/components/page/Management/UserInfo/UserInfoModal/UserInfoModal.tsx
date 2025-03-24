@@ -380,7 +380,7 @@ export const UserInfoModal: FC<UserDetailInfoModalProps> = ({ isdetail, LoginId 
             box.loginID = "";
             setUserData(box);
             alert("이미 사용중인 아이디 입니다.");
-            setErrorMessage("이미 사용중인 아이디 입니다.");
+            // setErrorMessage("이미 사용중인 아이디 입니다.");
         }
 
         //false로 해야 아디 또 적을시 이함수가 실행됨

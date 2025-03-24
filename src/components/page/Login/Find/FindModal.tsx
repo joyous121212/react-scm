@@ -1,5 +1,5 @@
 import { useRecoilState } from "recoil";
-import { findModalState } from "../../../../stores/modalState";
+import { modalState } from "../../../../stores/modalState";
 import { useEffect, useRef, useState } from "react";
 import { JoinStyled } from "../Join/styled";
 import { StyledInput } from "../../../common/StyledInput/StyledInput";
@@ -9,7 +9,7 @@ import { login } from "../../../../api/api";
 import { IFindFormData, IPostResponse } from "../../../../models/interface/IDelivery";
 
 export const FindModal = () => {
-    const [findModal, setFindModal] = useRecoilState<boolean>(findModalState);
+    const [findModal, setFindModal] = useRecoilState<boolean>(modalState);
     const [findFlag, setFindFlag] = useState<boolean>(true);
     const [emailSendPwd, setEmailSendPwd] = useState<boolean>(false);
     const [emailSendID, setEmailSendID] = useState<boolean>(false);

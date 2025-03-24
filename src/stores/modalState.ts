@@ -19,11 +19,6 @@ export const detailListModalState = atom<boolean>({
     default: false,
 });
 
-export const findModalState = atom<boolean>({
-    key: "findModalState",
-    default: false,
-});
-
 export const performanceState = atom<boolean>({
     key: "performanceState",
     default: false,
