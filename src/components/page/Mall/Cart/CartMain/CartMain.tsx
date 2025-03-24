@@ -93,7 +93,7 @@ export const CartMain= () => {
                     title: "삭제 완료",
                     confirmButtonText: "확인",
                 }).then(() => {
-                    postSuccess(); // 승인 후 실행할 함수
+                    postSuccess(); // 승인 후 실행할 함수                    
                 });
             }
         }        
@@ -101,6 +101,7 @@ export const CartMain= () => {
 
     const postSuccess = () => {
         searchCart();
+        setSelectedRows([]);
     };
 
     const order = async () => {
