@@ -192,6 +192,11 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
         return true;
     }
 
+    const getNumberOnly = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        const input = event.target as HTMLInputElement;
+        input.value = input.value.replace(/[^0-9]/g, '');
+    }
+
     return (
         <ProductsModalStyled>
             <div className="container">
@@ -211,7 +216,7 @@ export const ProductsModal: FC<IProductsModalProps> = ({productId, postSuccess, 
                                         <th>주문 수량<span className="font_red">*</span></th>
                                         <td>
                                             <StyledInput size="modal" name='count' type="text" placeholder='수량 입력 필수'
-                                                onChange={(e) => setCount(Number(e.target.value))}/>                                
+                                                onChange={(e) => setCount(Number(e.target.value))} onKeyUp={getNumberOnly}/>                                
                                         </td>
                                     </>
                                 )
