@@ -240,6 +240,7 @@ export const InquiryCUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
         const res: IInsertInquiryResponse = await postInquiryFileRemoveApi(InquiryInfo.inquiryFileRemove, {
             inquiryId: inquiryId,
         });
+
         if (res.result === "success") {
             alert("질문자의 등록 파일만을 삭제하였습니다.");
             PostRender(DefaultInquriySearch, setSearchKeyword);
@@ -425,9 +426,15 @@ export const InquiryCUserTypeModal: FC<IInquiryCUserTypeModalProps> = ({ inquiry
                                                 ></StyledInput>
                                                 {imageUrl != null ? (
                                                     <>
-                                                        <StyledButton onClick={deleteFile}>
-                                                            질문자 파일삭제
-                                                        </StyledButton>
+                                                        {inquiryId != undefined ? (
+                                                            <>
+                                                                <StyledButton type='button' onClick={deleteFile}>
+                                                                    질문자 파일삭제
+                                                                </StyledButton>
+                                                            </>
+                                                        ) : (
+                                                            <></>
+                                                        )}
                                                     </>
                                                 ) : (
                                                     <>
