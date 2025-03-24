@@ -82,10 +82,6 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
 
     const [categoryList, setCategoryList] = useState([]);
 
-    const [updateData, setUpData] = useState([]);
-
-    const [crudSuccess, setCrudSuccess] = useState(false);
-
     const { searchKeyword, setSearchKeyword } = useContext(ProductInfoContext);
 
     const updateRef = useRef<IUpdateRequestDto>({
@@ -133,8 +129,6 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
         setCategoryList(res3);
 
         const box = { ...insertProductDetail };
-        //  console.log(res2[0]);
-        // console.log(res3[0]);
         box.supplyId = res2[0].supplyId;
         box.categoryCode = res3[0].categoryCode;
         setInsertProductDetail(box);
@@ -150,15 +144,25 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
 
     useEffect(() => {
         console.log(productDetail);
-        setImageUrl(productDetail?.logicalPath);
+        if (productDetail?.logicalPath != null) {
+            setImageUrl(productDetail?.logicalPath);
+        }
     }, [productDetail]);
 
     const inserInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setInsertProductDetail((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+
+        if (productDetail != undefined) {
+            setProductDetail((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
+        } else {
+            setInsertProductDetail((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
+        }
     };
 
     const updateInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -211,13 +215,15 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
 
     const insertCateHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = e.target;
+        const category = value;
         const selectedOption = e.target.selectedOptions[0];
         const categoryCode = selectedOption?.getAttribute("data-categoryCode");
 
-        // alert(value);
+        console.log(`name: ${name}  value: ${value}`);
         setInsertProductDetail((prevData) => ({
             ...prevData,
-            categoryCode: value,
+            category: category,
+            categoryCode: categoryCode,
         }));
     };
 
@@ -266,11 +272,15 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
         if (res.result === "success") {
             alert("파일을 삭제 하였습니다.");
             setImageUrl(null);
+            setImageFile(null);
+            const box = { ...productDetail };
+            box.logicalPath = null;
+            setProductDetail(box);
         }
     };
 
     const goUpdate = async () => {
-        const formData = toRequestDto();
+        const formData = toFormData(productDetail);
         console.log(productDetail);
 
         if (!updateEmptyCheckFnc(formData)) {
@@ -294,39 +304,75 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
         }
     };
 
-    const toRequestDto = () => {
-        // updateRef의 값들을 FormData로 변환
-        const formData = new FormData();
-        updateRef.current.productId = productDetail.productId;
-        updateRef.current.name = productDetail.name;
-        updateRef.current.productNumber = productDetail.productNumber;
-        updateRef.current.sellPrice = productDetail.sellPrice;
-        updateRef.current.description = productDetail.description;
-        // updateRef.current.supplierName = productDetail.supplyId;
-        updateRef.current.category = productDetail.categoryCode;
-        updateRef.current.fileInput = imageFile;
-        updateRef.current.supplyId = productDetail.supplyId;
-        updateRef.current.categoryCode = productDetail.categoryCode;
-        updateRef.current.empty = "empty";
-        // updateRef에서 필요한 값들을 하나씩 추가합니다.
-        formData.append("productId", String(updateRef.current.productId));
-        formData.append("name", updateRef.current.name);
-        formData.append("productNumber", updateRef.current.productNumber);
-        formData.append("sellPrice", String(updateRef.current.sellPrice));
-        formData.append("description", updateRef.current.description);
-        formData.append("supplierName", String(updateRef.current.supplierName));
-        formData.append("category", updateRef.current.category);
-        formData.append("supplyId", String(updateRef.current.supplyId));
-        formData.append("categoryCode", updateRef.current.categoryCode);
-        formData.append("empty", updateRef.current.empty);
+    const goInsert = async () => {
+        if (!emptyCheckFnc()) {
+            return;
+        }
+        if (!valiCheckFnc()) {
+            return;
+        }
 
-        // 파일이 존재하면 FormData에 파일도 추가
+        const formData = toFormData(insertProductDetail);
+
+        const res: IPostResultMessageResponse = await postSaveProductInfoApi(ProductInfo.saveProductInfo, formData);
+
+        if (res.result === "success") {
+            alert("제품정보를 등록하였습니다.");
+            setModal(!modal);
+            setSearchKeyword({
+                currentPage: 1,
+                pageSize: 5,
+                searchKeyword: "",
+                searchOption: "searchAll",
+            });
+        }
+    };
+
+    const toFormData = <T extends Record<string, any>>(x: T): FormData => {
+        // updateRef의 값들을 FormData로 변환
+
+        const formData = new FormData();
+
+        // insertProductDetail의 값들을 FormData에 자동으로 추가
+        for (const [key, value] of Object.entries(x)) {
+            if (key === "sellPrice" || key === "supplyId") {
+                formData.append(key, String(value)); // 해당 값들을 문자열로 변환하여 추가
+            } else {
+                formData.append(key, value); // 그 외 값들은 그대로 추가
+            }
+        }
+
+        // fileInput이 존재하는 경우 파일을 FormData에 추가
         if (imageFile) {
             formData.append("file", imageFile); // file은 formData에 추가하는 키입니다.
         }
+        // FormData를 배열로 변환 후 출력
+        const formDataArray = Array.from(formData.entries());
 
-        // FormData 객체를 반환
+        formDataArray.forEach(([key, value]) => {
+            console.log(key, value);
+        });
+
         return formData;
+    };
+
+    const goDetateProduct = async () => {
+        const res: IPostResultMessageResponse = await postDeleteProductInfoApi(ProductInfo.deleteProductInfo, {
+            productId: productId,
+        });
+
+        if (res.result === "success") {
+            alert("제품정보를 삭제 하였습니다.");
+            setUpdateModal(!updateModal);
+            PostRender(ProductDefaultSearchKeyWord, setSearchKeyword);
+        } else if (res.result === "fail") {
+            alert("잠시후 다시 시도해주세요");
+        } else {
+            alert(
+                `해당 제품은 ${productDetail.supplier} 납품업체가 창고에서 운용하는 제품으로` +
+                    "\n  납품업체에게 문의 바랍니다."
+            );
+        }
     };
 
     const updateEmptyCheckFnc = (formData: FormData): boolean => {
@@ -354,32 +400,6 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
         return true;
     };
 
-    const goInsert = async () => {
-        console.log("두번호출");
-
-        if (!emptyCheckFnc()) {
-            return;
-        }
-        if (!valiCheckFnc()) {
-            return;
-        }
-
-        const formData = toInsertRequestDTO();
-
-        const res: IPostResultMessageResponse = await postSaveProductInfoApi(ProductInfo.saveProductInfo, formData);
-
-        if (res.result === "success") {
-            alert("제품정보를 등록하였습니다.");
-            setModal(!modal);
-            setSearchKeyword({
-                currentPage: 1,
-                pageSize: 5,
-                searchKeyword: "",
-                searchOption: "searchAll",
-            });
-        }
-    };
-
     const emptyCheckFnc = (): boolean => {
         for (var key in emptyCheck) {
             if (insertProductDetail[key] === "" || insertProductDetail[key] < 0) {
@@ -403,49 +423,6 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
         return true;
     };
 
-    const toInsertRequestDTO = () => {
-        const formData = new FormData();
-        // insertProductDetail의 값들을 FormData에 추가
-        formData.append("name", insertProductDetail.name);
-        formData.append("productNumber", insertProductDetail.productNumber);
-
-        // supplyId와 sellPrice를 문자열로 변환하여 추가
-        formData.append("sellPrice", String(insertProductDetail.sellPrice)); // sellPrice를 string으로 변환
-        formData.append("description", insertProductDetail.description);
-        formData.append("supplierName", insertProductDetail.supplierName);
-        formData.append("category", insertProductDetail.category);
-
-        // supplyId를 string으로 변환하여 추가
-        formData.append("supplyId", String(insertProductDetail.supplyId)); // supplyId를 string으로 변환
-        formData.append("categoryCode", insertProductDetail.categoryCode);
-        // fileInput이 존재하는 경우 파일을 FormData에 추가
-        if (imageFile) {
-            formData.append("file", imageFile); // file은 formData에 추가하는 키입니다.
-        }
-        // insertProductDetail의 값들을 FormData에 추가
-
-        return formData;
-    };
-
-    const goDetateProduct = async () => {
-        const res: IPostResultMessageResponse = await postDeleteProductInfoApi(ProductInfo.deleteProductInfo, {
-            productId: productId,
-        });
-
-        if (res.result === "success") {
-            alert("제품정보를 삭제 하였습니다.");
-            setUpdateModal(!updateModal);
-            PostRender(ProductDefaultSearchKeyWord, setSearchKeyword);
-        } else if (res.result === "fail") {
-            alert("잠시후 다시 시도해주세요");
-        } else {
-            alert(
-                `해당 제품은 ${productDetail.supplier} 납품업체가 창고에서 운용하는 제품으로` +
-                    "\n  납품업체에게 문의 바랍니다."
-            );
-        }
-    };
-
     return (
         <UserInfoModalStyle>
             <div className='container'>
@@ -465,31 +442,14 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                                 제품명 <span className='font_red'>*</span>
                             </th>
                             <td colSpan={3}>
-                                {productDetail !== undefined ? <></> : <></>}
-
-                                {productDetail !== undefined ? (
-                                    <>
-                                        <StyledInput
-                                            type='text'
-                                            className='inputTxt p100'
-                                            name='name'
-                                            id='name'
-                                            onChange={updateInputHandler}
-                                            value={productDetail?.name}
-                                        />
-                                    </>
-                                ) : (
-                                    <>
-                                        <StyledInput
-                                            type='text'
-                                            className='inputTxt p100'
-                                            name='name'
-                                            id='name'
-                                            onChange={inserInputHandler}
-                                            value={insertProductDetail?.name}
-                                        />
-                                    </>
-                                )}
+                                <StyledInput
+                                    type='text'
+                                    className='inputTxt p100'
+                                    name='name'
+                                    id='name'
+                                    onChange={inserInputHandler}
+                                    value={productDetail != undefined ? productDetail?.name : insertProductDetail?.name}
+                                />
                             </td>
                         </tr>
                         <tr>
@@ -497,29 +457,18 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                                 제품번호 <span className='font_red'>*</span>
                             </th>
                             <td colSpan={3}>
-                                {productDetail !== undefined ? (
-                                    <>
-                                        <StyledInput
-                                            type='text'
-                                            className='inputTxt p100'
-                                            name='productNumber'
-                                            value={productDetail?.productNumber}
-                                            onChange={updateInputHandler}
-                                            id='productNumber'
-                                        />
-                                    </>
-                                ) : (
-                                    <>
-                                        <StyledInput
-                                            type='text'
-                                            className='inputTxt p100'
-                                            name='productNumber'
-                                            onChange={inserInputHandler}
-                                            value={insertProductDetail?.productNumber}
-                                            id='productNumber'
-                                        />
-                                    </>
-                                )}
+                                <StyledInput
+                                    type='text'
+                                    className='inputTxt p100'
+                                    name='productNumber'
+                                    value={
+                                        productDetail != undefined
+                                            ? productDetail?.productNumber
+                                            : insertProductDetail?.productNumber
+                                    }
+                                    onChange={inserInputHandler}
+                                    id='productNumber'
+                                />
                             </td>
                         </tr>
                         <tr>
@@ -564,29 +513,18 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                                 상세정보<span className='font_red'>*</span>
                             </th>
                             <td colSpan={3}>
-                                {productDetail !== undefined ? (
-                                    <>
-                                        <StyledInput
-                                            type='text'
-                                            className='inputTxt p100'
-                                            name='description'
-                                            value={productDetail?.description}
-                                            onChange={updateInputHandler}
-                                            id='description'
-                                        />
-                                    </>
-                                ) : (
-                                    <>
-                                        <StyledInput
-                                            type='text'
-                                            className='inputTxt p100'
-                                            name='description'
-                                            onChange={inserInputHandler}
-                                            value={insertProductDetail?.description}
-                                            id='description'
-                                        />
-                                    </>
-                                )}
+                                <StyledInput
+                                    type='text'
+                                    className='inputTxt p100'
+                                    name='description'
+                                    value={
+                                        productDetail !== undefined
+                                            ? productDetail?.description
+                                            : insertProductDetail?.description
+                                    }
+                                    onChange={inserInputHandler}
+                                    id='description'
+                                />
                             </td>
                         </tr>
                         <tr>
@@ -634,54 +572,33 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                             </th>
                             <td colSpan={3}>
                                 <UserInfoSelectWrapperStyle variant='primary' className='selectWrapper'>
-                                    {productDetail !== undefined ? (
-                                        <>
-                                            <select
-                                                className='styledTag'
-                                                name='category'
-                                                id='category'
-                                                value={productDetail?.category}
-                                                onChange={updateCategoryHandler}
-                                            >
-                                                {categoryList.map((ele, index) => {
-                                                    // supplyId가 0일 경우, 0에 랜덤 값을 추가하여 중복을 방지
-                                                    const supplyId =
-                                                        ele.supplyId === 0
-                                                            ? Math.random().toString(36).substring(2, 15)
-                                                            : ele.supplyId;
-                                                    const optionKey = `${supplyId}-${index}`; // supplyId와 index를 조합
-                                                    return (
-                                                        <option key={optionKey} data-categorycode={ele.categoryCode}>
-                                                            {ele.category}
-                                                        </option>
-                                                    );
-                                                })}
-                                            </select>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <select
-                                                className='styledTag'
-                                                name='category'
-                                                id='category'
-                                                onChange={insertCateHandler}
-                                            >
-                                                {categoryList.map((ele, index) => {
-                                                    const supplyId = ele.supplyId === 0 ? uuidv4() : ele.supplyId; // uuid를 사용하여 고유값 생성
-                                                    const optionKey = `${supplyId}-${index}`; // supplyId와 index를 조합
-                                                    return (
-                                                        <option
-                                                            key={optionKey}
-                                                            value={ele.categoryCode}
-                                                            data-supplyid={ele.supplyId}
-                                                        >
-                                                            {ele.category}
-                                                        </option>
-                                                    );
-                                                })}
-                                            </select>
-                                        </>
-                                    )}
+                                    <select
+                                        className='styledTag'
+                                        name='category'
+                                        id='category'
+                                        value={
+                                            productDetail !== undefined
+                                                ? productDetail?.category
+                                                : insertProductDetail?.category
+                                        }
+                                        onChange={
+                                            productDetail !== undefined ? updateCategoryHandler : insertCateHandler
+                                        }
+                                    >
+                                        {categoryList.map((ele, index) => {
+                                            // supplyId가 0일 경우, 0에 랜덤 값을 추가하여 중복을 방지
+                                            const supplyId =
+                                                ele.supplyId === 0
+                                                    ? Math.random().toString(36).substring(2, 15)
+                                                    : ele.supplyId;
+                                            const optionKey = `${supplyId}-${index}`; // supplyId와 index를 조합
+                                            return (
+                                                <option key={optionKey} data-categorycode={ele.categoryCode}>
+                                                    {ele.category}
+                                                </option>
+                                            );
+                                        })}
+                                    </select>
                                 </UserInfoSelectWrapperStyle>
                             </td>
                         </tr>
@@ -692,39 +609,19 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                             <td colSpan={3}>
                                 <div className={"button-container"}>
                                     {imageUrl ? (
-                                        <>
-                                            {/* <StyledInput type='file' className='inputTxt p80' name='fileInput' id='fileInput' /> */}
-                                        </>
+                                        <></>
                                     ) : (
-                                        // inserthandlerFile
                                         <>
-                                            {productDetail !== undefined ? (
-                                                <>
-                                                    <StyledInput
-                                                        type='file'
-                                                        id='fileInput'
-                                                        style={{ display: "none" }}
-                                                        name='file'
-                                                        onChange={handlerFile}
-                                                    ></StyledInput>
-                                                    <label className='img-label' htmlFor='fileInput'>
-                                                        파일 첨부하기
-                                                    </label>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <StyledInput
-                                                        type='file'
-                                                        id='fileInput'
-                                                        style={{ display: "none" }}
-                                                        name='file'
-                                                        onChange={inserthandlerFile}
-                                                    ></StyledInput>
-                                                    <label className='img-label' htmlFor='fileInput'>
-                                                        파일 첨부하기
-                                                    </label>
-                                                </>
-                                            )}
+                                            <StyledInput
+                                                type='file'
+                                                id='fileInput'
+                                                style={{ display: "none" }}
+                                                name='file'
+                                                onChange={handlerFile}
+                                            ></StyledInput>
+                                            <label className='img-label' htmlFor='fileInput'>
+                                                파일 첨부하기
+                                            </label>
                                         </>
                                     )}
                                 </div>
@@ -738,20 +635,24 @@ export const ProductInfoModal: FC<IProductInfoModalProps> = ({ productId }) => {
                             </td>
                         </tr>
                         <tr>
-                            {/* logicalPath */}
-                            <th scope='row'>미리보기</th>
-
-                            <td colSpan={3} id='preview'>
-                                <div>
-                                    {imageUrl ? (
+                            {imageUrl ? (
+                                <>
+                                    <th scope='row'>미리보기</th>
+                                    <td colSpan={3} id='preview'>
                                         <div>
-                                            <img src={imageUrl} style={{ maxWidth: "400px", maxHeight: "500px" }} />
+                                            <div>
+                                                <img
+                                                    src={imageUrl}
+                                                    style={{ maxWidth: "400px", maxHeight: "500px" }}
+                                                    alt='미리보기'
+                                                />
+                                            </div>
                                         </div>
-                                    ) : (
-                                        <></>
-                                    )}
-                                </div>
-                            </td>
+                                    </td>
+                                </>
+                            ) : (
+                                <></>
+                            )}
                         </tr>
                     </tbody>
                 </table>
