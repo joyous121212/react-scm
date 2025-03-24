@@ -50,6 +50,9 @@ export const OrdersListMain = () => {
             setOrdersListCnt(result.orderDirectionGroupCnt);
             setCPage(currentPage);
         }
+        axios.get("/delivery/inventoryList.do").then((res) => {
+            setOrdersInventory(res.data);
+        });
     };
 
     const openGrid = (supplyId: number, orderDirectionDate: string, index: number) => {
@@ -74,9 +77,6 @@ export const OrdersListMain = () => {
         const data = { supplyId: supplyId, orderDirectionDate: orderDirectionDate };
         const result = await deliveryPostApi<IOrdersListDetailResponse>(DeliveryOrders.ordersDetial, data);
         setOrdersListDetail(result.orderDirectionDetail);
-        axios.get("/delivery/inventoryList.do").then((res) => {
-            setOrdersInventory(res.data);
-        });
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>, orderId: number) => {
@@ -188,8 +188,8 @@ export const OrdersListMain = () => {
                                                 onChange={(e) => handleChange(e, row.orderId)}
                                             >
                                                 <option value={0}>창고 선택</option>
-                                                {ordersInventory.map((value, index) => (
-                                                    <option key={index} value={value.warehouseId}>
+                                                {ordersInventory.map((value) => (
+                                                    <option key={value.warehouseId} value={value.warehouseId}>
                                                         {value.warehouseName}
                                                     </option>
                                                 ))}

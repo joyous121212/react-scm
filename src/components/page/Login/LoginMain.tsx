@@ -7,7 +7,7 @@ import { loginInfoState } from "../../../stores/userInfo";
 import { ILoginInfo } from "../../../models/interface/store/userInfo";
 import logo_img from "../../../assets/logo_img.png";
 import { JoinModal } from "./Join/JoinModal";
-import { findModalState, modalState } from "../../../stores/modalState";
+import { modalState } from "../../../stores/modalState";
 import { Portal } from "../../common/potal/Portal";
 import { FindModal } from "./Find/FindModal";
 import Swal from "sweetalert2";
@@ -27,7 +27,7 @@ export const LoginMain = () => {
     });
     const navigate = useNavigate();
     const [modal, setModal] = useRecoilState<boolean>(modalState);
-    const [findModal, setFindModal] = useRecoilState<boolean>(findModalState);
+    const [modalFlag, setModalFlag] = useState<String>("");
     const inputRef = useRef<HTMLInputElement | null>(null);
     const inputRef2 = useRef<HTMLInputElement | null>(null);
 
@@ -136,11 +136,23 @@ export const LoginMain = () => {
                                 <button className='login-button' onClick={loginHandler}>
                                     Login
                                 </button>
-                                <button className='signup-button' onClick={() => setModal(!modal)}>
+                                <button
+                                    className='signup-button'
+                                    onClick={() => {
+                                        setModal(!modal);
+                                        setModalFlag("Join");
+                                    }}
+                                >
                                     {" "}
                                     Sign Up{" "}
                                 </button>
-                                <button className='findID-button' onClick={() => setFindModal(!findModal)}>
+                                <button
+                                    className='findID-button'
+                                    onClick={() => {
+                                        setModal(!modal);
+                                        setModalFlag("Find");
+                                    }}
+                                >
                                     Find ID/Pwd
                                 </button>
                             </div>
@@ -148,12 +160,12 @@ export const LoginMain = () => {
                     </div>
                 </div>
             </div>
-            {modal && (
+            {modal && modalFlag === "Join" && (
                 <Portal>
                     <JoinModal />
                 </Portal>
             )}
-            {findModal && (
+            {modal && modalFlag === "Find" && (
                 <Portal>
                     <FindModal />
                 </Portal>
