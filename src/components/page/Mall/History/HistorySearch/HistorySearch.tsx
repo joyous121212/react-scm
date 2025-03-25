@@ -3,6 +3,7 @@ import { StyledButton } from "../../../../common/StyledButton/StyledButton"
 import { StyledInput } from "../../../../common/StyledInput/StyledInput"
 import { HistorySearchStyled } from "./styled"
 import { HistoryContext } from "../../../../../api/Provider/HistoryProvider";
+import { FaSync } from "react-icons/fa";
 
 export const HistorySearch = () => {
     const [startDate, setStartDate] = useState<string>("");
@@ -18,17 +19,33 @@ export const HistorySearch = () => {
         })
     }
 
+    const reset = () => {
+        setSearchKeyword({
+            searchTitle: "",
+            searchStDate: "",
+            searchEdDate: ""          
+        });
+        if (title.current !== null) {
+            title.current.value = "";
+        }
+        setStartDate("");
+        setEndDate("");
+    }
+
     return (
         <HistorySearchStyled>
             제품명:
             <StyledInput size='small' ref={title}/>
             주문일자:
-            <StyledInput size='small' type='date' onChange={(e) => setStartDate(e.target.value)}/>
+            <StyledInput size='small' type='date' value={startDate} onChange={(e) => setStartDate(e.target.value)}/>
             ~
-            <StyledInput size='small' type='date' onChange={(e) => setEndDate(e.target.value)}/>
+            <StyledInput size='small' type='date' value={endDate} onChange={(e) => setEndDate(e.target.value)}/>
             <StyledButton variant='secondary' onClick={handlerSearch}>
                 검색
             </StyledButton>
+            <>
+                <FaSync onClick={reset} className='reset' />
+            </>
         </HistorySearchStyled>
     )
 }

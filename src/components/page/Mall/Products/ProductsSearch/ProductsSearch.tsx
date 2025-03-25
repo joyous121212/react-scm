@@ -3,11 +3,11 @@ import { StyledSelectBox } from "../../../../common/StyledSelectBox/StyledSelect
 import { ProductsSearchStyled } from "./styled"
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { StyledInput } from "../../../../common/StyledInput/StyledInput";
-import { searchApi } from "../../../../../api/MallApi/searchApi";
 import { getApi } from "../../../../../api/MallApi/getApi";
 import { ICategory, ISupplyList } from "../../../../../models/interface/IProducts";
 import { Products } from "../../../../../api/api";
 import { ProductsContext } from "../../../../../api/Provider/ProductsProvider";
+import { FaSync } from "react-icons/fa";
 
 export const ProductsSearch = () => {
     const title = useRef<HTMLInputElement>();
@@ -20,7 +20,7 @@ export const ProductsSearch = () => {
     useEffect(() => {
         selectCategory();
         selectsupply();
-    }, [])
+    }, []);
 
     const selectCategory = async () => {
         const result = await getApi<{categoryValue: ICategory[]}>(Products.category);
@@ -47,7 +47,20 @@ export const ProductsSearch = () => {
             searchSupplyName: selectSupplyValue,
             searchTitle: title.current.value,
         })
-    }
+    };
+
+    const reset = () => {
+        setSearchKeyword ({
+            searchTitle: "",
+            searchCategory: "",
+            searchSupplyName: "",
+        })
+        if (title.current !== null) {
+            title.current.value = "";
+        }
+        setSelectCategoryValue("");
+        setSelectSupplyValue("");
+    };
 
     return (
         <ProductsSearchStyled>
@@ -58,6 +71,10 @@ export const ProductsSearch = () => {
             제품명:
             <StyledInput ref={title}/>
             <StyledButton variant='secondary' onClick={handlerSearch}>검색</StyledButton>
+            <>
+                <FaSync onClick={reset} className='reset' />
+            </>
+            
         </ProductsSearchStyled>
     )
 }
