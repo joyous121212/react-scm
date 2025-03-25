@@ -7,16 +7,16 @@ import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable"
 import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { ProfitCheckContext } from "../../../../../api/Provider/ProfitCheckProvider";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import { modalState, profitCheckState } from "../../../../../stores/modalState";
+import { modalState } from "../../../../../stores/modalState";
 import { ProfitCheckSubGrid } from "../ProfitCheckSubGrid/ProfitCheckSubGrid";
 
 export const ProfitCheckMain = () => {
     const [profitCheck, setProfitCheck] = useState<IProfitCheck[]>([]);
     const [supplierCnt, setSupplierCnt] = useState<number>();
     const [cPage, setCPage] = useState<number>(0);
-    const {searchKeyword} = useContext(ProfitCheckContext);
+    const {searchKeyword, modalId, setModalId} = useContext(ProfitCheckContext);
     const [supplyId, setSupplyId] = useState<number>();
-    const [modal, setModal] = useRecoilState<boolean>(profitCheckState);
+    const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [selectedSupplyId, setSelectedSupplyId] = useState<number | null>(null);
 
     const columns = [
@@ -54,11 +54,11 @@ export const ProfitCheckMain = () => {
         if (selectedSupplyId === id) {
             setSelectedSupplyId(null); // 같은 항목을 누르면 선택 해제
             setSupplyId(undefined);
-            setModal(false);
+            setModalId("");
         } else {
             setSelectedSupplyId(id);
             setSupplyId(id);
-            setModal(true);
+            setModalId("profitCheck");
         }
     };
 
@@ -118,7 +118,7 @@ export const ProfitCheckMain = () => {
                 itemsCountPerPage={10}
                 activePage={cPage}
             />
-            {modal && supplyId !== null && <ProfitCheckSubGrid supplyId={supplyId} clearSelection={clearSelection}/>}
+            {(modalId === "profitCheck" && supplyId !== null) && <ProfitCheckSubGrid supplyId={supplyId} clearSelection={clearSelection}/>}
         </ProfitCheckMainStyled>
     )
 }
