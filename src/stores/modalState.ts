@@ -24,15 +24,6 @@ export const findModalState = atom<boolean>({
     default: false,
 });
 
-export const performanceState = atom<boolean>({
-    key: "performanceState",
-    default: false,
-});
-export const profitCheckState = atom<boolean>({
-    key: "profitCheckState",
-    default: false,
-});
-
 export const inventoryModalState = atom<boolean>({
     key: "inventoryModalState",
     default: false,
