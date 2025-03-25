@@ -1,17 +1,16 @@
 import { useContext, useEffect, useState } from "react"
 import { StyledButton } from "../../../../common/StyledButton/StyledButton"
-import { StyledSelectBox } from "../../../../common/StyledSelectBox/StyledSelectBox"
 import { TopSalesSearchStyled } from "./styled"
 import { TopSales } from "../../../../../api/api"
 import { TopSalesContext } from "../../../../../api/Provider/TopSalesProvider"
 import { searchApi } from "../../../../../api/SalesApi/searchApi"
+import { FaSync } from "react-icons/fa"
 
 export const TopSalesSearch = () => {    
     const [minYearValue, setMinYearValue] = useState<number>();
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth() + 1;
     const [selectYearValue, setSelectYearValue] = useState<string>(String(currentYear));  
-    console.log(String(currentYear)); 
     const [selectMonthValue, setSelectMonthValue] = useState<string>(String(currentMonth));  
     const { setSearchKeyword } = useContext(TopSalesContext);
 
@@ -31,34 +30,21 @@ export const TopSalesSearch = () => {
         }
     };
 
-    const optionsYear = [
-            {label: "년도", value: ""},
-            ...Array.from(
-            { length: Math.max(1, currentYear - minYearValue + 1) }, // 최소 1개의 옵션이 있도록 보장
-            (_, index) => {
-                const year = minYearValue + index;             
-                return { label: `${year}년`, value: `${year}` };                
-            }
-        )
-    ];
-
-    const optionsMonth = [
-        {label: "년월", value: ""},
-        ...Array.from(
-            { length: 12 },
-            (_, index) => {
-                const month = index + 1;
-                return { label: `${month}월`, value: `${month}` };
-            }
-        )
-    ];
-
     const handlerSearch = () => {
         setSearchKeyword({
             searchYear: selectYearValue,
             searchMonth: selectMonthValue
         })
-    }
+    };
+
+    const reset = () => {
+        setSearchKeyword({
+            searchYear: String(currentYear),
+            searchMonth: String(currentMonth),
+        });
+        setSelectYearValue(String(currentYear));
+        setSelectMonthValue(String(currentMonth));
+    };
 
     return (
         <TopSalesSearchStyled>
@@ -96,11 +82,12 @@ export const TopSalesSearch = () => {
                     );
                 })}
             </select>
-            {/* <StyledSelectBox options={optionsYear} value={selectYearValue} onChange={setSelectYearValue}/>
-            <StyledSelectBox options={optionsMonth} value={selectMonthValue} onChange={setSelectMonthValue}/> */}
             <StyledButton variant='secondary' onClick={handlerSearch}>
                 검색
             </StyledButton>
+            <>
+                <FaSync onClick={reset} className='reset' />
+            </>
         </TopSalesSearchStyled>
     )
 }

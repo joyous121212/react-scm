@@ -20,6 +20,7 @@ export const StyledSelectBox: FC<SelectBoxProps> = ({
 }) => {
     return (
         <SelectBox
+            value={value}
             onChange={(e) => onChange(e.target.value)}
             fixedWidth={fixedWidth}
             variant={variant}
