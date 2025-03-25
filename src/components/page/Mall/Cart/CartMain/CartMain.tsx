@@ -65,10 +65,11 @@ export const CartMain= () => {
                 ? prev.filter(id => id !== cartdetailId) 
                 : [...prev, cartdetailId];
 
-            calculateSelectedPrice(newSelected, cartList);
-            setCartdetailIdList([...prev, cartdetailId]);
-            return newSelected;
-        });
+                calculateSelectedPrice(newSelected, cartList);
+                setCartdetailIdList(newSelected);
+                return newSelected;
+            }
+        );
     };
 
     const deleteCartDetail = async (cartdetailId) => {

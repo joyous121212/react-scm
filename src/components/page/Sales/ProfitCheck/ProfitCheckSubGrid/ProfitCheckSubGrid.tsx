@@ -1,18 +1,19 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { IProfitCheckDetail, IProfitCheckDetailResponse } from "../../../../../models/interface/IProfitCheck"
 import { ProfitCheckSubGridStyled } from "./styled"
 import { searchApi } from "../../../../../api/SalesApi/searchApi";
 import { ProfitCheck } from "../../../../../api/api";
 import { useRecoilState } from "recoil";
-import { modalState, profitCheckState, selectRowState } from "../../../../../stores/modalState";
+import { modalState, selectRowState } from "../../../../../stores/modalState";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
-import { Td, Tr } from "../../../../common/StyledTable/styled";
+import { ProfitCheckContext } from "../../../../../api/Provider/ProfitCheckProvider";
 
 export const ProfitCheckSubGrid = ({supplyId, clearSelection}) => {
-    const [modal, setModal] = useRecoilState(profitCheckState);
+    const [modal, setModal] = useRecoilState(modalState);
     const [profitCheckDetail, setProfitCheckDetail] = useState<IProfitCheckDetail[]>([]);
     const [selectRow, setSelectRow] = useRecoilState(selectRowState);
+    const {setModalId} = useContext(ProfitCheckContext);
 
     const columns = [
         { key: "supplierName", title: "기업고객명" },
@@ -35,7 +36,7 @@ export const ProfitCheckSubGrid = ({supplyId, clearSelection}) => {
     };
 
     const modalClose = () => {
-        setModal(!modal);
+        setModalId("");
         setSelectRow(false);
         clearSelection();
     };

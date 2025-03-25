@@ -8,14 +8,14 @@ import { PageNavigate } from "../../../../common/pageNavigation/PageNavigate";
 import { PerformanceContext } from "../../../../../api/Provider/PerformanceProvider";
 import { useRecoilState } from "recoil";
 import { PerformanceSubGrid } from "../PerformanceSubGrid/PerformanceSubGrid";
-import { performanceState } from "../../../../../stores/modalState";
+import { modalState } from "../../../../../stores/modalState";
 
 export const PerformanceMain = () => {
     const [performance, setPerformance] = useState<IPerformance[]>([]);
     const [supplierCnt, setSupplierCnt] = useState<number>();
     const [cPage, setCPage] = useState<number>(0);
-    const {searchKeyword} = useContext(PerformanceContext);
-    const [modal, setModal] = useRecoilState<boolean>(performanceState);
+    const {searchKeyword, modalId, setModalId} = useContext(PerformanceContext);
+    const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [supplyId, setSupplyId] = useState<number>();
     const [selectedSupplyId, setSelectedSupplyId] = useState<number | null>(null);
 
@@ -51,11 +51,11 @@ export const PerformanceMain = () => {
         if (selectedSupplyId === id) {
             setSelectedSupplyId(null); // 같은 항목을 누르면 선택 해제
             setSupplyId(undefined);
-            setModal(false);
+            setModalId("");
         } else {
             setSelectedSupplyId(id);
             setSupplyId(id);
-            setModal(true);
+            setModalId("performance");
         }
     };
 
@@ -90,7 +90,7 @@ export const PerformanceMain = () => {
                 itemsCountPerPage={10}
                 activePage={cPage}
             />
-            {modal && supplyId !== null && <PerformanceSubGrid supplyId={supplyId} clearSelection={clearSelection}/>}
+            {(modalId === "performance" && supplyId !== null) && <PerformanceSubGrid supplyId={supplyId} clearSelection={clearSelection}/>}
         </PerformanceMainStyled>
     )
 }

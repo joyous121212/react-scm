@@ -1,18 +1,19 @@
 import { useRecoilState } from "recoil";
 import { PerformanceModalStyled } from "./styled"
-import { modalState, performanceState, selectRowState } from "../../../../../stores/modalState";
+import { modalState, selectRowState } from "../../../../../stores/modalState";
 import { StyledButton } from "../../../../common/StyledButton/StyledButton";
 import { searchApi } from "../../../../../api/SalesApi/searchApi";
 import { IPerformanceDetailResponse } from "../../../../../models/interface/IPerformance";
 import { Performance } from "../../../../../api/api";
 import { IPerformanceDetail } from '../../../../../models/interface/IPerformance';
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Column, StyledTable } from "../../../../common/StyledTable/StyledTable";
+import { PerformanceContext } from "../../../../../api/Provider/PerformanceProvider";
 
 export const PerformanceSubGrid = ({supplyId, clearSelection}) => {
-    const [modal, setModal] = useRecoilState(performanceState);
     const [detail, setDetail] = useState<IPerformanceDetail[]>([]);    
     const [selectRow, setSelectRow] = useRecoilState(selectRowState);
+    const {setModalId} = useContext(PerformanceContext);
 
     const columns = [
         { key: "supplierName", title: "기업고객명"},
@@ -41,7 +42,7 @@ export const PerformanceSubGrid = ({supplyId, clearSelection}) => {
     };
 
     const modalClose = () => {
-        setModal(!modal);
+        setModalId("");
         setSelectRow(false);
         clearSelection();
     };
